@@ -7,6 +7,7 @@ class CsImportText : public CsImport
   {
   public:
     CsImportText();
+
   };
 
 #endif // CSIMPORTTEXT_H

@@ -1,6 +1,11 @@
 #include "CsImportText.h"
 
-CsImportText::CsImportText()
+#include <QObject>
+
+CsImportText::CsImportText() :
+  CsImport( {QString(".txt"), QString(".htm"), QString(".html")}, QObject::tr("Simple text aligned") )
   {
 
   }
+
+

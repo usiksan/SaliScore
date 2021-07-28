@@ -3,7 +3,8 @@
 
 #include "CsConfig.h"
 #include "CsWinHelp.h"
-#include "CsWinEditor.h"
+#include "CsWinScore.h"
+#include "import/CsImportManager.h"
 
 #include <QMainWindow>
 #include <QSplitter>
@@ -22,16 +23,12 @@ class CsWinMain : public QMainWindow
     QTabWidget      *mWEditors;      //!< Editors
     CsWinHelp       *mWHelp;         //!< Edge help
 
+    CsImportManager  mImportManager; //!< Import files manager. Contains converters from other formats
   public:
     CsWinMain(QWidget *parent = nullptr);
     ~CsWinMain();
 
   private slots:
-    //!
-    //! \brief activeEditor Returns current actived editor
-    //! \return             Current actived editor or nullptr if none
-    //!
-    CsWinEditor *activeEditor() const;
 
     //Menu File
     void cmFileNew();
@@ -43,7 +40,6 @@ class CsWinMain : public QMainWindow
     void cmFileSaveAll();
     void cmFileClose();
     void cmFileCloseAll();
-    void cmFileExit();
     void cmFilePrevious();
 
   public:
@@ -51,10 +47,47 @@ class CsWinMain : public QMainWindow
 
   private:
     //!
+    //! \brief activeEditor Returns current actived editor
+    //! \return             Current actived editor or nullptr if none
+    //!
+    CsWinScore *activeEditor() const;
+
+    //!
+    //! \brief editor Retrive editor by tab index
+    //! \param index  Index of tab which editor need to be retrieved
+    //! \return       Editor by tab index or nullptr if no editor in this index
+    //!
+    CsWinScore *editor( int index ) const;
+
+    //!
+    //! \brief fileSaveIndex Save file which editor on index tab
+    //! \param index         Tab index for editor
+    //!
+    void         fileSaveIndex( int index );
+
+    //!
+    //! \brief fileSaveAsIndex Save file which editor on index tab
+    //! \param index           Tab index for editor
+    //!
+    void         fileSaveAsIndex( int index );
+
+    //!
+    //! \brief fileCloseIndex Closes file editor with index tab
+    //! \param index          Tab index editor which need to be closed
+    //!
+    void         fileCloseIndex( int index );
+
+    //!
     //! \brief fileOpen Open file with path
     //! \param path     Path of file
     //!
-    void fileOpen( const QString path );
+    void         fileOpen( const QString path );
+
+    //!
+    //! \brief appendEditor Appends editor to editors tab
+    //! \param editor       Appended editor
+    //!
+    void         appendEditor( CsWinScore *editor );
 
     void createMenu();
   public:

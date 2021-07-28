@@ -1,10 +1,13 @@
 #include "CsWinMain.h"
+#include "import/saliScore/CsImportSaliScore.h"
 
 #include <QSettings>
 #include <QGuiApplication>
 #include <QMenu>
 #include <QMenuBar>
 #include <QCloseEvent>
+#include <QFileDialog>
+#include <QMessageBox>
 
 
 CsWinMain::CsWinMain(QWidget *parent) :
@@ -32,6 +35,10 @@ CsWinMain::CsWinMain(QWidget *parent) :
 
 
   createMenu();
+
+  //Create imports
+  mImportManager.registerImport( new CsImportSaliScore() );
+
   //Clipboard notification
   //connect( QGuiApplication::clipboard(), &QClipboard::changed, this, &CsWinMain::onClipboardChanged );
 
@@ -44,24 +51,28 @@ CsWinMain::~CsWinMain()
 
 
 
-//!
-//! \brief activeEditor Returns current actived editor
-//! \return             Current actived editor or nullptr if none
-//!
-CsWinEditor *CsWinMain::activeEditor() const
-  {
-  return dynamic_cast<CsWinEditor*>( mWEditors->currentWidget() );
-  }
 
 void CsWinMain::cmFileNew()
   {
-
+  static int defaultIndex = 0;
+  QString path(CS_DEFAULT_FILE_NAME);
+  if( defaultIndex > 0 )
+    path += QString::number(defaultIndex);
+  defaultIndex++;
+  CsComposition com;
+  appendEditor( new CsWinScore( path, com ) );
   }
+
+
 
 void CsWinMain::cmFileOpen()
   {
-
+  QString fname = QFileDialog::getOpenFileName( this, tr("Select file to open"), QString{}, mImportManager.formats() );
+  fileOpen( fname );
   }
+
+
+
 
 void CsWinMain::cmFileLoad()
   {
@@ -75,33 +86,32 @@ void CsWinMain::cmFileImport()
 
 void CsWinMain::cmFileSave()
   {
-
+  fileSaveIndex( mWEditors->currentIndex() );
   }
 
 void CsWinMain::cmFileSaveAs()
   {
-
+  fileSaveAsIndex( mWEditors->currentIndex() );
   }
 
 void CsWinMain::cmFileSaveAll()
   {
-
+  for( int i = 0; i < mWEditors->count(); i++ )
+    fileSaveIndex( i );
   }
 
 void CsWinMain::cmFileClose()
   {
-
+  fileCloseIndex( mWEditors->currentIndex() );
   }
+
 
 void CsWinMain::cmFileCloseAll()
   {
-
+  for( int i = mWEditors->count() - 1; i >= 0; i-- )
+    fileCloseIndex( i );
   }
 
-void CsWinMain::cmFileExit()
-  {
-
-  }
 
 void CsWinMain::cmFilePrevious()
   {
@@ -124,7 +134,7 @@ void CsWinMain::closeEvent(QCloseEvent *ev)
   //Test, it is all editors are closed
   bool editorPresent = false;
   for( int i = 0; i < mWEditors->count() && !editorPresent; i++ )
-    if( dynamic_cast<CsWinEditor*>( mWEditors->widget(i) ) != nullptr )
+    if( dynamic_cast<CsWinScore*>( mWEditors->widget(i) ) != nullptr )
       editorPresent = true;
 
   //If all closed
@@ -140,6 +150,100 @@ void CsWinMain::closeEvent(QCloseEvent *ev)
 
 
 
+//!
+//! \brief activeEditor Returns current actived editor
+//! \return             Current actived editor or nullptr if none
+//!
+CsWinScore *CsWinMain::activeEditor() const
+  {
+  return dynamic_cast<CsWinScore*>( mWEditors->currentWidget() );
+  }
+
+
+
+
+//!
+//! \brief editor Retrive editor by tab index
+//! \param index  Index of tab which editor need to be retrieved
+//! \return       Editor by tab index or nullptr if no editor in this index
+//!
+CsWinScore *CsWinMain::editor(int index) const
+  {
+  //Check index bound
+  if( index < 0 || index >= mWEditors->count() )
+    return nullptr;
+  return dynamic_cast<CsWinScore*>( mWEditors->widget(index) );
+  }
+
+
+
+
+//!
+//! \brief fileSaveIndex
+//! \param index
+//!
+void CsWinMain::fileSaveIndex(int index)
+  {
+  CsWinScore *ed = editor( index );
+  if( ed == nullptr ) return;
+
+  //Test if file name yet not assigned
+  if( ed->name().startsWith(QStringLiteral(CS_DEFAULT_FILE_NAME)) )
+    fileSaveAsIndex( index );
+  else
+    ed->cmFileSave( ed->path() );
+  }
+
+
+
+//!
+//! \brief fileSaveAsIndex Save file which editor on index tab
+//! \param index           Tab index for editor
+//!
+void CsWinMain::fileSaveAsIndex(int index)
+  {
+  CsWinScore *ed = editor( index );
+  if( ed == nullptr ) return;
+
+  QString title = ed->path();
+//  title = QFileDialog::getSaveFileName(this, tr("Save File"), title.isEmpty() ? (svProject->mProjectPath + svProject->mProjectName + QString(EXTENSION_SCRIPT) ) : title, QString("Script Files (*%1 *.h)").arg(EXTENSION_SCRIPT) );
+//  if( title.isEmpty() ) return;
+//  editor->mFilePath = title;
+//  mEditorTab->setTabToolTip( index, title );
+
+//  //Сохранить файл
+//  fileSaveIndex( index );
+
+  }
+
+
+
+
+//!
+//! \brief fileCloseIndex Closes file editor with index tab
+//! \param index          Tab index editor which need to be closed
+//!
+void CsWinMain::fileCloseIndex(int index)
+  {
+  CsWinScore *ed = editor( index );
+  if( ed == nullptr ) return;
+
+  if( ed->isDirty() ) {
+    int r = QMessageBox::question( this, tr("Warning!"), tr("File \"%1\" is modified! Do you want to save changes?").arg(ed->path()), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel );
+    if( r == QMessageBox::Cancel ) return;
+    if( r == QMessageBox::Yes ) {
+      fileSaveIndex(index);
+      if( ed->isDirty() )
+        //Saving unsuccessfull
+        return;
+      }
+    }
+  mWEditors->removeTab(index);
+  ed->deleteLater();
+  }
+
+
+
 
 //!
 //! \brief fileOpen Open file with path
@@ -147,7 +251,43 @@ void CsWinMain::closeEvent(QCloseEvent *ev)
 //!
 void CsWinMain::fileOpen(const QString path)
   {
+  //If empty path nothing done
+  if( path.isEmpty() )
+    return;
 
+  //Try find already opened file
+  for( int i = 0; i < mWEditors->count(); i++ ) {
+    CsWinScore *ed = editor(i);
+    if( ed != nullptr ) {
+      if( ed->path() == path ) {
+        //File with this path found
+        mWEditors->setCurrentIndex(i);
+        return;
+        }
+      }
+    }
+
+  bool ok = false;
+  CsComposition composition = mImportManager.readFile( path, ok );
+  if( ok ) {
+    //Successfull import
+    appendEditor( new CsWinScore( path, composition ) );
+    }
+
+  }
+
+
+
+
+//!
+//! \brief appendEditor Appends editor to editors tab
+//! \param editor       Appended editor
+//!
+void CsWinMain::appendEditor(CsWinScore *editor)
+  {
+  int index = mWEditors->addTab( editor, editor->name() );
+  mWEditors->setTabToolTip( index, editor->path() );
+  mWEditors->setCurrentIndex( index );
   }
 
 
@@ -174,7 +314,7 @@ void CsWinMain::createMenu()
   actionFileClose    = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileClose.png")), tr("Close file"), this, &CsWinMain::cmFileClose );
   actionFileCloseAll = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileCloseAll.png")), tr("Close all files"), this, &CsWinMain::cmFileCloseAll );
   menuFile->addSeparator();
-  actionFileExit     = menuFile->addAction( QIcon(QStringLiteral(":/pic/exit.png")), tr("Exit programm"), this, &CsWinMain::cmFileExit );
+  actionFileExit     = menuFile->addAction( QIcon(QStringLiteral(":/pic/exit.png")), tr("Exit programm"), this, &CsWinMain::close );
 
   //Last previous files menu
   for (int i = 0; i < CS_PREVIOUS_FILES_COUNT; ++i) {

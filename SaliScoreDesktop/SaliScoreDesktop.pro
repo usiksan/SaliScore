@@ -12,6 +12,8 @@ SOURCES += \
     CsBug.cpp \
     CsMain.cpp \
     import/CsImport.cpp \
+    import/CsImportManager.cpp \
+    import/saliScore/CsImportSaliScore.cpp \
     import/text/CsImportText.cpp \
     score/CsChord.cpp \
     score/CsChordKit.cpp \
@@ -25,14 +27,20 @@ SOURCES += \
     score/CsNoteLine.cpp \
     score/CsPosition.cpp \
     score/CsRemark.cpp \
+    windows/CsPainter.cpp \
     windows/CsWinCommand.cpp \
     windows/CsWinEditor.cpp \
     windows/CsWinHelp.cpp \
-    windows/CsWinMain.cpp
+    windows/CsWinKaraoke.cpp \
+    windows/CsWinMain.cpp \
+    windows/CsWinScore.cpp \
+    windows/CsWinTrain.cpp
 
 HEADERS += \
     CsConfig.h \
     import/CsImport.h \
+    import/CsImportManager.h \
+    import/saliScore/CsImportSaliScore.h \
     import/text/CsImportText.h \
     score/CsChord.h \
     score/CsChordKit.h \
@@ -46,10 +54,14 @@ HEADERS += \
     score/CsNoteLine.h \
     score/CsPosition.h \
     score/CsRemark.h \
+    windows/CsPainter.h \
     windows/CsWinCommand.h \
     windows/CsWinEditor.h \
     windows/CsWinHelp.h \
-    windows/CsWinMain.h
+    windows/CsWinKaraoke.h \
+    windows/CsWinMain.h \
+    windows/CsWinScore.h \
+    windows/CsWinTrain.h
 
 TRANSLATIONS += \
     SaliScoreDesktop_en_001.ts
