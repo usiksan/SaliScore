@@ -13,6 +13,8 @@ Description
 
 History
   28.07.2021 v0.1  Begin creation
+             v0.2  Begin creation composition structure
+             v0.3  Begin main menu creation
 */
 
 #ifndef CSCONFIG
@@ -26,7 +28,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             1
+#define CS_VERSION_MINOR             3
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"

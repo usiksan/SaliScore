@@ -25,6 +25,7 @@ SOURCES += \
     score/CsNoteLine.cpp \
     score/CsPosition.cpp \
     score/CsRemark.cpp \
+    windows/CsWinCommand.cpp \
     windows/CsWinEditor.cpp \
     windows/CsWinHelp.cpp \
     windows/CsWinMain.cpp
@@ -45,6 +46,7 @@ HEADERS += \
     score/CsNoteLine.h \
     score/CsPosition.h \
     score/CsRemark.h \
+    windows/CsWinCommand.h \
     windows/CsWinEditor.h \
     windows/CsWinHelp.h \
     windows/CsWinMain.h
