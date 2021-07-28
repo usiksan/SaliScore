@@ -28,7 +28,6 @@ SOURCES += \
     score/CsPosition.cpp \
     score/CsRemark.cpp \
     windows/CsPainter.cpp \
-    windows/CsWinCommand.cpp \
     windows/CsWinEditor.cpp \
     windows/CsWinHelp.cpp \
     windows/CsWinKaraoke.cpp \
@@ -55,7 +54,6 @@ HEADERS += \
     score/CsPosition.h \
     score/CsRemark.h \
     windows/CsPainter.h \
-    windows/CsWinCommand.h \
     windows/CsWinEditor.h \
     windows/CsWinHelp.h \
     windows/CsWinKaraoke.h \
