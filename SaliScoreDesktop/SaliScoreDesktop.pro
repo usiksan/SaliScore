@@ -11,10 +11,42 @@ CONFIG += c++17
 SOURCES += \
     CsBug.cpp \
     CsMain.cpp \
+    import/CsImport.cpp \
+    import/text/CsImportText.cpp \
+    score/CsChord.cpp \
+    score/CsChordKit.cpp \
+    score/CsChordLine.cpp \
+    score/CsComposition.cpp \
+    score/CsDuration.cpp \
+    score/CsLine.cpp \
+    score/CsLyric.cpp \
+    score/CsNote.cpp \
+    score/CsNoteKit.cpp \
+    score/CsNoteLine.cpp \
+    score/CsPosition.cpp \
+    score/CsRemark.cpp \
+    windows/CsWinEditor.cpp \
+    windows/CsWinHelp.cpp \
     windows/CsWinMain.cpp
 
 HEADERS += \
     CsConfig.h \
+    import/CsImport.h \
+    import/text/CsImportText.h \
+    score/CsChord.h \
+    score/CsChordKit.h \
+    score/CsChordLine.h \
+    score/CsComposition.h \
+    score/CsDuration.h \
+    score/CsLine.h \
+    score/CsLyric.h \
+    score/CsNote.h \
+    score/CsNoteKit.h \
+    score/CsNoteLine.h \
+    score/CsPosition.h \
+    score/CsRemark.h \
+    windows/CsWinEditor.h \
+    windows/CsWinHelp.h \
     windows/CsWinMain.h
 
 TRANSLATIONS += \
