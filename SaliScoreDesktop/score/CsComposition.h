@@ -4,6 +4,8 @@
 #include "CsConfig.h"
 #include "CsLine.h"
 
+#include <QJsonObject>
+
 class CsComposition
   {
     QString    mTitle;
@@ -13,6 +15,10 @@ class CsComposition
     CsLineList mLineList;
   public:
     CsComposition();
+
+    QJsonObject write() const;
+
+    void        read( const QJsonObject obj );
   };
 
 #endif // CSCOMPOSITION_H

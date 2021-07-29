@@ -11,6 +11,7 @@ CONFIG += c++17
 SOURCES += \
     CsBug.cpp \
     CsMain.cpp \
+    SvJson/SvJsonIO.cpp \
     import/CsImport.cpp \
     import/CsImportManager.cpp \
     import/saliScore/CsImportSaliScore.cpp \
@@ -37,6 +38,7 @@ SOURCES += \
 
 HEADERS += \
     CsConfig.h \
+    SvJson/SvJsonIO.h \
     import/CsImport.h \
     import/CsImportManager.h \
     import/saliScore/CsImportSaliScore.h \

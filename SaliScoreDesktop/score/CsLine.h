@@ -18,6 +18,10 @@ class CsLine
     QMap<QString,QString> mTranslation;
   public:
     CsLine();
+
+    QJsonObject write() const;
+
+    void        read( const QJsonObject obj );
   };
 
 using CsLinePtr = CsLine*;
