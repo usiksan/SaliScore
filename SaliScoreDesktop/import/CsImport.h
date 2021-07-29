@@ -13,6 +13,7 @@ class CsImport
     QString       mFilesTitle;
   public:
     CsImport(std::initializer_list<QString> list, const QString &filesTitle );
+    virtual ~CsImport() {}
 
     bool                  isMatchExtension( const QString ext ) const { return mExtensions.contains(ext); }
 

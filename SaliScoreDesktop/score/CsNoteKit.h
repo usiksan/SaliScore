@@ -7,9 +7,13 @@
 
 class CsNoteKit
   {
-    QMap<QString,CsNoteLine> mNoteKit;
+    QMap<QString,CsNoteLine> mNoteMap;
   public:
     CsNoteKit();
+
+    void jsonWrite( SvJsonWriter &js ) const;
+
+    void jsonRead( SvJsonReader &js );
   };
 
 #endif // CSNOTEKIT_H

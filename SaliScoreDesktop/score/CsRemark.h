@@ -7,6 +7,8 @@
 #include <QMap>
 
 
+class SvJsonWriter;
+class SvJsonReader;
 
 class CsRemark
   {
@@ -15,6 +17,10 @@ class CsRemark
     CsRemark();
 
     bool isEmpty() const { return mStringMap.isEmpty(); }
+
+    void jsonWrite( SvJsonWriter &js ) const;
+
+    void jsonRead( SvJsonReader &js );
   };
 
 #endif // CSREMARK_H

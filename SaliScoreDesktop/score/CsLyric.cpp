@@ -8,20 +8,17 @@ CsLyric::CsLyric()
   }
 
 
-QJsonObject CsLyric::write() const
-  {
-  QJsonObject obj;
-  SvJsonWriter js( obj );
-  js.jsonString( "text", mLyric );
 
-  return obj;
+void CsLyric::jsonWrite(SvJsonWriter &js) const
+  {
+  CsPosition::jsonWrite( js );
+  js.jsonString( "text", mLyric );
   }
 
 
 
-void CsLyric::read(const QJsonObject &obj)
+void CsLyric::jsonRead(SvJsonReader &js)
   {
-  SvJsonReader js( obj );
-
+  CsPosition::jsonRead( js );
   js.jsonString( "text", mLyric );
   }

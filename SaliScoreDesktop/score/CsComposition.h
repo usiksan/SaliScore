@@ -16,9 +16,10 @@ class CsComposition
   public:
     CsComposition();
 
-    QJsonObject write() const;
 
-    void        read( const QJsonObject obj );
+    void jsonWrite( SvJsonWriter &js ) const;
+
+    void jsonRead( SvJsonReader &js );
   };
 
 #endif // CSCOMPOSITION_H

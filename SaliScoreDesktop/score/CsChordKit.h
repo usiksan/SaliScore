@@ -11,6 +11,10 @@ class CsChordKit
     QMap<QString,CsChordLine> mChordLines;
   public:
     CsChordKit();
+
+    void jsonWrite( SvJsonWriter &js ) const;
+
+    void jsonRead( SvJsonReader &js );
   };
 
 #endif // CSCHORDKIT_H

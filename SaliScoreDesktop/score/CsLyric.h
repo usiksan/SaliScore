@@ -14,9 +14,11 @@ class CsLyric : public CsPosition
   public:
     CsLyric();
 
-    QJsonObject write() const;
 
-    void        read( const QJsonObject &obj );
+    // CsPosition interface
+  public:
+    virtual void jsonWrite(SvJsonWriter &js) const override;
+    virtual void jsonRead(SvJsonReader &js) override;
   };
 
 using CsLyricList = QList<CsLyric>;

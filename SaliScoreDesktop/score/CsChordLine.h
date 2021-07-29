@@ -9,6 +9,10 @@ class CsChordLine
     CsChordList mList;
   public:
     CsChordLine();
+
+    void jsonWrite( SvJsonWriter &js ) const;
+
+    void jsonRead( SvJsonReader &js );
   };
 
 #endif // CSCHORDLINE_H

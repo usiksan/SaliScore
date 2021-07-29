@@ -19,9 +19,9 @@ class CsLine
   public:
     CsLine();
 
-    QJsonObject write() const;
+    void jsonWrite( SvJsonWriter &js ) const;
 
-    void        read( const QJsonObject obj );
+    void jsonRead( SvJsonReader &js );
   };
 
 using CsLinePtr = CsLine*;

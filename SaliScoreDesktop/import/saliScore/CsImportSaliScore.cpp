@@ -1,4 +1,5 @@
 #include "CsImportSaliScore.h"
+#include "../../SvJson/SvJsonIO.h"
 
 #include <QObject>
 #include <QJsonDocument>
@@ -23,4 +24,13 @@ bool CsImportSaliScore::probe(const QByteArray &fileContent)
 
 CsComposition CsImportSaliScore::read(const QByteArray &fileContent, bool &ok)
   {
+  QJsonObject obj = QJsonDocument::fromJson( fileContent ).object();
+  CsComposition comp;
+  if( obj.value(QStringLiteral(CS_BASE_TYPE_KEY)).toString() == QStringLiteral(CS_BASE_TYPE) ) {
+    SvJsonReader js( obj, obj.value(QStringLiteral(CS_BASE_VERSION_KEY)).toInt() );
+    comp.jsonRead( js );
+    ok = true;
+    }
+  else ok = false;
+  return comp;
   }

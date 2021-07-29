@@ -9,6 +9,10 @@ class CsNoteLine
     CsNoteList mNoteList;
   public:
     CsNoteLine();
+
+    void jsonWrite( SvJsonWriter &js ) const;
+
+    void jsonRead( SvJsonReader &js );
   };
 
 #endif // CSNOTELINE_H

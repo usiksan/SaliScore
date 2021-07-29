@@ -10,6 +10,11 @@ class CsChord : public CsPosition
   {
   public:
     CsChord();
+
+    // CsPosition interface
+  public:
+    virtual void jsonWrite(SvJsonWriter &js) const override;
+    virtual void jsonRead(SvJsonReader &js) override;
   };
 
 //using CsChordPtr

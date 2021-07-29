@@ -7,10 +7,23 @@ CsComposition::CsComposition()
 
   }
 
-QJsonObject CsComposition::write() const
+void CsComposition::jsonWrite(SvJsonWriter &js) const
   {
-  QJsonObject obj;
-  SvJsonWriter js( obj );
-
-  return obj;
+  js.jsonString( "Title", mTitle );
+  js.jsonString( "Singer", mSinger );
+  js.jsonString( "Composer", mComposer );
+  js.jsonString( "Lyricist", mLyricist );
+  js.jsonList<CsLine>( "LineList", mLineList );
   }
+
+
+
+void CsComposition::jsonRead(SvJsonReader &js)
+  {
+  js.jsonString( "Title", mTitle );
+  js.jsonString( "Singer", mSinger );
+  js.jsonString( "Composer", mComposer );
+  js.jsonString( "Lyricist", mLyricist );
+  js.jsonList<CsLine>( "LineList", mLineList );
+  }
+
