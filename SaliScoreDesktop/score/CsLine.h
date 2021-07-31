@@ -19,9 +19,38 @@ class CsLine
   public:
     CsLine();
 
-    void jsonWrite( SvJsonWriter &js ) const;
+    CsLine( const QString &lang, const QString &rem );
 
-    void jsonRead( SvJsonReader &js );
+    //========================================================
+    //    Information
+    auto &remarkConst() const { return mRemark; }
+    auto &chordKitConst() const { return mChordKit; }
+    auto &noteKitConst() const { return mNoteKit; }
+    auto &lyricListConst() const { return mLyricList; }
+    auto &translationConst() const { return mTranslation; }
+
+    //========================================================
+    //    Remark part
+    QString remarkGet( const QString &lang ) const { return mRemark.remarkGet(lang); }
+
+    void    remarkSet( const QString &lang, const QString &rem ) { mRemark.remarkSet(lang,rem); }
+
+    //========================================================
+    //    Chord part
+    auto  chordListGet( const QString &part ) const { return mChordKit.chordListGet(part); }
+
+    void  chordListSet( const QString &part, const CsChordList &line ) { mChordKit.chordListSet( part, line ); }
+
+
+    //========================================================
+    //    Lyric part
+    void setLyric( const CsLyricList &lyricList ) { mLyricList = lyricList; }
+
+    //========================================================
+    //    json part
+    void jsonWrite( CsJsonWriter &js ) const;
+
+    void jsonRead( CsJsonReader &js );
   };
 
 using CsLinePtr = CsLine*;

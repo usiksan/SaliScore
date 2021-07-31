@@ -42,6 +42,11 @@ class CsWinMain : public QMainWindow
     void cmFileCloseAll();
     void cmFilePrevious();
 
+
+    void cmViewEditor();
+    void cmViewTrain();
+    void cmViewKaraoke();
+
   public:
     virtual void closeEvent( QCloseEvent *ev ) override;
 

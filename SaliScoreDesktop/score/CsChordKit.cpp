@@ -6,13 +6,14 @@ CsChordKit::CsChordKit()
 
   }
 
-void CsChordKit::jsonWrite(SvJsonWriter &js) const
+
+void CsChordKit::jsonWrite(CsJsonWriter &js) const
   {
-  js.jsonMap<CsChordLine>( "ChordLines", mChordLines );
+  js.jsonMap<CsChordLine>( "ChordMap", mChordMap );
   }
 
 
-void CsChordKit::jsonRead(SvJsonReader &js)
+void CsChordKit::jsonRead(CsJsonReader &js)
   {
-  js.jsonMap<CsChordLine>( "ChordLines", mChordLines );
+  js.jsonMap<CsChordLine>( "ChordMap", mChordMap );
   }

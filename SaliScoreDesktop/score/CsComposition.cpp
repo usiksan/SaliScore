@@ -7,23 +7,32 @@ CsComposition::CsComposition()
 
   }
 
-void CsComposition::jsonWrite(SvJsonWriter &js) const
+void CsComposition::lineInsert(int index, const CsLine &line)
   {
-  js.jsonString( "Title", mTitle );
-  js.jsonString( "Singer", mSinger );
+  if( index < 0 )
+    mLineList.append( line );
+  else
+    mLineList.insert( index, line );
+  }
+
+
+void CsComposition::jsonWrite(CsJsonWriter &js) const
+  {
+  js.jsonString( "CompTitle", mTitle );
+  js.jsonString( "CompSinger", mSinger );
   js.jsonString( "Composer", mComposer );
-  js.jsonString( "Lyricist", mLyricist );
+  js.jsonString( "CompLyricist", mLyricist );
   js.jsonList<CsLine>( "LineList", mLineList );
   }
 
 
 
-void CsComposition::jsonRead(SvJsonReader &js)
+void CsComposition::jsonRead(CsJsonReader &js)
   {
-  js.jsonString( "Title", mTitle );
-  js.jsonString( "Singer", mSinger );
+  js.jsonString( "CompTitle", mTitle );
+  js.jsonString( "CompSinger", mSinger );
   js.jsonString( "Composer", mComposer );
-  js.jsonString( "Lyricist", mLyricist );
+  js.jsonString( "CompLyricist", mLyricist );
   js.jsonList<CsLine>( "LineList", mLineList );
   }
 

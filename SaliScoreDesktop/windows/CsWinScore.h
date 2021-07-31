@@ -3,6 +3,10 @@
 
 #include "CsConfig.h"
 #include "score/CsComposition.h"
+#include "score/CsState.h"
+#include "CsWinTrain.h"
+#include "CsWinEditor.h"
+#include "CsWinKaraoke.h"
 
 #include <QWidget>
 
@@ -12,7 +16,10 @@ class CsWinScore : public QWidget
 
     QString       mPath;
     CsComposition mComposition;
+    CsState       mState;
     bool          mDirty;
+
+    CsWinTrain   *mWinTrain;
   public:
     explicit CsWinScore(const QString path, CsComposition &src, QWidget *parent = nullptr);
 
@@ -21,6 +28,12 @@ class CsWinScore : public QWidget
     //! \return     Current file path
     //!
     QString path() const { return mPath; }
+
+    //!
+    //! \brief setPath Setup new path for composition
+    //! \param thePath New path for composition
+    //!
+    void    setPath( const QString thePath );
 
     //!
     //! \brief name Returns current file name (without path)
@@ -59,6 +72,10 @@ class CsWinScore : public QWidget
 //    static QActionPtr  actionEditDelete;
 //    static QActionPtr  actionEditSelectAll;
 //    static QActionPtr  actionEditUnSelect;
+
+    void cmViewEditor();
+    void cmViewTrain();
+    void cmViewKaraoke();
 
   signals:
 

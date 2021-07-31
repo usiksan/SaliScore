@@ -9,7 +9,7 @@ CsLyric::CsLyric()
 
 
 
-void CsLyric::jsonWrite(SvJsonWriter &js) const
+void CsLyric::jsonWrite(CsJsonWriter &js) const
   {
   CsPosition::jsonWrite( js );
   js.jsonString( "text", mLyric );
@@ -17,7 +17,7 @@ void CsLyric::jsonWrite(SvJsonWriter &js) const
 
 
 
-void CsLyric::jsonRead(SvJsonReader &js)
+void CsLyric::jsonRead(CsJsonReader &js)
   {
   CsPosition::jsonRead( js );
   js.jsonString( "text", mLyric );

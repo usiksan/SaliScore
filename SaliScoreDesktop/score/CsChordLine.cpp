@@ -1,5 +1,4 @@
 #include "CsChordLine.h"
-#include "../SvJson/SvJsonIO.h"
 
 
 CsChordLine::CsChordLine()
@@ -7,12 +6,12 @@ CsChordLine::CsChordLine()
 
   }
 
-void CsChordLine::jsonWrite(SvJsonWriter &js) const
+void CsChordLine::jsonWrite(CsJsonWriter &js) const
   {
   js.jsonList<CsChord>( "ChordList", mList );
   }
 
-void CsChordLine::jsonRead(SvJsonReader &js)
+void CsChordLine::jsonRead(CsJsonReader &js)
   {
   js.jsonList<CsChord>( "ChordList", mList );
   }

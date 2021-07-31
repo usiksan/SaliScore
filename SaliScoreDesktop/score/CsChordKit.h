@@ -6,15 +6,27 @@
 
 #include <QMap>
 
+class CsPainter;
+
 class CsChordKit
   {
-    QMap<QString,CsChordLine> mChordLines;
+    QMap<QString,CsChordLine> mChordMap;
   public:
     CsChordKit();
 
-    void jsonWrite( SvJsonWriter &js ) const;
+    auto &chordMapConst() const { return mChordMap; }
 
-    void jsonRead( SvJsonReader &js );
+    auto  chordLineGet( const QString &part ) const { return mChordMap.value(part); }
+
+    void  chordLineSet( const QString &part, const CsChordLine &line ) { mChordMap.insert( part, line ); }
+
+    auto  chordListGet( const QString &part ) const { return mChordMap.value(part).chordListConst(); }
+
+    void  chordListSet( const QString &part, const CsChordList &list ) { mChordMap.insert( part, CsChordLine(list) ); }
+
+    void  jsonWrite( CsJsonWriter &js ) const;
+
+    void  jsonRead( CsJsonReader &js );
   };
 
 #endif // CSCHORDKIT_H

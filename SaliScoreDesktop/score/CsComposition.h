@@ -16,10 +16,19 @@ class CsComposition
   public:
     CsComposition();
 
+    void  remarkAppend( const QString &lang );
 
-    void jsonWrite( SvJsonWriter &js ) const;
+    void  remarkRemove( const QString &lang );
 
-    void jsonRead( SvJsonReader &js );
+    void  lineInsert( int index, const CsLine &line );
+
+    void  lineAppend( const CsLine &line ) { lineInsert( -1, line ); }
+
+    auto &lineList() const { return mLineList; }
+
+    void  jsonWrite( CsJsonWriter &js ) const;
+
+    void  jsonRead( CsJsonReader &js );
   };
 
 #endif // CSCOMPOSITION_H

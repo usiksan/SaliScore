@@ -6,7 +6,14 @@ CsLine::CsLine()
 
   }
 
-void CsLine::jsonWrite(SvJsonWriter &js) const
+CsLine::CsLine( const QString &lang, const QString &rem) :
+  mRemark( lang, rem )
+  {
+
+  }
+
+
+void CsLine::jsonWrite(CsJsonWriter &js) const
   {
   js.jsonObject<CsRemark>( "Remark", mRemark );
   js.jsonObject<CsChordKit>( "ChordKit", mChordKit );
@@ -15,7 +22,7 @@ void CsLine::jsonWrite(SvJsonWriter &js) const
   js.jsonMapString( "Translation", mTranslation );
   }
 
-void CsLine::jsonRead(SvJsonReader &js)
+void CsLine::jsonRead(CsJsonReader &js)
   {
   js.jsonObject<CsRemark>( "Remark", mRemark );
   js.jsonObject<CsChordKit>( "ChordKit", mChordKit );

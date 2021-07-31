@@ -7,7 +7,7 @@ CsNote::CsNote()
   }
 
 
-void CsNote::jsonWrite(SvJsonWriter &js) const
+void CsNote::jsonWrite(CsJsonWriter &js) const
   {
   CsPosition::jsonWrite( js );
   js.jsonInt( "Duration", mDuration );
@@ -16,7 +16,7 @@ void CsNote::jsonWrite(SvJsonWriter &js) const
 
 
 
-void CsNote::jsonRead(SvJsonReader &js)
+void CsNote::jsonRead(CsJsonReader &js)
   {
   CsPosition::jsonRead( js );
   js.jsonInt( "Duration", mDuration );

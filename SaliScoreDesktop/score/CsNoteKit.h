@@ -11,9 +11,11 @@ class CsNoteKit
   public:
     CsNoteKit();
 
-    void jsonWrite( SvJsonWriter &js ) const;
+    auto &noteMapConst() const { return mNoteMap; }
 
-    void jsonRead( SvJsonReader &js );
+    void jsonWrite( CsJsonWriter &js ) const;
+
+    void jsonRead( CsJsonReader &js );
   };
 
 #endif // CSNOTEKIT_H

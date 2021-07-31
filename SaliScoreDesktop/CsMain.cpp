@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 
 
   QSettings s;
-  if( !s.contains(SDK_LANGUAGE) ) {
+  if( !s.contains(KEY_LANGUAGE) ) {
     //Language is not assigned yet, assign it
 
     //Get system language
@@ -29,13 +29,13 @@ int main(int argc, char *argv[])
       lang = QStringLiteral("en");
 
     //Assign default language
-    s.setValue( SDK_LANGUAGE, lang );
+    s.setValue( KEY_LANGUAGE, lang );
     }
 
 
   //Translation system
   QTranslator appTranslator;
-  if( appTranslator.load( QString( QCoreApplication::applicationDirPath() + "/lang_%1.qm").arg( s.value( SDK_LANGUAGE ).toString() ) ) )
+  if( appTranslator.load( QString( QCoreApplication::applicationDirPath() + "/lang_%1.qm").arg( s.value( KEY_LANGUAGE ).toString() ) ) )
     a.installTranslator( &appTranslator );
 
   CsWinMain w;

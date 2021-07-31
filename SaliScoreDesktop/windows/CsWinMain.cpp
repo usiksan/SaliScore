@@ -30,8 +30,8 @@ CsWinMain::CsWinMain(QWidget *parent) :
 
   //Restore splitter positions
   QSettings s;
-  if( s.contains(QString(SDK_MAIN_SPLITTER)) )
-    mWSplitter->restoreState( s.value(QString(SDK_MAIN_SPLITTER)).toByteArray() );
+  if( s.contains(QString(KEY_MAIN_SPLITTER)) )
+    mWSplitter->restoreState( s.value(QString(KEY_MAIN_SPLITTER)).toByteArray() );
 
 
   createMenu();
@@ -122,6 +122,25 @@ void CsWinMain::cmFilePrevious()
 
 
 
+void CsWinMain::cmViewEditor()
+  {
+  actionViewEditor->setChecked(true);
+  actionViewTrain->setChecked(false);
+  actionViewKaraoke->setChecked(false);
+  }
+
+void CsWinMain::cmViewTrain()
+  {
+
+  }
+
+void CsWinMain::cmViewKaraoke()
+  {
+
+  }
+
+
+
 
 
 
@@ -141,8 +160,8 @@ void CsWinMain::closeEvent(QCloseEvent *ev)
   if( !editorPresent ) {
     //Save settings: main window maximisation and splitter position
     QSettings s;
-    s.setValue( QString(SDK_WMAIN_MAX), isMaximized() );
-    s.setValue( QString(SDK_MAIN_SPLITTER), mWSplitter->saveState() );
+    s.setValue( QString(KEY_WMAIN_MAX), isMaximized() );
+    s.setValue( QString(KEY_MAIN_SPLITTER), mWSplitter->saveState() );
     ev->accept();
     }
   else ev->ignore();
@@ -206,14 +225,14 @@ void CsWinMain::fileSaveAsIndex(int index)
   if( ed == nullptr ) return;
 
   QString title = ed->path();
-//  title = QFileDialog::getSaveFileName(this, tr("Save File"), title.isEmpty() ? (svProject->mProjectPath + svProject->mProjectName + QString(EXTENSION_SCRIPT) ) : title, QString("Script Files (*%1 *.h)").arg(EXTENSION_SCRIPT) );
-//  if( title.isEmpty() ) return;
-//  editor->mFilePath = title;
-//  mEditorTab->setTabToolTip( index, title );
+  title = QFileDialog::getSaveFileName(this, tr("Save File"), title, QString("SaliScore Files (*%1)").arg(CS_BASE_EXTENSION) );
+  if( title.isEmpty() ) return;
+  ed->setPath( title );
+  mWEditors->setTabText( index, ed->name() );
+  mWEditors->setTabToolTip( index, ed->path() );
 
-//  //Сохранить файл
-//  fileSaveIndex( index );
-
+  //Сохранить файл
+  fileSaveIndex( index );
   }
 
 
@@ -327,6 +346,12 @@ void CsWinMain::createMenu()
   menuEdit = new QMenu( tr("Edit") );
 
   menuView = new QMenu( tr("View") );
+  actionViewEditor  = menuView->addAction( QIcon(QStringLiteral(":/pic/exit.png")), tr("Editor mode"), this, &CsWinMain::cmViewEditor );
+  actionViewTrain   = menuView->addAction( QIcon(QStringLiteral(":/pic/exit.png")), tr("Train mode"), this, &CsWinMain::cmViewTrain );
+  actionViewKaraoke = menuView->addAction( QIcon(QStringLiteral(":/pic/exit.png")), tr("Karaoke mode"), this, &CsWinMain::cmViewKaraoke );
+  actionViewEditor->setCheckable(true);
+  actionViewTrain->setCheckable(true);
+  actionViewKaraoke->setCheckable(true);
 
   menuPlay = new QMenu( tr("Play") );
 

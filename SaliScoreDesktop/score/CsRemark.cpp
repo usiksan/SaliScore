@@ -1,17 +1,24 @@
 #include "CsRemark.h"
 #include "../SvJson/SvJsonIO.h"
+#include "../windows/CsPainter.h"
 
 CsRemark::CsRemark()
   {
 
   }
 
-void CsRemark::jsonWrite(SvJsonWriter &js) const
+CsRemark::CsRemark(const QString &lang, const QString &rem)
   {
-  js.jsonMapString( "StringMap", mStringMap );
+  mRemarkMap.insert( lang, rem );
   }
 
-void CsRemark::jsonRead(SvJsonReader &js)
+
+void CsRemark::jsonWrite(CsJsonWriter &js) const
   {
-  js.jsonMapString( "StringMap", mStringMap );
+  js.jsonMapString( "StringMap", mRemarkMap );
+  }
+
+void CsRemark::jsonRead(CsJsonReader &js)
+  {
+  js.jsonMapString( "StringMap", mRemarkMap );
   }

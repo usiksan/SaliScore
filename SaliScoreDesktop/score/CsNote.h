@@ -13,10 +13,14 @@ class CsNote : public CsPosition
   public:
     CsNote();
 
+    int duration() const { return mDuration; }
+
+    int pitch() const { return mPitch; }
+
     // CsPosition interface
   public:
-    virtual void jsonWrite(SvJsonWriter &js) const override;
-    virtual void jsonRead(SvJsonReader &js) override;
+    virtual void jsonWrite(CsJsonWriter &js) const override;
+    virtual void jsonRead(CsJsonReader &js) override;
   };
 
 using CsNoteList = QList<CsNote>;

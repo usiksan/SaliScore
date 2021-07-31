@@ -2,20 +2,20 @@
 #define CSPOSITION_H
 
 #include "CsConfig.h"
-
-class SvJsonWriter;
-class SvJsonReader;
+#include "CsJsonIO.h"
 
 class CsPosition
   {
     int mPosition; //!< Position in time scale, tick
   public:
-    CsPosition();
+    CsPosition( int pos = 0 );
     virtual ~CsPosition() {}
 
-    virtual void jsonWrite( SvJsonWriter &js ) const;
+    int          position() const { return mPosition; }
 
-    virtual void jsonRead( SvJsonReader &js );
+    virtual void jsonWrite( CsJsonWriter &js ) const;
+
+    virtual void jsonRead( CsJsonReader &js );
   };
 
 #endif // CSPOSITION_H

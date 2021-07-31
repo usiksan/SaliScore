@@ -6,12 +6,13 @@ CsNoteKit::CsNoteKit()
 
   }
 
-void CsNoteKit::jsonWrite(SvJsonWriter &js) const
+
+void CsNoteKit::jsonWrite(CsJsonWriter &js) const
   {
   js.jsonMap<CsNoteLine>( "NoteMap", mNoteMap );
   }
 
-void CsNoteKit::jsonRead(SvJsonReader &js)
+void CsNoteKit::jsonRead(CsJsonReader &js)
   {
   js.jsonMap<CsNoteLine>( "NoteMap", mNoteMap );
   }

@@ -20,6 +20,8 @@ SOURCES += \
     score/CsChordKit.cpp \
     score/CsChordLine.cpp \
     score/CsComposition.cpp \
+    score/CsDefChordLine.cpp \
+    score/CsDefinition.cpp \
     score/CsDuration.cpp \
     score/CsLine.cpp \
     score/CsLyric.cpp \
@@ -28,6 +30,8 @@ SOURCES += \
     score/CsNoteLine.cpp \
     score/CsPosition.cpp \
     score/CsRemark.cpp \
+    score/CsSettings.cpp \
+    score/CsState.cpp \
     windows/CsPainter.cpp \
     windows/CsWinEditor.cpp \
     windows/CsWinHelp.cpp \
@@ -47,7 +51,10 @@ HEADERS += \
     score/CsChordKit.h \
     score/CsChordLine.h \
     score/CsComposition.h \
+    score/CsDefChordLine.h \
+    score/CsDefinition.h \
     score/CsDuration.h \
+    score/CsJsonIO.h \
     score/CsLine.h \
     score/CsLyric.h \
     score/CsNote.h \
@@ -55,6 +62,8 @@ HEADERS += \
     score/CsNoteLine.h \
     score/CsPosition.h \
     score/CsRemark.h \
+    score/CsSettings.h \
+    score/CsState.h \
     windows/CsPainter.h \
     windows/CsWinEditor.h \
     windows/CsWinHelp.h \

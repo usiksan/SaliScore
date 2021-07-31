@@ -2,25 +2,31 @@
 #define CSREMARK_H
 
 #include "CsConfig.h"
+#include "CsJsonIO.h"
 
 #include <QString>
 #include <QMap>
 
-
-class SvJsonWriter;
-class SvJsonReader;
+class CsPainter;
 
 class CsRemark
   {
-    QMap<QString,QString> mStringMap;
+    QMap<QString,QString> mRemarkMap;
   public:
     CsRemark();
+    CsRemark( const QString &lang, const QString &rem );
 
-    bool isEmpty() const { return mStringMap.isEmpty(); }
+    auto &remarkMapConst() const { return mRemarkMap; }
 
-    void jsonWrite( SvJsonWriter &js ) const;
+    QString remarkGet( const QString &lang ) const { return mRemarkMap.value(lang); }
 
-    void jsonRead( SvJsonReader &js );
+    void    remarkSet( const QString &lang, const QString &rem ) { mRemarkMap.insert( lang, rem ); }
+
+    bool isEmpty() const { return mRemarkMap.isEmpty(); }
+
+    void jsonWrite( CsJsonWriter &js ) const;
+
+    void jsonRead( CsJsonReader &js );
   };
 
 #endif // CSREMARK_H

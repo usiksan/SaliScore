@@ -27,7 +27,8 @@ CsComposition CsImportSaliScore::read(const QByteArray &fileContent, bool &ok)
   QJsonObject obj = QJsonDocument::fromJson( fileContent ).object();
   CsComposition comp;
   if( obj.value(QStringLiteral(CS_BASE_TYPE_KEY)).toString() == QStringLiteral(CS_BASE_TYPE) ) {
-    SvJsonReader js( obj, obj.value(QStringLiteral(CS_BASE_VERSION_KEY)).toInt() );
+    int version = obj.value(QStringLiteral(CS_BASE_VERSION_KEY)).toInt();
+    SvJsonReaderExtInt js( obj, &version );
     comp.jsonRead( js );
     ok = true;
     }

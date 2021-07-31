@@ -18,11 +18,11 @@ static QString formatExtensions( QSet<QString> extensions )
   {
   QString res(" (" );
   bool notFirst = false;
-  for( auto str : extensions ) {
+  for( const auto &str : extensions ) {
     if( notFirst )
       res += QStringLiteral(" ");
     notFirst = true;
-    res += str;
+    res += QChar('*') + str;
     }
   return res + QStringLiteral(")");
   }
@@ -78,7 +78,7 @@ CsComposition CsImportManager::read(const QByteArray &data, bool &ok)
 CsComposition CsImportManager::readFile(const QString path, bool &ok)
   {
   //File extension in low register
-  QString ext( QFileInfo(path).suffix().toLower() );
+  QString ext( QChar('.') + QFileInfo(path).suffix().toLower() );
   //File
   QFile file(path);
   if( file.open( QIODevice::ReadOnly ) ) {

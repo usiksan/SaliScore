@@ -14,11 +14,13 @@ class CsLyric : public CsPosition
   public:
     CsLyric();
 
+    QString lyric() const { return mLyric; }
+    void    setLyric( const QString lyr ) { mLyric = lyr; }
 
     // CsPosition interface
   public:
-    virtual void jsonWrite(SvJsonWriter &js) const override;
-    virtual void jsonRead(SvJsonReader &js) override;
+    virtual void jsonWrite(CsJsonWriter &js) const override;
+    virtual void jsonRead(CsJsonReader &js) override;
   };
 
 using CsLyricList = QList<CsLyric>;
