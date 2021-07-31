@@ -19,10 +19,15 @@ class CsPainter
     QStringList mVisibleChord;
     QStringList mVisibleNote;
     QStringList mVisibleTranslate;
+    CsClefMap   mClefMap;
 
     int       mCurY;
     int       mPixPerX;
     int       mScoreLineDistance;
+    int       mFontSize;
+    int       mTextHeight;
+    int       mTextGap;
+    int       mLineGap;
   public:
     CsPainter( QPainter *painter, const CsComposition &comp );
 
@@ -48,7 +53,7 @@ class CsPainter
 
     void drawChordImpl( int x, int y, const CsChordLine &chordLine );
 
-    void drawNoteImpl( int x, int y, const CsNoteLine &noteLine );
+    void drawNoteImpl(int x, int y, int clef, const CsNoteLine &noteLine );
 
     void drawTranslationImpl( int x, int y, const QString &tran );
 

@@ -26,6 +26,15 @@ CsWinScore::CsWinScore(const QString path, CsComposition &src, QWidget *parent) 
   chordList.append( CsChord(256,noteD,chordMin) );
   mComposition.chordListSet( ln, QStringLiteral("soft"), chordList );
 
+  CsNoteList noteList;
+  noteList.append( CsNote( 128, duraEighth, noteG, octaveSecond ) );
+  noteList.append( CsNote( 128 + duraEighth, duraEighth, noteC, octaveFirst ) );
+  noteList.append( CsNote( 128 + 2*duraEighth, duraEighth, noteB, octaveFirst ) );
+  noteList.append( CsNote( 128 + 3*duraEighth, duraEighth, noteA, octaveFirst ) );
+  noteList.append( CsNote( 128 + 5*duraEighth, duraEighth + duraSixteenth + duraThirtySecond, noteCd, octaveSecond ) );
+  noteList.append( CsNote( 128 + 8*duraEighth, duraEighth + duraSixteenth + duraThirtySecond, noteFd, octaveFirst ) );
+  mComposition.noteListSet( ln, QStringLiteral("piano"), noteList );
+
   CsLyricList lyricList;
   lyricList.append( CsLyric(20, QStringLiteral("Бывают дни") ) );
   lyricList.append( CsLyric(256, QStringLiteral("когда опустишь") ) );

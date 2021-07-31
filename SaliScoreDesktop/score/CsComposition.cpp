@@ -55,13 +55,14 @@ void CsComposition::chordAppend(const QString &part, const QString &descr)
 
 
 
-void CsComposition::noteAppend(const QString &part, const QString &descr)
+void CsComposition::noteAppend(const QString &part, const QString &descr, int clef)
   {
   //Test if part already exist
   int index = noteIndex(part);
   if( index < 0 ) {
     //No note with this part, append
     mNoteList.append( CsDefinition( part, descr ) );
+    mClefMap.insert( part, clef );
     //Empty note list
     CsNoteList noteList;
     //Run over all lines and append note to non remark line
@@ -73,6 +74,7 @@ void CsComposition::noteAppend(const QString &part, const QString &descr)
   else {
     //Chord already exist, so change description only
     mNoteList[index].mDescription = descr;
+    mClefMap.insert( part, clef );
     }
   }
 
@@ -157,6 +159,8 @@ void CsComposition::jsonWrite(CsJsonWriter &js) const
   js.jsonList<CsDefinition>( "ChordDefList", mChordList );
   js.jsonList<CsDefinition>( "NoteDefList", mNoteList );
   js.jsonList<CsDefinition>( "TranslateList", mTranslationList );
+
+  js.jsonMapInt( "ClefMap", mClefMap );
   }
 
 
@@ -173,6 +177,8 @@ void CsComposition::jsonRead(CsJsonReader &js)
   js.jsonList<CsDefinition>( "ChordDefList", mChordList );
   js.jsonList<CsDefinition>( "NoteDefList", mNoteList );
   js.jsonList<CsDefinition>( "TranslateList", mTranslationList );
+
+  js.jsonMapInt( "ClefMap", mClefMap );
   }
 
 

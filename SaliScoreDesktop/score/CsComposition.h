@@ -21,6 +21,8 @@ Description
 #include <QStringList>
 #include <QJsonObject>
 
+using CsClefMap = QMap<QString,int>;
+
 class CsComposition
   {
     QString    mTitle;
@@ -32,6 +34,7 @@ class CsComposition
     CsDefList  mChordList;
     CsDefList  mNoteList;
     CsDefList  mTranslationList;
+    CsClefMap  mClefMap;
 
     CsLineList mLineList;
 
@@ -81,9 +84,15 @@ class CsComposition
 
     QStringList noteVisible() const { return visibleList(mNoteList); }
 
+    CsClefMap   noteClefMap() const { return mClefMap; }
+
+    int         noteClefGet( const QString &part ) const { return mClefMap.value(part); }
+
+    void        noteClefSet( const QString &part, int clef ) { mClefMap.insert( part, clef ); }
+
     int         noteIndex( const QString &part ) const { return defListIndex( mNoteList, part ); }
 
-    void        noteAppend( const QString &part, const QString &descr );
+    void        noteAppend( const QString &part, const QString &descr, int clef = noteG );
 
     void        noteRemove( int index );
 

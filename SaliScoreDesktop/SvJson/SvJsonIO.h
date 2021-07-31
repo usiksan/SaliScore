@@ -158,6 +158,20 @@ class SvJsonWriter
 
 
     //!
+    //! \brief jsonMapInt Transfer map of int
+    //! \param key        Key for map
+    //! \param map        Map to transfer
+    //!
+    void jsonMapInt( const char *key, const QMap<QString,int> &map )
+      {
+      QJsonObject obj;
+      for( auto i = map.constBegin(); i != map.constEnd(); i++ )
+        obj.insert( i.key(), i.value() );
+      mObjectRef.insert( QString(key), obj );
+      }
+
+
+    //!
     //! \brief jsonMap Template transfer map of any values with QString as key
     //!                Value class must contains jsonWrite method, which returns
     //!                json object for value object
@@ -371,6 +385,23 @@ class SvJsonReader
       for( auto i = obj.constBegin(); i != obj.constEnd(); i++ ) {
         QString str = i.value().toString();
         map.insert( i.key(), str );
+        }
+      }
+
+
+
+    //!
+    //! \brief jsonMapInt Transfer map of int
+    //! \param key        Key for map
+    //! \param map        Map to transfer
+    //!
+    void jsonMapInt( const char *key, QMap<QString,int> &map )
+      {
+      map.clear();
+      QJsonObject obj = mObject.value( QString(key) ).toObject();
+      for( auto i = obj.constBegin(); i != obj.constEnd(); i++ ) {
+        int v = i.value().toInt();
+        map.insert( i.key(), v );
         }
       }
 

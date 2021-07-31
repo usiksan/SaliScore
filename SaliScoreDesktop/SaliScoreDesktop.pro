@@ -54,6 +54,7 @@ HEADERS += \
     score/CsLine.h \
     score/CsLyric.h \
     score/CsNote.h \
+    score/CsNoteChord.h \
     score/CsNoteKit.h \
     score/CsNoteLine.h \
     score/CsPosition.h \

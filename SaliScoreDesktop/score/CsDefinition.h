@@ -3,6 +3,7 @@
 
 #include "CsConfig.h"
 #include "CsJsonIO.h"
+#include "CsNoteChord.h"
 
 #include <QString>
 #include <QList>
