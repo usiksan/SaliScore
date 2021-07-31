@@ -31,7 +31,7 @@ class CsComposition
     CsDefList  mRemarkList;
     CsDefList  mChordList;
     CsDefList  mNoteList;
-    CsDefList  mTranslateList;
+    CsDefList  mTranslationList;
 
     CsLineList mLineList;
 
@@ -52,6 +52,9 @@ class CsComposition
 
     void        remarkToggle( int index, bool on ) { mRemarkList[index].mVisible = on; }
 
+    auto        remarkGet( int line, const QString &lang ) const { return mLineList.at(line).remarkGet(lang); }
+
+    void        remarkSet( int line, const QString &lang, const QString &rem ) { mLineList[line].remarkSet(lang,rem); }
 
 
     //=================================================================
@@ -66,6 +69,10 @@ class CsComposition
     void        chordRemove( int index );
 
     void        chordToggle( int index, bool on ) { mChordList[index].mVisible = on; }
+
+    auto        chordListGet( int line, const QString &part ) const { return mLineList.at(line).chordListGet(part); }
+
+    void        chordListSet( int line, const QString &part, const CsChordList &list ) { mLineList[line].chordListSet(part,list); }
 
 
 
@@ -82,31 +89,47 @@ class CsComposition
 
     void        noteToggle( int index, bool on ) { mNoteList[index].mVisible = on; }
 
+    auto        noteListGet( int line, const QString &part ) const { return mLineList.at(line).noteListGet(part); }
+
+    void        noteListSet( int line, const QString &part, const CsNoteList &list ) { mLineList[line].noteListSet(part,list); }
+
+
+    //=================================================================
+    //         Note part
+    auto        lyricGet( int line ) const { return mLineList.at(line).lyricGet(); }
+
+    void        lyricSet( int line, const CsLyricList &list ) { mLineList[line].lyricSet(list); }
 
 
     //=================================================================
     //         Translation part
 
-    QStringList translationVisible() const { return visibleList(mTranslateList); }
+    QStringList translationVisible() const { return visibleList(mTranslationList); }
 
-    int         translationIndex( const QString &lang ) const { return defListIndex( mTranslateList, lang ); }
+    int         translationIndex( const QString &lang ) const { return defListIndex( mTranslationList, lang ); }
 
     void        translationAppend( const QString &lang, const QString &descr );
 
     void        translationRemove( int index );
 
-    void        translateToggle( int index, bool on ) { mTranslateList[index].mVisible = on; }
+    void        translationToggle( int index, bool on ) { mTranslationList[index].mVisible = on; }
 
+    auto        translationGet( int line, const QString &lang ) const { return mLineList.at(line).translationGet(lang); }
+
+    void        translationSet( int line, const QString &lang, const QString &tran ) { mLineList[line].translationSet( lang, tran ); }
 
 
     //=================================================================
     //         Lines
 
-    void        lineInsert( int index, const CsLine &line );
+    int         lineInsert( int index, bool rem );
 
-    void        lineAppend( const CsLine &line ) { lineInsert( -1, line ); }
+    int         lineAppend( bool rem ) { return lineInsert( -1, rem ); }
 
-    auto       &lineList() const { return mLineList; }
+    auto       &line( int index ) const { return mLineList.at(index); }
+
+    int         lineCount() const { return mLineList.count(); }
+
 
 
 

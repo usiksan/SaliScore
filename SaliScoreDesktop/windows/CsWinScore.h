@@ -3,7 +3,6 @@
 
 #include "CsConfig.h"
 #include "score/CsComposition.h"
-#include "score/CsState.h"
 #include "CsWinTrain.h"
 #include "CsWinEditor.h"
 #include "CsWinKaraoke.h"
@@ -16,7 +15,6 @@ class CsWinScore : public QWidget
 
     QString       mPath;
     CsComposition mComposition;
-    CsState       mState;
     bool          mDirty;
 
     CsWinTrain   *mWinTrain;

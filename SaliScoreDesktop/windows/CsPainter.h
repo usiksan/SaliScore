@@ -5,8 +5,8 @@
 #include "score/CsChordLine.h"
 #include "score/CsNoteLine.h"
 #include "score/CsLyric.h"
-#include "score/CsState.h"
 #include "score/CsLine.h"
+#include "score/CsComposition.h"
 
 #include <QPainter>
 #include <QStringList>
@@ -22,8 +22,9 @@ class CsPainter
 
     int       mCurY;
     int       mPixPerX;
+    int       mScoreLineDistance;
   public:
-    CsPainter( QPainter *painter, const CsState &st );
+    CsPainter( QPainter *painter, const CsComposition &comp );
 
     void drawLine( const CsLine &line );
 
@@ -39,6 +40,8 @@ class CsPainter
 
     void drawLyric( const CsLyricList &lyricList );
 
+    void drawTranslation( const QMap<QString,QString> &translationMap );
+
 
 
     void drawRemarkImpl( int x, int y, const QString &rem );
@@ -46,6 +49,8 @@ class CsPainter
     void drawChordImpl( int x, int y, const CsChordLine &chordLine );
 
     void drawNoteImpl( int x, int y, const CsNoteLine &noteLine );
+
+    void drawTranslationImpl( int x, int y, const QString &tran );
 
     int  visualX( int x, int pos );
   };

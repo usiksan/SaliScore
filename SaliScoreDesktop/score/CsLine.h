@@ -29,6 +29,8 @@ class CsLine
     auto &lyricListConst() const { return mLyricList; }
     auto &translationConst() const { return mTranslation; }
 
+    bool  isRemark() const { return !mRemark.isEmpty(); }
+
     //========================================================
     //    Remark part
     QString remarkGet( const QString &lang ) const { return mRemark.remarkGet(lang); }
@@ -37,14 +39,28 @@ class CsLine
 
     //========================================================
     //    Chord part
-    auto  chordListGet( const QString &part ) const { return mChordKit.chordListGet(part); }
+    auto    chordListGet( const QString &part ) const { return mChordKit.chordListGet(part); }
 
-    void  chordListSet( const QString &part, const CsChordList &line ) { mChordKit.chordListSet( part, line ); }
+    void    chordListSet( const QString &part, const CsChordList &line ) { mChordKit.chordListSet( part, line ); }
 
 
     //========================================================
+    //    Chord part
+    auto    noteListGet( const QString &part ) const { return mNoteKit.noteListGet( part ); }
+
+    void    noteListSet( const QString &part, const CsNoteList &list ) { mNoteKit.noteListSet( part, list ); }
+
+    //========================================================
     //    Lyric part
-    void setLyric( const CsLyricList &lyricList ) { mLyricList = lyricList; }
+    auto    lyricGet() const { return mLyricList; }
+
+    void    lyricSet( const CsLyricList &lyricList ) { mLyricList = lyricList; }
+
+    //========================================================
+    //    Translation part
+    QString translationGet( const QString &lang ) const { return mTranslation.value( lang ); }
+
+    void    translationSet( const QString &lang, const QString &tran ) { mTranslation.insert( lang, tran ); }
 
     //========================================================
     //    json part

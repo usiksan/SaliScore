@@ -3,7 +3,6 @@
 
 #include "CsConfig.h"
 #include "score/CsComposition.h"
-#include "score/CsState.h"
 
 #include <QWidget>
 
@@ -12,9 +11,8 @@ class CsWinTrain : public QWidget
     Q_OBJECT
 
     CsComposition &mComposition;
-    CsState       &mState;
   public:
-    explicit CsWinTrain( CsComposition &comp, CsState &st, QWidget *parent = nullptr);
+    explicit CsWinTrain( CsComposition &comp, QWidget *parent = nullptr);
 
   signals:
 

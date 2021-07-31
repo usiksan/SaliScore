@@ -13,6 +13,7 @@ class CsLyric : public CsPosition
     QString mLyric;
   public:
     CsLyric();
+    CsLyric( int pos, const QString &lyric ) : CsPosition( pos ), mLyric(lyric) {}
 
     QString lyric() const { return mLyric; }
     void    setLyric( const QString lyr ) { mLyric = lyr; }

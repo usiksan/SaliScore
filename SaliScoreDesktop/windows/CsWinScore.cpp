@@ -12,28 +12,39 @@ CsWinScore::CsWinScore(const QString path, CsComposition &src, QWidget *parent) 
   {
   setPath(path);
 
-  CsLine line;
+  mComposition.remarkAppend( QStringLiteral("ru"), QStringLiteral("Russian") );
+  mComposition.chordAppend( QStringLiteral("soft"), QStringLiteral("Soft variant") );
+  mComposition.noteAppend( QStringLiteral("piano"), QStringLiteral("Piano soft variant") );
+  mComposition.translationAppend( QStringLiteral("en"), QStringLiteral("English") );
+
+  int ln = mComposition.lineAppend( true );
+  mComposition.remarkSet( ln, QStringLiteral("ru"),  QStringLiteral("Проигрыш") );
+
+  ln = mComposition.lineAppend( false );
   CsChordList chordList;
   chordList.append( CsChord(128,noteC,chordMin) );
   chordList.append( CsChord(256,noteD,chordMin) );
-  line.chordListSet( QStringLiteral("soft"), chordList );
+  mComposition.chordListSet( ln, QStringLiteral("soft"), chordList );
 
-  mState.remarkAppend( QStringLiteral("ru"), QStringLiteral("Russian") );
-  mState.chordAppend( QStringLiteral("soft"), QStringLiteral("Soft variant") );
+  CsLyricList lyricList;
+  lyricList.append( CsLyric(20, QStringLiteral("Бывают дни") ) );
+  lyricList.append( CsLyric(256, QStringLiteral("когда опустишь") ) );
+  lyricList.append( CsLyric(400, QStringLiteral("руки") ) );
+  mComposition.lyricSet( ln, lyricList );
 
-  mComposition.lineAppend( CsLine( QStringLiteral("ru"), QStringLiteral("Проигрыш")) );
-  mComposition.lineAppend( CsLine( QStringLiteral("ru"), QString{} ) );
-  mComposition.lineAppend( CsLine( QStringLiteral("ru"), QStringLiteral("Куплет")) );
-  mComposition.lineAppend( line );
-  mComposition.lineAppend( CsLine( QStringLiteral("ru"), QString{} ) );
-  mComposition.lineAppend( CsLine( QStringLiteral("ru"), QStringLiteral("Припев")) );
+  static uint nt[3] = { 119135, 0, 0 };
+  mComposition.translationSet( ln, QStringLiteral("en"), QStringLiteral("There days when put down hands ") + QString::fromUcs4( nt, 1 ) );
+
+  ln = mComposition.lineAppend( true );
+  mComposition.remarkSet( ln, QStringLiteral("ru"),  QStringLiteral("Проигрыш") );
+
 
   //Layout
   QVBoxLayout *box = new QVBoxLayout();
   box->setSpacing(0);
   box->setContentsMargins( 0, 0, 0, 0 );
 
-  box->addWidget( mWinTrain = new CsWinTrain( mComposition, mState ) );
+  box->addWidget( mWinTrain = new CsWinTrain( mComposition ) );
 
   setLayout( box );
 

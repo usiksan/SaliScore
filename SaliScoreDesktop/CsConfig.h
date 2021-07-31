@@ -23,6 +23,8 @@ History
   31.07.2021 v0.7  Append settings as individual tuning of composition
              v0.8  Transfer settings into composition. So settings are the part of composition
                    and can be write-read separatelly
+             v0.9  Complete with transfer settings into composition
+                   Try drawing notes by standard font
 */
 
 #ifndef CSCONFIG
@@ -36,7 +38,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             7
+#define CS_VERSION_MINOR             9
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"

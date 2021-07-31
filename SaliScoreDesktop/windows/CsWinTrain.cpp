@@ -5,10 +5,9 @@
 #include <QPainter>
 #include <QSettings>
 
-CsWinTrain::CsWinTrain(CsComposition &comp, CsState &st, QWidget *parent) :
+CsWinTrain::CsWinTrain(CsComposition &comp, QWidget *parent) :
   QWidget(parent),
-  mComposition(comp),
-  mState(st)
+  mComposition(comp)
   {
 
   }
@@ -22,8 +21,7 @@ void CsWinTrain::paintEvent(QPaintEvent *event)
   QColor colorBack = QColor( (QRgb) (settings.value( KEY_TRAIN_COLOR_BACK, QVariant(QColor(Qt::white).rgb()) ).toUInt()) );
   painter.fillRect( QRect( QPoint(), size() ), colorBack );
 
-  CsPainter cp( &painter, mState );
-  auto list = mComposition.lineList();
-  for( const auto &line : list )
-    cp.drawLine( line );
+  CsPainter cp( &painter, mComposition );
+  for( int i = 0; i < mComposition.lineCount(); i++ )
+    cp.drawLine( mComposition.line(i) );
   }

@@ -10,7 +10,9 @@ class CsNoteLine
   public:
     CsNoteLine();
 
-    auto &noteList() const { return mNoteList; }
+    auto &noteListGet() const { return mNoteList; }
+
+    void  noteListSet( const CsNoteList &list ) { mNoteList = list; }
 
     void jsonWrite( CsJsonWriter &js ) const;
 
