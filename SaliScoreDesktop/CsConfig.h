@@ -21,6 +21,8 @@ History
   29.07.2021 v0.5  Append json reading and writing
   30.07.2021 v0.6  Begin to create drawing system
   31.07.2021 v0.7  Append settings as individual tuning of composition
+             v0.8  Transfer settings into composition. So settings are the part of composition
+                   and can be write-read separatelly
 */
 
 #ifndef CSCONFIG

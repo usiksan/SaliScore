@@ -35,9 +35,4 @@ void CsState::jsonRead(CsJsonReader &js)
 
 QStringList CsState::visibleList(const CsDefList &src)
   {
-  QStringList list;
-  for( const auto &def : src )
-    if( def.mVisible )
-      list.append( def.mName );
-  return list;
   }
