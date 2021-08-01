@@ -37,6 +37,7 @@ SOURCES += \
     windows/CsWinHelp.cpp \
     windows/CsWinKaraoke.cpp \
     windows/CsWinMain.cpp \
+    windows/CsWinPage.cpp \
     windows/CsWinScore.cpp \
     windows/CsWinTrain.cpp
 
@@ -70,6 +71,7 @@ HEADERS += \
     windows/CsWinHelp.h \
     windows/CsWinKaraoke.h \
     windows/CsWinMain.h \
+    windows/CsWinPage.h \
     windows/CsWinScore.h \
     windows/CsWinTrain.h
 

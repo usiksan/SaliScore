@@ -31,6 +31,7 @@ History
              v0.13 Append individual viewer settings
                    Append separated settings for different kind of information
                    Begin releasing viewer switching
+             v0.14 Append intermediate page window to support playLists
 */
 
 #ifndef CSCONFIG
@@ -44,7 +45,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             13
+#define CS_VERSION_MINOR             14
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"

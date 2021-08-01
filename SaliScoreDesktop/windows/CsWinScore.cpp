@@ -2,15 +2,11 @@
 
 #include <QFileInfo>
 #include <QJsonDocument>
-#include <QVBoxLayout>
 
 CsWinScore::CsWinScore(const QString path, CsComposition &src, QWidget *parent) :
-  QStackedWidget(parent),
-  mPath(path),
-  mComposition(src),
-  mDirty(false)
+  CsWinPage( path, parent ),
+  mComposition(src)
   {
-  setPath(path);
 
   /*
   mComposition.remarkAppend( QStringLiteral("ru"), QStringLiteral("Russian") );
@@ -64,68 +60,13 @@ CsWinScore::CsWinScore(const QString path, CsComposition &src, QWidget *parent) 
   }
 
 
-//!
-//! \brief setPath Setup new path for composition
-//! \param thePath New path for composition
-//!
-void CsWinScore::setPath(const QString thePath)
-  {
-  QFileInfo info(thePath);
-  mPath = info.absolutePath() + QChar('/') + info.completeBaseName() + QStringLiteral(CS_BASE_EXTENSION);
-  }
-
-
-
-//!
-//! \brief name Returns current file name (without path)
-//! \return     Current file name
-//!
-QString CsWinScore::name() const
-  {
-  QFileInfo info(mPath);
-  return info.completeBaseName();
-  }
 
 
 
 
-//!
-//! \brief cmFileSave Saves file into path
-//! \param path       Path to file
-//!
-void CsWinScore::cmFileSave(const QString path)
-  {
-  QFile file(path);
-  if( file.open(QIODevice::WriteOnly) ) {
-    //Create writer and use it to write composition contents to json object
-    CsJsonWriter js{};
-    mComposition.jsonWrite( js );
-
-    //Append file type and version
-    js.jsonString( CS_BASE_TYPE_KEY, QStringLiteral(CS_BASE_TYPE) );
-    js.jsonInt( CS_BASE_VERSION_KEY, CS_BASE_VERSION );
-
-    //Write contents to file
-    file.write( QJsonDocument(js.object()).toJson() );
-    }
-  }
 
 
 
-void CsWinScore::cmFilePublic()
-  {
-
-  }
-
-void CsWinScore::cmFileExport()
-  {
-
-  }
-
-void CsWinScore::cmFilePrint()
-  {
-
-  }
 
 void CsWinScore::cmEditUndo()
   {
@@ -156,3 +97,51 @@ void CsWinScore::cmEditDelete()
   {
 
   }
+
+
+QString CsWinScore::extension() const
+  {
+  return QStringLiteral(CS_BASE_EXTENSION);
+  }
+
+
+//!
+//! \brief cmFileSave Saves file into path
+//! \param path       Path to file
+//!
+void CsWinScore::cmFileSave(const QString path)
+  {
+  QFile file(path);
+  if( file.open(QIODevice::WriteOnly) ) {
+    //Create writer and use it to write composition contents to json object
+    CsJsonWriter js{};
+    mComposition.jsonWrite( js );
+
+    //Append file type and version
+    js.jsonString( CS_BASE_TYPE_KEY, QStringLiteral(CS_BASE_TYPE) );
+    js.jsonInt( CS_BASE_VERSION_KEY, CS_BASE_VERSION );
+
+    //Write contents to file
+    file.write( QJsonDocument(js.object()).toJson() );
+
+    //Write completed, reset dirty
+    mComposition.dirtyReset();
+    }
+  }
+
+
+void CsWinScore::cmFilePublic()
+  {
+
+  }
+
+void CsWinScore::cmFileExport()
+  {
+
+  }
+
+void CsWinScore::cmFilePrint()
+  {
+
+  }
+

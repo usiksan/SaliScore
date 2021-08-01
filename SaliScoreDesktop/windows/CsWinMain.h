@@ -55,14 +55,14 @@ class CsWinMain : public QMainWindow
     //! \brief activeEditor Returns current actived editor
     //! \return             Current actived editor or nullptr if none
     //!
-    CsWinScore *activeEditor() const;
+    CsWinPage  *activeEditor() const;
 
     //!
     //! \brief editor Retrive editor by tab index
     //! \param index  Index of tab which editor need to be retrieved
     //! \return       Editor by tab index or nullptr if no editor in this index
     //!
-    CsWinScore *editor( int index ) const;
+    CsWinPage  *editor( int index ) const;
 
     //!
     //! \brief fileSaveIndex Save file which editor on index tab
@@ -92,7 +92,7 @@ class CsWinMain : public QMainWindow
     //! \brief appendEditor Appends editor to editors tab
     //! \param editor       Appended editor
     //!
-    void         appendEditor( CsWinScore *editor );
+    void         appendEditor(CsWinPage *editor );
 
     void createMenu();
   public:

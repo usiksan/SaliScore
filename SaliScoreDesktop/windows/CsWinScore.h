@@ -3,19 +3,16 @@
 
 #include "CsConfig.h"
 #include "score/CsComposition.h"
+#include "CsWinPage.h"
 #include "CsWinTrain.h"
 #include "CsWinEditor.h"
 #include "CsWinKaraoke.h"
 
-#include <QStackedWidget>
-
-class CsWinScore : public QStackedWidget
+class CsWinScore : public CsWinPage
   {
     Q_OBJECT
 
-    QString       mPath;
     CsComposition mComposition;
-    bool          mDirty;
 
     CsWinEditor  *mWinEditor;
     CsWinTrain   *mWinTrain;
@@ -23,40 +20,6 @@ class CsWinScore : public QStackedWidget
   public:
     explicit CsWinScore(const QString path, CsComposition &src, QWidget *parent = nullptr);
 
-    //!
-    //! \brief path Returns current file path
-    //! \return     Current file path
-    //!
-    QString path() const { return mPath; }
-
-    //!
-    //! \brief setPath Setup new path for composition
-    //! \param thePath New path for composition
-    //!
-    void    setPath( const QString thePath );
-
-    //!
-    //! \brief name Returns current file name (without path)
-    //! \return     Current file name
-    //!
-    QString name() const;
-
-    //!
-    //! \brief isDirty Returns if composition edited
-    //! \return        true if composition edited
-    //!
-    bool    isDirty() const { return mDirty; }
-
-    //!
-    //! \brief cmFileSave Saves file into path
-    //! \param path       Path to file
-    //!
-    void    cmFileSave( const QString path );
-
-    //Menu File
-    void cmFilePublic();
-    void cmFileExport();
-    void cmFilePrint();
 
     //Menu Edit
     virtual void cmEditUndo();
@@ -78,6 +41,31 @@ class CsWinScore : public QStackedWidget
     void cmViewKaraoke();
 
   signals:
+
+
+    // CsWinPage interface
+  public:
+    //!
+    //! \brief extension Returns extension of files of editor
+    //! \return          Extension of files of editor
+    //!
+    virtual QString extension() const override;
+
+    //!
+    //! \brief isDirty Returns if composition edited
+    //! \return        true if composition edited
+    //!
+    virtual bool    isDirty() const override { return mComposition.isDirty(); }
+
+    //!
+    //! \brief cmFileSave Saves file into path
+    //! \param path       Path to file
+    //!
+    virtual void    cmFileSave( const QString path ) override;
+
+    virtual void    cmFilePublic() override;
+    virtual void    cmFileExport() override;
+    virtual void    cmFilePrint() override;
 
   };
 

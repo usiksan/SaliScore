@@ -11,6 +11,7 @@ CsComposition::CsComposition()
 
 void CsComposition::remarkAppend(const QString &lang, const QString &descr)
   {
+  mDirty = true;
   //Test if lang already exist
   int index = remarkIndex(lang);
   if( index < 0 ) {
@@ -33,6 +34,7 @@ void CsComposition::remarkAppend(const QString &lang, const QString &descr)
 
 void CsComposition::chordAppend(const QString &part, const QString &descr)
   {
+  mDirty = true;
   //Test if part already exist
   int index = chordIndex(part);
   if( index < 0 ) {
@@ -57,6 +59,7 @@ void CsComposition::chordAppend(const QString &part, const QString &descr)
 
 void CsComposition::noteAppend(const QString &part, const QString &descr, int clef)
   {
+  mDirty = true;
   //Test if part already exist
   int index = noteIndex(part);
   if( index < 0 ) {
@@ -83,6 +86,7 @@ void CsComposition::noteAppend(const QString &part, const QString &descr, int cl
 
 void CsComposition::translationAppend(const QString &lang, const QString &descr)
   {
+  mDirty = true;
   //Test if lang already exist
   int index = translationIndex(lang);
   if( index < 0 ) {
@@ -105,6 +109,7 @@ void CsComposition::translationAppend(const QString &lang, const QString &descr)
 
 int CsComposition::lineInsert(int index, bool rem)
   {
+  mDirty = true;
   //Create new line
   CsLine line;
   if( rem ) {
@@ -179,6 +184,8 @@ void CsComposition::jsonRead(CsJsonReader &js)
   js.jsonList<CsDefinition>( "TranslateList", mTranslationList );
 
   js.jsonMapInt( "ClefMap", mClefMap );
+
+  mDirty = false;
   }
 
 

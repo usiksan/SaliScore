@@ -159,7 +159,7 @@ void CsWinMain::closeEvent(QCloseEvent *ev)
   //Test, it is all editors are closed
   bool editorPresent = false;
   for( int i = 0; i < mWEditors->count() && !editorPresent; i++ )
-    if( dynamic_cast<CsWinScore*>( mWEditors->widget(i) ) != nullptr )
+    if( dynamic_cast<CsWinPage*>( mWEditors->widget(i) ) != nullptr )
       editorPresent = true;
 
   //If all closed
@@ -180,9 +180,9 @@ void CsWinMain::closeEvent(QCloseEvent *ev)
 //! \brief activeEditor Returns current actived editor
 //! \return             Current actived editor or nullptr if none
 //!
-CsWinScore *CsWinMain::activeEditor() const
+CsWinPage *CsWinMain::activeEditor() const
   {
-  return dynamic_cast<CsWinScore*>( mWEditors->currentWidget() );
+  return dynamic_cast<CsWinPage*>( mWEditors->currentWidget() );
   }
 
 
@@ -193,12 +193,12 @@ CsWinScore *CsWinMain::activeEditor() const
 //! \param index  Index of tab which editor need to be retrieved
 //! \return       Editor by tab index or nullptr if no editor in this index
 //!
-CsWinScore *CsWinMain::editor(int index) const
+CsWinPage *CsWinMain::editor(int index) const
   {
   //Check index bound
   if( index < 0 || index >= mWEditors->count() )
     return nullptr;
-  return dynamic_cast<CsWinScore*>( mWEditors->widget(index) );
+  return dynamic_cast<CsWinPage*>( mWEditors->widget(index) );
   }
 
 
@@ -210,7 +210,7 @@ CsWinScore *CsWinMain::editor(int index) const
 //!
 void CsWinMain::fileSaveIndex(int index)
   {
-  CsWinScore *ed = editor( index );
+  CsWinPage *ed = editor( index );
   if( ed == nullptr ) return;
 
   //Test if file name yet not assigned
@@ -228,11 +228,11 @@ void CsWinMain::fileSaveIndex(int index)
 //!
 void CsWinMain::fileSaveAsIndex(int index)
   {
-  CsWinScore *ed = editor( index );
+  CsWinPage *ed = editor( index );
   if( ed == nullptr ) return;
 
   QString title = ed->path();
-  title = QFileDialog::getSaveFileName(this, tr("Save File"), title, QString("SaliScore Files (*%1)").arg(CS_BASE_EXTENSION) );
+  title = QFileDialog::getSaveFileName(this, tr("Save File"), title, QString("SaliScore Files (*%1)").arg(ed->extension()) );
   if( title.isEmpty() ) return;
   ed->setPath( title );
   mWEditors->setTabText( index, ed->name() );
@@ -251,7 +251,7 @@ void CsWinMain::fileSaveAsIndex(int index)
 //!
 void CsWinMain::fileCloseIndex(int index)
   {
-  CsWinScore *ed = editor( index );
+  CsWinPage *ed = editor( index );
   if( ed == nullptr ) return;
 
   if( ed->isDirty() ) {
@@ -283,7 +283,7 @@ void CsWinMain::fileOpen(const QString path)
 
   //Try find already opened file
   for( int i = 0; i < mWEditors->count(); i++ ) {
-    CsWinScore *ed = editor(i);
+    CsWinPage *ed = editor(i);
     if( ed != nullptr ) {
       if( ed->path() == path ) {
         //File with this path found
@@ -309,7 +309,7 @@ void CsWinMain::fileOpen(const QString path)
 //! \brief appendEditor Appends editor to editors tab
 //! \param editor       Appended editor
 //!
-void CsWinMain::appendEditor(CsWinScore *editor)
+void CsWinMain::appendEditor(CsWinPage *editor)
   {
   int index = mWEditors->addTab( editor, editor->name() );
   mWEditors->setTabToolTip( index, editor->path() );

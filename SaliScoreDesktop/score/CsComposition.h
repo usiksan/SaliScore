@@ -25,28 +25,32 @@ using CsClefMap = QMap<QString,int>;
 
 class CsComposition
   {
-    QString    mTitle;
-    QString    mSinger;
-    QString    mComposer;
-    QString    mLyricist;
+    QString      mTitle;
+    QString      mSinger;
+    QString      mComposer;
+    QString      mLyricist;
 
-    int        mVoice;
-    int        mVoiceDual;
-    int        mVoiceRight;
-    int        mStyle;
-    int        mTempo;
+    int          mVoice;
+    int          mVoiceDual;
+    int          mVoiceRight;
+    int          mStyle;
+    int          mTempo;
 
-    CsDefList  mRemarkList;
-    CsDefList  mChordList;
-    CsDefList  mNoteList;
-    CsDefList  mTranslationList;
-    CsClefMap  mClefMap;
+    CsDefList    mRemarkList;
+    CsDefList    mChordList;
+    CsDefList    mNoteList;
+    CsDefList    mTranslationList;
+    CsClefMap    mClefMap;
 
-    CsLineList mLineList;
+    CsLineList   mLineList;
+
+    mutable bool mDirty;
 
     //Settings
   public:
     CsComposition();
+
+    bool        isDirty() const { return mDirty; }
 
     //=================================================================
     //         Remark part
@@ -63,7 +67,7 @@ class CsComposition
 
     auto        remarkGet( int line, const QString &lang ) const { return mLineList.at(line).remarkGet(lang); }
 
-    void        remarkSet( int line, const QString &lang, const QString &rem ) { mLineList[line].remarkSet(lang,rem); }
+    void        remarkSet( int line, const QString &lang, const QString &rem ) { mDirty = true; mLineList[line].remarkSet(lang,rem); }
 
 
     //=================================================================
@@ -81,7 +85,7 @@ class CsComposition
 
     auto        chordListGet( int line, const QString &part ) const { return mLineList.at(line).chordListGet(part); }
 
-    void        chordListSet( int line, const QString &part, const CsChordList &list ) { mLineList[line].chordListSet(part,list); }
+    void        chordListSet( int line, const QString &part, const CsChordList &list ) { mDirty = true; mLineList[line].chordListSet(part,list); }
 
 
 
@@ -94,7 +98,7 @@ class CsComposition
 
     int         noteClefGet( const QString &part ) const { return mClefMap.value(part); }
 
-    void        noteClefSet( const QString &part, int clef ) { mClefMap.insert( part, clef ); }
+    void        noteClefSet( const QString &part, int clef ) { mDirty = true; mClefMap.insert( part, clef ); }
 
     int         noteIndex( const QString &part ) const { return defListIndex( mNoteList, part ); }
 
@@ -106,14 +110,14 @@ class CsComposition
 
     auto        noteListGet( int line, const QString &part ) const { return mLineList.at(line).noteListGet(part); }
 
-    void        noteListSet( int line, const QString &part, const CsNoteList &list ) { mLineList[line].noteListSet(part,list); }
+    void        noteListSet( int line, const QString &part, const CsNoteList &list ) { mDirty = true; mLineList[line].noteListSet(part,list); }
 
 
     //=================================================================
     //         Note part
     auto        lyricGet( int line ) const { return mLineList.at(line).lyricGet(); }
 
-    void        lyricSet( int line, const CsLyricList &list ) { mLineList[line].lyricSet(list); }
+    void        lyricSet( int line, const CsLyricList &list ) { mDirty = true; mLineList[line].lyricSet(list); }
 
 
     //=================================================================
@@ -131,7 +135,7 @@ class CsComposition
 
     auto        translationGet( int line, const QString &lang ) const { return mLineList.at(line).translationGet(lang); }
 
-    void        translationSet( int line, const QString &lang, const QString &tran ) { mLineList[line].translationSet( lang, tran ); }
+    void        translationSet( int line, const QString &lang, const QString &tran ) { mDirty = true; mLineList[line].translationSet( lang, tran ); }
 
 
     //=================================================================
@@ -155,6 +159,8 @@ class CsComposition
     void        jsonWrite( CsJsonWriter &js ) const;
 
     void        jsonRead( CsJsonReader &js );
+
+    void        dirtyReset() { mDirty = false; }
 
 
 
