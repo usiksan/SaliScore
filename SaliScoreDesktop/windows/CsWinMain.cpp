@@ -430,12 +430,17 @@ void CsWinMain::createMenu()
   menuEdit = new QMenu( tr("Edit") );
 
   menuView = new QMenu( tr("View") );
-  actionViewEditor  = menuView->addAction( QIcon(QStringLiteral(":/pic/exit.png")), tr("Editor mode"), this, [this] () {if( auto editor = activeScore() ) editor->cmViewEditor(); } );
-  actionViewTrain   = menuView->addAction( QIcon(QStringLiteral(":/pic/exit.png")), tr("Train mode"), this, [this] () {if( auto editor = activeScore() ) editor->cmViewTrain(); } );
-  actionViewKaraoke = menuView->addAction( QIcon(QStringLiteral(":/pic/exit.png")), tr("Karaoke mode"), this, [this] () {if( auto editor = activeScore() ) editor->cmViewTrain(); } );
+  actionViewEditor  = menuView->addAction( QIcon(QStringLiteral(":/pic/viewEditor.png")), tr("Editor mode"), this, [this] () {if( auto editor = activeScore() ) editor->cmViewEditor(); } );
+  actionViewTrain   = menuView->addAction( QIcon(QStringLiteral(":/pic/viewTrain.png")), tr("Train mode"), this, [this] () {if( auto editor = activeScore() ) editor->cmViewTrain(); } );
+  actionViewKaraoke = menuView->addAction( QIcon(QStringLiteral(":/pic/viewKaraoke.png")), tr("Karaoke mode"), this, [this] () {if( auto editor = activeScore() ) editor->cmViewTrain(); } );
   actionViewEditor->setCheckable(true);
   actionViewTrain->setCheckable(true);
   actionViewKaraoke->setCheckable(true);
+  menuView->addSeparator();
+  actionViewRemark      = menuView->addAction( QIcon(QStringLiteral(":/pic/viewRemark.png")), tr("Remark manage..."), this, [this] () {if( auto editor = activeScore() ) editor->cmViewRemark(); } );
+  actionViewChord       = menuView->addAction( QIcon(QStringLiteral(":/pic/viewChord.png")), tr("Chord manage..."), this, [this] () {if( auto editor = activeScore() ) editor->cmViewChord(); } );
+  actionViewNote        = menuView->addAction( QIcon(QStringLiteral(":/pic/viewNote.png")), tr("Note manage..."), this, [this] () {if( auto editor = activeScore() ) editor->cmViewNote(); } );
+  actionViewTranslation = menuView->addAction( QIcon(QStringLiteral(":/pic/viewTranslation.png")), tr("Translation manage..."), this, [this] () {if( auto editor = activeScore() ) editor->cmViewTranslation(); } );
 
   QActionGroup *group = new QActionGroup(menuView);
   group->addAction( actionViewEditor );
@@ -443,6 +448,9 @@ void CsWinMain::createMenu()
   group->addAction( actionViewKaraoke );
 
   menuPlay = new QMenu( tr("Play") );
+  actionPlayStart = menuView->addAction( QIcon(QStringLiteral(":/pic/playStart.png")), tr("Start"), this, [this] () {if( auto editor = activeScore() ) editor->cmPlayStart(); } );
+  actionPlayPause = menuView->addAction( QIcon(QStringLiteral(":/pic/playPause.png")), tr("Pause"), this, [this] () {if( auto editor = activeScore() ) editor->cmPlayPause(); } );
+  actionPlayStop  = menuView->addAction( QIcon(QStringLiteral(":/pic/playStop.png")), tr("Stop"), this, [this] () {if( auto editor = activeScore() ) editor->cmPlayStop(); } );
 
   menuScore = new QMenu( tr("Score") );
 
@@ -479,8 +487,36 @@ void CsWinMain::createMenu()
   addToolBar( barMain );
 
   barEditor   = new QToolBar( tr("Editor") );
+  barEditor->addAction( actionViewEditor );
+  barEditor->addAction( actionViewTrain );
+  barEditor->addAction( actionViewKaraoke );
+  barEditor->addSeparator();
+  barEditor->addSeparator();
+  barEditor->addAction( actionPlayStart );
+  barEditor->addAction( actionPlayPause );
+  barEditor->addAction( actionPlayStop );
+  addToolBar( barEditor );
+
   barTrain    = new QToolBar( tr("Train") );
+  barTrain->addAction( actionViewEditor );
+  barTrain->addAction( actionViewTrain );
+  barTrain->addAction( actionViewKaraoke );
+  barTrain->addSeparator();
+  barTrain->addAction( actionPlayStart );
+  barTrain->addAction( actionPlayPause );
+  barTrain->addAction( actionPlayStop );
+  addToolBar( barTrain );
+
   barKaraoke  = new QToolBar( tr("Karaoke") );
+  barKaraoke->addAction( actionViewEditor );
+  barKaraoke->addAction( actionViewTrain );
+  barKaraoke->addAction( actionViewKaraoke );
+  barKaraoke->addSeparator();
+  barKaraoke->addAction( actionPlayStart );
+  barKaraoke->addAction( actionPlayPause );
+  barKaraoke->addAction( actionPlayStop );
+  addToolBar( barKaraoke );
+
   barPlayList = new QToolBar( tr("PlayList") );
 
   }
@@ -534,6 +570,10 @@ QActionPtr  CsWinMain::actionEditUnSelect;
 QActionPtr  CsWinMain::actionViewEditor;
 QActionPtr  CsWinMain::actionViewTrain;
 QActionPtr  CsWinMain::actionViewKaraoke;
+QActionPtr  CsWinMain::actionViewRemark;
+QActionPtr  CsWinMain::actionViewChord;
+QActionPtr  CsWinMain::actionViewNote;
+QActionPtr  CsWinMain::actionViewTranslation;
 
 QActionPtr  CsWinMain::actionPlayStart;
 QActionPtr  CsWinMain::actionPlayPause;

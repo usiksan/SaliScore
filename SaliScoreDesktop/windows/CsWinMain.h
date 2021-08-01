@@ -160,6 +160,10 @@ class CsWinMain : public QMainWindow
     static QActionPtr  actionViewEditor;
     static QActionPtr  actionViewTrain;
     static QActionPtr  actionViewKaraoke;
+    static QActionPtr  actionViewRemark;
+    static QActionPtr  actionViewChord;
+    static QActionPtr  actionViewNote;
+    static QActionPtr  actionViewTranslation;
 
     static QActionPtr  actionPlayStart;
     static QActionPtr  actionPlayPause;

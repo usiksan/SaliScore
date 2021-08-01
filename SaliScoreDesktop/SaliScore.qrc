@@ -14,5 +14,16 @@
         <file>pic/helpPrevious.png</file>
         <file>pic/helpRegistration.png</file>
         <file>pic/helpWebsite.png</file>
+        <file>pic/filePrint.png</file>
+        <file>pic/playPause.png</file>
+        <file>pic/playStart.png</file>
+        <file>pic/playStop.png</file>
+        <file>pic/viewEditor.png</file>
+        <file>pic/viewKaraoke.png</file>
+        <file>pic/viewTrain.png</file>
+        <file>pic/viewChord.png</file>
+        <file>pic/viewNote.png</file>
+        <file>pic/viewRemark.png</file>
+        <file>pic/viewTranslation.png</file>
     </qresource>
 </RCC>
