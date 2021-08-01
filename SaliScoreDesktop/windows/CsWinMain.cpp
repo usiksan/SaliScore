@@ -5,9 +5,11 @@
 #include <QGuiApplication>
 #include <QMenu>
 #include <QMenuBar>
+#include <QToolBar>
 #include <QCloseEvent>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QDesktopServices>
 
 
 CsWinMain::CsWinMain(QWidget *parent) :
@@ -47,6 +49,9 @@ CsWinMain::CsWinMain(QWidget *parent) :
 
   //Clipboard notification
   //connect( QGuiApplication::clipboard(), &QClipboard::changed, this, &CsWinMain::onClipboardChanged );
+
+  //Notification on tab changes
+  connect( mWEditors, &QTabWidget::currentChanged, this, [this] ( int index ) { if( auto page = editor(index) ) page->activate(); } );
 
   }
 
@@ -141,6 +146,29 @@ void CsWinMain::cmViewTrain()
   }
 
 void CsWinMain::cmViewKaraoke()
+  {
+
+  }
+
+
+
+
+void CsWinMain::cmHelpContent()
+  {
+
+  }
+
+void CsWinMain::cmHelpAbout()
+  {
+  QMessageBox::about( this, tr("About SaliScore"), tr("SaliLAB simple score edit, training and karaoke programm\n SaliScore version %1.%2").arg( CS_VERSION_MAJOR ).arg( CS_VERSION_MINOR ) );
+  }
+
+void CsWinMain::cmHelpWeb()
+  {
+  QDesktopServices::openUrl( QUrl(QString(CS_ORGANIZATION_DOMAIN)) );
+  }
+
+void CsWinMain::cmHelpRegistration()
   {
 
   }
@@ -389,7 +417,7 @@ void CsWinMain::createMenu()
   actionFileClose    = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileClose.png")), tr("Close file"), this, &CsWinMain::cmFileClose );
   actionFileCloseAll = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileCloseAll.png")), tr("Close all files"), this, &CsWinMain::cmFileCloseAll );
   menuFile->addSeparator();
-  actionFileExit     = menuFile->addAction( QIcon(QStringLiteral(":/pic/exit.png")), tr("Exit programm"), this, &CsWinMain::close );
+  actionFileExit     = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileExit.png")), tr("Exit programm"), this, &CsWinMain::close );
 
   //Last previous files menu
   for (int i = 0; i < CS_PREVIOUS_FILES_COUNT; ++i) {
@@ -402,12 +430,17 @@ void CsWinMain::createMenu()
   menuEdit = new QMenu( tr("Edit") );
 
   menuView = new QMenu( tr("View") );
-  actionViewEditor  = menuView->addAction( QIcon(QStringLiteral(":/pic/exit.png")), tr("Editor mode"), this, &CsWinMain::cmViewEditor );
-  actionViewTrain   = menuView->addAction( QIcon(QStringLiteral(":/pic/exit.png")), tr("Train mode"), this, &CsWinMain::cmViewTrain );
-  actionViewKaraoke = menuView->addAction( QIcon(QStringLiteral(":/pic/exit.png")), tr("Karaoke mode"), this, &CsWinMain::cmViewKaraoke );
+  actionViewEditor  = menuView->addAction( QIcon(QStringLiteral(":/pic/exit.png")), tr("Editor mode"), this, [this] () {if( auto editor = activeScore() ) editor->cmViewEditor(); } );
+  actionViewTrain   = menuView->addAction( QIcon(QStringLiteral(":/pic/exit.png")), tr("Train mode"), this, [this] () {if( auto editor = activeScore() ) editor->cmViewTrain(); } );
+  actionViewKaraoke = menuView->addAction( QIcon(QStringLiteral(":/pic/exit.png")), tr("Karaoke mode"), this, [this] () {if( auto editor = activeScore() ) editor->cmViewTrain(); } );
   actionViewEditor->setCheckable(true);
   actionViewTrain->setCheckable(true);
   actionViewKaraoke->setCheckable(true);
+
+  QActionGroup *group = new QActionGroup(menuView);
+  group->addAction( actionViewEditor );
+  group->addAction( actionViewTrain );
+  group->addAction( actionViewKaraoke );
 
   menuPlay = new QMenu( tr("Play") );
 
@@ -416,6 +449,17 @@ void CsWinMain::createMenu()
   menuTools = new QMenu( tr("Tools") );
 
   menuHelp = new QMenu( tr("Help") );
+  actionHelpContents     = menuHelp->addAction( QIcon(QString(":/pic/helpContent.png")), tr("Contents"), this, &CsWinMain::cmHelpContent );
+  actionHelpAbout        = menuHelp->addAction( QIcon(QString(":/pic/helpAbout.png")), tr("About"), this, &CsWinMain::cmHelpAbout );
+  actionHelpWeb          = menuHelp->addAction( QIcon(QString(":/pic/helpWebsite.png")), tr("WEB home page"), this, &CsWinMain::cmHelpWeb );
+  actionHelpRegistration = menuHelp->addAction( QIcon(QString(":/pic/helpRegistration.png")), tr("Registration"), this, &CsWinMain::cmHelpRegistration );
+  actionHelpHome         = new QAction( QIcon(QString(":/pic/helpHome.png")), QObject::tr("Home help page") );
+//  frame->connect( cmHelpHome, &QAction::triggered, frame, &SdWMain::cmHelpContents );
+  actionHelpBackward     = new QAction( QIcon(QString(":/pic/helpPrevious.png")), QObject::tr("Backward help page") );
+//  frame->connect( cmHelpBackward, &QAction::triggered, frame, &SdWMain::cmHelpBackward );
+  actionHelpForward      = new QAction( QIcon(QString(":/pic/helpNext.png")), QObject::tr("Forward help page") );
+//  frame->connect( cmHelpForward, &QAction::triggered, frame, &SdWMain::cmHelpForward );
+
 
   QMenuBar *bar = menuBar();
   bar->addMenu( menuFile );
@@ -427,6 +471,18 @@ void CsWinMain::createMenu()
   bar->addMenu( menuHelp );
 
   updateRecentFiles( QString{} );
+
+  barMain = new QToolBar( tr("Files") );
+  barMain->addAction( actionFileNew );
+  barMain->addAction( actionFileOpen );
+  barMain->addAction( actionFileSave );
+  addToolBar( barMain );
+
+  barEditor   = new QToolBar( tr("Editor") );
+  barTrain    = new QToolBar( tr("Train") );
+  barKaraoke  = new QToolBar( tr("Karaoke") );
+  barPlayList = new QToolBar( tr("PlayList") );
+
   }
 
 
@@ -448,6 +504,7 @@ QToolBar   *CsWinMain::barMain;
 QToolBar   *CsWinMain::barEditor;
 QToolBar   *CsWinMain::barTrain;
 QToolBar   *CsWinMain::barKaraoke;
+QToolBar   *CsWinMain::barPlayList;
 
 
 QActionPtr  CsWinMain::actionFileNew;
@@ -491,8 +548,8 @@ QActionPtr  CsWinMain::actionScoreNoteManage;
 QActionPtr  CsWinMain::actionToolsOption;
 
 QActionPtr  CsWinMain::actionHelpContents;
-QActionPtr  CsWinMain::actionHelpIndex;
 QActionPtr  CsWinMain::actionHelpAbout;
+QActionPtr  CsWinMain::actionHelpWeb;
 QActionPtr  CsWinMain::actionHelpRegistration;
 QActionPtr  CsWinMain::actionHelpHome;
 QActionPtr  CsWinMain::actionHelpBackward;

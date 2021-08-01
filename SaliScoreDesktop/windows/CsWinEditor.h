@@ -11,8 +11,10 @@
 class CsWinEditor : public QWidget
   {
     Q_OBJECT
+
+    CsComposition &mComposition;
   public:
-    explicit CsWinEditor(QWidget *parent = nullptr);
+    explicit CsWinEditor( CsComposition &comp, QWidget *parent = nullptr);
 
 
   signals:

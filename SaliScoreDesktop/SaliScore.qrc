@@ -7,5 +7,12 @@
         <file>pic/fileSave.png</file>
         <file>pic/fileSaveAll.png</file>
         <file>pic/fileSaveAs.png</file>
+        <file>pic/helpAbout.png</file>
+        <file>pic/helpContent.png</file>
+        <file>pic/helpHome.png</file>
+        <file>pic/helpNext.png</file>
+        <file>pic/helpPrevious.png</file>
+        <file>pic/helpRegistration.png</file>
+        <file>pic/helpWebsite.png</file>
     </qresource>
 </RCC>

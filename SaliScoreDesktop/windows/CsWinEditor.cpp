@@ -1,8 +1,9 @@
 #include "CsWinEditor.h"
 
 
-CsWinEditor::CsWinEditor(QWidget *parent) :
-  QWidget(parent)
+CsWinEditor::CsWinEditor(CsComposition &comp, QWidget *parent) :
+  QWidget(parent),
+  mComposition(comp)
   {
 
   }

@@ -45,6 +45,12 @@ class CsWinScore : public CsWinPage
 
     // CsWinPage interface
   public:
+
+    //!
+    //! \brief activate Called when window activated to ajust view
+    //!
+    virtual void    activate() override;
+
     //!
     //! \brief extension Returns extension of files of editor
     //! \return          Extension of files of editor

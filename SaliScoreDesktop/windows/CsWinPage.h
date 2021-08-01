@@ -30,6 +30,11 @@ class CsWinPage : public QStackedWidget
     QString name() const;
 
     //!
+    //! \brief activate Called when window activated to ajust view
+    //!
+    virtual void    activate() = 0;
+
+    //!
     //! \brief extension Returns extension of files of editor
     //! \return          Extension of files of editor
     //!

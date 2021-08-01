@@ -1,6 +1,8 @@
 #include "CsWinKaraoke.h"
 
-CsWinKaraoke::CsWinKaraoke(QWidget *parent) : QWidget(parent)
+CsWinKaraoke::CsWinKaraoke(CsComposition &comp, QWidget *parent) :
+  QWidget(parent),
+  mComposition(comp)
   {
 
   }

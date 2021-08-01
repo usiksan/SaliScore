@@ -47,6 +47,11 @@ class CsWinMain : public QMainWindow
     void cmViewTrain();
     void cmViewKaraoke();
 
+    void cmHelpContent();
+    void cmHelpAbout();
+    void cmHelpWeb();
+    void cmHelpRegistration();
+
   public:
     virtual void closeEvent( QCloseEvent *ev ) override;
 
@@ -56,6 +61,12 @@ class CsWinMain : public QMainWindow
     //! \return             Current actived editor or nullptr if none
     //!
     CsWinPage  *activeEditor() const;
+
+    //!
+    //! \brief activeScore Returns current actived score editor
+    //! \return            Current actived score editor or nullptr if none
+    //!
+    CsWinScore *activeScore() const { return dynamic_cast<CsWinScore*>(activeEditor()); }
 
     //!
     //! \brief editor Retrive editor by tab index
@@ -120,7 +131,7 @@ class CsWinMain : public QMainWindow
     static QToolBar *barEditor;
     static QToolBar *barTrain;
     static QToolBar *barKaraoke;
-
+    static QToolBar *barPlayList;
 
     static QActionPtr  actionFileNew;
     static QActionPtr  actionFileOpen;
@@ -163,8 +174,8 @@ class CsWinMain : public QMainWindow
     static QActionPtr  actionToolsOption;
 
     static QActionPtr  actionHelpContents;
-    static QActionPtr  actionHelpIndex;
     static QActionPtr  actionHelpAbout;
+    static QActionPtr  actionHelpWeb;
     static QActionPtr  actionHelpRegistration;
     static QActionPtr  actionHelpHome;
     static QActionPtr  actionHelpBackward;

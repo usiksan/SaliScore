@@ -1,7 +1,9 @@
 #include "CsWinScore.h"
+#include "CsWinMain.h"
 
 #include <QFileInfo>
 #include <QJsonDocument>
+#include <QToolBar>
 
 CsWinScore::CsWinScore(const QString filePath, CsComposition &src, QWidget *parent) :
   CsWinPage( filePath, parent ),
@@ -48,18 +50,17 @@ CsWinScore::CsWinScore(const QString filePath, CsComposition &src, QWidget *pare
   */
 
   addWidget( mWinTrain = new CsWinTrain( mComposition ) );
-  addWidget( mWinKaraoke = new CsWinKaraoke() );
-  addWidget( mWinEditor = new CsWinEditor() );
+  addWidget( mWinKaraoke = new CsWinKaraoke( mComposition ) );
+  addWidget( mWinEditor = new CsWinEditor( mComposition ) );
 
-  //Layout
-//  QVBoxLayout *box = new QVBoxLayout();
-//  box->setSpacing(0);
-//  box->setContentsMargins( 0, 0, 0, 0 );
-
-
-//  setLayout( box );
-
-  //
+  if( filePath.startsWith(CS_DEFAULT_FILE_NAME) )
+    cmViewEditor();
+  else if( CsWinMain::actionViewKaraoke->isChecked() )
+    cmViewKaraoke();
+  else if( CsWinMain::actionViewTrain->isChecked() )
+    cmViewTrain();
+  else
+    cmViewEditor();
   }
 
 
@@ -100,6 +101,58 @@ void CsWinScore::cmEditDelete()
   {
 
   }
+
+void CsWinScore::cmViewEditor()
+  {
+  setCurrentWidget( mWinEditor );
+  //Hide toolbars
+  CsWinMain::barPlayList->hide();
+  CsWinMain::barTrain->hide();
+  CsWinMain::barKaraoke->hide();
+  //Show active bar
+  CsWinMain::barEditor->show();
+  CsWinMain::actionViewEditor->setChecked(true);
+  }
+
+void CsWinScore::cmViewTrain()
+  {
+  setCurrentWidget( mWinTrain );
+  //Hide toolbars
+  CsWinMain::barPlayList->hide();
+  CsWinMain::barKaraoke->hide();
+  CsWinMain::barEditor->hide();
+  //Show active bar
+  CsWinMain::barTrain->show();
+  CsWinMain::actionViewTrain->setChecked(true);
+  }
+
+void CsWinScore::cmViewKaraoke()
+  {
+  setCurrentWidget( mWinKaraoke );
+  //Hide toolbars
+  CsWinMain::barPlayList->hide();
+  CsWinMain::barKaraoke->hide();
+  CsWinMain::barEditor->hide();
+  //Show active bar
+  CsWinMain::barTrain->show();
+  CsWinMain::actionViewKaraoke->setChecked(true);
+  }
+
+
+
+//!
+//! \brief activate Called when window activated to ajust view
+//!
+void CsWinScore::activate()
+  {
+  if( currentWidget() == mWinEditor )
+    cmViewEditor();
+  else if( currentWidget() == mWinTrain )
+    cmViewTrain();
+  else
+    cmViewKaraoke();
+  }
+
 
 
 QString CsWinScore::extension() const
