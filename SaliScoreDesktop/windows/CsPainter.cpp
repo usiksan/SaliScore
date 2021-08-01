@@ -1,28 +1,52 @@
 #include "CsPainter.h"
 
 #include <QTransform>
+#include <QSettings>
+#include <QJsonDocument>
 
-CsPainter::CsPainter(QPainter *painter, const CsComposition &comp ) :
+CsPainter::CsPainter(QPainter *painter, const QString &keyViewSettings, const CsComposition &comp ) :
   mPainter(painter),
   mVisibleRemark(comp.remarkVisible()),
   mVisibleChord(comp.chordVisible()),
   mVisibleNote(comp.noteVisible()),
   mVisibleTranslate(comp.translationVisible()),
-  mClefMap(comp.noteClefMap()),
-  mCurY(30),
-  mPixPerX(15),
-  mScoreLineDistance(8),
-  mFontSize(12),
-  mTextGap(4),
-  mLineGap(20)
+  mClefMap(comp.noteClefMap())
   {
-  mPainter->setFont( QFont(QStringLiteral("Serif"), mFontSize ) );
-  QRect r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, QStringLiteral("H") );
-  mTextHeight = r.height();
+  QSettings s;
+  if( s.contains(keyViewSettings) ) {
+    }
+
+  //Calculate font height
+  mRemarkTextHeight      = fontHeight( mSettings.mRemarkFontSize );
+  mChordTextHeight       = fontHeight( mSettings.mChordFontSize );
+  mLyricTextHeight       = fontHeight( mSettings.mLyricFontSize );
+  mTranslationTextHeight = fontHeight( mSettings.mTranslationFontSize );
   }
 
-void CsPainter::drawLine(const CsLine &line)
+
+
+
+int CsPainter::drawLine(int y, int lineIndex, const CsLine &line)
   {
+  mLineIndex = lineIndex;
+
+  //Calculate line height
+  int lineHeight;
+  if( line.isRemark() )
+    //Remark only
+    lineHeight = (mRemarkTextHeight + mSettings.mTextGap) * mVisibleRemark.count();
+  else {
+    //Chords
+    lineHeight = (mChordTextHeight + mSettings.mTextGap) * mVisibleChord.count();
+    //Notes
+    lineHeight += 9 * mSettings.mScoreLineDistance * mVisibleNote.count();
+    //Lyric
+    lineHeight += (mLyricTextHeight + mSettings.mTextGap);
+    //Translations
+    lineHeight += (mTranslationTextHeight + mSettings.mTextGap) * mVisibleTranslate.count();
+    }
+
+  mCurY = y;
   if( line.isRemark() )
     drawRemark( line.remarkConst().remarkMapConst() );
   else {
@@ -30,59 +54,94 @@ void CsPainter::drawLine(const CsLine &line)
     drawNote( line.noteKitConst().noteMapConst() );
     drawLyric( line.lyricListConst() );
     drawTranslation( line.translationConst() );
-    mCurY += mLineGap;
+    mCurY += mSettings.mLineGap;
     }
+
+  return mCurY;
   }
+
+
+
 
 void CsPainter::drawRemark(const QMap<QString, QString> &remarkMap)
   {
+  if( mVisibleRemark.count() > 0 )
+    mPainter->setFont( QFont(mSettings.mFontName, mSettings.mRemarkFontSize) );
+
   //For each remark translations which visible we perform drawing
   for( const auto &lang : qAsConst(mVisibleRemark) ) {
-    mCurY += mTextHeight;
+    mCurY += mRemarkTextHeight;
     drawRemarkImpl( 20, mCurY, remarkMap.value(lang) );
-    mCurY += mTextGap;
+    mCurY += mSettings.mTextGap;
     }
   }
+
+
+
 
 void CsPainter::drawChord(const QMap<QString, CsChordLine> &chordMap)
   {
+  if( mVisibleChord.count() > 0 )
+    mPainter->setFont( QFont(mSettings.mFontName, mSettings.mChordFontSize) );
+
   //For each chord line which visible we perform drawing
   for( const auto &chordKey : qAsConst(mVisibleChord) ) {
-    mCurY += mTextHeight;
+    mCurY += mChordTextHeight;
     drawChordImpl( 20, mCurY, chordMap.value(chordKey) );
-    mCurY += mTextGap;
+    mCurY += mSettings.mTextGap;
     }
   }
+
+
+
 
 void CsPainter::drawNote(const QMap<QString, CsNoteLine> &noteMap)
   {
+  if( mVisibleNote.count() > 0 )
+    mPainter->setFont( QFont( mSettings.mFontName, 4 * mSettings.mScoreLineDistance ) );
+
   //For each note line which visible we perform drawing
   for( const auto &noteKey : qAsConst(mVisibleNote) ) {
     drawNoteImpl( 20, mCurY, mClefMap.value(noteKey), noteMap.value(noteKey) );
-    mCurY += 9 * mScoreLineDistance;
+    mCurY += 9 * mSettings.mScoreLineDistance;
     }
   }
 
+
+
+
 void CsPainter::drawLyric(const CsLyricList &lyricList)
   {
-  mCurY += mTextHeight;
+  mCurY += mLyricTextHeight;
+  if( lyricList.count() > 0 )
+    mPainter->setFont( QFont( mSettings.mFontName, mSettings.mLyricFontSize ) );
+
   //Paint each lyric
   for( auto const &lyric : lyricList ) {
     int visx = visualX( 20, lyric.position() );
     mPainter->drawText( visx, mCurY, lyric.lyric() );
     }
-  mCurY += mTextGap;
+  mCurY += mSettings.mTextGap;
   }
+
+
+
 
 void CsPainter::drawTranslation(const QMap<QString, QString> &translationMap)
   {
+  if( mVisibleTranslate.count() > 0 )
+    mPainter->setFont( QFont(mSettings.mFontName, mSettings.mTranslationFontSize) );
+
   //For each translations which visible we perform drawing
   for( const auto &lang : qAsConst(mVisibleTranslate) ) {
-    mCurY += mTextHeight;
+    mCurY += mTranslationTextHeight;
     drawTranslationImpl( 20, mCurY, translationMap.value(lang) );
-    mCurY += mTextGap;
+    mCurY += mSettings.mTextGap;
     }
   }
+
+
+
 
 
 
@@ -98,6 +157,9 @@ void CsPainter::drawRemarkImpl(int x, int y, const QString &rem)
   mPainter->drawText( x, y, rem );
   }
 
+
+
+
 void CsPainter::drawChordImpl(int x, int y, const CsChordLine &chordLine)
   {
   auto &chordList = chordLine.chordListConst();
@@ -109,13 +171,15 @@ void CsPainter::drawChordImpl(int x, int y, const CsChordLine &chordLine)
   }
 
 
-QString unicode4( uint code )
+
+
+static QString unicode4( uint code )
   {
   return QString::fromUcs4( &code, 1 );
   }
 
 
-QString noteFraction( int duration, int noteDuration )
+static QString noteFraction( int duration, int noteDuration )
   {
   duration -= noteDuration;
   noteDuration /= 2;
@@ -131,7 +195,7 @@ QString noteFraction( int duration, int noteDuration )
   }
 
 
-QString noteText( int duration, QString &fraction )
+static QString noteText( int duration, QString &fraction )
   {
   //Exact values
   int code = 0;
@@ -186,29 +250,28 @@ QString noteText( int duration, QString &fraction )
   }
 
 
+
+
 void CsPainter::drawNoteImpl(int x, int y, int clef, const CsNoteLine &noteLine)
   {
-  int scoreY = y + mScoreLineDistance * 2;
+  int scoreY = y + mSettings.mScoreLineDistance * 2;
   //Draw five lines of score
   for( int i = 0; i < 5; i++ )
-    mPainter->drawLine( x, scoreY + i * mScoreLineDistance, x+1280, scoreY + i * mScoreLineDistance );
-
-  QFont prev = mPainter->font();
-  mPainter->setFont( QFont(QStringLiteral("Serif"), 4 * mScoreLineDistance ) );
+    mPainter->drawLine( x, scoreY + i * mSettings.mScoreLineDistance, x+1280, scoreY + i * mSettings.mScoreLineDistance );
 
   //Note abowe line 0
   int noteStart = whiteOctaveFirst + whiteC;
   //Clef
   if( clef == noteG ) {
-    mPainter->drawText( 20, scoreY + 4 * mScoreLineDistance, unicode4(119070) );
+    mPainter->drawText( 20, scoreY + 4 * mSettings.mScoreLineDistance, unicode4(119070) );
     noteStart = whiteOctaveSecond + whiteG;
     }
   else if( clef == noteF ) {
-    mPainter->drawText( 20, scoreY + 4 * mScoreLineDistance, unicode4(119074) );
+    mPainter->drawText( 20, scoreY + 4 * mSettings.mScoreLineDistance, unicode4(119074) );
     noteStart = whiteOctaveSmall + whiteB;
     }
   else if( clef == noteC ) {
-    mPainter->drawText( 20, scoreY + 4 * mScoreLineDistance, unicode4(119073) );
+    mPainter->drawText( 20, scoreY + 4 * mSettings.mScoreLineDistance, unicode4(119073) );
     noteStart = whiteOctaveFirst + whiteB;
     }
 
@@ -217,17 +280,17 @@ void CsPainter::drawNoteImpl(int x, int y, int clef, const CsNoteLine &noteLine)
   for( auto const &note : qAsConst(noteList) ) {
     int visX = visualX( x, note.position() );
     int yOffset = noteStart - note.white();
-    int yPos = scoreY + yOffset * mScoreLineDistance / 2;
+    int yPos = scoreY + yOffset * mSettings.mScoreLineDistance / 2;
     if( yOffset <= -2 ) {
       //Appended line above must be drawn
-      mPainter->drawLine( visX, scoreY - mScoreLineDistance, visX + 20, scoreY - mScoreLineDistance );
+      mPainter->drawLine( visX, scoreY - mSettings.mScoreLineDistance, visX + 20, scoreY - mSettings.mScoreLineDistance );
       }
     else if( yOffset > 10 ) {
       //Appended line below must be drawn
-      mPainter->drawLine( visX, scoreY + 5 * mScoreLineDistance, visX + 20, scoreY + 5 * mScoreLineDistance );
+      mPainter->drawLine( visX, scoreY + 5 * mSettings.mScoreLineDistance, visX + 20, scoreY + 5 * mSettings.mScoreLineDistance );
       if( yOffset > 12 )
         //Second appended line below must be drawn
-        mPainter->drawLine( visX, scoreY + 6 * mScoreLineDistance, visX + 20, scoreY + 6 * mScoreLineDistance );
+        mPainter->drawLine( visX, scoreY + 6 * mSettings.mScoreLineDistance, visX + 20, scoreY + 6 * mSettings.mScoreLineDistance );
       }
 
     if( yOffset < 5 ) {
@@ -244,7 +307,7 @@ void CsPainter::drawNoteImpl(int x, int y, int clef, const CsNoteLine &noteLine)
       QTransform m = QTransform::fromScale( 1.0, 1.0 ).rotate( -180 );
 
       //At second - origin offset
-      m *= QTransform::fromTranslate( visX + r.width(), yPos + 1 - mScoreLineDistance );
+      m *= QTransform::fromTranslate( visX + r.width(), yPos + 1 - mSettings.mScoreLineDistance );
       mPainter->setTransform( m );
       mPainter->drawText( 0, 0, fullNote );
       mPainter->resetTransform();
@@ -260,7 +323,6 @@ void CsPainter::drawNoteImpl(int x, int y, int clef, const CsNoteLine &noteLine)
       mPainter->drawText( visX, yPos, fullNote );
       }
     }
-  mPainter->setFont( prev );
   }
 
 
@@ -273,12 +335,23 @@ void CsPainter::drawTranslationImpl(int x, int y, const QString &tran)
   if( tran.isEmpty() )
     return;
 
-  //mPainter->setFont( QFont(QString("sans"),15) );
   //Draw simple text
   mPainter->drawText( x, y, tran );
   }
 
+
+
 int CsPainter::visualX(int x, int pos)
   {
   return x + pos * 3 / 2;
+  }
+
+
+
+
+int CsPainter::fontHeight(int fontSize) const
+  {
+  mPainter->setFont( QFont( mSettings.mFontName, fontSize ) );
+  QRect r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, QStringLiteral("H") );
+  return r.height();
   }

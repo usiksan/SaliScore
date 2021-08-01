@@ -7,6 +7,8 @@
 class CsNoteLine
   {
     CsNoteList mNoteList;
+    int        mNumerator;
+    int        mDenominator;
   public:
     CsNoteLine();
 
@@ -14,9 +16,16 @@ class CsNoteLine
 
     void  noteListSet( const CsNoteList &list ) { mNoteList = list; }
 
-    void jsonWrite( CsJsonWriter &js ) const;
 
-    void jsonRead( CsJsonReader &js );
+    int   numerator() const { return mNumerator; }
+    void  setNumerator(int numerator) { mNumerator = numerator; }
+
+    int   denominator() const { return mDenominator; }
+    void  setDenominator(int denominator) { mDenominator = denominator; }
+
+    void  jsonWrite( CsJsonWriter &js ) const;
+
+    void  jsonRead( CsJsonReader &js );
   };
 
 #endif // CSNOTELINE_H

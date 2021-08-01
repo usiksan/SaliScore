@@ -5,13 +5,14 @@
 #include <QVBoxLayout>
 
 CsWinScore::CsWinScore(const QString path, CsComposition &src, QWidget *parent) :
-  QWidget(parent),
+  QStackedWidget(parent),
   mPath(path),
   mComposition(src),
   mDirty(false)
   {
   setPath(path);
 
+  /*
   mComposition.remarkAppend( QStringLiteral("ru"), QStringLiteral("Russian") );
   mComposition.chordAppend( QStringLiteral("soft"), QStringLiteral("Soft variant") );
   mComposition.noteAppend( QStringLiteral("piano"), QStringLiteral("Piano soft variant") );
@@ -41,21 +42,23 @@ CsWinScore::CsWinScore(const QString path, CsComposition &src, QWidget *parent) 
   lyricList.append( CsLyric(400, QStringLiteral("руки") ) );
   mComposition.lyricSet( ln, lyricList );
 
-  static uint nt[3] = { 119135, 0, 0 };
-  mComposition.translationSet( ln, QStringLiteral("en"), QStringLiteral("There days when put down hands ") + QString::fromUcs4( nt, 1 ) );
+  mComposition.translationSet( ln, QStringLiteral("en"), QStringLiteral("There days when put down hands ") );
 
   ln = mComposition.lineAppend( true );
   mComposition.remarkSet( ln, QStringLiteral("ru"),  QStringLiteral("Проигрыш") );
+  */
 
+  addWidget( mWinTrain = new CsWinTrain( mComposition ) );
+  addWidget( mWinKaraoke = new CsWinKaraoke() );
+  addWidget( mWinEditor = new CsWinEditor() );
 
   //Layout
-  QVBoxLayout *box = new QVBoxLayout();
-  box->setSpacing(0);
-  box->setContentsMargins( 0, 0, 0, 0 );
+//  QVBoxLayout *box = new QVBoxLayout();
+//  box->setSpacing(0);
+//  box->setContentsMargins( 0, 0, 0, 0 );
 
-  box->addWidget( mWinTrain = new CsWinTrain( mComposition ) );
 
-  setLayout( box );
+//  setLayout( box );
 
   //
   }

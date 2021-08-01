@@ -7,9 +7,9 @@
 #include "CsWinEditor.h"
 #include "CsWinKaraoke.h"
 
-#include <QWidget>
+#include <QStackedWidget>
 
-class CsWinScore : public QWidget
+class CsWinScore : public QStackedWidget
   {
     Q_OBJECT
 
@@ -17,7 +17,9 @@ class CsWinScore : public QWidget
     CsComposition mComposition;
     bool          mDirty;
 
+    CsWinEditor  *mWinEditor;
     CsWinTrain   *mWinTrain;
+    CsWinKaraoke *mWinKaraoke;
   public:
     explicit CsWinScore(const QString path, CsComposition &src, QWidget *parent = nullptr);
 

@@ -28,8 +28,11 @@ SOURCES += \
     score/CsNoteKit.cpp \
     score/CsNoteLine.cpp \
     score/CsPosition.cpp \
+    score/CsReference.cpp \
     score/CsRemark.cpp \
+    windows/CsPaintStyle.cpp \
     windows/CsPainter.cpp \
+    windows/CsPainterSettings.cpp \
     windows/CsWinEditor.cpp \
     windows/CsWinHelp.cpp \
     windows/CsWinKaraoke.cpp \
@@ -58,8 +61,11 @@ HEADERS += \
     score/CsNoteKit.h \
     score/CsNoteLine.h \
     score/CsPosition.h \
+    score/CsReference.h \
     score/CsRemark.h \
+    windows/CsPaintStyle.h \
     windows/CsPainter.h \
+    windows/CsPainterSettings.h \
     windows/CsWinEditor.h \
     windows/CsWinHelp.h \
     windows/CsWinKaraoke.h \

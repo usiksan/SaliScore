@@ -30,6 +30,12 @@ class CsComposition
     QString    mComposer;
     QString    mLyricist;
 
+    int        mVoice;
+    int        mVoiceDual;
+    int        mVoiceRight;
+    int        mStyle;
+    int        mTempo;
+
     CsDefList  mRemarkList;
     CsDefList  mChordList;
     CsDefList  mNoteList;

@@ -21,14 +21,17 @@ class CsNote : public CsPosition
   {
     int mDuration; //!< Note duration, ticks
     int mPitch;    //!< Pitch from begin of one-lined octave
+    int mCommand;  //!< MIDI command
   public:
     CsNote();
-    CsNote( int pos, int duration, int note, int octave = octaveFirst ) : CsPosition(pos), mDuration(duration), mPitch(qBound(0,note + octave,127)) {}
+    CsNote( int pos, int duration, int note, int octave = octaveFirst ) : CsPosition(pos), mDuration(duration), mPitch(qBound(0,note + octave,127)), mCommand(0) {}
 
 
     int  duration() const { return mDuration; }
 
     int  pitch() const { return mPitch; }
+
+    int  command() const { return mCommand; }
 
     int  white() const;
 

@@ -12,6 +12,7 @@
 
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QColor>
 
 
 //!
@@ -56,6 +57,14 @@ class SvJsonWriter
     //! \param v       Int value
     //!
     void jsonInt( const char *key, int v ) { mObjectRef.insert( QString(key), v ); }
+
+
+    //!
+    //! \brief jsonInt Transfer color value
+    //! \param key     Key for value
+    //! \param v       Int value
+    //!
+    void jsonColor( const char *key, QColor color ) { mObjectRef.insert( QString(key), color.name() ); }
 
 
     //!
@@ -275,6 +284,14 @@ class SvJsonReader
     //! \param v       Int value
     //!
     void jsonInt( const char *key, int &v ) { v = mObject.value( QString(key) ).toInt(); }
+
+
+    //!
+    //! \brief jsonInt Transfer color value
+    //! \param key     Key for value
+    //! \param v       Int value
+    //!
+    void jsonColor( const char *key, QColor &color ) { color = QColor( mObject.value( QString(key) ).toString() ); }
 
 
     //!

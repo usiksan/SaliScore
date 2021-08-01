@@ -16,12 +16,12 @@ CsWinTrain::CsWinTrain(CsComposition &comp, QWidget *parent) :
 void CsWinTrain::paintEvent(QPaintEvent *event)
   {
   QPainter painter(this);
-  QSettings settings;
-  //Закрасить цветом фона
-  QColor colorBack = QColor( (QRgb) (settings.value( KEY_TRAIN_COLOR_BACK, QVariant(QColor(Qt::white).rgb()) ).toUInt()) );
-  painter.fillRect( QRect( QPoint(), size() ), colorBack );
+  CsPainter cp( &painter, QStringLiteral(KEY_TRAIN_SETTINGS), mComposition );
 
-  CsPainter cp( &painter, mComposition );
+  //Закрасить цветом фона
+  painter.fillRect( QRect( QPoint(), size() ), cp.backgroundColor() );
+
+  int posy = 35;
   for( int i = 0; i < mComposition.lineCount(); i++ )
-    cp.drawLine( mComposition.line(i) );
+    posy = cp.drawLine( posy, i, mComposition.line(i) );
   }

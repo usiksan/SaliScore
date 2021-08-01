@@ -28,6 +28,9 @@ History
              v0.10 Append clef info into composition
              v0.11 Preliminary finish with note drawing. All drawing completed.
   01.08.2021 v0.12 Append restoring size of main window
+             v0.13 Append individual viewer settings
+                   Append separated settings for different kind of information
+                   Begin releasing viewer switching
 */
 
 #ifndef CSCONFIG
@@ -41,7 +44,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             12
+#define CS_VERSION_MINOR             13
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"
@@ -84,11 +87,14 @@ History
 //#define CS_GET_OBJECT_MAX_FIND_LIST  300
 
 //Settings key names
-#define KEY_TRAIN_COLOR_BACK         "TrainColorBack"
 #define KEY_LANGUAGE                 "Language"
 #define KEY_MAIN_SPLITTER            "MainSplitter"
 #define KEY_WMAIN_MAX                "WMainMax"
 #define KEY_WMAIN_SIZE               "WMainSize"
+#define KEY_TRAIN_SETTINGS           "TrainSettings"
+#define KEY_EDITOR_SETTINGS          "EditorSettings"
+#define KEY_KARAOKE_SETTINGS         "KaraokeSettings"
+
 //#define SDK_PREVIOUS_FILES           "PreviousFiles"
 //#define SDK_GLOBAL_AUTHOR            "Author global id"
 //#define SDK_GLOBAL_PASSWORD          "Author global password"

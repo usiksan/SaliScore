@@ -55,6 +55,7 @@ void CsNote::jsonWrite(CsJsonWriter &js) const
   CsPosition::jsonWrite( js );
   js.jsonInt( "Duration", mDuration );
   js.jsonInt( "Pitch", mPitch );
+  js.jsonInt( "Command", mCommand );
   }
 
 
@@ -64,4 +65,5 @@ void CsNote::jsonRead(CsJsonReader &js)
   CsPosition::jsonRead( js );
   js.jsonInt( "Duration", mDuration );
   js.jsonInt( "Pitch", mPitch );
+  js.jsonInt( "Command", mCommand );
   }

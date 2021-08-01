@@ -1,5 +1,6 @@
 #include "CsConfig.h"
 #include "windows/CsWinMain.h"
+#include "windows/CsPainterSettings.h"
 
 #include <QApplication>
 #include <QSettings>
@@ -37,6 +38,14 @@ int main(int argc, char *argv[])
   QTranslator appTranslator;
   if( appTranslator.load( QString( QCoreApplication::applicationDirPath() + "/lang_%1.qm").arg( s.value( KEY_LANGUAGE ).toString() ) ) )
     a.installTranslator( &appTranslator );
+
+
+  //Default editor settings
+//  if( !s.contains(KEY_TRAIN_SETTINGS) ) {
+//    //Train windows settings not assigned
+//    CsPainterSettings ps;
+//    ps.write( QStringLiteral(KEY_TRAIN_SETTINGS) );
+//    }
 
   CsWinMain w;
   w.show();
