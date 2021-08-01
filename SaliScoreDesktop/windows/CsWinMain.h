@@ -94,6 +94,12 @@ class CsWinMain : public QMainWindow
     //!
     void         appendEditor(CsWinPage *editor );
 
+    //!
+    //! \brief updateRecentFiles Append file to recent file list
+    //! \param path              File path to append to list
+    //!
+    void         updateRecentFiles(const QString &path);
+
     void createMenu();
   public:
     //======================================================================================
@@ -119,7 +125,6 @@ class CsWinMain : public QMainWindow
     static QActionPtr  actionFileNew;
     static QActionPtr  actionFileOpen;
     static QActionPtr  actionFileLoad;
-    static QActionPtr  actionFileImport;
     static QActionPtr  actionFileSave;
     static QActionPtr  actionFileSaveAs;
     static QActionPtr  actionFileSaveAll;

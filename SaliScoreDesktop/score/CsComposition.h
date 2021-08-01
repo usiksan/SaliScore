@@ -162,6 +162,8 @@ class CsComposition
 
     void        dirtyReset() { mDirty = false; }
 
+    void        dirtySet() { mDirty = true; }
+
 
 
     //=================================================================

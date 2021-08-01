@@ -237,6 +237,7 @@ void CsWinMain::fileSaveAsIndex(int index)
   ed->setPath( title );
   mWEditors->setTabText( index, ed->name() );
   mWEditors->setTabToolTip( index, ed->path() );
+  updateRecentFiles( ed->path() );
 
   //Сохранить файл
   fileSaveIndex( index );
@@ -297,7 +298,9 @@ void CsWinMain::fileOpen(const QString path)
   CsComposition composition = mImportManager.readFile( path, ok );
   if( ok ) {
     //Successfull import
-    appendEditor( new CsWinScore( path, composition ) );
+    CsWinScore *winScore = new CsWinScore( path, composition );
+    appendEditor( winScore );
+    updateRecentFiles( winScore->path() );
     }
 
   }
@@ -319,6 +322,53 @@ void CsWinMain::appendEditor(CsWinPage *editor)
 
 
 
+//!
+//! \brief updateRecentFiles Append file to recent file list
+//! \param path              File path to append to list
+//!
+void CsWinMain::updateRecentFiles( const QString &path )
+  {
+  QSettings s;
+  QStringList list;
+
+  //Append file to recent file list
+  if( s.contains( KEY_RECENT_FILES ) ) {
+    list = s.value( KEY_RECENT_FILES ).toStringList();
+    if( !path.isEmpty() ) {
+      int i = list.indexOf( path );
+      if( i >= 0 )
+        //Pull up
+        list.removeAt( i );
+      else {
+        //Remove last
+        while( list.count() >= CS_PREVIOUS_FILES_COUNT )
+          list.removeLast();
+        }
+      list.insert( 0, path );
+      }
+    }
+  else if( !path.isEmpty() )
+    list.append( path );
+
+  s.setValue( KEY_RECENT_FILES, list );
+
+  //Syncro with menu
+  for( int i = 0; i < CS_PREVIOUS_FILES_COUNT; ++i )
+    if( i < list.count() ) {
+      QFileInfo info( list.at(i) );
+      actionFilePrevious[i]->setText( info.completeBaseName() );
+      actionFilePrevious[i]->setData( list.at(i) );
+      actionFilePrevious[i]->setToolTip( list.at(i) );
+      actionFilePrevious[i]->setVisible(true);
+      }
+    else actionFilePrevious[i]->setVisible(false);
+
+  menuFilePrevious->setEnabled( list.count() != 0 );
+  }
+
+
+
+
 void CsWinMain::createMenu()
   {
   menuFile = new QMenu( tr("File") );
@@ -327,7 +377,6 @@ void CsWinMain::createMenu()
   actionFileOpen     = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileOpen.png")), tr("Open file ..."), this, &CsWinMain::cmFileOpen );
   menuFilePrevious   = menuFile->addMenu( tr("Previous files") );
   actionFileLoad     = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileDownload.png")), tr("Load from public cloud..."), this, &CsWinMain::cmFileLoad );
-  actionFileImport   = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileImport.png")), tr("Import..."), this, &CsWinMain::cmFileImport );
   menuFile->addSeparator();
   actionFileSave     = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileSave.png")), tr("Save file"), this, &CsWinMain::cmFileSave );
   actionFileSaveAs   = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileSaveAs.png")), tr("Save file as..."), this, &CsWinMain::cmFileSaveAs );
@@ -377,6 +426,7 @@ void CsWinMain::createMenu()
   bar->addMenu( menuTools );
   bar->addMenu( menuHelp );
 
+  updateRecentFiles( QString{} );
   }
 
 
@@ -403,7 +453,6 @@ QToolBar   *CsWinMain::barKaraoke;
 QActionPtr  CsWinMain::actionFileNew;
 QActionPtr  CsWinMain::actionFileOpen;
 QActionPtr  CsWinMain::actionFileLoad;
-QActionPtr  CsWinMain::actionFileImport;
 QActionPtr  CsWinMain::actionFileSave;
 QActionPtr  CsWinMain::actionFileSaveAs;
 QActionPtr  CsWinMain::actionFileSaveAll;

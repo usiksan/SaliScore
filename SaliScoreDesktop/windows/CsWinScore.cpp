@@ -3,11 +3,14 @@
 #include <QFileInfo>
 #include <QJsonDocument>
 
-CsWinScore::CsWinScore(const QString path, CsComposition &src, QWidget *parent) :
-  CsWinPage( path, parent ),
+CsWinScore::CsWinScore(const QString filePath, CsComposition &src, QWidget *parent) :
+  CsWinPage( filePath, parent ),
   mComposition(src)
   {
+  setPath(filePath);
 
+  if( filePath != path() )
+    mComposition.dirtySet();
   /*
   mComposition.remarkAppend( QStringLiteral("ru"), QStringLiteral("Russian") );
   mComposition.chordAppend( QStringLiteral("soft"), QStringLiteral("Soft variant") );

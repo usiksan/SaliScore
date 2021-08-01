@@ -5,7 +5,6 @@
 CsWinPage::CsWinPage(const QString path, QWidget *parent) :
   QStackedWidget(parent)
   {
-  setPath(path);
   }
 
 

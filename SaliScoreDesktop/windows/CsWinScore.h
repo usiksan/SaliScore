@@ -18,7 +18,7 @@ class CsWinScore : public CsWinPage
     CsWinTrain   *mWinTrain;
     CsWinKaraoke *mWinKaraoke;
   public:
-    explicit CsWinScore(const QString path, CsComposition &src, QWidget *parent = nullptr);
+    explicit CsWinScore(const QString filePath, CsComposition &src, QWidget *parent = nullptr);
 
 
     //Menu Edit

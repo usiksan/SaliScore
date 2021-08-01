@@ -32,6 +32,7 @@ History
                    Append separated settings for different kind of information
                    Begin releasing viewer switching
              v0.14 Append intermediate page window to support playLists
+             v0.15 Append recent file functionality
 */
 
 #ifndef CSCONFIG
@@ -45,7 +46,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             14
+#define CS_VERSION_MINOR             15
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"
@@ -92,6 +93,7 @@ History
 #define KEY_MAIN_SPLITTER            "MainSplitter"
 #define KEY_WMAIN_MAX                "WMainMax"
 #define KEY_WMAIN_SIZE               "WMainSize"
+#define KEY_RECENT_FILES             "RecentFiles"
 #define KEY_TRAIN_SETTINGS           "TrainSettings"
 #define KEY_EDITOR_SETTINGS          "EditorSettings"
 #define KEY_KARAOKE_SETTINGS         "KaraokeSettings"

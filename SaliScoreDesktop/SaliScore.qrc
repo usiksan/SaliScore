@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>pic/fileClose.png</file>
+        <file>pic/fileExit.png</file>
+        <file>pic/fileNew.png</file>
+        <file>pic/fileOpen.png</file>
+        <file>pic/fileSave.png</file>
+        <file>pic/fileSaveAll.png</file>
+        <file>pic/fileSaveAs.png</file>
+    </qresource>
+</RCC>
