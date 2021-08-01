@@ -33,6 +33,12 @@ CsWinMain::CsWinMain(QWidget *parent) :
   if( s.contains(QString(KEY_MAIN_SPLITTER)) )
     mWSplitter->restoreState( s.value(QString(KEY_MAIN_SPLITTER)).toByteArray() );
 
+  if( s.contains(QStringLiteral(KEY_WMAIN_MAX)) ) {
+    if( !s.value(QStringLiteral(KEY_WMAIN_MAX)).toBool() )
+      //Restore main window size
+      resize( s.value(QStringLiteral(KEY_WMAIN_SIZE)).toSize() );
+    }
+
 
   createMenu();
 
@@ -160,8 +166,9 @@ void CsWinMain::closeEvent(QCloseEvent *ev)
   if( !editorPresent ) {
     //Save settings: main window maximisation and splitter position
     QSettings s;
-    s.setValue( QString(KEY_WMAIN_MAX), isMaximized() );
-    s.setValue( QString(KEY_MAIN_SPLITTER), mWSplitter->saveState() );
+    s.setValue( QStringLiteral(KEY_WMAIN_MAX), isMaximized() );
+    s.setValue( QStringLiteral(KEY_WMAIN_SIZE), size() );
+    s.setValue( QStringLiteral(KEY_MAIN_SPLITTER), mWSplitter->saveState() );
     ev->accept();
     }
   else ev->ignore();
