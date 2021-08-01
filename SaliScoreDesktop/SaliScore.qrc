@@ -25,5 +25,14 @@
         <file>pic/viewNote.png</file>
         <file>pic/viewRemark.png</file>
         <file>pic/viewTranslation.png</file>
+        <file>pic/editCopy.png</file>
+        <file>pic/editCut.png</file>
+        <file>pic/editor.png</file>
+        <file>pic/editPaste.png</file>
+        <file>pic/editRedo.png</file>
+        <file>pic/editReplace.png</file>
+        <file>pic/editSearch.png</file>
+        <file>pic/editSelectAll.png</file>
+        <file>pic/editUndo.png</file>
     </qresource>
 </RCC>

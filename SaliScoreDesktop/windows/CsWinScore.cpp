@@ -1,5 +1,6 @@
 #include "CsWinScore.h"
 #include "CsWinMain.h"
+#include "CsDlgDefRemark.h"
 
 #include <QFileInfo>
 #include <QJsonDocument>
@@ -136,6 +137,43 @@ void CsWinScore::cmViewKaraoke()
   //Show active bar
   CsWinMain::barTrain->show();
   CsWinMain::actionViewKaraoke->setChecked(true);
+  }
+
+void CsWinScore::cmViewRemark()
+  {
+  CsDlgDefRemark dlgRem( mComposition, this );
+  dlgRem.fill();
+  dlgRem.exec();
+  }
+
+void CsWinScore::cmViewChord()
+  {
+
+  }
+
+void CsWinScore::cmViewNote()
+  {
+
+  }
+
+void CsWinScore::cmViewTranslation()
+  {
+
+  }
+
+void CsWinScore::cmPlayStart()
+  {
+
+  }
+
+void CsWinScore::cmPlayPause()
+  {
+
+  }
+
+void CsWinScore::cmPlayStop()
+  {
+
   }
 
 

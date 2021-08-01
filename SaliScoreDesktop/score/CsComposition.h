@@ -55,11 +55,15 @@ class CsComposition
     //=================================================================
     //         Remark part
 
+    CsDefList   remarkDefList() const { return mRemarkList; }
+
     QStringList remarkVisible() const { return visibleList(mRemarkList); }
 
     int         remarkIndex( const QString &lang ) const { return defListIndex( mRemarkList, lang ); }
 
     void        remarkAppend( const QString &lang, const QString &descr );
+
+    void        remarkRename( int index, const QString &lang );
 
     void        remarkRemove( int index );
 
@@ -78,6 +82,8 @@ class CsComposition
     int         chordIndex( const QString &part ) const { return defListIndex( mChordList, part );}
 
     void        chordAppend( const QString &part, const QString &descr );
+
+    void        chordRename( int index, const QString &lang );
 
     void        chordRemove( int index );
 
@@ -104,6 +110,8 @@ class CsComposition
 
     void        noteAppend( const QString &part, const QString &descr, int clef = noteG );
 
+    void        noteRename( int index, const QString &lang );
+
     void        noteRemove( int index );
 
     void        noteToggle( int index, bool on ) { mNoteList[index].mVisible = on; }
@@ -128,6 +136,8 @@ class CsComposition
     int         translationIndex( const QString &lang ) const { return defListIndex( mTranslationList, lang ); }
 
     void        translationAppend( const QString &lang, const QString &descr );
+
+    void        translationRename( int index, const QString &lang );
 
     void        translationRemove( int index );
 

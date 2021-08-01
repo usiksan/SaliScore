@@ -37,6 +37,10 @@ class CsLine
 
     void    remarkSet( const QString &lang, const QString &rem ) { mRemark.remarkSet(lang,rem); }
 
+    void    remarkRename( const QString &prevLang, const QString &newLang ) { mRemark.remarkRename( prevLang, newLang ); }
+
+    void    remarkRemove( const QString &lang ) { mRemark.remarkRemove( lang ); }
+
     //========================================================
     //    Chord part
     auto    chordListGet( const QString &part ) const { return mChordKit.chordListGet(part); }

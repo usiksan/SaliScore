@@ -32,6 +32,35 @@ void CsComposition::remarkAppend(const QString &lang, const QString &descr)
 
 
 
+void CsComposition::remarkRename(int index, const QString &lang)
+  {
+  //Get previous lang
+  QString prevLang = mRemarkList.at(index).mName;
+  //Scan all lines and rename remark
+  for( int i = 0; i < mLineList.count(); i++ )
+    if( mLineList.at(i).isRemark() )
+      //Rename lang
+      mLineList[i].remarkRename( prevLang, lang );
+  }
+
+
+
+void CsComposition::remarkRemove(int index)
+  {
+  //Get lang
+  QString lang = mRemarkList.at(index).mName;
+  //Scan all lines and rename remark
+  for( int i = 0; i < mLineList.count(); i++ )
+    if( mLineList.at(i).isRemark() )
+      //Remove lang
+      mLineList[i].remarkRemove( lang );
+  //Remove from definition
+  mRemarkList.removeAt(index);
+  }
+
+
+
+
 void CsComposition::chordAppend(const QString &part, const QString &descr)
   {
   mDirty = true;

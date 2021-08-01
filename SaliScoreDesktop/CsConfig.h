@@ -35,6 +35,7 @@ History
              v0.15 Append recent file functionality
              v0.16 Append some help actions
                    Append view switching
+             v0.17 Begin creation definition editing dialog
 */
 
 #ifndef CSCONFIG
@@ -48,7 +49,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             16
+#define CS_VERSION_MINOR             17
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"

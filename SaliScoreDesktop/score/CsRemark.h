@@ -22,6 +22,10 @@ class CsRemark
 
     void    remarkSet( const QString &lang, const QString &rem ) { mRemarkMap.insert( lang, rem ); }
 
+    void    remarkRemove( const QString &lang ) { mRemarkMap.remove( lang ); }
+
+    void    remarkRename( const QString &prevLang, const QString &newLang );
+
     bool isEmpty() const { return mRemarkMap.isEmpty(); }
 
     void jsonWrite( CsJsonWriter &js ) const;
