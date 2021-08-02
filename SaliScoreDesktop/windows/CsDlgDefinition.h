@@ -20,6 +20,8 @@ class CsDlgDefinition : public QDialog
   public slots:
     void cmAppend();
     void cmDelete();
+    void onCellClicked(int row, int column);
+    void onItemChanged(QTableWidgetItem *item);
   protected:
     virtual CsDefList defList() const = 0;
 

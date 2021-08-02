@@ -34,5 +34,7 @@
         <file>pic/editSearch.png</file>
         <file>pic/editSelectAll.png</file>
         <file>pic/editUndo.png</file>
+        <file>pic/lampEnable.png</file>
+        <file>pic/lampDisable.png</file>
     </qresource>
 </RCC>
