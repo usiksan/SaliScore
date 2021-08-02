@@ -1,13 +1,15 @@
 #include "CsLine.h"
 #include "../SvJson/SvJsonIO.h"
 
-CsLine::CsLine()
+CsLine::CsLine() :
+  mTickCount(0)
   {
 
   }
 
 CsLine::CsLine( const QString &lang, const QString &rem) :
-  mRemark( lang, rem )
+  mRemark( lang, rem ),
+  mTickCount(0)
   {
 
   }
@@ -26,6 +28,7 @@ void CsLine::jsonWrite(CsJsonWriter &js) const
   js.jsonObject<CsNoteKit>( "NoteKit", mNoteKit );
   js.jsonList<CsLyric>( "LyricList", mLyricList );
   js.jsonMapString( "Translation", mTranslation );
+  js.jsonInt( "tickCount", mTickCount );
   }
 
 void CsLine::jsonRead(CsJsonReader &js)
@@ -35,4 +38,5 @@ void CsLine::jsonRead(CsJsonReader &js)
   js.jsonObject<CsNoteKit>( "NoteKit", mNoteKit );
   js.jsonList<CsLyric>( "LyricList", mLyricList );
   js.jsonMapString( "Translation", mTranslation );
+  js.jsonInt( "tickCount", mTickCount );
   }

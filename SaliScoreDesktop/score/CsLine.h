@@ -16,6 +16,7 @@ class CsLine
     CsNoteKit             mNoteKit;
     CsLyricList           mLyricList;
     QMap<QString,QString> mTranslation;
+    int                   mTickCount;
   public:
     CsLine();
 
@@ -45,7 +46,7 @@ class CsLine
     //    Chord part
     auto    chordListGet( const QString &part ) const { return mChordKit.chordListGet(part); }
 
-    void    chordListSet( const QString &part, const CsChordList &line ) { mChordKit.chordListSet( part, line ); }
+    void    chordListSet( const QString &part, const CsChordList &line ) { mChordKit.chordListSet( part, line ); tickCountUpdate(); }
 
     void    chordRename( const QString &prevPart, const QString &newPart ) { mChordKit.chordRename( prevPart, newPart ); }
 
@@ -56,7 +57,7 @@ class CsLine
     //    Chord part
     auto    noteListGet( const QString &part ) const { return mNoteKit.noteListGet( part ); }
 
-    void    noteListSet( const QString &part, const CsNoteList &list ) { mNoteKit.noteListSet( part, list ); }
+    void    noteListSet( const QString &part, const CsNoteList &list ) { mNoteKit.noteListSet( part, list ); tickCountUpdate(); }
 
     void    noteRename( const QString &prevPart, const QString &newPart ) { mNoteKit.noteRename( prevPart, newPart ); }
 
@@ -67,17 +68,25 @@ class CsLine
     //    Lyric part
     auto    lyricGet() const { return mLyricList; }
 
-    void    lyricSet( const CsLyricList &lyricList ) { mLyricList = lyricList; }
+    void    lyricSet( const CsLyricList &lyricList ) { mLyricList = lyricList; tickCountUpdate(); }
+
 
     //========================================================
     //    Translation part
     QString translationGet( const QString &lang ) const { return mTranslation.value( lang ); }
 
-    void    translationSet( const QString &lang, const QString &tran ) { mTranslation.insert( lang, tran ); }
+    void    translationSet( const QString &lang, const QString &tran ) { mTranslation.insert( lang, tran ); tickCountUpdate(); }
 
     void    translationRename( const QString &prevLang, const QString &newLang );
 
     void    translationRemove( const QString &lang ) { mTranslation.remove( lang ); }
+
+    //========================================================
+    //    Tick count
+
+    int     tickCount() const { return mTickCount; }
+
+    void    tickCountUpdate();
 
     //========================================================
     //    json part

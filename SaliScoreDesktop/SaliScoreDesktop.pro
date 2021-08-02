@@ -16,6 +16,7 @@ SOURCES += \
     import/CsImportManager.cpp \
     import/saliScore/CsImportSaliScore.cpp \
     import/text/CsImportText.cpp \
+    play/CsPlay.cpp \
     score/CsChord.cpp \
     score/CsChordKit.cpp \
     score/CsChordLine.cpp \
@@ -53,6 +54,7 @@ HEADERS += \
     import/CsImportManager.h \
     import/saliScore/CsImportSaliScore.h \
     import/text/CsImportText.h \
+    play/CsPlay.h \
     score/CsChord.h \
     score/CsChordKit.h \
     score/CsChordLine.h \

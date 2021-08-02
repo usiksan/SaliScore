@@ -178,8 +178,13 @@ class CsComposition
 
     int         lineCount() const { return mLineList.count(); }
 
+    int         lineTickCount( int index ) const { return mLineList.at(index).tickCount(); }
 
 
+    //=================================================================
+    //         Lines
+
+    int         tickCount() const;
 
 
     //=================================================================
