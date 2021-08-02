@@ -41,6 +41,8 @@ void CsComposition::remarkRename(int index, const QString &lang)
     if( mLineList.at(i).isRemark() )
       //Rename lang
       mLineList[i].remarkRename( prevLang, lang );
+  //Replace name in definition list
+  mRemarkList[index].mName = lang;
   }
 
 
@@ -81,6 +83,35 @@ void CsComposition::chordAppend(const QString &part, const QString &descr)
     //Chord already exist, so change description only
     mChordList[index].mDescription = descr;
     }
+  }
+
+
+void CsComposition::chordRename(int index, const QString &part)
+  {
+  //Get previous lang
+  QString prevPart = mChordList.at(index).mName;
+  //Scan all lines and rename chord
+  for( int i = 0; i < mLineList.count(); i++ )
+    if( !mLineList.at(i).isRemark() )
+      //Rename part
+      mLineList[i].chordRename( prevPart, part );
+  //Replace name in definition list
+  mChordList[index].mName = part;
+  }
+
+
+
+void CsComposition::chordRemove(int index)
+  {
+  //Get part
+  QString part = mChordList.at(index).mName;
+  //Scan all lines and remove chord
+  for( int i = 0; i < mLineList.count(); i++ )
+    if( !mLineList.at(i).isRemark() )
+      //Remove part
+      mLineList[i].chordRemove( part );
+  //Remove from definition
+  mChordList.removeAt(index);
   }
 
 

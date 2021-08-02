@@ -36,6 +36,8 @@ History
              v0.16 Append some help actions
                    Append view switching
              v0.17 Begin creation definition editing dialog
+  02.08.2021 v0.18 Complete with definition editing dialog
+                   Append chord definition dialog
 */
 
 #ifndef CSCONFIG
@@ -49,7 +51,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             17
+#define CS_VERSION_MINOR             18
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"

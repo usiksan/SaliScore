@@ -47,6 +47,10 @@ class CsLine
 
     void    chordListSet( const QString &part, const CsChordList &line ) { mChordKit.chordListSet( part, line ); }
 
+    void    chordRename( const QString &prevPart, const QString &newPart ) { mChordKit.chordRename( prevPart, newPart ); }
+
+    void    chordRemove( const QString &part ) { mChordKit.chordRemove( part ); }
+
 
     //========================================================
     //    Chord part

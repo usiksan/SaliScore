@@ -1,18 +1,18 @@
-#ifndef CSDLGDEFREMARK_H
-#define CSDLGDEFREMARK_H
+#ifndef CSDLGDEFCHORD_H
+#define CSDLGDEFCHORD_H
 
 #include "CsConfig.h"
 #include "score/CsComposition.h"
 
 #include "CsDlgDefinition.h"
 
-class CsDlgDefRemark : public CsDlgDefinition
+class CsDlgDefChord : public CsDlgDefinition
   {
     Q_OBJECT
 
     CsComposition &mComposition;
   public:
-    CsDlgDefRemark( CsComposition &comp, QWidget *parent );
+    CsDlgDefChord( CsComposition &comp, QWidget *parent );
 
     // CsDlgDefinition interface
   protected:
@@ -50,4 +50,4 @@ class CsDlgDefRemark : public CsDlgDefinition
     virtual bool      defToggle(int index) override;
   };
 
-#endif // CSDLGDEFREMARK_H
+#endif // CSDLGDEFCHORD_H

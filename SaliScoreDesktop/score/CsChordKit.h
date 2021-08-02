@@ -24,6 +24,10 @@ class CsChordKit
 
     void  chordListSet( const QString &part, const CsChordList &list ) { mChordMap.insert( part, CsChordLine(list) ); }
 
+    void  chordRename( const QString &prevPart, const QString &newPart );
+
+    void  chordRemove( const QString &part ) { mChordMap.remove( part ); }
+
     void  jsonWrite( CsJsonWriter &js ) const;
 
     void  jsonRead( CsJsonReader &js );

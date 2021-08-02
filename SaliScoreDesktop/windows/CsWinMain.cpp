@@ -519,6 +519,10 @@ void CsWinMain::createMenu()
 
   barPlayList = new QToolBar( tr("PlayList") );
 
+  //At start hide all bars except main
+  barEditor->hide();
+  barTrain->hide();
+  barKaraoke->hide();
   }
 
 

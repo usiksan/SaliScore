@@ -30,6 +30,7 @@ SOURCES += \
     score/CsPosition.cpp \
     score/CsReference.cpp \
     score/CsRemark.cpp \
+    windows/CsDlgDefChord.cpp \
     windows/CsDlgDefRemark.cpp \
     windows/CsDlgDefinition.cpp \
     windows/CsPaintStyle.cpp \
@@ -66,6 +67,7 @@ HEADERS += \
     score/CsPosition.h \
     score/CsReference.h \
     score/CsRemark.h \
+    windows/CsDlgDefChord.h \
     windows/CsDlgDefRemark.h \
     windows/CsDlgDefinition.h \
     windows/CsPaintStyle.h \

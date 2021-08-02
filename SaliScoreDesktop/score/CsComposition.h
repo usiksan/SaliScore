@@ -67,7 +67,7 @@ class CsComposition
 
     void        remarkRemove( int index );
 
-    void        remarkToggle( int index, bool on ) { mRemarkList[index].mVisible = on; }
+    bool        remarkToggle( int index ) { return mRemarkList[index].visibleToggle(); }
 
     auto        remarkGet( int line, const QString &lang ) const { return mLineList.at(line).remarkGet(lang); }
 
@@ -77,17 +77,19 @@ class CsComposition
     //=================================================================
     //         Chord part
 
+    CsDefList   chordDefList() const { return mChordList; }
+
     QStringList chordVisible() const { return visibleList(mChordList); }
 
     int         chordIndex( const QString &part ) const { return defListIndex( mChordList, part );}
 
     void        chordAppend( const QString &part, const QString &descr );
 
-    void        chordRename( int index, const QString &lang );
+    void        chordRename( int index, const QString &part );
 
     void        chordRemove( int index );
 
-    void        chordToggle( int index, bool on ) { mChordList[index].mVisible = on; }
+    bool        chordToggle( int index ) { return mChordList[index].visibleToggle(); }
 
     auto        chordListGet( int line, const QString &part ) const { return mLineList.at(line).chordListGet(part); }
 
