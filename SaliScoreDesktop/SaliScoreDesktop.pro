@@ -31,7 +31,9 @@ SOURCES += \
     score/CsReference.cpp \
     score/CsRemark.cpp \
     windows/CsDlgDefChord.cpp \
+    windows/CsDlgDefNote.cpp \
     windows/CsDlgDefRemark.cpp \
+    windows/CsDlgDefTranslation.cpp \
     windows/CsDlgDefinition.cpp \
     windows/CsPaintStyle.cpp \
     windows/CsPainter.cpp \
@@ -68,7 +70,9 @@ HEADERS += \
     score/CsReference.h \
     score/CsRemark.h \
     windows/CsDlgDefChord.h \
+    windows/CsDlgDefNote.h \
     windows/CsDlgDefRemark.h \
+    windows/CsDlgDefTranslation.h \
     windows/CsDlgDefinition.h \
     windows/CsPaintStyle.h \
     windows/CsPainter.h \

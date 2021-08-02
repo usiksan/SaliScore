@@ -21,6 +21,49 @@ CsPainter::CsPainter(QPainter *painter, const QString &keyViewSettings, const Cs
   mChordTextHeight       = fontHeight( mSettings.mChordFontSize );
   mLyricTextHeight       = fontHeight( mSettings.mLyricFontSize );
   mTranslationTextHeight = fontHeight( mSettings.mTranslationFontSize );
+  mTitleHeight           = fontHeight( mSettings.mTitleFontSize );
+  mPropertiesHeight      = fontHeight( mSettings.mPropertiesFontSize );
+  }
+
+
+
+
+int CsPainter::drawTitleAndProperties(int y, QSize size, const CsComposition &comp)
+  {
+  //Draw title and properties
+  mCurY = y;
+
+  //Draw title on horizontal center
+  mPainter->setFont( QFont(mSettings.mFontName, mSettings.mTitleFontSize) );
+  QRect r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, comp.title() );
+  int x = (r.width() - size.width()) / 2;
+  mPainter->drawText( x, y + mTitleHeight, comp.title() );
+  mCurY += mTitleHeight + mSettings.mTextGap;
+
+  //At left side properties
+  mPainter->setFont( QFont(mSettings.mFontName, mSettings.mPropertiesFontSize) );
+  QString singer = QObject::tr("Singer:");
+  QString composer = QObject::tr("Composer");
+  QString lyricist = QObject::tr("Lyricist:");
+  QString author = QObject::tr("Author:");
+  r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, singer );
+  int w = r.width();
+
+  r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, composer );
+  w = qMax( r.width(), w );
+
+  r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, lyricist );
+  w = qMax( r.width(), w );
+
+  r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, author );
+  w = qMax( r.width(), w );
+  w += 5;
+  drawPropertyImpl( w, singer, comp.singer() );
+  drawPropertyImpl( w, composer, comp.composer() );
+  drawPropertyImpl( w, lyricist, comp.lyricist() );
+  drawPropertyImpl( w, author, comp.author() );
+
+  return mCurY;
   }
 
 
@@ -337,6 +380,17 @@ void CsPainter::drawTranslationImpl(int x, int y, const QString &tran)
 
   //Draw simple text
   mPainter->drawText( x, y, tran );
+  }
+
+
+
+
+void CsPainter::drawPropertyImpl(int xtab, const QString &title, const QString &value)
+  {
+  mCurY += mPropertiesHeight;
+  mPainter->drawText( 10, mCurY, title );
+  mPainter->drawText( 10 + xtab, mCurY, value );
+  mCurY += mSettings.mTextGap;
   }
 
 

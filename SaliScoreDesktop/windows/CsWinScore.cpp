@@ -2,6 +2,8 @@
 #include "CsWinMain.h"
 #include "CsDlgDefRemark.h"
 #include "CsDlgDefChord.h"
+#include "CsDlgDefNote.h"
+#include "CsDlgDefTranslation.h"
 
 #include <QFileInfo>
 #include <QJsonDocument>
@@ -165,12 +167,18 @@ void CsWinScore::cmViewChord()
 
 void CsWinScore::cmViewNote()
   {
-
+  CsDlgDefNote dlgNote( mComposition, this );
+  dlgNote.fill();
+  dlgNote.exec();
   }
+
+
 
 void CsWinScore::cmViewTranslation()
   {
-
+  CsDlgDefTranslation dlgTranslation( mComposition, this );
+  dlgTranslation.fill();
+  dlgTranslation.exec();
   }
 
 void CsWinScore::cmPlayStart()

@@ -16,8 +16,11 @@ struct CsPainterSettings
     int         mChordFontSize;
     int         mLyricFontSize;
     int         mTranslationFontSize;
+    int         mTitleFontSize;
+    int         mPropertiesFontSize;
     int         mTextGap;
     int         mLineGap;
+    int         mLeftMenuSize;
 
     CsPainterSettings();
 

@@ -29,6 +29,7 @@ class CsComposition
     QString      mSinger;
     QString      mComposer;
     QString      mLyricist;
+    QString      mAuthor;
 
     int          mVoice;
     int          mVoiceDual;
@@ -51,6 +52,18 @@ class CsComposition
     CsComposition();
 
     bool        isDirty() const { return mDirty; }
+
+    //=================================================================
+    //         Header part
+    QString     title() const { return mTitle; }
+
+    QString     singer() const { return mSinger; }
+
+    QString     composer() const { return mComposer; }
+
+    QString     lyricist() const { return mLyricist; }
+
+    QString     author() const { return mAuthor; }
 
     //=================================================================
     //         Remark part
@@ -100,6 +113,8 @@ class CsComposition
     //=================================================================
     //         Note part
 
+    CsDefList   noteDefList() const { return mNoteList; }
+
     QStringList noteVisible() const { return visibleList(mNoteList); }
 
     CsClefMap   noteClefMap() const { return mClefMap; }
@@ -112,11 +127,11 @@ class CsComposition
 
     void        noteAppend( const QString &part, const QString &descr, int clef = noteG );
 
-    void        noteRename( int index, const QString &lang );
+    void        noteRename(int index, const QString &part );
 
     void        noteRemove( int index );
 
-    void        noteToggle( int index, bool on ) { mNoteList[index].mVisible = on; }
+    bool        noteToggle( int index ) { return mNoteList[index].visibleToggle(); }
 
     auto        noteListGet( int line, const QString &part ) const { return mLineList.at(line).noteListGet(part); }
 
@@ -133,6 +148,8 @@ class CsComposition
     //=================================================================
     //         Translation part
 
+    CsDefList   translationDefList() const { return mTranslationList; }
+
     QStringList translationVisible() const { return visibleList(mTranslationList); }
 
     int         translationIndex( const QString &lang ) const { return defListIndex( mTranslationList, lang ); }
@@ -143,7 +160,7 @@ class CsComposition
 
     void        translationRemove( int index );
 
-    void        translationToggle( int index, bool on ) { mTranslationList[index].mVisible = on; }
+    bool        translationToggle( int index ) { return mTranslationList[index].visibleToggle(); }
 
     auto        translationGet( int line, const QString &lang ) const { return mLineList.at(line).translationGet(lang); }
 

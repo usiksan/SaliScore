@@ -12,6 +12,12 @@ CsLine::CsLine( const QString &lang, const QString &rem) :
 
   }
 
+void CsLine::translationRename(const QString &prevLang, const QString &newLang)
+  {
+  mTranslation.insert( newLang, mTranslation.value(prevLang) );
+  mTranslation.remove( prevLang );
+  }
+
 
 void CsLine::jsonWrite(CsJsonWriter &js) const
   {

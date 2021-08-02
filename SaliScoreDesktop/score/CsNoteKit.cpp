@@ -6,6 +6,12 @@ CsNoteKit::CsNoteKit()
 
   }
 
+void CsNoteKit::noteRename(const QString &prevPart, const QString &newPart)
+  {
+  mNoteMap.insert( newPart, mNoteMap.value(prevPart) );
+  mNoteMap.remove( prevPart );
+  }
+
 
 void CsNoteKit::jsonWrite(CsJsonWriter &js) const
   {

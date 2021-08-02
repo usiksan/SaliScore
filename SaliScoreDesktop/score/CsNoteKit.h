@@ -17,6 +17,10 @@ class CsNoteKit
 
     void  noteListSet( const QString &part, const CsNoteList &list ) { mNoteMap[part].noteListSet(list); }
 
+    void  noteRename( const QString &prevPart, const QString &newPart );
+
+    void  noteRemove( const QString &part ) { mNoteMap.remove( part ); }
+
     void jsonWrite( CsJsonWriter &js ) const;
 
     void jsonRead( CsJsonReader &js );

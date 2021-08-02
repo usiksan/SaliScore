@@ -58,6 +58,11 @@ class CsLine
 
     void    noteListSet( const QString &part, const CsNoteList &list ) { mNoteKit.noteListSet( part, list ); }
 
+    void    noteRename( const QString &prevPart, const QString &newPart ) { mNoteKit.noteRename( prevPart, newPart ); }
+
+    void    noteRemove( const QString &part ) { mNoteKit.noteRemove( part ); }
+
+
     //========================================================
     //    Lyric part
     auto    lyricGet() const { return mLyricList; }
@@ -69,6 +74,10 @@ class CsLine
     QString translationGet( const QString &lang ) const { return mTranslation.value( lang ); }
 
     void    translationSet( const QString &lang, const QString &tran ) { mTranslation.insert( lang, tran ); }
+
+    void    translationRename( const QString &prevLang, const QString &newLang );
+
+    void    translationRemove( const QString &lang ) { mTranslation.remove( lang ); }
 
     //========================================================
     //    json part

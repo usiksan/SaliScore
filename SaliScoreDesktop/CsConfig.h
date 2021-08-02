@@ -38,6 +38,8 @@ History
              v0.17 Begin creation definition editing dialog
   02.08.2021 v0.18 Complete with definition editing dialog
                    Append chord definition dialog
+             v0.19 Append note definition dialog and translation definition dialog
+                   Append title and score properties paint into painter
 */
 
 #ifndef CSCONFIG
@@ -51,7 +53,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             18
+#define CS_VERSION_MINOR             19
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"

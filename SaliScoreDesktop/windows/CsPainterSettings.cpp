@@ -15,8 +15,11 @@ CsPainterSettings::CsPainterSettings()
   mChordFontSize       = 16;
   mLyricFontSize       = 14;
   mTranslationFontSize = 12;
+  mTitleFontSize       = 20;
+  mPropertiesFontSize  = 12;
   mTextGap             = 4;
   mLineGap             = 20;
+  mLeftMenuSize        = 10;
   }
 
 
@@ -33,8 +36,11 @@ void CsPainterSettings::write(QString key)
   js.jsonInt( "chordFontSize", mChordFontSize );
   js.jsonInt( "lyricFontSize", mLyricFontSize );
   js.jsonInt( "translationFontSize", mTranslationFontSize );
+  js.jsonInt( "titleFontSize", mTitleFontSize );
+  js.jsonInt( "propertiesFontSize", mPropertiesFontSize );
   js.jsonInt( "textGap", mTextGap );
   js.jsonInt( "lineGap", mLineGap );
+  js.jsonInt( "leftMenuSize", mLeftMenuSize );
 
   QSettings s;
   s.setValue( key, QJsonDocument(js.object()).toJson() );
@@ -61,7 +67,10 @@ void CsPainterSettings::read(QString key)
   js.jsonInt( "chordFontSize", mChordFontSize );
   js.jsonInt( "lyricFontSize", mLyricFontSize );
   js.jsonInt( "translationFontSize", mTranslationFontSize );
+  js.jsonInt( "titleFontSize", mTitleFontSize );
+  js.jsonInt( "propertiesFontSize", mPropertiesFontSize );
   js.jsonInt( "textGap", mTextGap );
   js.jsonInt( "lineGap", mLineGap );
+  js.jsonInt( "leftMenuSize", mLeftMenuSize );
   }
 

@@ -36,6 +36,7 @@ void CsComposition::remarkRename(int index, const QString &lang)
   {
   //Get previous lang
   QString prevLang = mRemarkList.at(index).mName;
+  if( prevLang == lang ) return;
   //Scan all lines and rename remark
   for( int i = 0; i < mLineList.count(); i++ )
     if( mLineList.at(i).isRemark() )
@@ -88,8 +89,9 @@ void CsComposition::chordAppend(const QString &part, const QString &descr)
 
 void CsComposition::chordRename(int index, const QString &part)
   {
-  //Get previous lang
+  //Get previous part
   QString prevPart = mChordList.at(index).mName;
+  if( prevPart == part ) return;
   //Scan all lines and rename chord
   for( int i = 0; i < mLineList.count(); i++ )
     if( !mLineList.at(i).isRemark() )
@@ -144,6 +146,38 @@ void CsComposition::noteAppend(const QString &part, const QString &descr, int cl
 
 
 
+void CsComposition::noteRename(int index, const QString &part)
+  {
+  //Get previous part
+  QString prevPart = mNoteList.at(index).mName;
+  if( prevPart == part ) return;
+  //Scan all lines and rename notes
+  for( int i = 0; i < mLineList.count(); i++ )
+    if( !mLineList.at(i).isRemark() )
+      //Rename part
+      mLineList[i].noteRename( prevPart, part );
+  //Replace name in definition list
+  mNoteList[index].mName = part;
+  }
+
+
+
+void CsComposition::noteRemove(int index)
+  {
+  //Get part
+  QString part = mNoteList.at(index).mName;
+  //Scan all lines and remove note
+  for( int i = 0; i < mLineList.count(); i++ )
+    if( !mLineList.at(i).isRemark() )
+      //Remove part
+      mLineList[i].noteRemove( part );
+  //Remove from definition
+  mNoteList.removeAt(index);
+  }
+
+
+
+
 void CsComposition::translationAppend(const QString &lang, const QString &descr)
   {
   mDirty = true;
@@ -162,6 +196,37 @@ void CsComposition::translationAppend(const QString &lang, const QString &descr)
     //Remark already exist, so change description only
     mTranslationList[index].mDescription = descr;
     }
+  }
+
+
+
+void CsComposition::translationRename(int index, const QString &lang)
+  {
+  //Get previous lang
+  QString prevLang = mTranslationList.at(index).mName;
+  if( prevLang == lang ) return;
+  //Scan all lines and rename notes
+  for( int i = 0; i < mLineList.count(); i++ )
+    if( !mLineList.at(i).isRemark() )
+      //Rename part
+      mLineList[i].translationRename( prevLang, lang );
+  //Replace name in definition list
+  mTranslationList[index].mName = lang;
+  }
+
+
+
+void CsComposition::translationRemove(int index)
+  {
+  //Get lang
+  QString lang = mTranslationList.at(index).mName;
+  //Scan all lines and rename translation
+  for( int i = 0; i < mLineList.count(); i++ )
+    if( !mLineList.at(i).isRemark() )
+      //Remove lang
+      mLineList[i].translationRemove( lang );
+  //Remove from definition
+  mTranslationList.removeAt(index);
   }
 
 

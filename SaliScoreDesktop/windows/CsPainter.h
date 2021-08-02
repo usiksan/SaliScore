@@ -34,6 +34,11 @@ class CsPainter
     int               mChordTextHeight;
     int               mLyricTextHeight;
     int               mTranslationTextHeight;
+    int               mTitleHeight;
+    int               mPropertiesHeight;
+    int               mLeftGap;
+    int               mClefPos;
+    int               mDenominator;
 
     CsReferenceList   mReferenceList;
     int               mLineIndex;
@@ -41,6 +46,8 @@ class CsPainter
     CsPainter( QPainter *painter, const QString &keyViewSettings, const CsComposition &comp );
 
     QColor backgroundColor() const { return mSettings.mColorBackground; }
+
+    int    drawTitleAndProperties( int y, QSize size, const CsComposition &comp );
 
     int    drawLine( int y, int lineIndex, const CsLine &line );
 
@@ -64,6 +71,8 @@ class CsPainter
     void   drawNoteImpl(int x, int y, int clef, const CsNoteLine &noteLine );
 
     void   drawTranslationImpl( int x, int y, const QString &tran );
+
+    void   drawPropertyImpl( int xtab, const QString &title, const QString &value );
 
     int    visualX( int x, int pos );
 
