@@ -15,3 +15,4 @@ void CsChordLine::jsonRead(CsJsonReader &js)
   {
   js.jsonList<CsChord>( "ChordList", mList );
   }
+

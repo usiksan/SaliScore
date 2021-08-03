@@ -2,17 +2,16 @@
 #define CSWINTRAIN_H
 
 #include "CsConfig.h"
-#include "score/CsComposition.h"
+#include "CsWinScoreMode.h"
 
 #include <QWidget>
 
-class CsWinTrain : public QWidget
+class CsWinTrain : public CsWinScoreMode
   {
     Q_OBJECT
 
-    CsComposition &mComposition;
   public:
-    explicit CsWinTrain( CsComposition &comp, QWidget *parent = nullptr);
+    explicit CsWinTrain( CsComposition &comp, CsPlay &play, QWidget *parent = nullptr);
 
   signals:
 

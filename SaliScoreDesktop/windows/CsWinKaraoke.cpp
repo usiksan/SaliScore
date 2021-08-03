@@ -1,8 +1,7 @@
 #include "CsWinKaraoke.h"
 
-CsWinKaraoke::CsWinKaraoke(CsComposition &comp, QWidget *parent) :
-  QWidget(parent),
-  mComposition(comp)
+CsWinKaraoke::CsWinKaraoke(CsComposition &comp, CsPlay &play, QWidget *parent) :
+  CsWinScoreMode( comp, play, parent )
   {
 
   }

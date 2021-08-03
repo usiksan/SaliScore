@@ -2,19 +2,17 @@
 #define CSWINEDITOR_H
 
 #include "CsConfig.h"
-#include "score/CsComposition.h"
+#include "CsWinScoreMode.h"
 
 #include <QWidget>
 #include <QAbstractScrollArea>
 
 
-class CsWinEditor : public QWidget
+class CsWinEditor : public CsWinScoreMode
   {
     Q_OBJECT
-
-    CsComposition &mComposition;
   public:
-    explicit CsWinEditor( CsComposition &comp, QWidget *parent = nullptr);
+    explicit CsWinEditor( CsComposition &comp, CsPlay &play, QWidget *parent = nullptr);
 
 
   signals:

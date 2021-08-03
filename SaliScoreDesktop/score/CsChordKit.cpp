@@ -23,3 +23,5 @@ void CsChordKit::jsonRead(CsJsonReader &js)
   {
   js.jsonMap<CsChordLine>( "ChordMap", mChordMap );
   }
+
+

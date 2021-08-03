@@ -2,14 +2,14 @@
 #include "../SvJson/SvJsonIO.h"
 
 CsLine::CsLine() :
-  mTickCount(0)
+  mTaktCount(8)
   {
 
   }
 
 CsLine::CsLine( const QString &lang, const QString &rem) :
   mRemark( lang, rem ),
-  mTickCount(0)
+  mTaktCount(0)
   {
 
   }
@@ -21,6 +21,7 @@ void CsLine::translationRename(const QString &prevLang, const QString &newLang)
   }
 
 
+
 void CsLine::jsonWrite(CsJsonWriter &js) const
   {
   js.jsonObject<CsRemark>( "Remark", mRemark );
@@ -28,7 +29,7 @@ void CsLine::jsonWrite(CsJsonWriter &js) const
   js.jsonObject<CsNoteKit>( "NoteKit", mNoteKit );
   js.jsonList<CsLyric>( "LyricList", mLyricList );
   js.jsonMapString( "Translation", mTranslation );
-  js.jsonInt( "tickCount", mTickCount );
+  js.jsonInt( "taktCount", mTaktCount );
   }
 
 void CsLine::jsonRead(CsJsonReader &js)
@@ -38,5 +39,5 @@ void CsLine::jsonRead(CsJsonReader &js)
   js.jsonObject<CsNoteKit>( "NoteKit", mNoteKit );
   js.jsonList<CsLyric>( "LyricList", mLyricList );
   js.jsonMapString( "Translation", mTranslation );
-  js.jsonInt( "tickCount", mTickCount );
+  js.jsonInt( "taktCount", mTaktCount );
   }

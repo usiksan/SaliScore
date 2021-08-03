@@ -10,6 +10,7 @@
 #include "score/CsLine.h"
 #include "score/CsComposition.h"
 #include "score/CsReference.h"
+#include "play/CsPlay.h"
 
 #include <QPainter>
 #include <QStringList>
@@ -17,6 +18,7 @@
 class CsPainter
   {
     QPainter         *mPainter;
+    const CsPlay     &mPlayer;
 
     //Composition settings
     QStringList       mVisibleRemark;
@@ -38,12 +40,12 @@ class CsPainter
     int               mPropertiesHeight;
     int               mLeftGap;
     int               mClefPos;
-    int               mDenominator;
+    int               mDenominatorPos;
 
     CsReferenceList   mReferenceList;
     int               mLineIndex;
   public:
-    CsPainter( QPainter *painter, const QString &keyViewSettings, const CsComposition &comp );
+    CsPainter( QPainter *painter, const QString &keyViewSettings, const CsComposition &comp, const CsPlay &player );
 
     QColor backgroundColor() const { return mSettings.mColorBackground; }
 
@@ -54,9 +56,9 @@ class CsPainter
   private:
     void   drawRemark( const QMap<QString,QString> &remarkMap );
 
-    void   drawChord(const QMap<QString, CsChordLine> &chordMap );
+    void   drawChord(int taktCount, const QMap<QString, CsChordLine> &chordMap );
 
-    void   drawNote(const QMap<QString,CsNoteLine> &noteMap );
+    void   drawNote( int taktCount, const QMap<QString,CsNoteLine> &noteMap );
 
     void   drawLyric( const CsLyricList &lyricList );
 
@@ -66,17 +68,23 @@ class CsPainter
 
     void   drawRemarkImpl( int x, int y, const QString &rem );
 
-    void   drawChordImpl( int x, int y, const CsChordLine &chordLine );
+    void   drawChordImpl(const CsChordLine &chordLine );
 
-    void   drawNoteImpl(int x, int y, int clef, const CsNoteLine &noteLine );
+    void   drawNoteImpl(int clef, int taktCount, const CsNoteLine &noteLine );
 
     void   drawTranslationImpl( int x, int y, const QString &tran );
 
     void   drawPropertyImpl( int xtab, const QString &title, const QString &value );
 
+    void   drawTaktLines( int taktCount, int y0, int y1 );
+
     int    visualX( int x, int pos );
 
     int    fontHeight( int fontSize ) const;
+
+    bool   isPlayerOnCurrentLine() const { return mPlayer.isShow() && mPlayer.lineIndex() == mLineIndex; }
+
+    bool   isHighlight( int position, int duration ) const;
   };
 
 #endif // CSPAINTER_H

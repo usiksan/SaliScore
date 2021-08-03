@@ -4,12 +4,30 @@
 #include <QJsonDocument>
 #include <QSettings>
 
+
+
 CsPainterSettings::CsPainterSettings()
+  {
+  setDefault();
+  }
+
+
+
+void CsPainterSettings::setDefault()
   {
   //Defaults
   mFontName            = QStringLiteral("Serif");
   mColorBackground     = QColor(Qt::white);
-  mPixPerX             = 15;
+  mColorRemark         = QColor(Qt::black);
+  mColorChord          = QColor(Qt::black);
+  mColorChordHighlight = QColor(Qt::blue);
+  mColorNote           = QColor(Qt::black);
+  mColorNoteHighlight  = QColor(Qt::blue);
+  mColorLyric          = QColor(Qt::black);
+  mColorLyricHighlight = QColor(Qt::blue);
+  mColorTranslation    = QColor(Qt::black);
+  mColorTakt           = QColor(Qt::lightGray);
+  mPixelPerTakt        = 200;
   mScoreLineDistance   = 8;
   mRemarkFontSize      = 12;
   mChordFontSize       = 16;
@@ -30,7 +48,16 @@ void CsPainterSettings::write(QString key)
 
   js.jsonString( "fontName", mFontName );
   js.jsonColor( "colorBackground", mColorBackground );
-  js.jsonInt( "pixPerX", mPixPerX );
+  js.jsonColor( "colorRemark", mColorRemark );
+  js.jsonColor( "colorChord", mColorChord );
+  js.jsonColor( "colorChordHighlight", mColorChordHighlight );
+  js.jsonColor( "colorNote", mColorNote );
+  js.jsonColor( "colorNoteHighlight", mColorNoteHighlight );
+  js.jsonColor( "colorLyric", mColorLyric );
+  js.jsonColor( "colorLyricHighlight", mColorLyricHighlight );
+  js.jsonColor( "colorTranslation", mColorTranslation );
+  js.jsonColor( "colorTakt", mColorTakt );
+  js.jsonInt( "pixelPerTakt", mPixelPerTakt );
   js.jsonInt( "scoreLineDistance", mScoreLineDistance );
   js.jsonInt( "remarkFontSize", mRemarkFontSize );
   js.jsonInt( "chordFontSize", mChordFontSize );
@@ -61,7 +88,16 @@ void CsPainterSettings::read(QString key)
 
   js.jsonString( "fontName", mFontName );
   js.jsonColor( "colorBackground", mColorBackground );
-  js.jsonInt( "pixPerX", mPixPerX );
+  js.jsonColor( "colorRemark", mColorRemark );
+  js.jsonColor( "colorChord", mColorChord );
+  js.jsonColor( "colorChordHighlight", mColorChordHighlight );
+  js.jsonColor( "colorNote", mColorNote );
+  js.jsonColor( "colorNoteHighlight", mColorNoteHighlight );
+  js.jsonColor( "colorLyric", mColorLyric );
+  js.jsonColor( "colorLyricHighlight", mColorLyricHighlight );
+  js.jsonColor( "colorTranslation", mColorTranslation );
+  js.jsonColor( "colorTakt", mColorTakt );
+  js.jsonInt( "pixelPerTakt", mPixelPerTakt );
   js.jsonInt( "scoreLineDistance", mScoreLineDistance );
   js.jsonInt( "remarkFontSize", mRemarkFontSize );
   js.jsonInt( "chordFontSize", mChordFontSize );

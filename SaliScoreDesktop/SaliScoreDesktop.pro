@@ -45,6 +45,7 @@ SOURCES += \
     windows/CsWinMain.cpp \
     windows/CsWinPage.cpp \
     windows/CsWinScore.cpp \
+    windows/CsWinScoreMode.cpp \
     windows/CsWinTrain.cpp
 
 HEADERS += \
@@ -85,6 +86,7 @@ HEADERS += \
     windows/CsWinMain.h \
     windows/CsWinPage.h \
     windows/CsWinScore.h \
+    windows/CsWinScoreMode.h \
     windows/CsWinTrain.h
 
 TRANSLATIONS += \

@@ -11,7 +11,8 @@
 
 CsWinScore::CsWinScore(const QString filePath, CsComposition &src, QWidget *parent) :
   CsWinPage( filePath, parent ),
-  mComposition(src)
+  mComposition(src),
+  mPlayer(mComposition)
   {
   setPath(filePath);
 
@@ -53,9 +54,9 @@ CsWinScore::CsWinScore(const QString filePath, CsComposition &src, QWidget *pare
   mComposition.remarkSet( ln, QStringLiteral("ru"),  QStringLiteral("Проигрыш") );
 
 
-  addWidget( mWinTrain = new CsWinTrain( mComposition ) );
-  addWidget( mWinKaraoke = new CsWinKaraoke( mComposition ) );
-  addWidget( mWinEditor = new CsWinEditor( mComposition ) );
+  addWidget( mWinTrain = new CsWinTrain( mComposition, mPlayer ) );
+  addWidget( mWinKaraoke = new CsWinKaraoke( mComposition, mPlayer ) );
+  addWidget( mWinEditor = new CsWinEditor( mComposition, mPlayer ) );
 
   if( filePath.startsWith(CS_DEFAULT_FILE_NAME) )
     cmViewEditor();

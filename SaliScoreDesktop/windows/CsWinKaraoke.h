@@ -2,18 +2,16 @@
 #define CSWINKARAOKE_H
 
 #include "CsConfig.h"
-#include "score/CsComposition.h"
+#include "CsWinScoreMode.h"
 
 #include <QWidget>
 
-class CsWinKaraoke : public QWidget
+class CsWinKaraoke : public CsWinScoreMode
   {
     Q_OBJECT
 
-
-    CsComposition &mComposition;
   public:
-    explicit CsWinKaraoke(CsComposition &comp, QWidget *parent = nullptr);
+    explicit CsWinKaraoke( CsComposition &comp, CsPlay &play, QWidget *parent = nullptr);
 
   signals:
 

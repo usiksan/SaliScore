@@ -5,9 +5,8 @@
 #include <QPainter>
 #include <QSettings>
 
-CsWinTrain::CsWinTrain(CsComposition &comp, QWidget *parent) :
-  QWidget(parent),
-  mComposition(comp)
+CsWinTrain::CsWinTrain(CsComposition &comp, CsPlay &play, QWidget *parent) :
+  CsWinScoreMode( comp, play, parent )
   {
 
   }
@@ -16,7 +15,7 @@ CsWinTrain::CsWinTrain(CsComposition &comp, QWidget *parent) :
 void CsWinTrain::paintEvent(QPaintEvent *event)
   {
   QPainter painter(this);
-  CsPainter cp( &painter, QStringLiteral(KEY_TRAIN_SETTINGS), mComposition );
+  CsPainter cp( &painter, QStringLiteral(KEY_TRAIN_SETTINGS), mComposition, mPlayer );
 
   //Закрасить цветом фона
   painter.fillRect( QRect( QPoint(), size() ), cp.backgroundColor() );

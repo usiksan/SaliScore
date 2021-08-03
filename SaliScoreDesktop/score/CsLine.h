@@ -1,3 +1,23 @@
+/*
+Project "SaliScore Score music edit, view and tutorial programm"
+
+Author
+  Sibilev Alexander S.
+
+Web
+  www.saliLab.com
+  www.saliLab.ru
+
+Description
+  CsLine - is one line of partiture
+  Line may be a remark or song
+
+  One line of song contains chord line, note line, lyric line and translation line
+  Each of them lines may contains multiple line for different variant of representation, but all
+  of them apply to single song line
+
+  Line contains exactly count of takts
+*/
 #ifndef CSLINE_H
 #define CSLINE_H
 
@@ -16,7 +36,7 @@ class CsLine
     CsNoteKit             mNoteKit;
     CsLyricList           mLyricList;
     QMap<QString,QString> mTranslation;
-    int                   mTickCount;
+    int                   mTaktCount;
   public:
     CsLine();
 
@@ -46,7 +66,7 @@ class CsLine
     //    Chord part
     auto    chordListGet( const QString &part ) const { return mChordKit.chordListGet(part); }
 
-    void    chordListSet( const QString &part, const CsChordList &line ) { mChordKit.chordListSet( part, line ); tickCountUpdate(); }
+    void    chordListSet( const QString &part, const CsChordList &line ) { mChordKit.chordListSet( part, line ); }
 
     void    chordRename( const QString &prevPart, const QString &newPart ) { mChordKit.chordRename( prevPart, newPart ); }
 
@@ -57,7 +77,7 @@ class CsLine
     //    Chord part
     auto    noteListGet( const QString &part ) const { return mNoteKit.noteListGet( part ); }
 
-    void    noteListSet( const QString &part, const CsNoteList &list ) { mNoteKit.noteListSet( part, list ); tickCountUpdate(); }
+    void    noteListSet( const QString &part, const CsNoteList &list ) { mNoteKit.noteListSet( part, list ); }
 
     void    noteRename( const QString &prevPart, const QString &newPart ) { mNoteKit.noteRename( prevPart, newPart ); }
 
@@ -68,25 +88,23 @@ class CsLine
     //    Lyric part
     auto    lyricGet() const { return mLyricList; }
 
-    void    lyricSet( const CsLyricList &lyricList ) { mLyricList = lyricList; tickCountUpdate(); }
+    void    lyricSet( const CsLyricList &lyricList ) { mLyricList = lyricList; }
 
 
     //========================================================
     //    Translation part
     QString translationGet( const QString &lang ) const { return mTranslation.value( lang ); }
 
-    void    translationSet( const QString &lang, const QString &tran ) { mTranslation.insert( lang, tran ); tickCountUpdate(); }
+    void    translationSet( const QString &lang, const QString &tran ) { mTranslation.insert( lang, tran ); }
 
     void    translationRename( const QString &prevLang, const QString &newLang );
 
     void    translationRemove( const QString &lang ) { mTranslation.remove( lang ); }
 
     //========================================================
-    //    Tick count
+    //    Takt count
 
-    int     tickCount() const { return mTickCount; }
-
-    void    tickCountUpdate();
+    int     taktCount() const { return mTaktCount; }
 
     //========================================================
     //    json part

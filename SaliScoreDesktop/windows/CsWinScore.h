@@ -3,16 +3,22 @@
 
 #include "CsConfig.h"
 #include "score/CsComposition.h"
+#include "play/CsPlay.h"
 #include "CsWinPage.h"
 #include "CsWinTrain.h"
 #include "CsWinEditor.h"
 #include "CsWinKaraoke.h"
+
+#include <QTimer>
 
 class CsWinScore : public CsWinPage
   {
     Q_OBJECT
 
     CsComposition mComposition;
+    CsPlay        mPlayer;
+
+    QTimer        mTickGenerator;
 
     CsWinEditor  *mWinEditor;
     CsWinTrain   *mWinTrain;
@@ -48,7 +54,10 @@ class CsWinScore : public CsWinPage
     void cmPlayPause();
     void cmPlayStop();
 
+    void midiIn( int command, int byte0, int byte1 );
+
   signals:
+    void midiOut( int command, int byte0, int byte1 );
 
 
     // CsWinPage interface

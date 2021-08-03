@@ -41,6 +41,10 @@ History
              v0.19 Append note definition dialog and translation definition dialog
                    Append title and score properties paint into painter
              v0.20 Begin player
+  03.08.2021 v0.21 Inject common class CsWinScoreMode as base class for all view of score
+                   Append taktCount for line
+                   Modify painter to accept taktCount for lines
+
 */
 
 #ifndef CSCONFIG
@@ -54,7 +58,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             20
+#define CS_VERSION_MINOR             21
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"
