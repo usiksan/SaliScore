@@ -44,7 +44,9 @@ History
   03.08.2021 v0.21 Inject common class CsWinScoreMode as base class for all view of score
                    Append taktCount for line
                    Modify painter to accept taktCount for lines
-
+  04.08.2021 v0.22 Create paint for karaoke mode with multypurpose view and animation
+                   Realised simple single line karaoke mode
+             v0.23 Append text import
 */
 
 #ifndef CSCONFIG
@@ -58,7 +60,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             21
+#define CS_VERSION_MINOR             23
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"

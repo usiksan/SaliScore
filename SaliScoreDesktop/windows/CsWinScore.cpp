@@ -18,7 +18,7 @@ CsWinScore::CsWinScore(const QString filePath, CsComposition &src, QWidget *pare
 
   if( filePath != path() )
     mComposition.dirtySet();
-
+/*
   mComposition.remarkAppend( QStringLiteral("ru"), QStringLiteral("Russian") );
   mComposition.chordAppend( QStringLiteral("soft"), QStringLiteral("Soft variant") );
   mComposition.noteAppend( QStringLiteral("piano"), QStringLiteral("Piano soft variant") );
@@ -52,7 +52,7 @@ CsWinScore::CsWinScore(const QString filePath, CsComposition &src, QWidget *pare
 
   ln = mComposition.lineAppend( true );
   mComposition.remarkSet( ln, QStringLiteral("ru"),  QStringLiteral("Проигрыш") );
-
+*/
 
   addWidget( mWinTrain = new CsWinTrain( mComposition, mPlayer ) );
   addWidget( mWinKaraoke = new CsWinKaraoke( mComposition, mPlayer ) );

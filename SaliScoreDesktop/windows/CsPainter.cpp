@@ -195,7 +195,7 @@ void CsPainter::drawLyric(const CsLyricList &lyricList)
 
   //Paint each lyric
   for( auto const &lyric : lyricList ) {
-    int visx = visualX( 20, lyric.position() );
+    int visx = visualX( mLeftGap, lyric.position() );
     mPainter->drawText( visx, mCurY, lyric.lyric() );
     }
   mCurY += mSettings.mTextGap;

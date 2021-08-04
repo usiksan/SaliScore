@@ -1,5 +1,6 @@
 #include "CsWinMain.h"
 #include "import/saliScore/CsImportSaliScore.h"
+#include "import/text/CsImportText.h"
 
 #include <QSettings>
 #include <QGuiApplication>
@@ -46,6 +47,7 @@ CsWinMain::CsWinMain(QWidget *parent) :
 
   //Create imports
   mImportManager.registerImport( new CsImportSaliScore() );
+  mImportManager.registerImport( new CsImportText() );
 
   //Clipboard notification
   //connect( QGuiApplication::clipboard(), &QClipboard::changed, this, &CsWinMain::onClipboardChanged );

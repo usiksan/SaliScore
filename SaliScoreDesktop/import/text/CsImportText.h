@@ -16,8 +16,11 @@ Description
 
 #include "../CsImport.h"
 
+#include <QMap>
+
 class CsImportText : public CsImport
   {
+    QMap<QString,int> mChordMap; //!< Map to conversion textual reprentation of chord to inner SaliScore format
   public:
     CsImportText();
 
@@ -26,6 +29,11 @@ class CsImportText : public CsImport
   public:
     virtual bool probe(const QByteArray &fileContent) override;
     virtual CsComposition read(const QByteArray &fileContent, bool &ok) override;
+
+  private:
+    bool chordParser( const QString name, int &note, int &chord ) const;
+
+    bool chordProbe( const QString &line ) const;
   };
 
 #endif // CSIMPORTTEXT_H
