@@ -24,6 +24,12 @@ class CsWinScoreMode : public QAbstractScrollArea
     // QWidget interface
   protected:
     virtual void paintEvent(QPaintEvent *event) override;
+    virtual void mousePressEvent(QMouseEvent *event) override { mView->upMousePressEvent(event); }
+    virtual void mouseReleaseEvent(QMouseEvent *event) override { mView->upMouseReleaseEvent(event); }
+    virtual void mouseMoveEvent(QMouseEvent *event) override { mView->upMouseMoveEvent(event); }
+    virtual void wheelEvent(QWheelEvent *event) override { mView->upWheelEvent(event); }
+    virtual void keyPressEvent(QKeyEvent *event) override { mView->upKeyPressEvent(event); }
+    virtual void keyReleaseEvent(QKeyEvent *event) override { mView->upKeyReleaseEvent(event); }
   };
 
 #endif // CSWINSCOREMODE_H

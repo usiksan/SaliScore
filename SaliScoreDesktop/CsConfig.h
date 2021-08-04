@@ -50,6 +50,7 @@ History
              v0.24 To append scrollbar to edit and train windows make refactory of score modes.
                    Fact modes at now are views and mode represents by single class CsWinScoreMode,
                    which is QAbstractScrollBar and separate views are them viewports
+             v0.25 Append scrolling to windows, made scroll for trainMode
 */
 
 #ifndef CSCONFIG
@@ -63,7 +64,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             24
+#define CS_VERSION_MINOR             25
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"

@@ -7,19 +7,31 @@
 
 #include <QWidget>
 
+class CsWinScoreMode;
+
 class CsWinScoreView : public QWidget
   {
     Q_OBJECT
 
   protected:
-    CsComposition &mComposition;
-    CsPlay        &mPlayer;
+    CsComposition  &mComposition;
+    CsPlay         &mPlayer;
+    CsWinScoreMode *mWinScroll;   //!< Parent window which is QAbstractScrollArea
   public:
     explicit CsWinScoreView( CsComposition &comp, CsPlay &play, QWidget *parent = nullptr);
 
     virtual void activate() { update(); }
 
     virtual void paint() = 0;
+
+    virtual void setupWinScroll( CsWinScoreMode *winScroll );
+
+    virtual void upMousePressEvent(QMouseEvent *event) { Q_UNUSED(event) }
+    virtual void upMouseReleaseEvent(QMouseEvent *event) { Q_UNUSED(event) }
+    virtual void upMouseMoveEvent(QMouseEvent *event) { Q_UNUSED(event) }
+    virtual void upWheelEvent(QWheelEvent *event) { Q_UNUSED(event) }
+    virtual void upKeyPressEvent(QKeyEvent *event) { Q_UNUSED(event) }
+    virtual void upKeyReleaseEvent(QKeyEvent *event) { Q_UNUSED(event) }
   signals:
 
   };

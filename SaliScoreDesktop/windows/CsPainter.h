@@ -44,14 +44,18 @@ class CsPainter
 
     CsReferenceList   mReferenceList;
     int               mLineIndex;
+
+    //To support x scroll
+    int               mOffsetX;
+    QSize             mSize;                   //!< Drawable area size
   public:
-    CsPainter( QPainter *painter, const QString &keyViewSettings, const CsComposition &comp, const CsPlay &player );
+    CsPainter( QPainter *painter, const QString &keyViewSettings, const CsComposition &comp, const CsPlay &player, int offsetX, QSize size );
 
     QPainter *painter() { return mPainter; }
 
     QColor    backgroundColor() const { return mSettings.mColorBackground; }
 
-    int       drawTitleAndProperties( int y, QSize size, const CsComposition &comp );
+    int       drawTitleAndProperties( int y, const CsComposition &comp );
 
     int       drawLine( int y, int lineIndex, const CsLine &line );
 
@@ -80,7 +84,7 @@ class CsPainter
 
     void   drawTranslationImpl( int x, int y, const QString &tran );
 
-    void   drawPropertyImpl( int xtab, const QString &title, const QString &value );
+    void   drawPropertyImpl(int xorigin, int xtab, const QString &title, const QString &value );
 
     void   drawTaktLines( int taktCount, int y0, int y1 );
 

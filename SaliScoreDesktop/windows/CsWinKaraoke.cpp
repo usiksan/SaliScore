@@ -19,7 +19,7 @@ void CsWinKaraoke::activate()
 void CsWinKaraoke::paint()
   {
   QPainter painter(this);
-  CsPainter cp( &painter, QStringLiteral(KEY_KARAOKE_SETTINGS), mComposition, mPlayer );
+  CsPainter cp( &painter, QStringLiteral(KEY_KARAOKE_SETTINGS), mComposition, mPlayer, 0, size() );
 
   if( mPageMap.isEmpty() ) {
     //Build page map

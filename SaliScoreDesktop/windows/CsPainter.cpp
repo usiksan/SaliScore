@@ -4,14 +4,16 @@
 #include <QSettings>
 #include <QJsonDocument>
 
-CsPainter::CsPainter(QPainter *painter, const QString &keyViewSettings, const CsComposition &comp, const CsPlay &player ) :
+CsPainter::CsPainter(QPainter *painter, const QString &keyViewSettings, const CsComposition &comp, const CsPlay &player , int offsetX, QSize size) :
   mPainter(painter),
   mPlayer(player),
   mVisibleRemark(comp.remarkVisible()),
   mVisibleChord(comp.chordVisible()),
   mVisibleNote(comp.noteVisible()),
   mVisibleTranslate(comp.translationVisible()),
-  mClefMap(comp.noteClefMap())
+  mClefMap(comp.noteClefMap()),
+  mOffsetX(offsetX),
+  mSize(size)
   {
   QSettings s;
   if( s.contains(keyViewSettings) ) {
@@ -26,15 +28,15 @@ CsPainter::CsPainter(QPainter *painter, const QString &keyViewSettings, const Cs
   mPropertiesHeight      = fontHeight( mSettings.mPropertiesFontSize );
 
   //First takt offset
-  mClefPos = mSettings.mLeftMenuSize + 15;
-  mDenominatorPos = mClefPos + 20;
-  mLeftGap = mDenominatorPos + 20;
+  mClefPos = mSettings.mLeftMenuSize + 15 - mOffsetX;
+  mDenominatorPos = mClefPos + 20 - mOffsetX;
+  mLeftGap = mDenominatorPos + 20 - mOffsetX;
   }
 
 
 
 
-int CsPainter::drawTitleAndProperties(int y, QSize size, const CsComposition &comp)
+int CsPainter::drawTitleAndProperties(int y, const CsComposition &comp)
   {
   //Draw title and properties
   mCurY = y;
@@ -42,8 +44,8 @@ int CsPainter::drawTitleAndProperties(int y, QSize size, const CsComposition &co
   //Draw title on horizontal center
   mPainter->setFont( QFont(mSettings.mFontName, mSettings.mTitleFontSize) );
   QRect r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, comp.title() );
-  int x = (r.width() - size.width()) / 2;
-  mPainter->drawText( x, y + mTitleHeight, comp.title() );
+  int x = (r.width() - mSize.width()) / 2;
+  mPainter->drawText( x - mOffsetX, y + mTitleHeight, comp.title() );
   mCurY += mTitleHeight + mSettings.mTextGap;
 
   //At left side properties
@@ -64,10 +66,10 @@ int CsPainter::drawTitleAndProperties(int y, QSize size, const CsComposition &co
   r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, author );
   w = qMax( r.width(), w );
   w += 5;
-  drawPropertyImpl( w, singer, comp.singer() );
-  drawPropertyImpl( w, composer, comp.composer() );
-  drawPropertyImpl( w, lyricist, comp.lyricist() );
-  drawPropertyImpl( w, author, comp.author() );
+  drawPropertyImpl( mClefPos, w, singer, comp.singer() );
+  drawPropertyImpl( mClefPos, w, composer, comp.composer() );
+  drawPropertyImpl( mClefPos, w, lyricist, comp.lyricist() );
+  drawPropertyImpl( mClefPos, w, author, comp.author() );
 
   return mCurY;
   }
@@ -81,9 +83,10 @@ int CsPainter::drawLine(int y, int lineIndex, const CsLine &line)
 
   //Calculate line height
   int lineHeight;
+  int fullLineHeight;
   if( line.isRemark() )
     //Remark only
-    lineHeight = (mRemarkTextHeight + mSettings.mTextGap) * mVisibleRemark.count();
+    fullLineHeight = lineHeight = (mRemarkTextHeight + mSettings.mTextGap) * mVisibleRemark.count();
   else {
     //Chords
     lineHeight = (mChordTextHeight + mSettings.mTextGap) * mVisibleChord.count();
@@ -93,7 +96,12 @@ int CsPainter::drawLine(int y, int lineIndex, const CsLine &line)
     lineHeight += (mLyricTextHeight + mSettings.mTextGap);
     //Translations
     lineHeight += (mTranslationTextHeight + mSettings.mTextGap) * mVisibleTranslate.count();
+    fullLineHeight = lineHeight + mSettings.mLineGap;
     }
+
+  if( (y < 0 && (y + lineHeight) < 0) || (y > mSize.height()) )
+    //All drawing is outside viewport
+    return y + fullLineHeight;
 
   mCurY = y;
   if( line.isRemark() )
@@ -147,7 +155,7 @@ void CsPainter::drawRemark(const QMap<QString, QString> &remarkMap)
   //For each remark translations which visible we perform drawing
   for( const auto &lang : qAsConst(mVisibleRemark) ) {
     mCurY += mRemarkTextHeight;
-    drawRemarkImpl( 20, mCurY, remarkMap.value(lang) );
+    drawRemarkImpl( mLeftGap, mCurY, remarkMap.value(lang) );
     mCurY += mSettings.mTextGap;
     }
   }
@@ -430,11 +438,11 @@ void CsPainter::drawTranslationImpl(int x, int y, const QString &tran)
 
 
 
-void CsPainter::drawPropertyImpl(int xtab, const QString &title, const QString &value)
+void CsPainter::drawPropertyImpl( int xorigin, int xtab, const QString &title, const QString &value)
   {
   mCurY += mPropertiesHeight;
-  mPainter->drawText( 10, mCurY, title );
-  mPainter->drawText( 10 + xtab, mCurY, value );
+  mPainter->drawText( xorigin, mCurY, title );
+  mPainter->drawText( xorigin + xtab, mCurY, value );
   mCurY += mSettings.mTextGap;
   }
 
