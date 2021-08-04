@@ -5,6 +5,7 @@
 #include "score/CsComposition.h"
 #include "play/CsPlay.h"
 #include "CsWinPage.h"
+#include "CsWinScoreMode.h"
 #include "CsWinTrain.h"
 #include "CsWinEditor.h"
 #include "CsWinKaraoke.h"
@@ -15,14 +16,14 @@ class CsWinScore : public CsWinPage
   {
     Q_OBJECT
 
-    CsComposition mComposition;
-    CsPlay        mPlayer;
+    CsComposition   mComposition;
+    CsPlay          mPlayer;
 
-    QTimer        mTickGenerator;
+    QTimer          mTickGenerator;
 
-    CsWinEditor  *mWinEditor;
-    CsWinTrain   *mWinTrain;
-    CsWinKaraoke *mWinKaraoke;
+    CsWinScoreMode *mWinEditor;
+    CsWinScoreMode *mWinTrain;
+    CsWinScoreMode *mWinKaraoke;
   public:
     explicit CsWinScore(const QString filePath, CsComposition &src, QWidget *parent = nullptr);
 

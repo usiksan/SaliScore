@@ -2,7 +2,7 @@
 #define CSWINKARAOKE_H
 
 #include "CsConfig.h"
-#include "CsWinScoreMode.h"
+#include "CsWinScoreView.h"
 #include "CsKaraokePage.h"
 
 #include <QWidget>
@@ -11,7 +11,7 @@ enum CsAnimationMode {
   camSingleLine
 };
 
-class CsWinKaraoke : public CsWinScoreMode
+class CsWinKaraoke : public CsWinScoreView
   {
     Q_OBJECT
 
@@ -19,13 +19,11 @@ class CsWinKaraoke : public CsWinScoreMode
   public:
     explicit CsWinKaraoke( CsComposition &comp, CsPlay &play, QWidget *parent = nullptr);
 
-    void activate();
+    virtual void activate() override;
+
+    virtual void paint() override;
   signals:
 
-
-    // QWidget interface
-  protected:
-    virtual void paintEvent(QPaintEvent *event) override;
 
   private:
     void buildSingleLine(CsPainter &cp);

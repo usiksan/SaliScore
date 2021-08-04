@@ -47,6 +47,9 @@ History
   04.08.2021 v0.22 Create paint for karaoke mode with multypurpose view and animation
                    Realised simple single line karaoke mode
              v0.23 Append text import
+             v0.24 To append scrollbar to edit and train windows make refactory of score modes.
+                   Fact modes at now are views and mode represents by single class CsWinScoreMode,
+                   which is QAbstractScrollBar and separate views are them viewports
 */
 
 #ifndef CSCONFIG
@@ -60,7 +63,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             23
+#define CS_VERSION_MINOR             24
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"

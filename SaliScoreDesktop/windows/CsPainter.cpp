@@ -247,7 +247,7 @@ void CsPainter::drawChordImpl( const CsChordLine &chordLine )
   //Paint each chord
   for( auto const &chord : chordList ) {
     int visx = visualX( mLeftGap, chord.position() );
-    mPainter->setPen( mPlayer.isHit( chord.position(), 256 ) ? mSettings.mColorChordHighlight : mSettings.mColorChord );
+    mPainter->setPen( isHighlight( chord.position(), 256 ) ? mSettings.mColorChordHighlight : mSettings.mColorChord );
     mPainter->drawText( visx, mCurY, chord.chordText() );
     }
   }

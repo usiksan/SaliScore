@@ -2,7 +2,12 @@
 
 
 CsWinEditor::CsWinEditor(CsComposition &comp, CsPlay &play, QWidget *parent) :
-  CsWinScoreMode( comp, play, parent )
+  CsWinScoreView( comp, play, parent )
+  {
+
+  }
+
+void CsWinEditor::paint()
   {
 
   }

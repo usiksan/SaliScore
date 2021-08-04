@@ -5,7 +5,7 @@
 #include <QSettings>
 
 CsWinKaraoke::CsWinKaraoke(CsComposition &comp, CsPlay &play, QWidget *parent) :
-  CsWinScoreMode( comp, play, parent )
+  CsWinScoreView( comp, play, parent )
   {
 
   }
@@ -16,9 +16,7 @@ void CsWinKaraoke::activate()
   mPlayer.reset();
   }
 
-
-
-void CsWinKaraoke::paintEvent(QPaintEvent *event)
+void CsWinKaraoke::paint()
   {
   QPainter painter(this);
   CsPainter cp( &painter, QStringLiteral(KEY_KARAOKE_SETTINGS), mComposition, mPlayer );
@@ -43,6 +41,9 @@ void CsWinKaraoke::paintEvent(QPaintEvent *event)
   if( mPageMap.contains( currentLine ) )
     mPageMap.value( currentLine ).paint( lineTickElapsed, cp, mComposition );
   }
+
+
+
 
 
 

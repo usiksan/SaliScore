@@ -3,7 +3,7 @@
 CsPlay::CsPlay(CsComposition &comp) :
   mComposition(comp),
   mTickIndex(0),
-  mLineIndex(0),
+  mLineIndex(3),
   mTickLineStart(0),
   mTickLineStop(0)
   {

@@ -54,9 +54,9 @@ CsWinScore::CsWinScore(const QString filePath, CsComposition &src, QWidget *pare
   mComposition.remarkSet( ln, QStringLiteral("ru"),  QStringLiteral("Проигрыш") );
 */
 
-  addWidget( mWinTrain = new CsWinTrain( mComposition, mPlayer ) );
-  addWidget( mWinKaraoke = new CsWinKaraoke( mComposition, mPlayer ) );
-  addWidget( mWinEditor = new CsWinEditor( mComposition, mPlayer ) );
+  addWidget( mWinTrain = new CsWinScoreMode( new CsWinTrain( mComposition, mPlayer ) ) );
+  addWidget( mWinKaraoke = new CsWinScoreMode( new CsWinKaraoke( mComposition, mPlayer ) ) );
+  addWidget( mWinEditor = new CsWinScoreMode( new CsWinEditor( mComposition, mPlayer ) ) );
 
   if( filePath.startsWith(CS_DEFAULT_FILE_NAME) )
     cmViewEditor();
@@ -117,6 +117,8 @@ void CsWinScore::cmViewEditor()
   //Show active bar
   CsWinMain::barEditor->show();
   CsWinMain::actionViewEditor->setChecked(true);
+  //Activate karaoke
+  mWinEditor->view()->activate();
   }
 
 void CsWinScore::cmViewTrain()
@@ -129,6 +131,8 @@ void CsWinScore::cmViewTrain()
   //Show active bar
   CsWinMain::barTrain->show();
   CsWinMain::actionViewTrain->setChecked(true);
+  //Activate karaoke
+  mWinTrain->view()->activate();
   }
 
 void CsWinScore::cmViewKaraoke()
@@ -142,7 +146,7 @@ void CsWinScore::cmViewKaraoke()
   CsWinMain::barKaraoke->show();
   CsWinMain::actionViewKaraoke->setChecked(true);
   //Activate karaoke
-  mWinKaraoke->activate();
+  mWinKaraoke->view()->activate();
   }
 
 
