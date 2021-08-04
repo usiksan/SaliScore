@@ -109,6 +109,7 @@ History
 #define KEY_TRAIN_SETTINGS           "TrainSettings"
 #define KEY_EDITOR_SETTINGS          "EditorSettings"
 #define KEY_KARAOKE_SETTINGS         "KaraokeSettings"
+#define KEY_KARAOKE_ANIMATION        "KaraokeAnimation"
 
 //#define SDK_PREVIOUS_FILES           "PreviousFiles"
 //#define SDK_GLOBAL_AUTHOR            "Author global id"

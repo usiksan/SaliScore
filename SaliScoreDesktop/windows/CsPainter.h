@@ -47,11 +47,17 @@ class CsPainter
   public:
     CsPainter( QPainter *painter, const QString &keyViewSettings, const CsComposition &comp, const CsPlay &player );
 
-    QColor backgroundColor() const { return mSettings.mColorBackground; }
+    QPainter *painter() { return mPainter; }
 
-    int    drawTitleAndProperties( int y, QSize size, const CsComposition &comp );
+    QColor    backgroundColor() const { return mSettings.mColorBackground; }
 
-    int    drawLine( int y, int lineIndex, const CsLine &line );
+    int       drawTitleAndProperties( int y, QSize size, const CsComposition &comp );
+
+    int       drawLine( int y, int lineIndex, const CsLine &line );
+
+    int       lineRemarkHeight() const;
+
+    int       lineSongHeight() const;
 
   private:
     void   drawRemark( const QMap<QString,QString> &remarkMap );

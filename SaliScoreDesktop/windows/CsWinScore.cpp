@@ -136,11 +136,13 @@ void CsWinScore::cmViewKaraoke()
   setCurrentWidget( mWinKaraoke );
   //Hide toolbars
   CsWinMain::barPlayList->hide();
-  CsWinMain::barKaraoke->hide();
+  CsWinMain::barTrain->hide();
   CsWinMain::barEditor->hide();
   //Show active bar
-  CsWinMain::barTrain->show();
+  CsWinMain::barKaraoke->show();
   CsWinMain::actionViewKaraoke->setChecked(true);
+  //Activate karaoke
+  mWinKaraoke->activate();
   }
 
 

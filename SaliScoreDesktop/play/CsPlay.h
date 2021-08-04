@@ -10,6 +10,7 @@ class CsPlay
     int            mLineIndex;
     int            mTickLineStart;
     int            mTickLineStop;
+    int            mTickCount;
     bool           mShow;
   public:
     CsPlay( CsComposition &comp );
@@ -18,9 +19,13 @@ class CsPlay
 
     int  lineTickIndex() const { return mTickIndex - mTickLineStart; }
 
+    int  lineTickElapsed() const { if( auto tickCount = (mTickLineStop - mTickLineStart) ) return lineTickIndex() * 100 / tickCount; return 100; }
+
     bool isHit( int position, int duration ) const;
 
     void next( int tick );
+
+    void reset();
 
     bool isShow() const { return mShow; }
     void show( bool sh ) { mShow = sh; }

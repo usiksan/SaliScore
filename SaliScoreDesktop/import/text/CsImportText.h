@@ -1,3 +1,16 @@
+/*
+Project "SaliScore Score music edit, view and tutorial programm"
+
+Author
+  Sibilev Alexander S.
+
+Web
+  www.saliLab.com
+  www.saliLab.ru
+
+Description
+  CsImportText perform import partiture from guitar chord-style text song ot saliScore format
+*/
 #ifndef CSIMPORTTEXT_H
 #define CSIMPORTTEXT_H
 

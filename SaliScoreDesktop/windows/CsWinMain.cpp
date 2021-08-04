@@ -432,7 +432,7 @@ void CsWinMain::createMenu()
   menuView = new QMenu( tr("View") );
   actionViewEditor  = menuView->addAction( QIcon(QStringLiteral(":/pic/viewEditor.png")), tr("Editor mode"), this, [this] () {if( auto editor = activeScore() ) editor->cmViewEditor(); } );
   actionViewTrain   = menuView->addAction( QIcon(QStringLiteral(":/pic/viewTrain.png")), tr("Train mode"), this, [this] () {if( auto editor = activeScore() ) editor->cmViewTrain(); } );
-  actionViewKaraoke = menuView->addAction( QIcon(QStringLiteral(":/pic/viewKaraoke.png")), tr("Karaoke mode"), this, [this] () {if( auto editor = activeScore() ) editor->cmViewTrain(); } );
+  actionViewKaraoke = menuView->addAction( QIcon(QStringLiteral(":/pic/viewKaraoke.png")), tr("Karaoke mode"), this, [this] () {if( auto editor = activeScore() ) editor->cmViewKaraoke(); } );
   actionViewEditor->setCheckable(true);
   actionViewTrain->setCheckable(true);
   actionViewKaraoke->setCheckable(true);

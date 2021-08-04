@@ -110,6 +110,31 @@ int CsPainter::drawLine(int y, int lineIndex, const CsLine &line)
   }
 
 
+int CsPainter::lineRemarkHeight() const
+  {
+  //Remark only
+  return (mRemarkTextHeight + mSettings.mTextGap) * mVisibleRemark.count();
+  }
+
+
+
+int CsPainter::lineSongHeight() const
+  {
+  //Chords
+  int lineHeight = (mChordTextHeight + mSettings.mTextGap) * mVisibleChord.count();
+  //Notes
+  lineHeight += 9 * mSettings.mScoreLineDistance * mVisibleNote.count();
+  //Lyric
+  lineHeight += (mLyricTextHeight + mSettings.mTextGap);
+  //Translations
+  lineHeight += (mTranslationTextHeight + mSettings.mTextGap) * mVisibleTranslate.count();
+
+  return lineHeight;
+  }
+
+
+
+
 
 
 void CsPainter::drawRemark(const QMap<QString, QString> &remarkMap)
