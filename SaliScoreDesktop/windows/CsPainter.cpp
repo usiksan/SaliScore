@@ -203,6 +203,7 @@ void CsPainter::drawLyric(const CsLyricList &lyricList)
 
   //Paint each lyric
   for( auto const &lyric : lyricList ) {
+    mPainter->setPen( isHighlight( lyric.position(), lyric.duration() ) ? mSettings.mColorLyricHighlight : mSettings.mColorLyric );
     int visx = visualX( mLeftGap, lyric.position() );
     mPainter->drawText( visx, mCurY, lyric.lyric() );
     }
@@ -255,7 +256,7 @@ void CsPainter::drawChordImpl( const CsChordLine &chordLine )
   //Paint each chord
   for( auto const &chord : chordList ) {
     int visx = visualX( mLeftGap, chord.position() );
-    mPainter->setPen( isHighlight( chord.position(), 256 ) ? mSettings.mColorChordHighlight : mSettings.mColorChord );
+    mPainter->setPen( isHighlight( chord.position(), chord.duration() ) ? mSettings.mColorChordHighlight : mSettings.mColorChord );
     mPainter->drawText( visx, mCurY, chord.chordText() );
     }
   }

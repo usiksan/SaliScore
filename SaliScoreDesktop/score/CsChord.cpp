@@ -53,13 +53,14 @@ static ccharp chords[34] = {
   "1+2+5"   // chord1plus2plus5, 1+2+5 //0,2,7
   };
 
-CsChord::CsChord()
+CsChord::CsChord() :
+  CsPosition(0, 0)
   {
 
   }
 
-CsChord::CsChord(int pos, int note, int chord) :
-  CsPosition(pos),
+CsChord::CsChord(int pos, int duration, int note, int chord) :
+  CsPosition(pos, duration),
   mNote(qBound<int>(noteC,note,noteB)),
   mChord(qBound<int>(chordMaj,chord,chord1plus2plus5))
   {

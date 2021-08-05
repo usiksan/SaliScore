@@ -15,7 +15,7 @@ class CsChord : public CsPosition
     int mChord; //!< Chord variant, one of CsChordVar
   public:
     CsChord();
-    CsChord( int pos, int note, int chord );
+    CsChord( int pos, int duration, int note, int chord );
 
     QString chordText() const;
 

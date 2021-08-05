@@ -16,6 +16,8 @@
 
 using QActionPtr = QAction*;
 
+class CsMidiSequencer;
+
 class CsWinMain : public QMainWindow
   {
     Q_OBJECT
@@ -24,11 +26,11 @@ class CsWinMain : public QMainWindow
     QTabWidget      *mWEditors;      //!< Editors
     CsWinHelp       *mWHelp;         //!< Edge help
 
-    QTimer           mLocalTickGenerator;
+    CsMidiSequencer *mMidiSequencer;
 
     CsImportManager  mImportManager; //!< Import files manager. Contains converters from other formats
   public:
-    CsWinMain(QWidget *parent = nullptr);
+    CsWinMain( CsMidiSequencer *midiSequencer, QWidget *parent = nullptr);
     ~CsWinMain();
 
   private slots:

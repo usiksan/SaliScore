@@ -199,9 +199,10 @@ void CsWinScore::playStart()
   if( mDefferedReset ) {
     mDefferedReset = false;
     mPlayer.reset();
+    mPlayer.show(true);
     }
 
-  else if( CsWinMain::actionViewKaraoke->isChecked() )
+  if( CsWinMain::actionViewKaraoke->isChecked() )
     connect( &mUpdateTimer, &QTimer::timeout, mWinKaraoke->view(), &CsWinScoreView::viewUpdate );
   else if( CsWinMain::actionViewTrain->isChecked() )
     connect( &mUpdateTimer, &QTimer::timeout, mWinTrain->view(), &CsWinScoreView::viewUpdate );
@@ -215,6 +216,8 @@ void CsWinScore::playStart()
 
 void CsWinScore::playStop()
   {
+  if( mDefferedReset )
+    mPlayer.show(false);
   mDefferedReset = true;
   mUpdateTimer.stop();
   mUpdateTimer.disconnect();

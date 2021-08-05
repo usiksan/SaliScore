@@ -1,6 +1,7 @@
 #include "CsWinScoreView.h"
 #include "CsWinScoreMode.h"
 
+#include <QDebug>
 
 CsWinScoreView::CsWinScoreView(CsComposition &comp, CsPlay &play, QWidget *parent) :
   QWidget(parent),
@@ -14,4 +15,9 @@ CsWinScoreView::CsWinScoreView(CsComposition &comp, CsPlay &play, QWidget *paren
 void CsWinScoreView::setupWinScroll(CsWinScoreMode *winScroll)
   {
   mWinScroll = winScroll;
+  }
+
+void CsWinScoreView::viewUpdate()
+  {
+  update();
   }

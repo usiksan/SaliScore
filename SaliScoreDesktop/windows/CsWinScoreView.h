@@ -35,7 +35,7 @@ class CsWinScoreView : public QWidget
   signals:
 
   public slots:
-    void viewUpdate() { update(); }
+    void viewUpdate();
   };
 
 #endif // CSWINSCOREVIEW_H

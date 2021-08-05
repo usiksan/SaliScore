@@ -1,7 +1,8 @@
 #include "CsNote.h"
 #include "../SvJson/SvJsonIO.h"
 
-CsNote::CsNote()
+CsNote::CsNote() :
+  CsPosition(0,0)
   {
 
   }
@@ -53,7 +54,6 @@ bool CsNote::isDies() const
 void CsNote::jsonWrite(CsJsonWriter &js) const
   {
   CsPosition::jsonWrite( js );
-  js.jsonInt( "Duration", mDuration );
   js.jsonInt( "Pitch", mPitch );
   js.jsonInt( "Command", mCommand );
   }
@@ -63,7 +63,6 @@ void CsNote::jsonWrite(CsJsonWriter &js) const
 void CsNote::jsonRead(CsJsonReader &js)
   {
   CsPosition::jsonRead( js );
-  js.jsonInt( "Duration", mDuration );
   js.jsonInt( "Pitch", mPitch );
   js.jsonInt( "Command", mCommand );
   }

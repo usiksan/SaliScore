@@ -1,6 +1,7 @@
 #include "CsWinMain.h"
 #include "import/saliScore/CsImportSaliScore.h"
 #include "import/text/CsImportText.h"
+#include "midi/CsMidiSequencer.h"
 
 #include <QSettings>
 #include <QGuiApplication>
@@ -13,8 +14,9 @@
 #include <QDesktopServices>
 
 
-CsWinMain::CsWinMain(QWidget *parent) :
-  QMainWindow(parent)
+CsWinMain::CsWinMain(CsMidiSequencer *midiSequencer, QWidget *parent) :
+  QMainWindow(parent),
+  mMidiSequencer(midiSequencer)
   {
   //At central part - wiziwig editors
   mWEditors     = new QTabWidget();
@@ -51,6 +53,9 @@ CsWinMain::CsWinMain(QWidget *parent) :
 
   //Clipboard notification
   //connect( QGuiApplication::clipboard(), &QClipboard::changed, this, &CsWinMain::onClipboardChanged );
+
+  //Notification for tick
+  connect( mMidiSequencer, &CsMidiSequencer::tick, this, [this] ( int count ) { if( auto score = activeScore() ) score->playTick( count ); } );
 
   //Notification on tab changes
   connect( mWEditors, &QTabWidget::currentChanged, this, [this] ( int index ) { if( auto page = editor(index) ) page->activate(); } );
@@ -450,9 +455,9 @@ void CsWinMain::createMenu()
   group->addAction( actionViewKaraoke );
 
   menuPlay = new QMenu( tr("Play") );
-  actionPlayStart = menuView->addAction( QIcon(QStringLiteral(":/pic/playStart.png")), tr("Start"), this, [this] () {if( auto editor = activeScore() ) editor->cmPlayStart(); } );
-  actionPlayPause = menuView->addAction( QIcon(QStringLiteral(":/pic/playPause.png")), tr("Pause"), this, [this] () {if( auto editor = activeScore() ) editor->cmPlayPause(); } );
-  actionPlayStop  = menuView->addAction( QIcon(QStringLiteral(":/pic/playStop.png")), tr("Stop"), this, [this] () {if( auto editor = activeScore() ) editor->cmPlayStop(); } );
+  actionPlayStart = menuView->addAction( QIcon(QStringLiteral(":/pic/playStart.png")), tr("Start"), this, [this] () { if( auto editor = activeScore() ) editor->playStart();  mMidiSequencer->setRun(true); } );
+  actionPlayPause = menuView->addAction( QIcon(QStringLiteral(":/pic/playPause.png")), tr("Pause"), this, [this] () {  mMidiSequencer->setRun(false); } );
+  actionPlayStop  = menuView->addAction( QIcon(QStringLiteral(":/pic/playStop.png")), tr("Stop"), this, [this] () {  mMidiSequencer->setRun(false); if( auto editor = activeScore() ) editor->playStop(); } );
 
   menuScore = new QMenu( tr("Score") );
 

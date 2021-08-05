@@ -2,7 +2,8 @@
 
 #include "../SvJson/SvJsonIO.h"
 
-CsLyric::CsLyric()
+CsLyric::CsLyric() :
+  CsPosition(0,0)
   {
 
   }

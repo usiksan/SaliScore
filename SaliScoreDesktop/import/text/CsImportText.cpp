@@ -4,15 +4,15 @@
 
 #include <QObject>
 
-inline int packChord( int note, int chord ) { return (note << 8) + chord;}
+//inline int packChord( int note, int chord ) { return (note << 8) + chord;}
 
-inline int unpackNote( int pk ) { return (pk >> 8); }
-inline int unpackChord( int pk ) { return (pk & 0xff); }
+//inline int unpackNote( int pk ) { return (pk >> 8); }
+//inline int unpackChord( int pk ) { return (pk & 0xff); }
 
-bool chordParser( const QString name, int &note, int &chord )
-  {
+//bool chordParser( const QString name, int &note, int &chord )
+//  {
 
-  }
+//  }
 
 
 CsImportText::CsImportText() :
@@ -114,8 +114,8 @@ CsComposition CsImportText::read(const QByteArray &fileContent, bool &ok)
         int cNote, cChord, cPos = 0;
         for( const auto &chordName : chordNameList )
           if( chordParser( chordName, cNote, cChord ) ) {
-            chordList.append( CsChord( cPos, cNote, cChord ) );
-            cPos += 256;
+            chordList.append( CsChord( cPos, duraHole, cNote, cChord ) );
+            cPos += duraHole;
             }
 
         comp.chordListSet( comp.lineAppend(false), QStringLiteral("chords"), chordList );
@@ -134,7 +134,7 @@ CsComposition CsImportText::read(const QByteArray &fileContent, bool &ok)
 
           //Append lyric part
           if( lyricPartStart < line.count() && i != lyricPartStart )
-            lyricList.append( CsLyric( pos, line.mid( lyricPartStart, i - lyricPartStart) ) );
+            lyricList.append( CsLyric( pos, duraHole, line.mid( lyricPartStart, i - lyricPartStart) ) );
 
           lyricPartStart = i;
 
@@ -150,12 +150,12 @@ CsComposition CsImportText::read(const QByteArray &fileContent, bool &ok)
 
           //Add chord
           pos += 256;
-          chordList.append( CsChord( pos, cNote, cChord ) );
+          chordList.append( CsChord( pos, duraHole, cNote, cChord ) );
           }
 
         //Finish lyric
         if( lyricPartStart < line.count() )
-          lyricList.append( CsLyric( pos, line.mid( lyricPartStart, -1) ) );
+          lyricList.append( CsLyric( pos, duraHole, line.mid( lyricPartStart, -1) ) );
 
         int ln = comp.lineAppend(false);
         comp.chordListSet( ln, QStringLiteral("chords"), chordList );

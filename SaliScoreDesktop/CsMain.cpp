@@ -1,4 +1,5 @@
 #include "CsConfig.h"
+#include "midi/CsMidiSequencer.h"
 #include "windows/CsWinMain.h"
 #include "windows/CsPainterSettings.h"
 
@@ -6,6 +7,7 @@
 #include <QSettings>
 #include <QLocale>
 #include <QTranslator>
+#include <QThread>
 
 int main(int argc, char *argv[])
   {
@@ -47,7 +49,17 @@ int main(int argc, char *argv[])
 //    ps.write( QStringLiteral(KEY_TRAIN_SETTINGS) );
 //    }
 
-  CsWinMain w;
+
+  //=============================================================================
+  //        MIDI keyboard setup
+  //Start midi keyboard
+  QThread *midiThread = new QThread();
+  CsMidiSequencer *midiSequencer = new CsMidiSequencer( midiThread );
+
+
+  CsWinMain w( midiSequencer );
   w.show();
+
+  midiThread->start();
   return a.exec();
   }

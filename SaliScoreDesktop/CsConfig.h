@@ -51,6 +51,9 @@ History
                    Fact modes at now are views and mode represents by single class CsWinScoreMode,
                    which is QAbstractScrollBar and separate views are them viewports
              v0.25 Append scrolling to windows, made scroll for trainMode
+  05.08.2021 v0.26 Append soft tick generator and prepare midi tick sync
+                   Fix some errors in player with tick accept
+                   Move duration field into CsPosition. So any position at now has duration
 */
 
 #ifndef CSCONFIG
@@ -64,7 +67,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             25
+#define CS_VERSION_MINOR             26
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"
