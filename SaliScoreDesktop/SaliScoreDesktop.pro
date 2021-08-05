@@ -11,6 +11,7 @@ CONFIG += c++17
 SOURCES += \
     CsBug.cpp \
     CsMain.cpp \
+    CsTickGenerator.cpp \
     SvJson/SvJsonIO.cpp \
     import/CsImport.cpp \
     import/CsImportManager.cpp \
@@ -52,6 +53,7 @@ SOURCES += \
 
 HEADERS += \
     CsConfig.h \
+    CsTickGenerator.h \
     SvJson/SvJsonIO.h \
     import/CsImport.h \
     import/CsImportManager.h \

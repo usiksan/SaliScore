@@ -12,7 +12,8 @@
 CsWinScore::CsWinScore(const QString filePath, CsComposition &src, QWidget *parent) :
   CsWinPage( filePath, parent ),
   mComposition(src),
-  mPlayer(mComposition)
+  mPlayer(mComposition),
+  mDefferedReset(true)
   {
   setPath(filePath);
 
@@ -66,6 +67,8 @@ CsWinScore::CsWinScore(const QString filePath, CsComposition &src, QWidget *pare
     cmViewTrain();
   else
     cmViewEditor();
+
+  mUpdateTimer.setInterval(100);
   }
 
 
@@ -188,20 +191,45 @@ void CsWinScore::cmViewTranslation()
   dlgTranslation.exec();
   }
 
-void CsWinScore::cmPlayStart()
-  {
 
+
+
+void CsWinScore::playStart()
+  {
+  if( mDefferedReset ) {
+    mDefferedReset = false;
+    mPlayer.reset();
+    }
+
+  else if( CsWinMain::actionViewKaraoke->isChecked() )
+    connect( &mUpdateTimer, &QTimer::timeout, mWinKaraoke->view(), &CsWinScoreView::viewUpdate );
+  else if( CsWinMain::actionViewTrain->isChecked() )
+    connect( &mUpdateTimer, &QTimer::timeout, mWinTrain->view(), &CsWinScoreView::viewUpdate );
+  else
+    connect( &mUpdateTimer, &QTimer::timeout, mWinEditor->view(), &CsWinScoreView::viewUpdate );
+  mUpdateTimer.start();
   }
 
-void CsWinScore::cmPlayPause()
-  {
 
+
+
+void CsWinScore::playStop()
+  {
+  mDefferedReset = true;
+  mUpdateTimer.stop();
+  mUpdateTimer.disconnect();
   }
 
-void CsWinScore::cmPlayStop()
-  {
 
+
+
+void CsWinScore::playTick(int tick)
+  {
+  mPlayer.next( tick );
   }
+
+
+
 
 
 

@@ -18,8 +18,8 @@ class CsWinScore : public CsWinPage
 
     CsComposition   mComposition;
     CsPlay          mPlayer;
-
-    QTimer          mTickGenerator;
+    bool            mDefferedReset;
+    QTimer          mUpdateTimer;
 
     CsWinScoreMode *mWinEditor;
     CsWinScoreMode *mWinTrain;
@@ -51,14 +51,18 @@ class CsWinScore : public CsWinPage
     void cmViewNote();
     void cmViewTranslation();
 
-    void cmPlayStart();
-    void cmPlayPause();
-    void cmPlayStop();
+    void playStart();
+    void playStop();
+    void playTick( int tick );
 
-    void midiIn( int command, int byte0, int byte1 );
+    void midiVoice( int voice );
+    void midiVoiceDual( int dual );
+    void midiVoiceRight( int right );
+    void midiStyle( int style );
+    void midiTempo( int tempo );
 
   signals:
-    void midiOut( int command, int byte0, int byte1 );
+    void midiSetup( int voice, int voiceDual, int voiceRight, int style, int tempo );
 
 
     // CsWinPage interface

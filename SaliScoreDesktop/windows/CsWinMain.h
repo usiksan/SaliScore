@@ -12,6 +12,7 @@
 #include <QStringList>
 #include <QClipboard>
 #include <QAction>
+#include <QTimer>
 
 using QActionPtr = QAction*;
 
@@ -22,6 +23,8 @@ class CsWinMain : public QMainWindow
     QSplitter       *mWSplitter;     //!< Central widget of application, it delimit space into two parts: wiziwig editors and help
     QTabWidget      *mWEditors;      //!< Editors
     CsWinHelp       *mWHelp;         //!< Edge help
+
+    QTimer           mLocalTickGenerator;
 
     CsImportManager  mImportManager; //!< Import files manager. Contains converters from other formats
   public:

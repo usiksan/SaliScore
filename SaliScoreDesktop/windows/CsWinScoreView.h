@@ -34,6 +34,8 @@ class CsWinScoreView : public QWidget
     virtual void upKeyReleaseEvent(QKeyEvent *event) { Q_UNUSED(event) }
   signals:
 
+  public slots:
+    void viewUpdate() { update(); }
   };
 
 #endif // CSWINSCOREVIEW_H

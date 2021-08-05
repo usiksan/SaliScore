@@ -54,7 +54,7 @@ CsWinMain::CsWinMain(QWidget *parent) :
 
   //Notification on tab changes
   connect( mWEditors, &QTabWidget::currentChanged, this, [this] ( int index ) { if( auto page = editor(index) ) page->activate(); } );
-
+  connect( mWEditors, &QTabWidget::tabCloseRequested, this, &CsWinMain::fileCloseIndex );
   }
 
 CsWinMain::~CsWinMain()
