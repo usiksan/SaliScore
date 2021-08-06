@@ -1,9 +1,11 @@
 #include "CsMidiSequencer.h"
 
 #include <QDebug>
+#ifdef Q_OS_LINUX
 #include <sys/ioctl.h>
 #include <unistd.h>
 #include <fcntl.h>
+#endif
 
 CsMidiSequencer::CsMidiSequencer(QThread *th, QObject *parent) :
   QObject(parent),
@@ -23,8 +25,10 @@ CsMidiSequencer::CsMidiSequencer(QThread *th, QObject *parent) :
 
 CsMidiSequencer::~CsMidiSequencer()
   {
+#ifdef Q_OS_LINUX
   if( mMidiHandle >= 0 )
     close( mMidiHandle );
+#endif
   }
 
 void CsMidiSequencer::setRun(bool on)
@@ -44,6 +48,7 @@ void CsMidiSequencer::setTempo(int tempo)
 void CsMidiSequencer::periodic()
   {
   if( mMidiHandle >= 0 ) {
+#ifdef Q_OS_LINUX
     //There is opened midi device. Parse incomming messages
     char buf[30];
     ssize_t r;
@@ -82,6 +87,7 @@ void CsMidiSequencer::periodic()
       midiSignal( mControl, mData0, 0 );
       //qDebug() << "post midi" << mControl << mData0;
       }
+#endif
     }
   else {
     //No midi device. Make soft tick signal
@@ -103,6 +109,7 @@ void CsMidiSequencer::onStart()
     connect( mPeriodic, &QTimer::timeout, this, &CsMidiSequencer::periodic );
     mPeriodic->start();
     }
+#ifdef Q_OS_LINUX
   mMidiHandle = open( "/dev/snd/midiC1D0", O_RDONLY | O_NONBLOCK );
   if( mMidiHandle >= 0 ) {
     emit midiLink( true );
@@ -112,6 +119,7 @@ void CsMidiSequencer::onStart()
     //Try connect after one second
     QTimer::singleShot( 1000, this, &CsMidiSequencer::onStart );
     }
+#endif
   }
 
 
