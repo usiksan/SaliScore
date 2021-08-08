@@ -4,7 +4,7 @@
 #include <QSettings>
 #include <QJsonDocument>
 
-CsPainter::CsPainter(QPainter *painter, const QString &keyViewSettings, const CsComposition &comp, const CsPlay &player , int offsetX, QSize size) :
+CsPainter::CsPainter(QPainter *painter, const QString &keyViewSettings, const CsComposition &comp, const CsPlay &player , int offsetX, QSize size, CsCellCursor *cellCursor) :
   mPainter(painter),
   mPlayer(player),
   mVisibleRemark(comp.remarkVisible()),
@@ -12,6 +12,7 @@ CsPainter::CsPainter(QPainter *painter, const QString &keyViewSettings, const Cs
   mVisibleNote(comp.noteVisible()),
   mVisibleTranslate(comp.translationVisible()),
   mClefMap(comp.noteClefMap()),
+  mCellCursor(cellCursor),
   mOffsetX(offsetX),
   mSize(size)
   {
@@ -44,7 +45,8 @@ int CsPainter::drawTitleAndProperties(int y, const CsComposition &comp)
   //Draw title on horizontal center
   mPainter->setFont( QFont(mSettings.mFontName, mSettings.mTitleFontSize) );
   QRect r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, comp.title() );
-  int x = (r.width() - mSize.width()) / 2;
+  int x = (mSize.width() - r.width()) / 2;
+  drawCellProperty( x - mOffsetX, y, comp.title(), mTitleHeight, ccpTitle );
   mPainter->drawText( x - mOffsetX, y + mTitleHeight, comp.title() );
   mCurY += mTitleHeight + mSettings.mTextGap;
 
@@ -66,10 +68,10 @@ int CsPainter::drawTitleAndProperties(int y, const CsComposition &comp)
   r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, author );
   w = qMax( r.width(), w );
   w += 5;
-  drawPropertyImpl( mClefPos, w, singer, comp.singer() );
-  drawPropertyImpl( mClefPos, w, composer, comp.composer() );
-  drawPropertyImpl( mClefPos, w, lyricist, comp.lyricist() );
-  drawPropertyImpl( mClefPos, w, author, comp.author() );
+  drawPropertyImpl( mClefPos, w, singer, comp.singer(), ccpSinger );
+  drawPropertyImpl( mClefPos, w, composer, comp.composer(), ccpComposer );
+  drawPropertyImpl( mClefPos, w, lyricist, comp.lyricist(), ccpLyricist );
+  drawPropertyImpl( mClefPos, w, author, comp.author(), ccpAuthor );
 
   return mCurY;
   }
@@ -84,14 +86,16 @@ int CsPainter::drawLine(int y, int lineIndex, const CsLine &line)
   //Calculate line height
   int lineHeight;
   int fullLineHeight;
+  int playMarkPositionHeight = 0;
   if( line.isRemark() )
     //Remark only
-    fullLineHeight = lineHeight = (mRemarkTextHeight + mSettings.mTextGap) * mVisibleRemark.count();
+    fullLineHeight = lineHeight = lineRemarkHeight();
   else {
     //Chords
     lineHeight = (mChordTextHeight + mSettings.mTextGap) * mVisibleChord.count();
     //Notes
     lineHeight += 9 * mSettings.mScoreLineDistance * mVisibleNote.count();
+    playMarkPositionHeight = lineHeight;
     //Lyric
     lineHeight += (mLyricTextHeight + mSettings.mTextGap);
     //Translations
@@ -107,6 +111,9 @@ int CsPainter::drawLine(int y, int lineIndex, const CsLine &line)
   if( line.isRemark() )
     drawRemark( line.remarkConst().remarkMapConst() );
   else {
+    //Draw cursor position
+    drawPlayPosition( playMarkPositionHeight );
+    //Draw line content
     drawChord( line.taktCount(), line.chordKitConst().chordMapConst() );
     drawNote( line.taktCount(), line.noteKitConst().noteMapConst() );
     drawLyric( line.lyricListConst() );
@@ -226,6 +233,18 @@ void CsPainter::drawTranslation(const QMap<QString, QString> &translationMap)
     drawTranslationImpl( 20, mCurY, translationMap.value(lang) );
     mCurY += mSettings.mTextGap;
     }
+  }
+
+
+
+void CsPainter::drawPlayPosition( int markHeight )
+  {
+  if( !isPlayerOnCurrentLine() || markHeight <= 0 )
+    return;
+
+  int posx = visualX( mLeftGap, mPlayer.lineTickIndex() );
+  mPainter->setPen( QPen( QBrush(mSettings.mPlayMarkColor), mSettings.mPlayMarkWidth ) );
+  mPainter->drawLine( posx, mCurY, posx, mCurY + markHeight );
   }
 
 
@@ -439,10 +458,11 @@ void CsPainter::drawTranslationImpl(int x, int y, const QString &tran)
 
 
 
-void CsPainter::drawPropertyImpl( int xorigin, int xtab, const QString &title, const QString &value)
+void CsPainter::drawPropertyImpl(int xorigin, int xtab, const QString &title, const QString &value, int propertyId)
   {
   mCurY += mPropertiesHeight;
   mPainter->drawText( xorigin, mCurY, title );
+  drawCellProperty( xorigin + xtab, mCurY - mPropertiesHeight, value, mPropertiesHeight, propertyId );
   mPainter->drawText( xorigin + xtab, mCurY, value );
   mCurY += mSettings.mTextGap;
   }
@@ -482,4 +502,39 @@ int CsPainter::fontHeight(int fontSize) const
 bool CsPainter::isHighlight(int position, int duration) const
   {
   return isPlayerOnCurrentLine() && mPlayer.isHit( position, duration );
+  }
+
+
+
+void CsPainter::drawCellProperty(int x, int y, const QString &value, int height, int propertyId)
+  {
+  if( mCellCursor == nullptr )
+    return;
+
+  //Calculate width of cell. Width is max of width of value string and 50 pixels
+  int width = 50;
+  if( !value.isEmpty() ) {
+    QRect r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, value );
+    if( r.width() > 50 )
+      width = r.width();
+    }
+
+  bool isCurrent =  mCellCursor->cellClass() == cccProperty && mCellCursor->propertyId() == propertyId;
+
+  if( isCurrent ) {
+    //Draw current cell background
+    mPainter->setPen( Qt::transparent );
+    mPainter->setBrush( mSettings.mColorCellCurrent );
+    mPainter->drawRect( x, y, width, height );
+    }
+  else {
+    //Cell is not current
+    //Draw cell bound
+    mPainter->setPen( QPen(mSettings.mColorGrid, 2, Qt::DotLine) );
+    mPainter->setBrush( Qt::transparent );
+    mPainter->drawRect( x, y, width, height );
+    //qDebug() << "rect" << x << y << width <<  height;
+    }
+
+  mPainter->setPen( Qt::black );
   }

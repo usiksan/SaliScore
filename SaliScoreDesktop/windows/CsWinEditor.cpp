@@ -7,6 +7,8 @@
 #include <QSettings>
 #include <QScrollBar>
 #include <QWheelEvent>
+#include <QMouseEvent>
+#include <QKeyEvent>
 
 
 CsWinEditor::CsWinEditor(CsComposition &comp, CsPlay &play, QWidget *parent) :
@@ -23,7 +25,7 @@ CsWinEditor::CsWinEditor(CsComposition &comp, CsPlay &play, QWidget *parent) :
 void CsWinEditor::paint()
   {
   QPainter painter(this);
-  CsPainter cp( &painter, QStringLiteral(KEY_EDITOR_SETTINGS), mComposition, mPlayer, mOffsetX, size() );
+  CsPainter cp( &painter, QStringLiteral(KEY_EDITOR_SETTINGS), mComposition, mPlayer, mOffsetX, size(), &mCellCursor );
 
   //Закрасить цветом фона
   painter.fillRect( QRect( QPoint(), size() ), cp.backgroundColor() );
@@ -81,3 +83,27 @@ void CsWinEditor::upWheelEvent(QWheelEvent *event)
   }
 
 
+
+
+void CsWinEditor::upMousePressEvent(QMouseEvent *event)
+  {
+  }
+
+void CsWinEditor::upMouseReleaseEvent(QMouseEvent *event)
+  {
+  }
+
+void CsWinEditor::upMouseMoveEvent(QMouseEvent *event)
+  {
+  }
+
+void CsWinEditor::upKeyPressEvent(QKeyEvent *event)
+  {
+  switch( event->key() ) {
+    case Qt::Key_Up
+    }
+  }
+
+void CsWinEditor::upKeyReleaseEvent(QKeyEvent *event)
+  {
+  }

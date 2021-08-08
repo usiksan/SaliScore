@@ -36,6 +36,13 @@ struct CsPainterSettings
     int         mLineGap;
     int         mLeftMenuSize;
 
+    int         mPlayMarkWidth;
+    QColor      mPlayMarkColor;
+
+    QColor      mColorGrid;
+    QColor      mColorCellCurrent;
+    QColor      mColorCellSelected;
+    QColor      mColorFontSelected;
     CsPainterSettings();
 
     void setDefault();

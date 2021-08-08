@@ -3,6 +3,7 @@
 
 #include "CsConfig.h"
 #include "CsPainterSettings.h"
+#include "CsCellCursor.h"
 #include "score/CsRemark.h"
 #include "score/CsChordLine.h"
 #include "score/CsNoteLine.h"
@@ -44,12 +45,13 @@ class CsPainter
 
     CsReferenceList   mReferenceList;
     int               mLineIndex;
+    CsCellCursor     *mCellCursor;
 
     //To support x scroll
     int               mOffsetX;
     QSize             mSize;                   //!< Drawable area size
   public:
-    CsPainter( QPainter *painter, const QString &keyViewSettings, const CsComposition &comp, const CsPlay &player, int offsetX, QSize size );
+    CsPainter( QPainter *painter, const QString &keyViewSettings, const CsComposition &comp, const CsPlay &player, int offsetX, QSize size, CsCellCursor *cellCursor = nullptr );
 
     QPainter        *painter() { return mPainter; }
 
@@ -76,6 +78,8 @@ class CsPainter
 
     void   drawTranslation( const QMap<QString,QString> &translationMap );
 
+    void   drawPlayPosition(int markHeight);
+
 
 
     void   drawRemarkImpl( int x, int y, const QString &rem );
@@ -86,7 +90,7 @@ class CsPainter
 
     void   drawTranslationImpl( int x, int y, const QString &tran );
 
-    void   drawPropertyImpl(int xorigin, int xtab, const QString &title, const QString &value );
+    void   drawPropertyImpl(int xorigin, int xtab, const QString &title, const QString &value, int propertyId );
 
     void   drawTaktLines( int taktCount, int y0, int y1 );
 
@@ -97,6 +101,9 @@ class CsPainter
     bool   isPlayerOnCurrentLine() const { return mPlayer.isShow() && mPlayer.lineIndex() == mLineIndex; }
 
     bool   isHighlight( int position, int duration ) const;
+
+
+    void   drawCellProperty(int x, int y, const QString &value, int height, int propertyId );
   };
 
 #endif // CSPAINTER_H

@@ -32,6 +32,7 @@ SOURCES += \
     score/CsPosition.cpp \
     score/CsReference.cpp \
     score/CsRemark.cpp \
+    windows/CsCellCursor.cpp \
     windows/CsDlgDefChord.cpp \
     windows/CsDlgDefNote.cpp \
     windows/CsDlgDefRemark.cpp \
@@ -76,6 +77,7 @@ HEADERS += \
     score/CsPosition.h \
     score/CsReference.h \
     score/CsRemark.h \
+    windows/CsCellCursor.h \
     windows/CsDlgDefChord.h \
     windows/CsDlgDefNote.h \
     windows/CsDlgDefRemark.h \

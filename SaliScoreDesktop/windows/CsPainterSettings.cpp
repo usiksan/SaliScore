@@ -38,6 +38,12 @@ void CsPainterSettings::setDefault()
   mTextGap             = 4;
   mLineGap             = 20;
   mLeftMenuSize        = 10;
+  mPlayMarkWidth       = 2;
+  mPlayMarkColor       = QColor(Qt::gray);
+  mColorGrid           = QColor(Qt::green).lighter();
+  mColorCellCurrent    = QColor(Qt::magenta).lighter();
+  mColorCellSelected   = QColor(Qt::blue);
+  mColorFontSelected   = QColor(Qt::white);
   }
 
 
@@ -68,6 +74,12 @@ void CsPainterSettings::write(QString key)
   js.jsonInt( "textGap", mTextGap );
   js.jsonInt( "lineGap", mLineGap );
   js.jsonInt( "leftMenuSize", mLeftMenuSize );
+  js.jsonInt( "playMarkWidth", mPlayMarkWidth );
+  js.jsonColor( "playMarkColor", mPlayMarkColor );
+  js.jsonColor( "colorGrid", mColorGrid );
+  js.jsonColor( "colorCellCurrent", mColorCellCurrent );
+  js.jsonColor( "colorCellSelected", mColorCellSelected );
+  js.jsonColor( "colorFontSelected", mColorFontSelected );
 
   QSettings s;
   s.setValue( key, QJsonDocument(js.object()).toJson() );
@@ -108,5 +120,11 @@ void CsPainterSettings::read(QString key)
   js.jsonInt( "textGap", mTextGap );
   js.jsonInt( "lineGap", mLineGap );
   js.jsonInt( "leftMenuSize", mLeftMenuSize );
+  js.jsonInt( "playMarkWidth", mPlayMarkWidth );
+  js.jsonColor( "playMarkColor", mPlayMarkColor );
+  js.jsonColor( "colorGrid", mColorGrid );
+  js.jsonColor( "colorCellCurrent", mColorCellCurrent );
+  js.jsonColor( "colorCellSelected", mColorCellSelected );
+  js.jsonColor( "colorFontSelected", mColorFontSelected );
   }
 

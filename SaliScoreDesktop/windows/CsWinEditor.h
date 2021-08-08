@@ -3,6 +3,7 @@
 
 #include "CsConfig.h"
 #include "CsWinScoreView.h"
+#include "CsCellCursor.h"
 #include "score/CsReference.h"
 
 #include <QWidget>
@@ -16,6 +17,8 @@ class CsWinEditor : public CsWinScoreView
     int             mOffsetX;
     int             mOffsetY;
     int             mSizeY;
+
+    CsCellCursor    mCellCursor;
 
     //Line text editor
     QString         mString;       //Work string
@@ -43,6 +46,11 @@ class CsWinEditor : public CsWinScoreView
     // CsWinScoreView interface
   public:
     virtual void upWheelEvent(QWheelEvent *event) override;
+    virtual void upMousePressEvent(QMouseEvent *event) override;
+    virtual void upMouseReleaseEvent(QMouseEvent *event) override;
+    virtual void upMouseMoveEvent(QMouseEvent *event) override;
+    virtual void upKeyPressEvent(QKeyEvent *event) override;
+    virtual void upKeyReleaseEvent(QKeyEvent *event) override;
   };
 
 #endif // CSWINEDITOR_H
