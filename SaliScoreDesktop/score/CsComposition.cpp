@@ -4,7 +4,9 @@
 
 CsComposition::CsComposition()
   {
-
+  mStepChord = 64;
+  mStepNote  = 16;
+  mStepLyric = 16;
   }
 
 
@@ -322,6 +324,33 @@ QStringList CsComposition::visibleList(const CsDefList &src)
     if( def.mVisible )
       list.append( def.mName );
   return list;
+  }
+
+
+
+QString CsComposition::prevVisible(const CsDefList &list, const QString &key)
+  {
+  int i = key.isEmpty() ? list.count() - 1 : defListIndex( list, key );
+  if( i < 0 )
+    return QString{};
+  while( --i >= 0 )
+    if( list.at(i).mVisible )
+      return list.at(i).mName;
+  return QString{};
+  }
+
+
+
+
+QString CsComposition::nextVisible(const CsDefList &list, const QString &key)
+  {
+  int i = key.isEmpty() ? 0 : defListIndex( list, key );
+  if( i < 0 )
+    return QString{};
+  while( ++i < list.count() )
+    if( list.at(i).mVisible )
+      return list.at(i).mName;
+  return QString{};
   }
 
 

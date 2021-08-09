@@ -37,6 +37,10 @@ class CsComposition
     int          mStyle;
     int          mTempo;
 
+    int          mStepChord;
+    int          mStepNote;
+    int          mStepLyric;
+
     CsDefList    mRemarkList;
     CsDefList    mChordList;
     CsDefList    mNoteList;
@@ -72,6 +76,10 @@ class CsComposition
 
     QStringList remarkVisible() const { return visibleList(mRemarkList); }
 
+    QString     remarkPrevVisible( const QString &key ) const { return prevVisible( mRemarkList, key ); }
+
+    QString     remarkNextVisible( const QString &key ) const { return nextVisible( mRemarkList, key ); }
+
     int         remarkIndex( const QString &lang ) const { return defListIndex( mRemarkList, lang ); }
 
     void        remarkAppend( const QString &lang, const QString &descr );
@@ -93,6 +101,10 @@ class CsComposition
     CsDefList   chordDefList() const { return mChordList; }
 
     QStringList chordVisible() const { return visibleList(mChordList); }
+
+    QString     chordPrevVisible( const QString &key ) const { return prevVisible( mChordList, key ); }
+
+    QString     chordNextVisible( const QString &key ) const { return nextVisible( mChordList, key ); }
 
     int         chordIndex( const QString &part ) const { return defListIndex( mChordList, part );}
 
@@ -116,6 +128,10 @@ class CsComposition
     CsDefList   noteDefList() const { return mNoteList; }
 
     QStringList noteVisible() const { return visibleList(mNoteList); }
+
+    QString     notePrevVisible( const QString &key ) const { return prevVisible( mNoteList, key ); }
+
+    QString     noteNextVisible( const QString &key ) const { return nextVisible( mNoteList, key ); }
 
     CsClefMap   noteClefMap() const { return mClefMap; }
 
@@ -152,6 +168,10 @@ class CsComposition
 
     QStringList translationVisible() const { return visibleList(mTranslationList); }
 
+    QString     translationPrevVisible( const QString &key ) const { return prevVisible( mTranslationList, key ); }
+
+    QString     translationNextVisible( const QString &key ) const { return nextVisible( mTranslationList, key ); }
+
     int         translationIndex( const QString &lang ) const { return defListIndex( mTranslationList, lang ); }
 
     void        translationAppend( const QString &lang, const QString &descr );
@@ -180,11 +200,22 @@ class CsComposition
 
     int         lineTaktCount( int index ) const { return mLineList.at(index).taktCount(); }
 
+    int         lineTickCount( int index ) const { return lineTaktCount(index) * 256; }
 
     //=================================================================
-    //         Lines
+    //         Tick
 
     int         tickCount() const;
+
+
+    //=================================================================
+    //         Step (in ticks)
+
+    int         stepChord() const { return mStepChord; }
+
+    int         stepNote() const { return mStepNote; }
+
+    int         stepLyric() const { return mStepLyric; }
 
 
     //=================================================================
@@ -209,6 +240,10 @@ class CsComposition
 
   private:
     static QStringList visibleList( const CsDefList &src );
+
+    static QString     prevVisible( const CsDefList &list, const QString &key );
+
+    static QString     nextVisible( const CsDefList &list, const QString &key );
 
     static int         defListIndex( const CsDefList &list, const QString &key );
   };

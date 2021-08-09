@@ -43,6 +43,14 @@ class CsPainter
     int               mClefPos;
     int               mDenominatorPos;
 
+    int               mStepChord;
+    int               mStepNote;
+    int               mStepLyric;
+
+    int               mStepPixChord;
+    int               mStepPixNote;
+    int               mStepPixLyric;
+
     CsReferenceList   mReferenceList;
     int               mLineIndex;
     CsCellCursor     *mCellCursor;
@@ -104,6 +112,16 @@ class CsPainter
 
 
     void   drawCellProperty(int x, int y, const QString &value, int height, int propertyId );
+
+    void   drawCellText( int x, int y, const QString &value, int height, bool isCurrent );
+
+    void   drawCellChord( int y , int tickCount, const QString &part );
+
+    void   drawCellNote( int y, int tickCount, const QString &part );
+
+    void   drawCellLyric( int y, int tickCount );
+
+    void   drawCell( int x, int y, int width, int height, bool isCurrent );
   };
 
 #endif // CSPAINTER_H

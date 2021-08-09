@@ -20,7 +20,7 @@ class CsWinScoreView : public QWidget
   public:
     explicit CsWinScoreView( CsComposition &comp, CsPlay &play, QWidget *parent = nullptr);
 
-    virtual void activate() { update(); }
+    virtual void activate();
 
     virtual void paint() = 0;
 

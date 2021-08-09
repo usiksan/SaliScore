@@ -15,7 +15,8 @@ CsWinEditor::CsWinEditor(CsComposition &comp, CsPlay &play, QWidget *parent) :
   CsWinScoreView( comp, play, parent ),
   mOffsetX(0),
   mOffsetY(0),
-  mSizeY(0)
+  mSizeY(0),
+  mCellCursor( comp )
   {
 
   }
@@ -100,8 +101,23 @@ void CsWinEditor::upMouseMoveEvent(QMouseEvent *event)
 void CsWinEditor::upKeyPressEvent(QKeyEvent *event)
   {
   switch( event->key() ) {
-    case Qt::Key_Up
+    case Qt::Key_Up :
+      mCellCursor.move( ccoUp );
+      break;
+
+    case Qt::Key_Down :
+      mCellCursor.move( ccoDown );
+      break;
+
+    case Qt::Key_Left :
+      mCellCursor.move( ccoLeft );
+      break;
+
+    case Qt::Key_Right :
+      mCellCursor.move( ccoRight );
+      break;
     }
+  update();
   }
 
 void CsWinEditor::upKeyReleaseEvent(QKeyEvent *event)

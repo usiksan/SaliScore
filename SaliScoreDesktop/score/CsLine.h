@@ -36,7 +36,7 @@ class CsLine
     CsNoteKit             mNoteKit;
     CsLyricList           mLyricList;
     QMap<QString,QString> mTranslation;
-    int                   mTaktCount;
+    int                   mTaktCount;   //!<
   public:
     CsLine();
 

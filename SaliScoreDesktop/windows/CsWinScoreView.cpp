@@ -12,6 +12,18 @@ CsWinScoreView::CsWinScoreView(CsComposition &comp, CsPlay &play, QWidget *paren
 
   }
 
+
+
+
+void CsWinScoreView::activate()
+  {
+  setFocus();
+  update();
+  }
+
+
+
+
 void CsWinScoreView::setupWinScroll(CsWinScoreMode *winScroll)
   {
   mWinScroll = winScroll;

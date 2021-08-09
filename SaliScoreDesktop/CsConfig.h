@@ -13,6 +13,8 @@ Description
 
   One tick is 1/256 part of hole note
 
+  One takt is one hole note
+
 History
   28.07.2021 v0.1  Begin creation
              v0.2  Begin creation composition structure
@@ -54,6 +56,8 @@ History
   05.08.2021 v0.26 Append soft tick generator and prepare midi tick sync
                    Fix some errors in player with tick accept
                    Move duration field into CsPosition. So any position at now has duration
+  08.08.2021 v0.27 Begin creating score edit concept
+             v0.28 Append cell drawing with cursor support
 */
 
 #ifndef CSCONFIG
@@ -67,7 +71,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             26
+#define CS_VERSION_MINOR             28
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"

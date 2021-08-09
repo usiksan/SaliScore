@@ -5,15 +5,19 @@
 
 enum CsCellClass {
   cccTitle,
-  cccSinger,
-  cccComposer,
-  cccLyricist,
-  cccAuthor,
 
   cccVoice,
+  cccSinger,
+
   cccVoiceDual,
+  cccComposer,
+
   cccVoiceRight,
+  cccLyricist,
+
   cccStyle,
+  cccAuthor,
+
   cccTempo,
 
   cccRemark,
@@ -23,8 +27,7 @@ enum CsCellClass {
   cccTranslation
   };
 
-enum CsCellProperty {
-  };
+
 
 enum CsCellCursorOperation
   {
@@ -45,24 +48,41 @@ class CsComposition;
 class CsCellCursor
   {
     CsComposition &mComposition; //!< Composition on which works this cursor
-    CsCellClass    mCellClass;
+    int            mCellClass;
     int            mPosition;
     int            mLineIndex;
     QString        mPartName;
   public:
     CsCellCursor( CsComposition &comp );
 
-    CsCellClass    cellClass() const { return mCellClass; }
+    bool           isCurrent( int cellClass ) const { return mCellClass == cellClass; }
+
+    bool           isCurrent( int cellClass, int lineIndex, const QString &partName ) const;
+
+    bool           isCurrent( int cellClass, int position, int lineIndex, const QString &partName ) const;
+
+    bool           isCurrent( int cellClass, int position, int lineIndex ) const;
+
+    CsCellClass    cellClass() const { return static_cast<CsCellClass>(mCellClass); }
 
     int            position() const { return mPosition; }
-
-    CsCellProperty propertyId() const { return static_cast<CsCellProperty>(mPosition); }
 
     int            lineIndex() const { return mLineIndex; }
 
     QString        partName() const { return mPartName; }
 
     void           move( CsCellCursorOperation oper, bool doSelect = false, int n = 1 );
+
+  private:
+    void           setPosition( int pos, int step );
+
+    void           movePrevPart();
+
+    void           moveNextPart();
+
+    void           moveUp();
+
+    void           moveDown();
   };
 
 #endif // CSCELLCURSOR_H
