@@ -134,12 +134,14 @@ void CsCellCursor::movePrevPart()
         if( mLineIndex >= 0 )
           mCellClass = mComposition.line(mLineIndex).isRemark() ? cccRemark : cccTranslation;
         }
+      else normPosition( mComposition.stepChord() );
       break;
 
     case cccNote :
       mPartName = mComposition.notePrevVisible( mPartName );
       if( mPartName.isEmpty() )
         mCellClass = cccChord;
+      else normPosition( mComposition.stepNote() );
       break;
 
     case cccLyric :
@@ -148,8 +150,10 @@ void CsCellCursor::movePrevPart()
 
     case cccTranslation :
       mPartName = mComposition.translationPrevVisible( mPartName );
-      if( mPartName.isEmpty() )
+      if( mPartName.isEmpty() ) {
         mCellClass = cccLyric;
+        normPosition( mComposition.stepLyric() );
+        }
       break;
     }
   }
@@ -173,12 +177,16 @@ void CsCellCursor::moveNextPart()
       mPartName = mComposition.chordPrevVisible( mPartName );
       if( mPartName.isEmpty() )
         mCellClass = cccNote;
+      else normPosition( mComposition.stepChord() );
       break;
 
     case cccNote :
       mPartName = mComposition.notePrevVisible( mPartName );
-      if( mPartName.isEmpty() )
-        mCellClass = cccChord;
+      if( mPartName.isEmpty() ) {
+        mCellClass = cccLyric;
+        normPosition( mComposition.stepLyric() );
+        }
+      else normPosition( mComposition.stepNote() );
       break;
 
     case cccLyric :
@@ -241,5 +249,13 @@ void CsCellCursor::moveDown()
         }
       }
     }
+  }
+
+
+
+void CsCellCursor::normPosition(int step)
+  {
+  //Bound position
+  mPosition = qBound( 0, (mPosition / step) * step, mComposition.lineTickCount(mLineIndex) - step );
   }
 

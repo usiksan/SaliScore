@@ -330,12 +330,13 @@ QStringList CsComposition::visibleList(const CsDefList &src)
 
 QString CsComposition::prevVisible(const CsDefList &list, const QString &key)
   {
-  int i = key.isEmpty() ? list.count() - 1 : defListIndex( list, key );
+  int i = key.isEmpty() ? list.count() - 1 : defListIndex( list, key ) - 1;
   if( i < 0 )
     return QString{};
-  while( --i >= 0 )
+  while( i >= 0 )
     if( list.at(i).mVisible )
       return list.at(i).mName;
+    else i--;
   return QString{};
   }
 
@@ -344,12 +345,13 @@ QString CsComposition::prevVisible(const CsDefList &list, const QString &key)
 
 QString CsComposition::nextVisible(const CsDefList &list, const QString &key)
   {
-  int i = key.isEmpty() ? 0 : defListIndex( list, key );
+  int i = key.isEmpty() ? 0 : defListIndex( list, key ) + 1;
   if( i < 0 )
     return QString{};
-  while( ++i < list.count() )
+  while( i < list.count() )
     if( list.at(i).mVisible )
       return list.at(i).mName;
+    else i++;
   return QString{};
   }
 

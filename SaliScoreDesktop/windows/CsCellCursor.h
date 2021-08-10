@@ -83,6 +83,8 @@ class CsCellCursor
     void           moveUp();
 
     void           moveDown();
+
+    void           normPosition( int step );
   };
 
 #endif // CSCELLCURSOR_H
