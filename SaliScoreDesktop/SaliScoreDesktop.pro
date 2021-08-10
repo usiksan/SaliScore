@@ -22,6 +22,7 @@ SOURCES += \
     score/CsChordKit.cpp \
     score/CsChordLine.cpp \
     score/CsComposition.cpp \
+    score/CsCursor.cpp \
     score/CsDefinition.cpp \
     score/CsDuration.cpp \
     score/CsLine.cpp \
@@ -33,14 +34,19 @@ SOURCES += \
     score/CsReference.cpp \
     score/CsRemark.cpp \
     windows/CsCellCursor.cpp \
+    windows/CsCursorEdit.cpp \
+    windows/CsCursorEditProperty.cpp \
+    windows/CsCursorEditString.cpp \
     windows/CsDlgDefChord.cpp \
     windows/CsDlgDefNote.cpp \
     windows/CsDlgDefRemark.cpp \
     windows/CsDlgDefTranslation.cpp \
     windows/CsDlgDefinition.cpp \
+    windows/CsEditCursor.cpp \
     windows/CsKaraokePage.cpp \
     windows/CsPaintStyle.cpp \
     windows/CsPainter.cpp \
+    windows/CsPainterEditor.cpp \
     windows/CsPainterSettings.cpp \
     windows/CsWinEditor.cpp \
     windows/CsWinHelp.cpp \
@@ -65,6 +71,7 @@ HEADERS += \
     score/CsChordKit.h \
     score/CsChordLine.h \
     score/CsComposition.h \
+    score/CsCursor.h \
     score/CsDefinition.h \
     score/CsDuration.h \
     score/CsJsonIO.h \
@@ -78,14 +85,19 @@ HEADERS += \
     score/CsReference.h \
     score/CsRemark.h \
     windows/CsCellCursor.h \
+    windows/CsCursorEdit.h \
+    windows/CsCursorEditProperty.h \
+    windows/CsCursorEditString.h \
     windows/CsDlgDefChord.h \
     windows/CsDlgDefNote.h \
     windows/CsDlgDefRemark.h \
     windows/CsDlgDefTranslation.h \
     windows/CsDlgDefinition.h \
+    windows/CsEditCursor.h \
     windows/CsKaraokePage.h \
     windows/CsPaintStyle.h \
     windows/CsPainter.h \
+    windows/CsPainterEditor.h \
     windows/CsPainterSettings.h \
     windows/CsWinEditor.h \
     windows/CsWinHelp.h \

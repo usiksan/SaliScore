@@ -84,7 +84,7 @@ int CsPainter::drawTitleAndProperties(int y, const CsComposition &comp)
 
 
 
-int CsPainter::drawLine(int y, int lineIndex, const CsLine &line)
+int CsPainter::drawLine(int y, int lineIndex, const CsLine &line, bool fullDrawing )
   {
   mLineIndex = lineIndex;
 
@@ -108,7 +108,7 @@ int CsPainter::drawLine(int y, int lineIndex, const CsLine &line)
     fullLineHeight = lineHeight + mSettings.mLineGap;
     }
 
-  if( (y < 0 && (y + lineHeight) < 0) || (y > mSize.height()) )
+  if( !fullDrawing && ((y < 0 && (y + lineHeight) < 0) || (y > mSize.height())) )
     //All drawing is outside viewport
     return y + fullLineHeight;
 
@@ -156,6 +156,60 @@ int CsPainter::lineSongHeight() const
 
 
 
+bool CsPainter::isNotEditProperty(int propertyId, int x, int y)
+  {
+  Q_UNUSED(propertyId)
+  Q_UNUSED(x)
+  Q_UNUSED(y)
+  return true;
+  }
+
+
+
+bool CsPainter::isNotEditRemark(const QString &part, int x, int y)
+  {
+  Q_UNUSED(part)
+  Q_UNUSED(x)
+  Q_UNUSED(y)
+  return true;
+  }
+
+
+
+bool CsPainter::isNotEditChord(const QString &part, int position, int x, int y)
+  {
+  Q_UNUSED(part)
+  Q_UNUSED(position)
+  Q_UNUSED(x)
+  Q_UNUSED(y)
+  return true;
+  }
+
+
+
+bool CsPainter::isNotEditNote(const QString &part, int position, int x, int y)
+  {
+  Q_UNUSED(part)
+  Q_UNUSED(position)
+  Q_UNUSED(x)
+  Q_UNUSED(y)
+  return true;
+  }
+
+
+
+
+bool CsPainter::isNotEditTranslation(const QString &part, int x, int y)
+  {
+  Q_UNUSED(part)
+  Q_UNUSED(x)
+  Q_UNUSED(y)
+  return true;
+  }
+
+
+
+
 
 
 void CsPainter::drawRemark(const QMap<QString, QString> &remarkMap)
@@ -169,7 +223,7 @@ void CsPainter::drawRemark(const QMap<QString, QString> &remarkMap)
   for( const auto &lang : qAsConst(mVisibleRemark) ) {
     if( mCellCursor != nullptr )
       drawCellText( mLeftGap, mCurY, remarkMap.value(lang), mTranslationTextHeight,
-                    mCellCursor->isCurrent( cccRemark, mLineIndex, lang ) );
+                    mCellCursor->isMatch( cccRemark, mLineIndex, lang ) );
 
     mCurY += mRemarkTextHeight;
     drawRemarkImpl( mLeftGap, mCurY, remarkMap.value(lang) );
@@ -243,7 +297,7 @@ void CsPainter::drawTranslation(const QMap<QString, QString> &translationMap)
   for( const auto &lang : qAsConst(mVisibleTranslate) ) {
     if( mCellCursor != nullptr )
       drawCellText( mLeftGap, mCurY, translationMap.value(lang), mTranslationTextHeight,
-                    mCellCursor->isCurrent( cccTranslation, mLineIndex, lang ) );
+                    mCellCursor->isMatch( cccTranslation, mLineIndex, lang ) );
 
     mCurY += mTranslationTextHeight;
     drawTranslationImpl( mLeftGap, mCurY, translationMap.value(lang) );
@@ -479,7 +533,8 @@ void CsPainter::drawPropertyImpl(int xorigin, int xtab, const QString &title, co
   mCurY += mPropertiesHeight;
   mPainter->drawText( xorigin, mCurY, title );
   drawCellProperty( xorigin + xtab, mCurY - mPropertiesHeight, value, mPropertiesHeight, propertyId );
-  mPainter->drawText( xorigin + xtab, mCurY, value );
+  if( isNotEditProperty( propertyId, xorigin + xtab, mCurY )  )
+    mPainter->drawText( xorigin + xtab, mCurY, value );
   mCurY += mSettings.mTextGap;
   }
 
@@ -522,6 +577,13 @@ bool CsPainter::isHighlight(int position, int duration) const
 
 
 
+
+
+
+
+
+
+
 void CsPainter::drawCellProperty(int x, int y, const QString &value, int height, int propertyId)
   {
   if( mCellCursor == nullptr )
@@ -529,6 +591,7 @@ void CsPainter::drawCellProperty(int x, int y, const QString &value, int height,
 
   drawCellText( x, y, value, height, mCellCursor->cellClass() == propertyId );
   }
+
 
 
 
@@ -554,7 +617,7 @@ void CsPainter::drawCellChord(int y, int tickCount, const QString &part )
 
   for( int tick = 0; tick < tickCount; tick += mStepChord )
     drawCell( visualX( mLeftGap, tick ), y, mStepPixChord, mChordTextHeight,
-              mCellCursor->isCurrent( cccChord, tick, mLineIndex, part ) );
+              mCellCursor->isMatch( cccChord, tick, mLineIndex, part ) );
   }
 
 
@@ -567,7 +630,7 @@ void CsPainter::drawCellNote(int y, int tickCount, const QString &part)
 
   for( int tick = 0; tick < tickCount; tick += mStepNote )
     drawCell( visualX( mLeftGap, tick ), y, mStepPixNote, 9 * mSettings.mScoreLineDistance,
-              mCellCursor->isCurrent( cccNote, tick, mLineIndex, part ) );
+              mCellCursor->isMatch( cccNote, tick, mLineIndex, part ) );
   }
 
 
@@ -581,7 +644,7 @@ void CsPainter::drawCellLyric(int y, int tickCount)
 
   for( int tick = 0; tick < tickCount; tick += mStepLyric )
     drawCell( visualX( mLeftGap, tick ), y, mStepPixLyric, mLyricTextHeight,
-              mCellCursor->isCurrent( cccLyric, tick, mLineIndex ) );
+              mCellCursor->isMatch( cccLyric, tick, mLineIndex ) );
   }
 
 
@@ -594,6 +657,7 @@ void CsPainter::drawCell(int x, int y, int width, int height, bool isCurrent)
     mPainter->setPen( Qt::transparent );
     mPainter->setBrush( mSettings.mColorCellCurrent );
     mPainter->drawRect( x, y, width, height );
+    mCellCursorRect.setRect( x, y, width, height );
     }
   else {
     //Cell is not current

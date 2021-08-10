@@ -60,6 +60,7 @@ class CsComposition
     //=================================================================
     //         Header part
     QString     title() const { return mTitle; }
+    void        titleSet( const QString &tit ) { mTitle = tit; mDirty = true; }
 
     QString     singer() const { return mSinger; }
 

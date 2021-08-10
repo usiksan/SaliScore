@@ -18,6 +18,7 @@
 
 class CsPainter
   {
+  protected:
     QPainter         *mPainter;
     const CsPlay     &mPlayer;
 
@@ -58,6 +59,8 @@ class CsPainter
     //To support x scroll
     int               mOffsetX;
     QSize             mSize;                   //!< Drawable area size
+
+    QRect             mCellCursorRect;         //!< Current cell rectangle
   public:
     CsPainter( QPainter *painter, const QString &keyViewSettings, const CsComposition &comp, const CsPlay &player, int offsetX, QSize size, CsCellCursor *cellCursor = nullptr );
 
@@ -67,13 +70,26 @@ class CsPainter
 
     QColor           backgroundColor() const { return mSettings.mColorBackground; }
 
+    QRect            cellCursorRect() const { return mCellCursorRect; }
+
     int              drawTitleAndProperties( int y, const CsComposition &comp );
 
-    int              drawLine( int y, int lineIndex, const CsLine &line );
+    int              drawLine(int y, int lineIndex, const CsLine &line , bool fullDrawing = false );
 
     int              lineRemarkHeight() const;
 
     int              lineSongHeight() const;
+
+  protected:
+    virtual bool isNotEditProperty( int propertyId, int x, int y );
+
+    virtual bool isNotEditRemark( const QString &part, int x, int y );
+
+    virtual bool isNotEditChord( const QString &part, int position, int x, int y );
+
+    virtual bool isNotEditNote( const QString &part, int position, int x, int y );
+
+    virtual bool isNotEditTranslation( const QString &part, int x, int y );
 
   private:
     void   drawRemark( const QMap<QString,QString> &remarkMap );

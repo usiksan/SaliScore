@@ -58,6 +58,7 @@ History
                    Move duration field into CsPosition. So any position at now has duration
   08.08.2021 v0.27 Begin creating score edit concept
              v0.28 Append cell drawing with cursor support
+  10.08.2021 v0.29 Append editing cursor. Begin creating text editing cursor. Append property title edit
 */
 
 #ifndef CSCONFIG

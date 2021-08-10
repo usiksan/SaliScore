@@ -4,6 +4,7 @@
 #include "CsConfig.h"
 #include "CsWinScoreView.h"
 #include "CsCellCursor.h"
+#include "CsCursorEdit.h"
 #include "score/CsReference.h"
 
 #include <QWidget>
@@ -20,15 +21,10 @@ class CsWinEditor : public CsWinScoreView
 
     CsCellCursor    mCellCursor;
 
-    //Line text editor
-    QString         mString;       //Work string
-    int             mPos;          //Char cursor position
-    int             mStartSel;     //Char start select position
-    int             mStopSel;      //Char stop select position
-    QRect           mOverRect;     //Text over rect
-    QRect           mSelectRect;   //Selection region
-    QPoint          mCursorP1;     //Cursor position p1. Cursor is vertical line from p1 to p2 at insert position
-    QPoint          mCursorP2;     //Cursor position p2
+    bool            mAutoScroll;   //!< Automatic scroll content on cursor position changed
+
+    CsCursorEdit   *mEditor;       //!< Editor for content
+
     bool            mShift;
     bool            mControl;
 

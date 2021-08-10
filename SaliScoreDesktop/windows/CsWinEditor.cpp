@@ -1,6 +1,6 @@
 #include "CsWinEditor.h"
 #include "CsWinScoreMode.h"
-#include "CsPainter.h"
+#include "CsPainterEditor.h"
 
 #include <QPaintEvent>
 #include <QPainter>
@@ -9,6 +9,7 @@
 #include <QWheelEvent>
 #include <QMouseEvent>
 #include <QKeyEvent>
+#include <QDebug>
 
 
 CsWinEditor::CsWinEditor(CsComposition &comp, CsPlay &play, QWidget *parent) :
@@ -16,7 +17,11 @@ CsWinEditor::CsWinEditor(CsComposition &comp, CsPlay &play, QWidget *parent) :
   mOffsetX(0),
   mOffsetY(0),
   mSizeY(0),
-  mCellCursor( comp )
+  mCellCursor( comp ),
+  mAutoScroll(false),
+  mEditor(nullptr),
+  mShift(false),
+  mControl(false)
   {
 
   }
@@ -26,7 +31,7 @@ CsWinEditor::CsWinEditor(CsComposition &comp, CsPlay &play, QWidget *parent) :
 void CsWinEditor::paint()
   {
   QPainter painter(this);
-  CsPainter cp( &painter, QStringLiteral(KEY_EDITOR_SETTINGS), mComposition, mPlayer, mOffsetX, size(), &mCellCursor );
+  CsPainterEditor cp( &painter, QStringLiteral(KEY_EDITOR_SETTINGS), mComposition, mPlayer, mOffsetX, size(), &mCellCursor, mEditor );
 
   //Закрасить цветом фона
   painter.fillRect( QRect( QPoint(), size() ), cp.backgroundColor() );
@@ -34,7 +39,7 @@ void CsWinEditor::paint()
   //Draw properties
   int posy = cp.drawTitleAndProperties( -mOffsetY, mComposition );
   for( int i = 0; i < mComposition.lineCount(); i++ )
-    posy = cp.drawLine( posy, i, mComposition.line(i) );
+    posy = cp.drawLine( posy, i, mComposition.line(i), mAutoScroll );
 
   //Norm posy to vertical size
   posy += mOffsetY;
@@ -45,6 +50,25 @@ void CsWinEditor::paint()
     mWinScroll->verticalScrollBar()->setSingleStep( size().height() / 100 );
     mWinScroll->verticalScrollBar()->setPageStep( size().height() * 9 / 10 );
     //verticalScrollBar()->setValue( -mOrigin.y() );
+    }
+
+  if( mAutoScroll ) {
+    QRect r( cp.cellCursorRect() );
+    //Vertical autoscroll
+    //qDebug() << "offy" << mOffsetY << r.top() << r.bottom() << mSizeY;
+    if( r.top() < 0 )
+      mOffsetY = qBound( 0, mOffsetY + r.top(), mSizeY );
+    else if( r.bottom() > size().height() )
+      mOffsetY = qBound( 0, mOffsetY + r.bottom() - size().height() + 10, mSizeY );
+
+    //Horizontal autoscroll
+    if( r.left() < 0 )
+      mOffsetX = qBound( 0, mOffsetX + r.left(), 1024 );
+    else if( r.right() > size().width() )
+      mOffsetX = qBound( 0, mOffsetX + r.right() - size().width(), 1024 );
+
+    mAutoScroll = false;
+    update();
     }
   }
 
@@ -100,25 +124,70 @@ void CsWinEditor::upMouseMoveEvent(QMouseEvent *event)
 
 void CsWinEditor::upKeyPressEvent(QKeyEvent *event)
   {
-  switch( event->key() ) {
+  int key = event->key();
+  QChar ch;
+  if( !event->text().isEmpty() )
+    ch = event->text().at(0);
+
+  switch( key ) {
     case Qt::Key_Up :
+      if( mEditor != nullptr )
+        mEditor->keyPress( key, ch, mEditor );
       mCellCursor.move( ccoUp );
       break;
 
     case Qt::Key_Down :
+      if( mEditor != nullptr )
+        mEditor->keyPress( key, ch, mEditor );
       mCellCursor.move( ccoDown );
       break;
 
     case Qt::Key_Left :
-      mCellCursor.move( ccoLeft );
+      if( mEditor == nullptr )
+        mCellCursor.move( ccoLeft );
+      else
+        mEditor->keyPress( key, ch, mEditor );
       break;
 
     case Qt::Key_Right :
-      mCellCursor.move( ccoRight );
+      if( mEditor == nullptr )
+        mCellCursor.move( ccoRight );
+      else
+        mEditor->keyPress( key, ch, mEditor );
+      break;
+
+    case Qt::Key_Return :
+      if( mEditor == nullptr )
+        mEditor = CsCursorEdit::build( mCellCursor, mComposition );
+      else
+        mEditor->keyPress( key, ch, mEditor );
+      break;
+
+    case Qt::Key_A :
+    case Qt::Key_B :
+    case Qt::Key_C :
+    case Qt::Key_D :
+    case Qt::Key_E :
+    case Qt::Key_F :
+    case Qt::Key_G :
+      if( mEditor == nullptr && mCellCursor.isMatchClass( { cccChord, cccNote } ) )
+        mEditor = CsCursorEdit::build( mCellCursor, mComposition );
+
+    default:
+      if( mEditor == nullptr && ch.isPrint() && mCellCursor.isMatchClass( {cccRemark, cccLyric, cccTranslation, cccTitle,   cccVoice,
+                                                                           cccSinger, cccVoiceDual, cccComposer, cccVoiceRight,
+                                                                           cccLyricist, cccStyle, cccAuthor, cccTempo } )  )
+          mEditor = CsCursorEdit::build( mCellCursor, mComposition );
+      if( mEditor != nullptr )
+        mEditor->keyPress( key, ch, mEditor );
       break;
     }
+
+  mAutoScroll = true;
   update();
   }
+
+
 
 void CsWinEditor::upKeyReleaseEvent(QKeyEvent *event)
   {

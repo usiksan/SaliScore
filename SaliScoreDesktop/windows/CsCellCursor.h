@@ -1,31 +1,9 @@
 #ifndef CSCELLCURSOR_H
 #define CSCELLCURSOR_H
 
+#include "score/CsCursor.h"
+
 #include <QString>
-
-enum CsCellClass {
-  cccTitle,
-
-  cccVoice,
-  cccSinger,
-
-  cccVoiceDual,
-  cccComposer,
-
-  cccVoiceRight,
-  cccLyricist,
-
-  cccStyle,
-  cccAuthor,
-
-  cccTempo,
-
-  cccRemark,
-  cccChord,
-  cccNote,
-  cccLyric,
-  cccTranslation
-  };
 
 
 
@@ -45,46 +23,26 @@ enum CsCellCursorOperation
 
 class CsComposition;
 
-class CsCellCursor
+class CsCellCursor : public CsCursor
   {
     CsComposition &mComposition; //!< Composition on which works this cursor
-    int            mCellClass;
-    int            mPosition;
-    int            mLineIndex;
-    QString        mPartName;
   public:
     CsCellCursor( CsComposition &comp );
 
-    bool           isCurrent( int cellClass ) const { return mCellClass == cellClass; }
-
-    bool           isCurrent( int cellClass, int lineIndex, const QString &partName ) const;
-
-    bool           isCurrent( int cellClass, int position, int lineIndex, const QString &partName ) const;
-
-    bool           isCurrent( int cellClass, int position, int lineIndex ) const;
-
-    CsCellClass    cellClass() const { return static_cast<CsCellClass>(mCellClass); }
-
-    int            position() const { return mPosition; }
-
-    int            lineIndex() const { return mLineIndex; }
-
-    QString        partName() const { return mPartName; }
-
-    void           move( CsCellCursorOperation oper, bool doSelect = false, int n = 1 );
+    void move( CsCellCursorOperation oper, bool doSelect = false, int n = 1 );
 
   private:
-    void           setPosition( int pos, int step );
+    void setPosition( int pos, int step );
 
-    void           movePrevPart();
+    void movePrevPart();
 
-    void           moveNextPart();
+    void moveNextPart();
 
-    void           moveUp();
+    void moveUp();
 
-    void           moveDown();
+    void moveDown();
 
-    void           normPosition( int step );
+    void normPosition( int step );
   };
 
 #endif // CSCELLCURSOR_H
