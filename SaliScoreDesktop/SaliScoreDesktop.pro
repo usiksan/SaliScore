@@ -36,7 +36,9 @@ SOURCES += \
     windows/CsCellCursor.cpp \
     windows/CsCursorEdit.cpp \
     windows/CsCursorEditProperty.cpp \
+    windows/CsCursorEditRemark.cpp \
     windows/CsCursorEditString.cpp \
+    windows/CsCursorEditTranslation.cpp \
     windows/CsDlgDefChord.cpp \
     windows/CsDlgDefNote.cpp \
     windows/CsDlgDefRemark.cpp \
@@ -87,7 +89,9 @@ HEADERS += \
     windows/CsCellCursor.h \
     windows/CsCursorEdit.h \
     windows/CsCursorEditProperty.h \
+    windows/CsCursorEditRemark.h \
     windows/CsCursorEditString.h \
+    windows/CsCursorEditTranslation.h \
     windows/CsDlgDefChord.h \
     windows/CsDlgDefNote.h \
     windows/CsDlgDefRemark.h \

@@ -1,5 +1,7 @@
 #include "CsCursorEdit.h"
 #include "CsCursorEditProperty.h"
+#include "CsCursorEditRemark.h"
+#include "CsCursorEditTranslation.h"
 
 CsCursorEdit::CsCursorEdit(CsComposition &comp) :
   CsCursor(),
@@ -74,6 +76,12 @@ CsCursorEdit *CsCursorEdit::build(CsCursor &src, CsComposition &comp)
 
     case cccTempo :
       return new CsCursorEditProperty( src.cellClass(), comp );
+
+    case cccRemark :
+      return new CsCursorEditRemark( src.lineIndex(), src.partName(), comp );
+
+    case cccTranslation :
+      return new CsCursorEditTranslation( src.lineIndex(), src.partName(), comp );
 
     default:
       return nullptr;

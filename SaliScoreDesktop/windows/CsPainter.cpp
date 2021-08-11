@@ -227,7 +227,8 @@ void CsPainter::drawRemark(const QMap<QString, QString> &remarkMap)
                     mCellCursor->isMatch( cccRemark, mLineIndex, lang ) );
 
     mCurY += mRemarkTextHeight;
-    drawRemarkImpl( mLeftGap, mCurY, remarkMap.value(lang) );
+    if( isNotEditRemark( lang, mLeftGap, mCurY ) )
+      drawRemarkImpl( mLeftGap, mCurY, remarkMap.value(lang) );
     mCurY += mSettings.mTextGap;
     }
   }
@@ -245,7 +246,7 @@ void CsPainter::drawChord( int taktCount, const QMap<QString, CsChordLine> &chor
     drawTaktLines( taktCount, mCurY, mCurY + mChordTextHeight );
     drawCellChord( mCurY, taktCount * 256, chordKey );
     mCurY += mChordTextHeight;
-    drawChordImpl( chordMap.value(chordKey) );
+    drawChordImpl( chordKey, chordMap.value(chordKey) );
     mCurY += mSettings.mTextGap;
     }
   }
@@ -340,14 +341,15 @@ void CsPainter::drawRemarkImpl(int x, int y, const QString &rem)
 
 
 
-void CsPainter::drawChordImpl( const CsChordLine &chordLine )
+void CsPainter::drawChordImpl( const QString &part, const CsChordLine &chordLine )
   {
   auto &chordList = chordLine.chordListConst();
   //Paint each chord
   for( auto const &chord : chordList ) {
     int visx = visualX( mLeftGap, chord.position() );
     mPainter->setPen( isHighlight( chord.position(), chord.duration() ) ? mSettings.mColorChordHighlight : mSettings.mColorChord );
-    mPainter->drawText( visx, mCurY, chord.chordText() );
+    if( isNotEditChord( part, chord.position(), visx, mCurY ) )
+      mPainter->drawText( visx, mCurY, chord.chordText() );
     }
   }
 

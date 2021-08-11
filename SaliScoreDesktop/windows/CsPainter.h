@@ -108,7 +108,7 @@ class CsPainter
 
     void   drawRemarkImpl( int x, int y, const QString &rem );
 
-    void   drawChordImpl(const CsChordLine &chordLine );
+    void   drawChordImpl(const QString &part, const CsChordLine &chordLine );
 
     void   drawNoteImpl(int clef, int taktCount, const CsNoteLine &noteLine );
 

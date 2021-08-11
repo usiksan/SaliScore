@@ -13,6 +13,10 @@ class CsPainterEditor : public CsPainter
     // CsPainter interface
   protected:
     virtual bool isNotEditProperty(int propertyId, int x, int y) override;
+    virtual bool isNotEditRemark(const QString &part, int x, int y) override;
+    virtual bool isNotEditChord(const QString &part, int position, int x, int y) override;
+    virtual bool isNotEditNote(const QString &part, int position, int x, int y) override;
+    virtual bool isNotEditTranslation(const QString &part, int x, int y) override;
 
   private:
     void paintEditText( int x, int y );

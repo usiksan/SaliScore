@@ -20,6 +20,44 @@ bool CsPainterEditor::isNotEditProperty(int propertyId, int x, int y)
 
 
 
+bool CsPainterEditor::isNotEditRemark(const QString &part, int x, int y)
+  {
+  if( mCursorEdit == nullptr || !mCursorEdit->isMatch( cccRemark, mLineIndex, part ) )
+    return true;
+
+  paintEditText( x, y );
+  return false;
+  }
+
+
+
+
+bool CsPainterEditor::isNotEditChord(const QString &part, int position, int x, int y)
+  {
+  return true;
+  }
+
+
+
+
+bool CsPainterEditor::isNotEditNote(const QString &part, int position, int x, int y)
+  {
+  return true;
+  }
+
+
+
+bool CsPainterEditor::isNotEditTranslation(const QString &part, int x, int y)
+  {
+  if( mCursorEdit == nullptr || !mCursorEdit->isMatch( cccRemark, mLineIndex, part ) )
+    return true;
+
+  paintEditText( x, y );
+  return false;
+  }
+
+
+
 void CsPainterEditor::paintEditText(int x, int y)
   {
   QString str( mCursorEdit->getStr() );
@@ -58,3 +96,5 @@ void CsPainterEditor::paintEditText(int x, int y)
     }
 
   }
+
+
