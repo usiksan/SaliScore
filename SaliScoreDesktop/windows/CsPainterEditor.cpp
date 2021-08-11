@@ -47,6 +47,16 @@ bool CsPainterEditor::isNotEditNote(const QString &part, int position, int x, in
 
 
 
+bool CsPainterEditor::isNotEditLyric(int position, int x, int y)
+  {
+  if( mCursorEdit == nullptr || !mCursorEdit->isMatch( cccLyric, position, mLineIndex ) )
+    return true;
+
+  paintEditText( x, y );
+  return false;
+  }
+
+
 bool CsPainterEditor::isNotEditTranslation(const QString &part, int x, int y)
   {
   if( mCursorEdit == nullptr || !mCursorEdit->isMatch( cccRemark, mLineIndex, part ) )
@@ -96,5 +106,6 @@ void CsPainterEditor::paintEditText(int x, int y)
     }
 
   }
+
 
 

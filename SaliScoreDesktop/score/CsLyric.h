@@ -15,8 +15,10 @@ class CsLyric : public CsPosition
     CsLyric();
     CsLyric( int pos, int duration, const QString &lyric ) : CsPosition( pos, duration ), mLyric(lyric) {}
 
+    bool    lyricIsEmpty() const { return mLyric.isEmpty(); }
+
     QString lyric() const { return mLyric; }
-    void    setLyric( const QString lyr ) { mLyric = lyr; }
+    void    lyricSet( const QString lyr ) { mLyric = lyr; }
 
     // CsPosition interface
   public:

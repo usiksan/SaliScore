@@ -24,7 +24,6 @@ SOURCES += \
     score/CsComposition.cpp \
     score/CsCursor.cpp \
     score/CsDefinition.cpp \
-    score/CsDuration.cpp \
     score/CsLine.cpp \
     score/CsLyric.cpp \
     score/CsNote.cpp \
@@ -35,6 +34,7 @@ SOURCES += \
     score/CsRemark.cpp \
     windows/CsCellCursor.cpp \
     windows/CsCursorEdit.cpp \
+    windows/CsCursorEditLyric.cpp \
     windows/CsCursorEditProperty.cpp \
     windows/CsCursorEditRemark.cpp \
     windows/CsCursorEditString.cpp \
@@ -75,7 +75,6 @@ HEADERS += \
     score/CsComposition.h \
     score/CsCursor.h \
     score/CsDefinition.h \
-    score/CsDuration.h \
     score/CsJsonIO.h \
     score/CsLine.h \
     score/CsLyric.h \
@@ -88,6 +87,7 @@ HEADERS += \
     score/CsRemark.h \
     windows/CsCellCursor.h \
     windows/CsCursorEdit.h \
+    windows/CsCursorEditLyric.h \
     windows/CsCursorEditProperty.h \
     windows/CsCursorEditRemark.h \
     windows/CsCursorEditString.h \

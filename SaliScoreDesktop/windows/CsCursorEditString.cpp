@@ -26,31 +26,31 @@ void CsCursorEditString::movePos(int pos, bool sel)
     //Need selection
     if( isSelectionPresent() ) {
       //Selection already presents
-      if( mPos == mStartSel ) {
-        mPos = pos;
-        if( mPos > mStopSel ) {
+      if( mCharPos == mStartSel ) {
+        mCharPos = pos;
+        if( mCharPos > mStopSel ) {
           mStartSel = mStopSel;
-          mStopSel = mPos;
+          mStopSel = mCharPos;
           }
-        else mStartSel = mPos;
+        else mStartSel = mCharPos;
         }
       else {
-        mPos = pos;
-        if( mPos < mStartSel ) {
+        mCharPos = pos;
+        if( mCharPos < mStartSel ) {
           mStopSel = mStartSel;
-          mStartSel = mPos;
+          mStartSel = mCharPos;
           }
-        else mStopSel = mPos;
+        else mStopSel = mCharPos;
         }
       }
     else {
-      mPos = pos;
-      if( mPos > mStartSel ) mStopSel = mPos;
-      else mStartSel = mPos;
+      mCharPos = pos;
+      if( mCharPos > mStartSel ) mStopSel = mCharPos;
+      else mStartSel = mCharPos;
       }
     }
   else {
-    mStartSel = mStopSel = mPos = pos;
+    mStartSel = mStopSel = mCharPos = pos;
     }
   }
 
@@ -66,7 +66,7 @@ void CsCursorEditString::setSel(int start, int stop)
   {
   if( start >= 0 && start <= mString.length() && stop >= start && stop <= mString.length() ) {
     mStartSel = start;
-    mPos = mStopSel = stop;
+    mCharPos = mStopSel = stop;
     }
   }
 
@@ -81,10 +81,10 @@ void CsCursorEditString::insertText(const QString str, bool sel)
 
   if( !str.isEmpty() ) {
     //Make insertion
-    mString.insert( mPos, str );
+    mString.insert( mCharPos, str );
 
     //End of selection in any chois is equal position after insertion
-    mStopSel = mPos += str.length();
+    mStopSel = mCharPos += str.length();
 
     //If no selection, then startSel equal stopSel
     if( !sel )
@@ -99,7 +99,7 @@ void CsCursorEditString::setText(const QString str, bool sel)
   {
   //At first clear old text
   mString.clear();
-  mPos = mStopSel = mStartSel = 0;
+  mCharPos = mStopSel = mStartSel = 0;
 
   //Insert new text with selection param
   insertText( str, sel );
@@ -117,7 +117,7 @@ void CsCursorEditString::delSelected()
   if( isSelectionPresent() ) {
     //Remove selection
     mString.remove( mStartSel, mStopSel - mStartSel );
-    mPos = mStopSel = mStartSel;
+    mCharPos = mStopSel = mStartSel;
     }
   }
 
@@ -135,10 +135,10 @@ void CsCursorEditString::keyPress(int key, QChar ch, CsCursorEditPtr &ptr)
       CsCursorEdit::keyPress( key, ch, ptr );
       break;
     case Qt::Key_Left :
-      movePos( mPos - 1, mShift );
+      movePos( mCharPos - 1, mShift );
       break;
     case Qt::Key_Right :
-      movePos( mPos + 1, mShift );
+      movePos( mCharPos + 1, mShift );
       break;
     case Qt::Key_Home :
       movePos( 0, mShift );
@@ -149,7 +149,7 @@ void CsCursorEditString::keyPress(int key, QChar ch, CsCursorEditPtr &ptr)
     case Qt::Key_Backspace :
       if( isSelectionPresent() )
         delSelected();
-      movePos( mPos - 1, true );
+      movePos( mCharPos - 1, true );
       delSelected();
       break;
     case Qt::Key_Delete :
@@ -158,7 +158,7 @@ void CsCursorEditString::keyPress(int key, QChar ch, CsCursorEditPtr &ptr)
       else {
         if( isSelectionPresent() )
           delSelected();
-        movePos( mPos + 1, true );
+        movePos( mCharPos + 1, true );
         delSelected();
         }
       break;
@@ -171,9 +171,9 @@ void CsCursorEditString::keyPress(int key, QChar ch, CsCursorEditPtr &ptr)
         //Insert character
         if( isSelectionPresent() )
           delSelected();
-        mString.insert( mPos, ch );
-        mPos++;
-        mStartSel = mStopSel = mPos;
+        mString.insert( mCharPos, ch );
+        mCharPos++;
+        mStartSel = mStopSel = mCharPos;
         }
       break;
     }
@@ -214,7 +214,7 @@ int CsCursorEditString::selStop() const
 
 int CsCursorEditString::charPosition() const
   {
-  return mPos;
+  return mCharPos;
   }
 
 

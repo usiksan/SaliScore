@@ -200,6 +200,17 @@ bool CsPainter::isNotEditNote(const QString &part, int position, int x, int y)
 
 
 
+bool CsPainter::isNotEditLyric(int position, int x, int y)
+  {
+  Q_UNUSED(position)
+  Q_UNUSED(x)
+  Q_UNUSED(y)
+  return true;
+  }
+
+
+
+
 bool CsPainter::isNotEditTranslation(const QString &part, int x, int y)
   {
   Q_UNUSED(part)
@@ -280,7 +291,8 @@ void CsPainter::drawLyric(const CsLyricList &lyricList)
   for( auto const &lyric : lyricList ) {
     mPainter->setPen( isHighlight( lyric.position(), lyric.duration() ) ? mSettings.mColorLyricHighlight : mSettings.mColorLyric );
     int visx = visualX( mLeftGap, lyric.position() );
-    mPainter->drawText( visx, mCurY, lyric.lyric() );
+    if( isNotEditLyric( lyric.position(), visx, mCurY ) )
+      mPainter->drawText( visx, mCurY, lyric.lyric() );
     }
   mCurY += mSettings.mTextGap;
   }

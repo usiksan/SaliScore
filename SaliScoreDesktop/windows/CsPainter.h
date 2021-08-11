@@ -89,6 +89,8 @@ class CsPainter
 
     virtual bool isNotEditNote( const QString &part, int position, int x, int y );
 
+    virtual bool isNotEditLyric( int position, int x, int y );
+
     virtual bool isNotEditTranslation( const QString &part, int x, int y );
 
   private:

@@ -8,7 +8,7 @@ class CsCursorEditString : public CsCursorEdit
   protected:
     //Line text editor
     QString mString;   //!< Work string
-    int     mPos;      //!< Char cursor position
+    int     mCharPos;  //!< Char cursor position
     int     mStartSel; //!< Char start select position
     int     mStopSel;  //!< Char stop select position
   public:

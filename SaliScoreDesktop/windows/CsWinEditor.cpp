@@ -184,6 +184,7 @@ void CsWinEditor::upKeyPressEvent(QKeyEvent *event)
     }
 
   mAutoScroll = true;
+  event->accept();
   update();
   }
 
