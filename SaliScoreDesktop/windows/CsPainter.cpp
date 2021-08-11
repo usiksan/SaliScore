@@ -52,7 +52,8 @@ int CsPainter::drawTitleAndProperties(int y, const CsComposition &comp)
   QRect r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, comp.title() );
   int x = (mSize.width() - r.width()) / 2;
   drawCellProperty( x - mOffsetX, y, comp.title(), mTitleHeight, cccTitle );
-  mPainter->drawText( x - mOffsetX, y + mTitleHeight, comp.title() );
+  if( isNotEditProperty( cccTitle, x - mOffsetX, y + mTitleHeight )  )
+    mPainter->drawText( x - mOffsetX, y + mTitleHeight, comp.title() );
   mCurY += mTitleHeight + mSettings.mTextGap;
 
   //At left side properties

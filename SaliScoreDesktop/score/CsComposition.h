@@ -63,12 +63,31 @@ class CsComposition
     void        titleSet( const QString &tit ) { mTitle = tit; mDirty = true; }
 
     QString     singer() const { return mSinger; }
+    void        singerSet( const QString &sing ) { mSinger = sing; mDirty = true; }
 
     QString     composer() const { return mComposer; }
+    void        composerSet( const QString &compos ) { mComposer = compos; mDirty = true; }
 
     QString     lyricist() const { return mLyricist; }
+    void        lyricistSet( const QString &lyr ) { mLyricist = lyr; mDirty = true; }
 
     QString     author() const { return mAuthor; }
+    void        authorSet( const QString &auth ) { mAuthor = auth; mDirty = true; }
+
+    QString     voice() const { return QString::number( mVoice ); }
+    void        voiceSet( const QString &voi ) { mVoice = voi.toInt(); mDirty = true; }
+
+    QString     voiceDual() const { return QString::number( mVoiceDual); }
+    void        voiceDualSet( const QString &voi ) { mVoiceDual = voi.toInt(); mDirty = true; }
+
+    QString     voiceRight() const { return QString::number( mVoiceRight ); }
+    void        voiceRightSet( const QString &voi ) { mVoiceRight = voi.toInt(); mDirty = true; }
+
+    QString     style() const { return QString::number( mStyle ); }
+    void        styleSet( const QString &stl ) { mStyle = stl.toInt(); mDirty = true; }
+
+    QString     tempo() const { return QString::number( mTempo ); }
+    void        tempoSet( const QString &tmp ) { mTempo = tmp.toInt(); mDirty = true; }
 
     //=================================================================
     //         Remark part

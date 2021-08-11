@@ -60,7 +60,23 @@ CsCursorEdit *CsCursorEdit::build(CsCursor &src, CsComposition &comp)
   {
   switch( src.cellClass() ) {
     case cccTitle :
+    case cccVoice :
+    case cccSinger :
+
+    case cccVoiceDual :
+    case cccComposer :
+
+    case cccVoiceRight :
+    case cccLyricist :
+
+    case cccStyle :
+    case cccAuthor :
+
+    case cccTempo :
       return new CsCursorEditProperty( src.cellClass(), comp );
+
+    default:
+      return nullptr;
     }
   return nullptr;
   }

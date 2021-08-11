@@ -36,7 +36,7 @@ void CsPainterEditor::paintEditText(int x, int y)
     mPainter->drawText( x, y, str );
 
   //Cursor position
-  mPainter->drawLine( x + rpos.width(), y, x + rpos.width(), y + over.height() );
+  mPainter->drawLine( x + rpos.width(), y, x + rpos.width(), y - over.height() );
 
   if( mCursorEdit->isSelectionPresent() ) {
     //Fill selection rect
