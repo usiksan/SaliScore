@@ -130,6 +130,10 @@ void CsCursorEditNote::keyPress(int key, QChar ch, CsCursorEditPtr &ptr)
         mNote.durationSet( duraSixteenth );
         break;
 
+      case Qt::Key_3 :
+        mNote.durationSet( duraThirtySecond );
+        break;
+
       case Qt::Key_Plus :
         mNote.durationSet( qBound( duraOneHundredTwentyEighth, mNote.duration() * 2, duraBreve ) );
         break;

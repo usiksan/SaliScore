@@ -32,6 +32,8 @@ SOURCES += \
     score/CsPosition.cpp \
     score/CsReference.cpp \
     score/CsRemark.cpp \
+    undo/CsUndo.cpp \
+    undo/CsUndoItem.cpp \
     windows/CsCellCursor.cpp \
     windows/CsCursorEdit.cpp \
     windows/CsCursorEditChord.cpp \
@@ -87,6 +89,8 @@ HEADERS += \
     score/CsPosition.h \
     score/CsReference.h \
     score/CsRemark.h \
+    undo/CsUndo.h \
+    undo/CsUndoItem.h \
     windows/CsCellCursor.h \
     windows/CsCursorEdit.h \
     windows/CsCursorEditChord.h \

@@ -351,6 +351,7 @@ QRect CsPainter::drawNoteSingle(int x, int scoreY, int noteStart, int noteWhite,
     fullNote.append( noteSign + QStringLiteral(" ") + fraction );
     mPainter->drawText( x, yPos, fullNote );
     over = mPainter->boundingRect( x,yPos, 0,0, Qt::AlignLeft | Qt::AlignTop, fullNote );
+    over.moveTop( yPos - over.height() );
     }
   return over;
   }

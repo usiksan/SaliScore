@@ -58,8 +58,10 @@ bool CsPainterEditor::isNotEditNote(const QString &part, int position, int x, in
   QRect over = drawNoteSingle( x, scoreY, noteStart, mCursorEdit->noteWhite(), mCursorEdit->duration(), mCursorEdit->noteDies() );
 
   //Cursor position
-  mPainter->setBrush( Qt::transparent );
-  mPainter->drawRect( over );
+  //mPainter->setBrush( Qt::transparent );
+  int cx = qMax( over.left(), over.right() );
+  int cy = over.top();
+  mPainter->drawLine( cx, cy, cx, cy - over.height() );
 
   return false;
   }
