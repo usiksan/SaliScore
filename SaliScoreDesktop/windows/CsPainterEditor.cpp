@@ -34,7 +34,17 @@ bool CsPainterEditor::isNotEditRemark(const QString &part, int x, int y)
 
 bool CsPainterEditor::isNotEditChord(const QString &part, int position, int x, int y)
   {
-  return true;
+  if( mCursorEdit == nullptr || !mCursorEdit->isMatch( cccChord, position, mLineIndex, part ) )
+    return true;
+
+  mPainter->drawText( x, y, mCursorEdit->getStr() );
+
+  QRect rpos = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, mCursorEdit->getStr() );
+
+  //Cursor position
+  mPainter->drawLine( x + rpos.width(), y, x + rpos.width(), y - rpos.height() );
+
+  return false;
   }
 
 

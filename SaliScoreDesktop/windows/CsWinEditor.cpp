@@ -133,13 +133,15 @@ void CsWinEditor::upKeyPressEvent(QKeyEvent *event)
     case Qt::Key_Up :
       if( mEditor != nullptr )
         mEditor->keyPress( key, ch, mEditor );
-      mCellCursor.move( ccoUp );
+      if( mEditor == nullptr )
+        mCellCursor.move( ccoUp );
       break;
 
     case Qt::Key_Down :
       if( mEditor != nullptr )
         mEditor->keyPress( key, ch, mEditor );
-      mCellCursor.move( ccoDown );
+      if( mEditor == nullptr )
+        mCellCursor.move( ccoDown );
       break;
 
     case Qt::Key_Left :

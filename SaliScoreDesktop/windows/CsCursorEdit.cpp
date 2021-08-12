@@ -1,6 +1,7 @@
 #include "CsCursorEdit.h"
 #include "CsCursorEditProperty.h"
 #include "CsCursorEditRemark.h"
+#include "CsCursorEditChord.h"
 #include "CsCursorEditLyric.h"
 #include "CsCursorEditTranslation.h"
 
@@ -80,6 +81,9 @@ CsCursorEdit *CsCursorEdit::build(CsCursor &src, CsComposition &comp)
 
     case cccRemark :
       return new CsCursorEditRemark( src.lineIndex(), src.partName(), comp );
+
+    case cccChord :
+      return new CsCursorEditChord( src.lineIndex(), src.position(), src.partName(), comp );
 
     case cccLyric :
       return new CsCursorEditLyric( src.lineIndex(), src.position(), comp );

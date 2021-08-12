@@ -19,8 +19,11 @@ class CsChord : public CsPosition
 
     QString chordText() const;
 
-//    static QString note2text( int note );
-//    static QString chord2text( int chord );
+    int     note() const { return mNote; }
+    void    noteSet( int n ) { mNote = qBound<int>( noteC, n, noteB ); }
+
+    int     chord() const { return mChord; }
+    void    chordSet( int ch ) { mChord = qBound<int>( chordMaj, ch, chord1plus2plus5 ); }
 
     // CsPosition interface
   public:

@@ -34,6 +34,7 @@ SOURCES += \
     score/CsRemark.cpp \
     windows/CsCellCursor.cpp \
     windows/CsCursorEdit.cpp \
+    windows/CsCursorEditChord.cpp \
     windows/CsCursorEditLyric.cpp \
     windows/CsCursorEditProperty.cpp \
     windows/CsCursorEditRemark.cpp \
@@ -87,6 +88,7 @@ HEADERS += \
     score/CsRemark.h \
     windows/CsCellCursor.h \
     windows/CsCursorEdit.h \
+    windows/CsCursorEditChord.h \
     windows/CsCursorEditLyric.h \
     windows/CsCursorEditProperty.h \
     windows/CsCursorEditRemark.h \
