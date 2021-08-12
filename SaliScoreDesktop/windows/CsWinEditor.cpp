@@ -165,6 +165,11 @@ void CsWinEditor::upKeyPressEvent(QKeyEvent *event)
         mEditor->keyPress( key, ch, mEditor );
       break;
 
+    case Qt::Key_Insert :
+      //Insert new line
+      mComposition.lineInsert( qBound( 0, mCellCursor.lineIndex(), mComposition.lineCount() ), false );
+      break;
+
     case Qt::Key_A :
     case Qt::Key_B :
     case Qt::Key_C :
