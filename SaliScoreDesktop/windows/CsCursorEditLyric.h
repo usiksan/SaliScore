@@ -14,6 +14,7 @@ class CsCursorEditLyric : public CsCursorEditString
     // CsCursorEdit interface
   public:
     virtual void keyPress(int key, QChar ch, CsCursorEditPtr &ptr) override;
+    virtual int  duration() const override;
     virtual void apply() override;
     virtual void cancel() override;
   };

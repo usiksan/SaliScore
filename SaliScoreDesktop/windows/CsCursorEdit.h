@@ -11,6 +11,7 @@ class CsCursorEdit : public CsCursor
     CsComposition &mComposition;
     bool           mShift;
     bool           mControl;
+    bool           mIsEdit;      //!< True when cursor edit already existing element, and false when newly created
   public:
     using CsCursorEditPtr = CsCursorEdit*;
 
@@ -22,6 +23,12 @@ class CsCursorEdit : public CsCursor
     virtual void         keyRelease( int key, QChar ch );
 
     virtual QString      getStr() const { return QString{}; }
+
+    virtual int          duration() const { return 0; }
+
+    virtual int          noteWhite() const { return 0; }
+
+    virtual bool         noteDies() const { return false; }
 
     virtual bool         isSelectionPresent() const { return false; }
 

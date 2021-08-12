@@ -21,9 +21,17 @@ CsCursorEditChord::CsCursorEditChord(int lineIndex, int position, const QString 
 
     //Update chord list into composition
     mComposition.chordListSet( mLineIndex, mPartName, mChordList );
+
+    mIsEdit = false;
     }
-  else mChord = mChordList.at(mChordIndex);
+  else {
+    mChord = mChordList.at(mChordIndex);
+    mIsEdit = true;
+    }
   }
+
+
+
 
 
 void CsCursorEditChord::keyPress(int key, QChar ch, CsCursorEditPtr &ptr)
@@ -162,9 +170,23 @@ QString CsCursorEditChord::getStr() const
 
 
 
+int CsCursorEditChord::duration() const
+  {
+  return mChord.duration();
+  }
+
+
+
+
 void CsCursorEditChord::cancel()
   {
+  if( !mIsEdit ) {
+    //Remove newly inserted chord
+    mChordList.removeAt(mChordIndex);
 
+    //Update composition
+    mComposition.chordListSet( mLineIndex, mPartName, mChordList );
+    }
   }
 
 

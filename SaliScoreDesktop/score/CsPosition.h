@@ -18,6 +18,7 @@ class CsPosition
     void         positionSet( int pos ) { mPosition = pos; }
 
     int          duration() const { return mDuration; }
+    void         durationSet( int d ) { mDuration = d; }
 
     virtual void jsonWrite( CsJsonWriter &js ) const;
 

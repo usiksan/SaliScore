@@ -27,6 +27,16 @@ class CsNote : public CsPosition
 
     int  pitch() const { return mPitch; }
 
+    int  note() const { return mPitch % 12; }
+
+    void noteSet( int nt );
+
+    void noteShift( bool up );
+
+    int  octaveIndex() const { return mPitch / 12; }
+
+    void octaveShift( bool up );
+
     int  command() const { return mCommand; }
 
     int  white() const;

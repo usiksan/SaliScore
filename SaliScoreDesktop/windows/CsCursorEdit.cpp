@@ -2,6 +2,7 @@
 #include "CsCursorEditProperty.h"
 #include "CsCursorEditRemark.h"
 #include "CsCursorEditChord.h"
+#include "CsCursorEditNote.h"
 #include "CsCursorEditLyric.h"
 #include "CsCursorEditTranslation.h"
 
@@ -9,7 +10,8 @@ CsCursorEdit::CsCursorEdit(CsComposition &comp) :
   CsCursor(),
   mComposition(comp),
   mShift(false),
-  mControl(false)
+  mControl(false),
+  mIsEdit(false)
   {
 
   }
@@ -84,6 +86,9 @@ CsCursorEdit *CsCursorEdit::build(CsCursor &src, CsComposition &comp)
 
     case cccChord :
       return new CsCursorEditChord( src.lineIndex(), src.position(), src.partName(), comp );
+
+    case cccNote :
+      return new CsCursorEditNote( src.lineIndex(), src.position(), src.partName(), comp );
 
     case cccLyric :
       return new CsCursorEditLyric( src.lineIndex(), src.position(), comp );

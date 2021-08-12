@@ -36,6 +36,7 @@ SOURCES += \
     windows/CsCursorEdit.cpp \
     windows/CsCursorEditChord.cpp \
     windows/CsCursorEditLyric.cpp \
+    windows/CsCursorEditNote.cpp \
     windows/CsCursorEditProperty.cpp \
     windows/CsCursorEditRemark.cpp \
     windows/CsCursorEditString.cpp \
@@ -90,6 +91,7 @@ HEADERS += \
     windows/CsCursorEdit.h \
     windows/CsCursorEditChord.h \
     windows/CsCursorEditLyric.h \
+    windows/CsCursorEditNote.h \
     windows/CsCursorEditProperty.h \
     windows/CsCursorEditRemark.h \
     windows/CsCursorEditString.h \

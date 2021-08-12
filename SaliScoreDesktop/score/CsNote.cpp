@@ -7,6 +7,28 @@ CsNote::CsNote() :
 
   }
 
+void CsNote::noteSet(int nt)
+  {
+  int octaveIndex = mPitch / 12;
+  mPitch = octaveIndex * 12 + qBound<int>( noteC, nt, noteB );
+  }
+
+
+
+void CsNote::noteShift(bool up)
+  {
+  mPitch = qBound( 0, mPitch + (up ? 1 : -1), 127 );
+  }
+
+
+
+void CsNote::octaveShift(bool up)
+  {
+  mPitch = qBound( 0, mPitch + (up ? 12 : -12), 127 );
+  }
+
+
+
 int CsNote::white() const
   {
   int octaveIndex = mPitch / 12;

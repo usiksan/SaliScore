@@ -50,9 +50,18 @@ bool CsPainterEditor::isNotEditChord(const QString &part, int position, int x, i
 
 
 
-bool CsPainterEditor::isNotEditNote(const QString &part, int position, int x, int y)
+bool CsPainterEditor::isNotEditNote(const QString &part, int position, int x, int scoreY, int noteStart)
   {
-  return true;
+  if( mCursorEdit == nullptr || !mCursorEdit->isMatch( cccNote, position, mLineIndex, part ) )
+    return true;
+
+  QRect over = drawNoteSingle( x, scoreY, noteStart, mCursorEdit->noteWhite(), mCursorEdit->duration(), mCursorEdit->noteDies() );
+
+  //Cursor position
+  mPainter->setBrush( Qt::transparent );
+  mPainter->drawRect( over );
+
+  return false;
   }
 
 

@@ -188,12 +188,13 @@ bool CsPainter::isNotEditChord(const QString &part, int position, int x, int y)
 
 
 
-bool CsPainter::isNotEditNote(const QString &part, int position, int x, int y)
+bool CsPainter::isNotEditNote(const QString &part, int position, int x, int scoreY, int noteStart)
   {
   Q_UNUSED(part)
   Q_UNUSED(position)
   Q_UNUSED(x)
-  Q_UNUSED(y)
+  Q_UNUSED(scoreY)
+  Q_UNUSED(noteStart)
   return true;
   }
 
@@ -218,6 +219,145 @@ bool CsPainter::isNotEditTranslation(const QString &part, int x, int y)
   Q_UNUSED(y)
   return true;
   }
+
+
+
+
+static QString unicode4( uint code )
+  {
+  return QString::fromUcs4( &code, 1 );
+  }
+
+
+static QString noteFraction( int duration, int noteDuration )
+  {
+  duration -= noteDuration;
+  noteDuration /= 2;
+  if( duration == noteDuration )
+    return QStringLiteral(".");
+
+  duration -= noteDuration;
+  noteDuration /= 2;
+  if( duration == noteDuration )
+    return QStringLiteral("..");
+
+  return QStringLiteral("...");
+  }
+
+
+static QString noteText( int duration, QString &fraction )
+  {
+  //Exact values
+  int code = 0;
+  switch( duration ) {
+    case duraBreve : code = 119132; break;
+    case duraHole : code = 119133; break;
+    case duraHalf : code = 119134; break;
+    case duraQuarter : code = 119135; break;
+    case duraEighth : code = 119136; break;
+    case duraSixteenth : code = 119137; break;
+    case duraThirtySecond : code = 119138; break;
+    case duraSixtyFourth : code = 119139; break;
+    case duraOneHundredTwentyEighth : code = 119140; break;
+    }
+  if( code )
+    return unicode4( code );
+
+  if( duration > duraBreve ) {
+    fraction = noteFraction( duration, duraBreve );
+    return noteText( duraBreve, fraction );
+    }
+  if( duration > duraHole ) {
+    fraction = noteFraction( duration, duraHole );
+    return noteText( duraHole, fraction );
+    }
+  if( duration > duraHalf ) {
+    fraction = noteFraction( duration, duraHalf );
+    return noteText( duraHalf, fraction );
+    }
+  if( duration > duraQuarter ) {
+    fraction = noteFraction( duration, duraQuarter );
+    return noteText( duraQuarter, fraction );
+    }
+  if( duration > duraEighth ) {
+    fraction = noteFraction( duration, duraEighth );
+    return noteText( duraEighth, fraction );
+    }
+  if( duration > duraSixteenth ) {
+    fraction = noteFraction( duration, duraSixteenth );
+    return noteText( duraSixteenth, fraction );
+    }
+  if( duration > duraThirtySecond ) {
+    fraction = noteFraction( duration, duraThirtySecond );
+    return noteText( duraThirtySecond, fraction );
+    }
+  if( duration > duraSixtyFourth ) {
+    fraction = noteFraction( duration, duraSixtyFourth );
+    return noteText( duraSixtyFourth, fraction );
+    }
+  fraction = noteFraction( duration, duraOneHundredTwentyEighth );
+  return noteText( duraOneHundredTwentyEighth, fraction );
+  }
+
+
+
+
+
+
+QRect CsPainter::drawNoteSingle(int x, int scoreY, int noteStart, int noteWhite, int noteDuration, bool noteDies)
+  {
+  int yOffset = noteStart - noteWhite;
+  int yPos = scoreY + yOffset * mSettings.mScoreLineDistance / 2;
+  if( yOffset <= -2 ) {
+    //Appended line above must be drawn
+    mPainter->drawLine( x, scoreY - mSettings.mScoreLineDistance, x + 20, scoreY - mSettings.mScoreLineDistance );
+    }
+  else if( yOffset > 10 ) {
+    //Appended line below must be drawn
+    mPainter->drawLine( x, scoreY + 5 * mSettings.mScoreLineDistance, x + 20, scoreY + 5 * mSettings.mScoreLineDistance );
+    if( yOffset > 12 )
+      //Second appended line below must be drawn
+      mPainter->drawLine( x, scoreY + 6 * mSettings.mScoreLineDistance, x + 20, scoreY + 6 * mSettings.mScoreLineDistance );
+    }
+
+  QRect over;
+  if( yOffset < 5 ) {
+    //Rotate symbol
+    //Create text with mirror order
+    QString fraction;
+    QString noteSign = noteText( noteDuration, fraction );
+    QString fullNote = fraction + noteSign;
+    if( noteDies )
+      fullNote.append( QStringLiteral(" ") + unicode4(9839) );
+
+    QRect r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, fullNote );
+    //At frist - rotation
+    QTransform m = QTransform::fromScale( 1.0, 1.0 ).rotate( -180 );
+
+    //At second - origin offset
+    m *= QTransform::fromTranslate( x + r.width(), yPos + 1 - mSettings.mScoreLineDistance );
+    mPainter->setTransform( m );
+    mPainter->drawText( 0, 0, fullNote );
+    over = m.mapRect( r );
+    mPainter->resetTransform();
+    }
+  else {
+    //Simple text
+    QString fraction;
+    QString noteSign = noteText( noteDuration, fraction );
+    QString fullNote;
+    if( noteDies )
+      fullNote = unicode4(9839);
+    fullNote.append( noteSign + QStringLiteral(" ") + fraction );
+    mPainter->drawText( x, yPos, fullNote );
+    over = mPainter->boundingRect( x,yPos, 0,0, Qt::AlignLeft | Qt::AlignTop, fullNote );
+    }
+  return over;
+  }
+
+
+
+
 
 
 
@@ -273,7 +413,7 @@ void CsPainter::drawNote(int taktCount, const QMap<QString, CsNoteLine> &noteMap
   //For each note line which visible we perform drawing
   for( const auto &noteKey : qAsConst(mVisibleNote) ) {
     drawCellNote( mCurY, taktCount * 256, noteKey );
-    drawNoteImpl( mClefMap.value(noteKey), taktCount, noteMap.value(noteKey) );
+    drawNoteImpl( mClefMap.value(noteKey), taktCount, noteKey, noteMap.value(noteKey) );
     mCurY += 9 * mSettings.mScoreLineDistance;
     }
   }
@@ -368,86 +508,11 @@ void CsPainter::drawChordImpl( const QString &part, const CsChordLine &chordLine
 
 
 
-static QString unicode4( uint code )
-  {
-  return QString::fromUcs4( &code, 1 );
-  }
-
-
-static QString noteFraction( int duration, int noteDuration )
-  {
-  duration -= noteDuration;
-  noteDuration /= 2;
-  if( duration == noteDuration )
-    return QStringLiteral(".");
-
-  duration -= noteDuration;
-  noteDuration /= 2;
-  if( duration == noteDuration )
-    return QStringLiteral("..");
-
-  return QStringLiteral("...");
-  }
-
-
-static QString noteText( int duration, QString &fraction )
-  {
-  //Exact values
-  int code = 0;
-  switch( duration ) {
-    case duraBreve : code = 119132; break;
-    case duraHole : code = 119133; break;
-    case duraHalf : code = 119134; break;
-    case duraQuarter : code = 119135; break;
-    case duraEighth : code = 119136; break;
-    case duraSixteenth : code = 119137; break;
-    case duraThirtySecond : code = 119138; break;
-    case duraSixtyFourth : code = 119139; break;
-    case duraOneHundredTwentyEighth : code = 119140; break;
-    }
-  if( code )
-    return unicode4( code );
-
-  if( duration > duraBreve ) {
-    fraction = noteFraction( duration, duraBreve );
-    return noteText( duraBreve, fraction );
-    }
-  if( duration > duraHole ) {
-    fraction = noteFraction( duration, duraHole );
-    return noteText( duraHole, fraction );
-    }
-  if( duration > duraHalf ) {
-    fraction = noteFraction( duration, duraHalf );
-    return noteText( duraHalf, fraction );
-    }
-  if( duration > duraQuarter ) {
-    fraction = noteFraction( duration, duraQuarter );
-    return noteText( duraQuarter, fraction );
-    }
-  if( duration > duraEighth ) {
-    fraction = noteFraction( duration, duraEighth );
-    return noteText( duraEighth, fraction );
-    }
-  if( duration > duraSixteenth ) {
-    fraction = noteFraction( duration, duraSixteenth );
-    return noteText( duraSixteenth, fraction );
-    }
-  if( duration > duraThirtySecond ) {
-    fraction = noteFraction( duration, duraThirtySecond );
-    return noteText( duraThirtySecond, fraction );
-    }
-  if( duration > duraSixtyFourth ) {
-    fraction = noteFraction( duration, duraSixtyFourth );
-    return noteText( duraSixtyFourth, fraction );
-    }
-  fraction = noteFraction( duration, duraOneHundredTwentyEighth );
-  return noteText( duraOneHundredTwentyEighth, fraction );
-  }
 
 
 
 
-void CsPainter::drawNoteImpl( int clef, int taktCount, const CsNoteLine &noteLine)
+void CsPainter::drawNoteImpl( int clef, int taktCount, const QString &part, const CsNoteLine &noteLine)
   {
   int scoreY = mCurY + mSettings.mScoreLineDistance * 2;
 
@@ -480,51 +545,13 @@ void CsPainter::drawNoteImpl( int clef, int taktCount, const CsNoteLine &noteLin
   for( auto const &note : qAsConst(noteList) ) {
     mPainter->setPen( mPlayer.isHit( note.position(), note.duration() ) ? mSettings.mColorNoteHighlight : mSettings.mColorNote );
     int visX = visualX( mLeftGap, note.position() );
-    int yOffset = noteStart - note.white();
-    int yPos = scoreY + yOffset * mSettings.mScoreLineDistance / 2;
-    if( yOffset <= -2 ) {
-      //Appended line above must be drawn
-      mPainter->drawLine( visX, scoreY - mSettings.mScoreLineDistance, visX + 20, scoreY - mSettings.mScoreLineDistance );
-      }
-    else if( yOffset > 10 ) {
-      //Appended line below must be drawn
-      mPainter->drawLine( visX, scoreY + 5 * mSettings.mScoreLineDistance, visX + 20, scoreY + 5 * mSettings.mScoreLineDistance );
-      if( yOffset > 12 )
-        //Second appended line below must be drawn
-        mPainter->drawLine( visX, scoreY + 6 * mSettings.mScoreLineDistance, visX + 20, scoreY + 6 * mSettings.mScoreLineDistance );
-      }
-
-    if( yOffset < 5 ) {
-      //Rotate symbol
-      //Create text with mirror order
-      QString fraction;
-      QString noteSign = noteText( note.duration(), fraction );
-      QString fullNote = fraction + noteSign;
-      if( note.isDies() )
-        fullNote.append( QStringLiteral(" ") + unicode4(9839) );
-
-      QRect r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, fullNote );
-      //At frist - rotation
-      QTransform m = QTransform::fromScale( 1.0, 1.0 ).rotate( -180 );
-
-      //At second - origin offset
-      m *= QTransform::fromTranslate( visX + r.width(), yPos + 1 - mSettings.mScoreLineDistance );
-      mPainter->setTransform( m );
-      mPainter->drawText( 0, 0, fullNote );
-      mPainter->resetTransform();
-      }
-    else {
-      //Simple text
-      QString fraction;
-      QString noteSign = noteText( note.duration(), fraction );
-      QString fullNote;
-      if( note.isDies() )
-        fullNote = unicode4(9839);
-      fullNote.append( noteSign + QStringLiteral(" ") + fraction );
-      mPainter->drawText( visX, yPos, fullNote );
-      }
+    if( isNotEditNote( part, note.position(), visX, scoreY, noteStart ) )
+      drawNoteSingle( visX, scoreY, noteStart, note.white(), note.duration(), note.isDies() );
     }
   }
+
+
+
 
 
 

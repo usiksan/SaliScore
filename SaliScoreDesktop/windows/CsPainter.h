@@ -87,11 +87,13 @@ class CsPainter
 
     virtual bool isNotEditChord( const QString &part, int position, int x, int y );
 
-    virtual bool isNotEditNote( const QString &part, int position, int x, int y );
+    virtual bool isNotEditNote(const QString &part, int position, int x, int scoreY, int noteStart);
 
     virtual bool isNotEditLyric( int position, int x, int y );
 
     virtual bool isNotEditTranslation( const QString &part, int x, int y );
+
+    QRect  drawNoteSingle( int x, int scoreY, int noteStart, int noteWhite, int noteDuration, bool noteDies );
 
   private:
     void   drawRemark( const QMap<QString,QString> &remarkMap );
@@ -112,7 +114,7 @@ class CsPainter
 
     void   drawChordImpl(const QString &part, const CsChordLine &chordLine );
 
-    void   drawNoteImpl(int clef, int taktCount, const CsNoteLine &noteLine );
+    void   drawNoteImpl(int clef, int taktCount, const QString &part, const CsNoteLine &noteLine );
 
     void   drawTranslationImpl( int x, int y, const QString &tran );
 

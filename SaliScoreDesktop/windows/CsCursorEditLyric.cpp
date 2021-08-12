@@ -23,7 +23,9 @@ CsCursorEditLyric::CsCursorEditLyric( int lineIndex, int position, CsComposition
 
     //Update lyric list into composition
     mComposition.lyricSet( mLineIndex, mLyricList );
+    mIsEdit = false;
     }
+  else mIsEdit = true;
 
   setText( mLyricList.at(mLyricIndex).lyric(), false );
   }
@@ -35,6 +37,7 @@ void CsCursorEditLyric::keyPress(int key, QChar ch, CsCursorEditPtr &ptr)
   {
   if( key == Qt::Key_Backspace && mCharPos == 0 && mLyricIndex ) {
     //Union lyric with previous lyric
+    mIsEdit = true;
     mLyricList.removeAt( mLyricIndex );
     mLyricIndex--;
     //Previous lyric
@@ -54,6 +57,7 @@ void CsCursorEditLyric::keyPress(int key, QChar ch, CsCursorEditPtr &ptr)
       int newPosition = mPosition + mComposition.stepLyric();
       if( mLyricIndex + 1 < mLyricList.count() && mLyricList.at(mLyricIndex+1).position() <= newPosition ) {
         //Need union with next lyric
+        mIsEdit = true;
 
         //Remove current
         mLyricList.removeAt( mLyricIndex );
@@ -71,6 +75,7 @@ void CsCursorEditLyric::keyPress(int key, QChar ch, CsCursorEditPtr &ptr)
         }
       }
     else {
+      mIsEdit = true;
       //Split current string
       mLyricList[mLyricIndex].lyricSet( mString.left(mCharPos) );
 
@@ -108,6 +113,15 @@ void CsCursorEditLyric::keyPress(int key, QChar ch, CsCursorEditPtr &ptr)
 
 
 
+
+int CsCursorEditLyric::duration() const
+  {
+  return 0;
+  }
+
+
+
+
 void CsCursorEditLyric::apply()
   {
   //Update lyric list
@@ -126,8 +140,8 @@ void CsCursorEditLyric::apply()
 
 void CsCursorEditLyric::cancel()
   {
-  if( mLyricList.at(mLyricIndex).lyricIsEmpty() ) {
-    //Remove empty lyric
+  if( !mIsEdit ) {
+    //Remove newly inserted lyric
     mLyricList.removeAt( mLyricIndex );
 
     //Update lyric line in composition

@@ -16,6 +16,7 @@ class CsCursorEditChord : public CsCursorEdit
   public:
     virtual void    keyPress(int key, QChar ch, CsCursorEditPtr &ptr) override;
     virtual QString getStr() const override;
+    virtual int     duration() const override;
     virtual void    cancel() override;
     virtual void    apply() override;
   };
