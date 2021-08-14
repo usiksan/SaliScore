@@ -36,5 +36,8 @@
         <file>pic/editUndo.png</file>
         <file>pic/lampEnable.png</file>
         <file>pic/lampDisable.png</file>
+        <file>pic/plList.png</file>
+        <file>pic/plMinus.png</file>
+        <file>pic/plPlus.png</file>
     </qresource>
 </RCC>

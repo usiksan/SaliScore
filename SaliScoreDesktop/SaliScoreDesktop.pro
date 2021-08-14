@@ -11,6 +11,7 @@ CONFIG += c++17
 SOURCES += \
     CsBug.cpp \
     CsMain.cpp \
+    SdLib/SdTime2x.cpp \
     midi/CsMidiSequencer.cpp \
     SvJson/SvJsonIO.cpp \
     import/CsImport.cpp \
@@ -29,6 +30,9 @@ SOURCES += \
     score/CsNote.cpp \
     score/CsNoteKit.cpp \
     score/CsNoteLine.cpp \
+    score/CsPlayComposition.cpp \
+    score/CsPlayList.cpp \
+    score/CsPlayPart.cpp \
     score/CsPosition.cpp \
     score/CsReference.cpp \
     score/CsRemark.cpp \
@@ -59,6 +63,8 @@ SOURCES += \
     windows/CsWinKaraoke.cpp \
     windows/CsWinMain.cpp \
     windows/CsWinPage.cpp \
+    windows/CsWinPlayList.cpp \
+    windows/CsWinRemote.cpp \
     windows/CsWinScore.cpp \
     windows/CsWinScoreMode.cpp \
     windows/CsWinScoreView.cpp \
@@ -66,6 +72,7 @@ SOURCES += \
 
 HEADERS += \
     CsConfig.h \
+    SdLib/SdTime2x.h \
     midi/CsMidiSequencer.h \
     SvJson/SvJsonIO.h \
     import/CsImport.h \
@@ -86,6 +93,9 @@ HEADERS += \
     score/CsNoteChord.h \
     score/CsNoteKit.h \
     score/CsNoteLine.h \
+    score/CsPlayComposition.h \
+    score/CsPlayList.h \
+    score/CsPlayPart.h \
     score/CsPosition.h \
     score/CsReference.h \
     score/CsRemark.h \
@@ -116,6 +126,8 @@ HEADERS += \
     windows/CsWinKaraoke.h \
     windows/CsWinMain.h \
     windows/CsWinPage.h \
+    windows/CsWinPlayList.h \
+    windows/CsWinRemote.h \
     windows/CsWinScore.h \
     windows/CsWinScoreMode.h \
     windows/CsWinScoreView.h \

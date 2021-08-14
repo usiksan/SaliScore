@@ -4,27 +4,38 @@
 #include "CsConfig.h"
 #include "CsWinHelp.h"
 #include "CsWinScore.h"
+#include "CsWinPlayList.h"
+#include "CsWinRemote.h"
 #include "import/CsImportManager.h"
 
 #include <QMainWindow>
+#include <QStackedWidget>
 #include <QSplitter>
 #include <QTabWidget>
 #include <QStringList>
 #include <QClipboard>
 #include <QAction>
 #include <QTimer>
+#include <QLineEdit>
 
 using QActionPtr = QAction*;
 
 class CsMidiSequencer;
+
+#define WIN_INDEX_PLAY_LIST   0
+#define WIN_INDEX_REMOTE_FIND 1
 
 class CsWinMain : public QMainWindow
   {
     Q_OBJECT
 
     QSplitter       *mWSplitter;     //!< Central widget of application, it delimit space into two parts: wiziwig editors and help
+    QStackedWidget  *mWLeftPart;     //!< Play list
     QTabWidget      *mWEditors;      //!< Editors
     CsWinHelp       *mWHelp;         //!< Edge help
+
+    CsWinPlayList   *mWPlayList;
+    CsWinRemote     *mWRemote;
 
     CsMidiSequencer *mMidiSequencer;
 
@@ -116,7 +127,19 @@ class CsWinMain : public QMainWindow
     //!
     void         updateRecentFiles(const QString &path);
 
-    void createMenu();
+    //!
+    //! \brief buildPlayList Builds play list view widget
+    //! \return              Play list view widget
+    //!
+    QWidget     *buildPlayList();
+
+    //!
+    //! \brief buildRemoteFind Builds remote find view list
+    //! \return                Remote find view list
+    //!
+    QWidget     *buildRemoteFind();
+
+    void         createMenu();
   public:
     //======================================================================================
     //                           Commands
@@ -179,6 +202,11 @@ class CsWinMain : public QMainWindow
     static QActionPtr  actionScoreRemarkManage;
     static QActionPtr  actionScoreChordManage;
     static QActionPtr  actionScoreNoteManage;
+
+    static QActionPtr  actionPlMinus;
+    static QActionPtr  actionPlPlus;
+    static QActionPtr  actionPlLoad;
+    static QActionPtr  actionPlPlayList;
 
     static QActionPtr  actionToolsOption;
 

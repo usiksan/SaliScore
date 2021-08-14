@@ -12,12 +12,20 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QDesktopServices>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QPushButton>
 
 
 CsWinMain::CsWinMain(CsMidiSequencer *midiSequencer, QWidget *parent) :
   QMainWindow(parent),
   mMidiSequencer(midiSequencer)
   {
+
+  //At left side - play list
+  mWLeftPart = new QStackedWidget();
+
   //At central part - wiziwig editors
   mWEditors     = new QTabWidget();
   mWEditors->setTabsClosable(true);
@@ -27,9 +35,11 @@ CsWinMain::CsWinMain(CsMidiSequencer *midiSequencer, QWidget *parent) :
   mWHelp->setMinimumWidth(200);
 
   mWSplitter    = new QSplitter();
+  mWSplitter->addWidget( mWLeftPart );
   mWSplitter->addWidget( mWEditors );
   mWSplitter->addWidget( mWHelp );
   mWHelp->hide();
+
 
   setCentralWidget( mWSplitter );
 
@@ -46,6 +56,14 @@ CsWinMain::CsWinMain(CsMidiSequencer *midiSequencer, QWidget *parent) :
 
 
   createMenu();
+
+  //Build play list
+  //Play list consist from two view:
+  // 0 - tree view play list (actived default)
+  // 1 - remote server find system (activate when Load...)
+  mWLeftPart->addWidget( buildPlayList() );
+  mWLeftPart->addWidget( buildRemoteFind() );
+  mWLeftPart->setCurrentIndex(WIN_INDEX_PLAY_LIST);
 
   //Create imports
   mImportManager.registerImport( new CsImportSaliScore() );
@@ -404,6 +422,54 @@ void CsWinMain::updateRecentFiles( const QString &path )
 
 
 
+
+
+//!
+//! \brief buildPlayList Builds play list view widget
+//! \return              Play list view widget
+//!
+QWidget *CsWinMain::buildPlayList()
+  {
+  QVBoxLayout *box = new QVBoxLayout();
+  box->addWidget( new QLabel(tr("Play List")) );
+  box->addWidget( mWPlayList = new CsWinPlayList(), 100 );
+
+  QToolBar *bar = new QToolBar();
+  bar->addAction( actionPlMinus );
+  bar->addAction( actionPlPlus );
+  box->addWidget( bar );
+
+  QWidget *we = new QWidget();
+  we->setLayout( box );
+  return we;
+  }
+
+
+
+
+QWidget *CsWinMain::buildRemoteFind()
+  {
+  QHBoxLayout *hbox = new QHBoxLayout();
+  hbox->addWidget( new QLabel(tr("Find string:")) );
+  hbox->addWidget( new QLineEdit() );
+  QPushButton *but = new QPushButton( tr("Find") );
+  hbox->addWidget( but );
+
+  QVBoxLayout *box = new QVBoxLayout();
+  box->addLayout( hbox );
+  box->addWidget( mWRemote = new CsWinRemote() );
+
+  QToolBar *bar = new QToolBar();
+  box->addWidget( bar );
+
+  QWidget *we = new QWidget();
+  we->setLayout( box );
+  return we;
+  }
+
+
+
+
 void CsWinMain::createMenu()
   {
   menuFile = new QMenu( tr("File") );
@@ -530,6 +596,13 @@ void CsWinMain::createMenu()
   barEditor->hide();
   barTrain->hide();
   barKaraoke->hide();
+
+
+  actionPlMinus = new QAction( QIcon(QStringLiteral(":/pic/plMinus.png")), tr("Remove composition from list...") );
+  actionPlPlus  = new QAction( QIcon(QStringLiteral(":/pic/plPlus.png")), tr("Add composition from server") );
+  //actionPlLoad;
+  actionPlPlayList = new QAction( QIcon(QStringLiteral(":/pic/plList.png")), tr("Switch to Play list") );
+
   }
 
 
@@ -595,6 +668,12 @@ QActionPtr  CsWinMain::actionScoreRemark;
 QActionPtr  CsWinMain::actionScoreRemarkManage;
 QActionPtr  CsWinMain::actionScoreChordManage;
 QActionPtr  CsWinMain::actionScoreNoteManage;
+
+
+QActionPtr  CsWinMain::actionPlMinus;
+QActionPtr  CsWinMain::actionPlPlus;
+QActionPtr  CsWinMain::actionPlLoad;
+QActionPtr  CsWinMain::actionPlPlayList;
 
 QActionPtr  CsWinMain::actionToolsOption;
 
