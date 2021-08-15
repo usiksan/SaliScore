@@ -23,8 +23,12 @@ SOURCES += \
     score/CsChordKit.cpp \
     score/CsChordLine.cpp \
     score/CsComposition.cpp \
+    score/CsCompositionHeader.cpp \
+    score/CsCompositionSettings.cpp \
     score/CsCursor.cpp \
     score/CsDefinition.cpp \
+    score/CsDescrSinger.cpp \
+    score/CsDescrSong.cpp \
     score/CsLine.cpp \
     score/CsLyric.cpp \
     score/CsNote.cpp \
@@ -36,6 +40,7 @@ SOURCES += \
     score/CsPosition.cpp \
     score/CsReference.cpp \
     score/CsRemark.cpp \
+    score/CsSynthSettings.cpp \
     undo/CsUndo.cpp \
     undo/CsUndoItem.cpp \
     windows/CsCellCursor.cpp \
@@ -84,8 +89,12 @@ HEADERS += \
     score/CsChordKit.h \
     score/CsChordLine.h \
     score/CsComposition.h \
+    score/CsCompositionHeader.h \
+    score/CsCompositionSettings.h \
     score/CsCursor.h \
     score/CsDefinition.h \
+    score/CsDescrSinger.h \
+    score/CsDescrSong.h \
     score/CsJsonIO.h \
     score/CsLine.h \
     score/CsLyric.h \
@@ -99,6 +108,7 @@ HEADERS += \
     score/CsPosition.h \
     score/CsReference.h \
     score/CsRemark.h \
+    score/CsSynthSettings.h \
     undo/CsUndo.h \
     undo/CsUndoItem.h \
     windows/CsCellCursor.h \

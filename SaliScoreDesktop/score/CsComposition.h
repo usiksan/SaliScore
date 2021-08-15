@@ -17,6 +17,7 @@ Description
 #include "CsConfig.h"
 #include "CsLine.h"
 #include "CsDefinition.h"
+#include "CsCompositionHeader.h"
 
 #include <QStringList>
 #include <QJsonObject>
@@ -25,45 +26,39 @@ using CsClefMap = QMap<QString,int>;
 
 class CsComposition
   {
-    QString      mTitle;
-    QString      mSinger;
-    QString      mComposer;
-    QString      mLyricist;
-    QString      mAuthor;
+    CsCompositionHeader mHeader;
+    QString             mComposer;
+    QString             mLyricist;
 
-    int          mVoice;
-    int          mVoiceDual;
-    int          mVoiceRight;
-    int          mStyle;
-    int          mTempo;
+    int                 mStepChord;
+    int                 mStepNote;
+    int                 mStepLyric;
 
-    int          mStepChord;
-    int          mStepNote;
-    int          mStepLyric;
+    CsDefList           mRemarkList;
+    CsDefList           mChordList;
+    CsDefList           mNoteList;
+    CsDefList           mTranslationList;
+    CsClefMap           mClefMap;
 
-    CsDefList    mRemarkList;
-    CsDefList    mChordList;
-    CsDefList    mNoteList;
-    CsDefList    mTranslationList;
-    CsClefMap    mClefMap;
+    CsLineList          mLineList;
 
-    CsLineList   mLineList;
-
-    mutable bool mDirty;
-
+    mutable bool        mDirty;
+    mutable bool        mStateDirty;
     //Settings
   public:
     CsComposition();
 
     bool        isDirty() const { return mDirty; }
 
+    void        dirtySet();
+
     //=================================================================
     //         Header part
-    QString     title() const { return mTitle; }
-    void        titleSet( const QString &tit ) { mTitle = tit; mDirty = true; }
+    QString     title() const { return mHeader.name(); }
+    void        titleSet( const QString &tit ) { mHeader.nameSet( tit ); mStateDirty = mDirty = true; }
 
-    QString     singer() const { return mSinger; }
-    void        singerSet( const QString &sing ) { mSinger = sing; mDirty = true; }
+    QString     singer() const { return mHeader.singer(); }
+    void        singerSet( const QString &sing ) { mHeader.singerSet( sing ); mStateDirty = mDirty = true; }
 
     QString     composer() const { return mComposer; }
     void        composerSet( const QString &compos ) { mComposer = compos; mDirty = true; }
@@ -71,23 +66,7 @@ class CsComposition
     QString     lyricist() const { return mLyricist; }
     void        lyricistSet( const QString &lyr ) { mLyricist = lyr; mDirty = true; }
 
-    QString     author() const { return mAuthor; }
-    void        authorSet( const QString &auth ) { mAuthor = auth; mDirty = true; }
-
-    QString     voice() const { return QString::number( mVoice ); }
-    void        voiceSet( const QString &voi ) { mVoice = voi.toInt(); mDirty = true; }
-
-    QString     voiceDual() const { return QString::number( mVoiceDual); }
-    void        voiceDualSet( const QString &voi ) { mVoiceDual = voi.toInt(); mDirty = true; }
-
-    QString     voiceRight() const { return QString::number( mVoiceRight ); }
-    void        voiceRightSet( const QString &voi ) { mVoiceRight = voi.toInt(); mDirty = true; }
-
-    QString     style() const { return QString::number( mStyle ); }
-    void        styleSet( const QString &stl ) { mStyle = stl.toInt(); mDirty = true; }
-
-    QString     tempo() const { return QString::number( mTempo ); }
-    void        tempoSet( const QString &tmp ) { mTempo = tmp.toInt(); mDirty = true; }
+    QString     author() const { return mHeader.author(); }
 
     //=================================================================
     //         Remark part

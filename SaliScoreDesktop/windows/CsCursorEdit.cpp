@@ -76,7 +76,7 @@ CsCursorEdit *CsCursorEdit::build(CsCursor &src, CsComposition &comp)
     case cccLyricist :
 
     case cccStyle :
-    case cccAuthor :
+    //case cccAuthor :
 
     case cccTempo :
       return new CsCursorEditProperty( src.cellClass(), comp );

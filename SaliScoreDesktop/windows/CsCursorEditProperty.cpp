@@ -39,10 +39,6 @@ CsCursorEditProperty::CsCursorEditProperty(int propertyId, CsComposition &comp) 
       setText( comp.style(), false );
       break;
 
-    case cccAuthor :
-      setText( comp.author(), false );
-      break;
-
     case cccTempo :
       setText( comp.tempo(), false );
       break;

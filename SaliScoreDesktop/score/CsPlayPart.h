@@ -1,12 +1,16 @@
 #ifndef CSPLAYPART_H
 #define CSPLAYPART_H
 
-#include "CsPlayComposition.h"
+#include "SvJson/SvJsonIO.h"
+
+#include <QString>
+#include <QList>
+
 
 class CsPlayPart
   {
-    QString               mTitle;
-    CsPlayCompositionList mCompositionList;
+    QString        mTitle;
+    QList<QString> mCompositionList;
   public:
     CsPlayPart();
 
