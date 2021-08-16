@@ -30,6 +30,8 @@ class CsSynthSettings
     QString tempo() const { return QString::number( mTempo ); }
     void    tempoSet( const QString &tmp ) { mTempo = tmp.toInt(); }
 
+    void    clear();
+
     //=================================================================
     //         Settings JSON io
 

@@ -350,6 +350,29 @@ void CsComposition::settingsRead(const CsCompositionSettings &settings)
 
 
 
+void CsComposition::clear()
+  {
+  mHeader.clear();
+  mComposer.clear();
+  mLyricist.clear();
+
+  mStepChord = 64;
+  mStepNote  = 16;
+  mStepLyric = 16;
+
+  mRemarkList.clear();
+  mChordList.clear();
+  mNoteList.clear();
+  mTranslationList.clear();
+  mClefMap.clear();
+
+  mLineList.clear();
+
+  mDirty = mStateDirty = false;
+  }
+
+
+
 
 
 QStringList CsComposition::visibleList(const CsDefList &src)

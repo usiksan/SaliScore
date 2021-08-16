@@ -50,10 +50,13 @@ class CsComposition
   public:
     CsComposition();
 
-    bool        isDirty() const { return mDirty; }
+    bool        isDirty() const { return mDirty || mStateDirty; }
 
     //=================================================================
     //         Header part
+
+    const CsCompositionHeader &header() const { return mHeader; }
+
     QString     title() const { return mHeader.name(); }
     void        titleSet( const QString &tit ) { mHeader.nameSet( tit ); dirtySet(); }
 
@@ -253,6 +256,8 @@ class CsComposition
     void        stateDirtySet() { mStateDirty = true; }
 
     void        settingsRead( const CsCompositionSettings &settings );
+
+    void        clear();
 
   private:
     static QStringList visibleList( const CsDefList &src );

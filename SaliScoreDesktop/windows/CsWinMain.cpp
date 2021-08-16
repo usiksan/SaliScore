@@ -2,6 +2,10 @@
 #include "import/saliScore/CsImportSaliScore.h"
 #include "import/text/CsImportText.h"
 #include "midi/CsMidiSequencer.h"
+#include "CsDlgDefRemark.h"
+#include "CsDlgDefChord.h"
+#include "CsDlgDefNote.h"
+#include "CsDlgDefTranslation.h"
 
 #include <QSettings>
 #include <QGuiApplication>
@@ -16,19 +20,20 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
+#include <QJsonDocument>
 
 
 CsWinMain::CsWinMain(CsMidiSequencer *midiSequencer, QWidget *parent) :
   QMainWindow(parent),
-  mMidiSequencer(midiSequencer)
+  mMidiSequencer(midiSequencer),
+  mPlayer( mComposition )
   {
 
   //At left side - play list
   mWLeftPart = new QStackedWidget();
 
   //At central part - wiziwig editors
-  mWEditors     = new QTabWidget();
-  mWEditors->setTabsClosable(true);
+  mWCentralPart = new QStackedWidget();
 
   //At right part - help
   mWHelp = new CsWinHelp();
@@ -36,7 +41,7 @@ CsWinMain::CsWinMain(CsMidiSequencer *midiSequencer, QWidget *parent) :
 
   mWSplitter    = new QSplitter();
   mWSplitter->addWidget( mWLeftPart );
-  mWSplitter->addWidget( mWEditors );
+  mWSplitter->addWidget( mWCentralPart );
   mWSplitter->addWidget( mWHelp );
   mWHelp->hide();
 
@@ -65,6 +70,12 @@ CsWinMain::CsWinMain(CsMidiSequencer *midiSequencer, QWidget *parent) :
   mWLeftPart->addWidget( buildRemoteFind() );
   mWLeftPart->setCurrentIndex(WIN_INDEX_PLAY_LIST);
 
+  //mWCentralPart->addWidget( mWinIntro = new CsWinIntro() );
+  mWCentralPart->addWidget( mWinTrain = new CsWinScoreMode( new CsWinTrain( mComposition, mPlayer ) ) );
+  mWCentralPart->addWidget( mWinKaraoke = new CsWinScoreMode( new CsWinKaraoke( mComposition, mPlayer ) ) );
+  mWCentralPart->addWidget( mWinEditor = new CsWinScoreMode( new CsWinEditor( mComposition, mPlayer ) ) );
+
+
   //Create imports
   mImportManager.registerImport( new CsImportSaliScore() );
   mImportManager.registerImport( new CsImportText() );
@@ -73,12 +84,17 @@ CsWinMain::CsWinMain(CsMidiSequencer *midiSequencer, QWidget *parent) :
   //connect( QGuiApplication::clipboard(), &QClipboard::changed, this, &CsWinMain::onClipboardChanged );
 
   //Notification for tick
-  connect( mMidiSequencer, &CsMidiSequencer::tick, this, [this] ( int count ) { if( auto score = activeScore() ) score->playTick( count ); } );
+  connect( mMidiSequencer, &CsMidiSequencer::tick, this, [this] ( int count ) { mPlayer.next( count ); } );
 
-  //Notification on tab changes
-  connect( mWEditors, &QTabWidget::currentChanged, this, [this] ( int index ) { if( auto page = editor(index) ) page->activate(); } );
-  connect( mWEditors, &QTabWidget::tabCloseRequested, this, &CsWinMain::fileCloseIndex );
+  mUpdateTimer.setInterval(100);
+
+  cmViewEditor();
+
+  playListLoad();
+
   }
+
+
 
 CsWinMain::~CsWinMain()
   {
@@ -90,21 +106,12 @@ CsWinMain::~CsWinMain()
 
 void CsWinMain::cmFileNew()
   {
-  static int defaultIndex = 0;
-  QString path(CS_DEFAULT_FILE_NAME);
-  if( defaultIndex > 0 )
-    path += QString::number(defaultIndex);
-  defaultIndex++;
-  CsComposition com;
-  appendEditor( new CsWinScore( path, com ) );
-  }
-
-
-
-void CsWinMain::cmFileOpen()
-  {
-  QString fname = QFileDialog::getOpenFileName( this, tr("Select file to open"), QString{}, mImportManager.formats() );
-  fileOpen( fname );
+  if( canCloseEditor() ) {
+    mComposition.clear();
+    mWinEditor->view()->compositionChanged();
+    mWinTrain->view()->compositionChanged();
+    mWinKaraoke->view()->compositionChanged();
+    }
   }
 
 
@@ -112,67 +119,208 @@ void CsWinMain::cmFileOpen()
 
 void CsWinMain::cmFileLoad()
   {
-
+  mWLeftPart->setCurrentIndex( WIN_INDEX_REMOTE_FIND );
   }
+
+
+
 
 void CsWinMain::cmFileImport()
   {
-
+  if( canCloseEditor() ) {
+    QString fname = QFileDialog::getOpenFileName( this, tr("Select file to open"), QString{}, mImportManager.formats() );
+    bool ok = false;
+    CsComposition composition = mImportManager.readFile( fname, ok );
+    if( ok ) {
+      mComposition = composition;
+      mWinEditor->view()->compositionChanged();
+      mWinTrain->view()->compositionChanged();
+      mWinKaraoke->view()->compositionChanged();
+      }
+    }
   }
+
+
+
 
 void CsWinMain::cmFileSave()
   {
-  fileSaveIndex( mWEditors->currentIndex() );
+  if( mComposition.version() == 0 )
+    mComposition.makeCopy();
+
+  if( mComposition.isDirty() )
+    mComposition.versionUpdate();
+
+  QFile file( mComposition.header().path() );
+  if( file.open(QIODevice::WriteOnly) ) {
+    //Create writer and use it to write composition contents to json object
+    CsJsonWriter js{};
+    mComposition.jsonWrite( js );
+
+    //Append file type and version
+    js.jsonString( CS_BASE_TYPE_KEY, QStringLiteral(CS_BASE_TYPE) );
+    js.jsonInt( CS_BASE_VERSION_KEY, CS_BASE_VERSION );
+
+    //Write contents to file
+    file.write( QJsonDocument(js.object()).toJson() );
+
+    //Write completed, reset dirty
+    mComposition.dirtyReset();
+    }
+
+  mPlayList.compositionSet( mComposition );
   }
 
-void CsWinMain::cmFileSaveAs()
+void CsWinMain::cmFileCopy()
   {
-  fileSaveAsIndex( mWEditors->currentIndex() );
+
   }
 
-void CsWinMain::cmFileSaveAll()
+void CsWinMain::cmFilePublic()
   {
-  for( int i = 0; i < mWEditors->count(); i++ )
-    fileSaveIndex( i );
+
   }
 
-void CsWinMain::cmFileClose()
+void CsWinMain::cmFileExport()
   {
-  fileCloseIndex( mWEditors->currentIndex() );
+
   }
 
-
-void CsWinMain::cmFileCloseAll()
+void CsWinMain::cmFilePrint()
   {
-  for( int i = mWEditors->count() - 1; i >= 0; i-- )
-    fileCloseIndex( i );
+
   }
 
 
-void CsWinMain::cmFilePrevious()
-  {
-  QAction *action = qobject_cast<QAction *>(sender());
-  if( action )
-    fileOpen( action->data().toString() );
-  }
 
 
 
 void CsWinMain::cmViewEditor()
   {
+  mWCentralPart->setCurrentWidget( mWinEditor );
+  //Hide toolbars
+  barPlayList->hide();
+  barTrain->hide();
+  barKaraoke->hide();
+  //Show active bar
+  barEditor->show();
   actionViewEditor->setChecked(true);
-  actionViewTrain->setChecked(false);
-  actionViewKaraoke->setChecked(false);
+  //Activate karaoke
+  mWinEditor->view()->activate();
   }
+
+
+
+
 
 void CsWinMain::cmViewTrain()
   {
-
+  mWCentralPart->setCurrentWidget( mWinTrain );
+  //Hide toolbars
+  barPlayList->hide();
+  barKaraoke->hide();
+  barEditor->hide();
+  //Show active bar
+  barTrain->show();
+  actionViewTrain->setChecked(true);
+  //Activate karaoke
+  mWinTrain->view()->activate();
   }
+
+
+
+
 
 void CsWinMain::cmViewKaraoke()
   {
+  mWCentralPart->setCurrentWidget( mWinKaraoke );
+  //Hide toolbars
+  barPlayList->hide();
+  barTrain->hide();
+  barEditor->hide();
+  //Show active bar
+  barKaraoke->show();
+  actionViewKaraoke->setChecked(true);
+  //Activate karaoke
+  mWinKaraoke->view()->activate();
+  }
 
+
+
+
+void CsWinMain::cmViewRemark()
+  {
+  CsDlgDefRemark dlgRem( mComposition, this );
+  dlgRem.fill();
+  dlgRem.exec();
+  }
+
+
+
+
+void CsWinMain::cmViewChord()
+  {
+  CsDlgDefChord dlgChord( mComposition, this );
+  dlgChord.fill();
+  dlgChord.exec();
+  }
+
+
+
+
+void CsWinMain::cmViewNote()
+  {
+  CsDlgDefNote dlgNote( mComposition, this );
+  dlgNote.fill();
+  dlgNote.exec();
+  }
+
+
+
+
+void CsWinMain::cmViewTranslation()
+  {
+  CsDlgDefTranslation dlgTranslation( mComposition, this );
+  dlgTranslation.fill();
+  dlgTranslation.exec();
+  }
+
+
+
+
+
+void CsWinMain::cmPlayStart()
+  {
+  if( mDefferedReset ) {
+    mDefferedReset = false;
+    mPlayer.reset();
+    mPlayer.show(true);
+    }
+
+  if( CsWinMain::actionViewKaraoke->isChecked() )
+    connect( &mUpdateTimer, &QTimer::timeout, mWinKaraoke->view(), &CsWinScoreView::viewUpdate );
+  else if( CsWinMain::actionViewTrain->isChecked() )
+    connect( &mUpdateTimer, &QTimer::timeout, mWinTrain->view(), &CsWinScoreView::viewUpdate );
+  else
+    connect( &mUpdateTimer, &QTimer::timeout, mWinEditor->view(), &CsWinScoreView::viewUpdate );
+  mUpdateTimer.start();
+
+  mMidiSequencer->setRun(true);
+  }
+
+
+
+
+
+void CsWinMain::cmPlayStop()
+  {
+  mMidiSequencer->setRun(false);
+
+  if( mDefferedReset )
+    mPlayer.show(false);
+  mDefferedReset = true;
+  mUpdateTimer.stop();
+  mUpdateTimer.disconnect();
   }
 
 
@@ -206,17 +354,8 @@ void CsWinMain::cmHelpRegistration()
 
 void CsWinMain::closeEvent(QCloseEvent *ev)
   {
-  //Try close all files
-  cmFileCloseAll();
-
-  //Test, it is all editors are closed
-  bool editorPresent = false;
-  for( int i = 0; i < mWEditors->count() && !editorPresent; i++ )
-    if( dynamic_cast<CsWinPage*>( mWEditors->widget(i) ) != nullptr )
-      editorPresent = true;
-
-  //If all closed
-  if( !editorPresent ) {
+  //If can close editor
+  if( canCloseEditor() ) {
     //Save settings: main window maximisation and splitter position
     QSettings s;
     s.setValue( QStringLiteral(KEY_WMAIN_MAX), isMaximized() );
@@ -229,195 +368,6 @@ void CsWinMain::closeEvent(QCloseEvent *ev)
 
 
 
-//!
-//! \brief activeEditor Returns current actived editor
-//! \return             Current actived editor or nullptr if none
-//!
-CsWinPage *CsWinMain::activeEditor() const
-  {
-  return dynamic_cast<CsWinPage*>( mWEditors->currentWidget() );
-  }
-
-
-
-
-//!
-//! \brief editor Retrive editor by tab index
-//! \param index  Index of tab which editor need to be retrieved
-//! \return       Editor by tab index or nullptr if no editor in this index
-//!
-CsWinPage *CsWinMain::editor(int index) const
-  {
-  //Check index bound
-  if( index < 0 || index >= mWEditors->count() )
-    return nullptr;
-  return dynamic_cast<CsWinPage*>( mWEditors->widget(index) );
-  }
-
-
-
-
-//!
-//! \brief fileSaveIndex
-//! \param index
-//!
-void CsWinMain::fileSaveIndex(int index)
-  {
-  CsWinPage *ed = editor( index );
-  if( ed == nullptr ) return;
-
-  //Test if file name yet not assigned
-  if( ed->name().startsWith(QStringLiteral(CS_DEFAULT_FILE_NAME)) )
-    fileSaveAsIndex( index );
-  else
-    ed->cmFileSave( ed->path() );
-  }
-
-
-
-//!
-//! \brief fileSaveAsIndex Save file which editor on index tab
-//! \param index           Tab index for editor
-//!
-void CsWinMain::fileSaveAsIndex(int index)
-  {
-  CsWinPage *ed = editor( index );
-  if( ed == nullptr ) return;
-
-  QString title = ed->path();
-  title = QFileDialog::getSaveFileName(this, tr("Save File"), title, QString("SaliScore Files (*%1)").arg(ed->extension()) );
-  if( title.isEmpty() ) return;
-  ed->setPath( title );
-  mWEditors->setTabText( index, ed->name() );
-  mWEditors->setTabToolTip( index, ed->path() );
-  updateRecentFiles( ed->path() );
-
-  //Сохранить файл
-  fileSaveIndex( index );
-  }
-
-
-
-
-//!
-//! \brief fileCloseIndex Closes file editor with index tab
-//! \param index          Tab index editor which need to be closed
-//!
-void CsWinMain::fileCloseIndex(int index)
-  {
-  CsWinPage *ed = editor( index );
-  if( ed == nullptr ) return;
-
-  if( ed->isDirty() ) {
-    int r = QMessageBox::question( this, tr("Warning!"), tr("File \"%1\" is modified! Do you want to save changes?").arg(ed->path()), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel );
-    if( r == QMessageBox::Cancel ) return;
-    if( r == QMessageBox::Yes ) {
-      fileSaveIndex(index);
-      if( ed->isDirty() )
-        //Saving unsuccessfull
-        return;
-      }
-    }
-  mWEditors->removeTab(index);
-  ed->deleteLater();
-  }
-
-
-
-
-//!
-//! \brief fileOpen Open file with path
-//! \param path     Path of file
-//!
-void CsWinMain::fileOpen(const QString path)
-  {
-  //If empty path nothing done
-  if( path.isEmpty() )
-    return;
-
-  //Try find already opened file
-  for( int i = 0; i < mWEditors->count(); i++ ) {
-    CsWinPage *ed = editor(i);
-    if( ed != nullptr ) {
-      if( ed->path() == path ) {
-        //File with this path found
-        mWEditors->setCurrentIndex(i);
-        return;
-        }
-      }
-    }
-
-  bool ok = false;
-  CsComposition composition = mImportManager.readFile( path, ok );
-  if( ok ) {
-    //Successfull import
-    CsWinScore *winScore = new CsWinScore( path, composition );
-    appendEditor( winScore );
-    updateRecentFiles( winScore->path() );
-    }
-
-  }
-
-
-
-
-//!
-//! \brief appendEditor Appends editor to editors tab
-//! \param editor       Appended editor
-//!
-void CsWinMain::appendEditor(CsWinPage *editor)
-  {
-  int index = mWEditors->addTab( editor, editor->name() );
-  mWEditors->setTabToolTip( index, editor->path() );
-  mWEditors->setCurrentIndex( index );
-  }
-
-
-
-
-//!
-//! \brief updateRecentFiles Append file to recent file list
-//! \param path              File path to append to list
-//!
-void CsWinMain::updateRecentFiles( const QString &path )
-  {
-  QSettings s;
-  QStringList list;
-
-  //Append file to recent file list
-  if( s.contains( KEY_RECENT_FILES ) ) {
-    list = s.value( KEY_RECENT_FILES ).toStringList();
-    if( !path.isEmpty() ) {
-      int i = list.indexOf( path );
-      if( i >= 0 )
-        //Pull up
-        list.removeAt( i );
-      else {
-        //Remove last
-        while( list.count() >= CS_PREVIOUS_FILES_COUNT )
-          list.removeLast();
-        }
-      list.insert( 0, path );
-      }
-    }
-  else if( !path.isEmpty() )
-    list.append( path );
-
-  s.setValue( KEY_RECENT_FILES, list );
-
-  //Syncro with menu
-  for( int i = 0; i < CS_PREVIOUS_FILES_COUNT; ++i )
-    if( i < list.count() ) {
-      QFileInfo info( list.at(i) );
-      actionFilePrevious[i]->setText( info.completeBaseName() );
-      actionFilePrevious[i]->setData( list.at(i) );
-      actionFilePrevious[i]->setToolTip( list.at(i) );
-      actionFilePrevious[i]->setVisible(true);
-      }
-    else actionFilePrevious[i]->setVisible(false);
-
-  menuFilePrevious->setEnabled( list.count() != 0 );
-  }
 
 
 
@@ -432,7 +382,7 @@ QWidget *CsWinMain::buildPlayList()
   {
   QVBoxLayout *box = new QVBoxLayout();
   box->addWidget( new QLabel(tr("Play List")) );
-  box->addWidget( mWPlayList = new CsWinPlayList(), 100 );
+  box->addWidget( mWPlayList = new CsWinPlayList( mPlayList ), 100 );
 
   QToolBar *bar = new QToolBar();
   bar->addAction( actionPlMinus );
@@ -460,6 +410,7 @@ QWidget *CsWinMain::buildRemoteFind()
   box->addWidget( mWRemote = new CsWinRemote() );
 
   QToolBar *bar = new QToolBar();
+  bar->addAction( actionFileLoad );
   box->addWidget( bar );
 
   QWidget *we = new QWidget();
@@ -470,50 +421,82 @@ QWidget *CsWinMain::buildRemoteFind()
 
 
 
+//!
+//! \brief canCloseEditor Check, can be closed editor
+//! \return               true - editor can be closed
+//!
+bool CsWinMain::canCloseEditor()
+  {
+  if( mComposition.isDirty() ) {
+    //Contents is changed
+    auto res = QMessageBox::question( this, tr("Warning!"), tr("Composition is changed. Do You want to save changes?"), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel );
+    if( res == QMessageBox::Yes ) {
+      cmFileSave();
+      return true;
+      }
+    if( res == QMessageBox::No )
+      return true;
+    return false;
+    }
+  return true;
+  }
+
+
+
+
+void CsWinMain::playListLoad()
+  {
+  QFile file( CsDescrSong::homeDir( QString{} ) + "playList.dat" );
+  if( file.exists() ) {
+    if( file.open( QIODevice::ReadOnly ) ) {
+      int version = 0;
+      SvJsonReaderExtInt js( QJsonDocument::fromJson( file.readAll() ).object(), &version );
+      mPlayList.jsonRead( js );
+      }
+    }
+  else {
+    //Create default play list
+    mPlayList.partAppend( tr("Examples") );
+    mPlayList.partAppend( tr("My songs") );
+    }
+
+  mWPlayList->updateContent();
+  }
+
+
+
+
 void CsWinMain::createMenu()
   {
   menuFile = new QMenu( tr("File") );
 
   actionFileNew      = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileNew.png")), tr("New file"), this, &CsWinMain::cmFileNew );
-  actionFileOpen     = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileOpen.png")), tr("Open file ..."), this, &CsWinMain::cmFileOpen );
-  menuFilePrevious   = menuFile->addMenu( tr("Previous files") );
+  actionFileImport   = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileImport.png")), tr("Open file ..."), this, &CsWinMain::cmFileImport );
   actionFileLoad     = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileDownload.png")), tr("Load from public cloud..."), this, &CsWinMain::cmFileLoad );
   menuFile->addSeparator();
-  actionFileSave     = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileSave.png")), tr("Save file"), this, &CsWinMain::cmFileSave );
-  actionFileSaveAs   = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileSaveAs.png")), tr("Save file as..."), this, &CsWinMain::cmFileSaveAs );
-  actionFileSaveAll  = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileSaveAll.png")), tr("Save all files"), this, &CsWinMain::cmFileSaveAll );
-  actionFilePublic   = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileUpload.png")), tr("Public to cloud..."), this, [this] () { if( auto editor = activeEditor() ) editor->cmFilePublic(); } );
-  actionFileExport   = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileExport.png")), tr("Export..."), this,  [this] () { if( auto editor = activeEditor() ) editor->cmFileExport(); } );
+  actionFileSave     = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileSave.png")), tr("Save score"), this, &CsWinMain::cmFileSave );
+  actionFileCopy     = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileSaveAs.png")), tr("Make copy score"), this, &CsWinMain::cmFileCopy );
+  actionFilePublic   = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileUpload.png")), tr("Public to cloud"), this, &CsWinMain::cmFilePublic );
+  actionFileExport   = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileExport.png")), tr("Export..."), this,  &CsWinMain::cmFileExport );
   menuFile->addSeparator();
-  actionFilePrint    = menuFile->addAction( QIcon(QStringLiteral(":/pic/filePrint.png")), tr("Print..."), this, [this] () { if( auto editor = activeEditor() ) editor->cmFilePrint(); } );
-  menuFile->addSeparator();
-  actionFileClose    = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileClose.png")), tr("Close file"), this, &CsWinMain::cmFileClose );
-  actionFileCloseAll = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileCloseAll.png")), tr("Close all files"), this, &CsWinMain::cmFileCloseAll );
+  actionFilePrint    = menuFile->addAction( QIcon(QStringLiteral(":/pic/filePrint.png")), tr("Print..."), this, &CsWinMain::cmFilePrint );
   menuFile->addSeparator();
   actionFileExit     = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileExit.png")), tr("Exit programm"), this, &CsWinMain::close );
-
-  //Last previous files menu
-  for (int i = 0; i < CS_PREVIOUS_FILES_COUNT; ++i) {
-    actionFilePrevious[i] = new QAction(this);
-    actionFilePrevious[i]->setVisible(false);
-    connect( actionFilePrevious[i], &QAction::triggered, this, &CsWinMain::cmFilePrevious );
-    menuFilePrevious->addAction( actionFilePrevious[i] );
-    }
 
   menuEdit = new QMenu( tr("Edit") );
 
   menuView = new QMenu( tr("View") );
-  actionViewEditor  = menuView->addAction( QIcon(QStringLiteral(":/pic/viewEditor.png")), tr("Editor mode"), this, [this] () {if( auto editor = activeScore() ) editor->cmViewEditor(); } );
-  actionViewTrain   = menuView->addAction( QIcon(QStringLiteral(":/pic/viewTrain.png")), tr("Train mode"), this, [this] () {if( auto editor = activeScore() ) editor->cmViewTrain(); } );
-  actionViewKaraoke = menuView->addAction( QIcon(QStringLiteral(":/pic/viewKaraoke.png")), tr("Karaoke mode"), this, [this] () {if( auto editor = activeScore() ) editor->cmViewKaraoke(); } );
+  actionViewEditor  = menuView->addAction( QIcon(QStringLiteral(":/pic/viewEditor.png")), tr("Editor mode"), this, &CsWinMain::cmViewEditor );
+  actionViewTrain   = menuView->addAction( QIcon(QStringLiteral(":/pic/viewTrain.png")), tr("Train mode"), this, &CsWinMain::cmViewTrain );
+  actionViewKaraoke = menuView->addAction( QIcon(QStringLiteral(":/pic/viewKaraoke.png")), tr("Karaoke mode"), this, &CsWinMain::cmViewKaraoke );
   actionViewEditor->setCheckable(true);
   actionViewTrain->setCheckable(true);
   actionViewKaraoke->setCheckable(true);
   menuView->addSeparator();
-  actionViewRemark      = menuView->addAction( QIcon(QStringLiteral(":/pic/viewRemark.png")), tr("Remark manage..."), this, [this] () {if( auto editor = activeScore() ) editor->cmViewRemark(); } );
-  actionViewChord       = menuView->addAction( QIcon(QStringLiteral(":/pic/viewChord.png")), tr("Chord manage..."), this, [this] () {if( auto editor = activeScore() ) editor->cmViewChord(); } );
-  actionViewNote        = menuView->addAction( QIcon(QStringLiteral(":/pic/viewNote.png")), tr("Note manage..."), this, [this] () {if( auto editor = activeScore() ) editor->cmViewNote(); } );
-  actionViewTranslation = menuView->addAction( QIcon(QStringLiteral(":/pic/viewTranslation.png")), tr("Translation manage..."), this, [this] () {if( auto editor = activeScore() ) editor->cmViewTranslation(); } );
+  actionViewRemark      = menuView->addAction( QIcon(QStringLiteral(":/pic/viewRemark.png")), tr("Remark manage..."), this, &CsWinMain::cmViewRemark );
+  actionViewChord       = menuView->addAction( QIcon(QStringLiteral(":/pic/viewChord.png")), tr("Chord manage..."), this, &CsWinMain::cmViewChord );
+  actionViewNote        = menuView->addAction( QIcon(QStringLiteral(":/pic/viewNote.png")), tr("Note manage..."), this, &CsWinMain::cmViewNote );
+  actionViewTranslation = menuView->addAction( QIcon(QStringLiteral(":/pic/viewTranslation.png")), tr("Translation manage..."), this, &CsWinMain::cmViewTranslation );
 
   QActionGroup *group = new QActionGroup(menuView);
   group->addAction( actionViewEditor );
@@ -521,9 +504,9 @@ void CsWinMain::createMenu()
   group->addAction( actionViewKaraoke );
 
   menuPlay = new QMenu( tr("Play") );
-  actionPlayStart = menuView->addAction( QIcon(QStringLiteral(":/pic/playStart.png")), tr("Start"), this, [this] () { if( auto editor = activeScore() ) editor->playStart();  mMidiSequencer->setRun(true); } );
+  actionPlayStart = menuView->addAction( QIcon(QStringLiteral(":/pic/playStart.png")), tr("Start"), this, &CsWinMain::cmPlayStart );
   actionPlayPause = menuView->addAction( QIcon(QStringLiteral(":/pic/playPause.png")), tr("Pause"), this, [this] () {  mMidiSequencer->setRun(false); } );
-  actionPlayStop  = menuView->addAction( QIcon(QStringLiteral(":/pic/playStop.png")), tr("Stop"), this, [this] () {  mMidiSequencer->setRun(false); if( auto editor = activeScore() ) editor->playStop(); } );
+  actionPlayStop  = menuView->addAction( QIcon(QStringLiteral(":/pic/playStop.png")), tr("Stop"), this, &CsWinMain::cmPlayStop );
 
   menuScore = new QMenu( tr("Score") );
 
@@ -551,11 +534,9 @@ void CsWinMain::createMenu()
   bar->addMenu( menuTools );
   bar->addMenu( menuHelp );
 
-  updateRecentFiles( QString{} );
-
   barMain = new QToolBar( tr("Files") );
   barMain->addAction( actionFileNew );
-  barMain->addAction( actionFileOpen );
+  barMain->addAction( actionFileCopy );
   barMain->addAction( actionFileSave );
   addToolBar( barMain );
 
@@ -597,9 +578,10 @@ void CsWinMain::createMenu()
   barTrain->hide();
   barKaraoke->hide();
 
-
+  //QMenu *menu = new QMenu("hidden");
   actionPlMinus = new QAction( QIcon(QStringLiteral(":/pic/plMinus.png")), tr("Remove composition from list...") );
   actionPlPlus  = new QAction( QIcon(QStringLiteral(":/pic/plPlus.png")), tr("Add composition from server") );
+  connect( actionPlPlus, &QAction::triggered, this, &CsWinMain::cmFileLoad );
   //actionPlLoad;
   actionPlPlayList = new QAction( QIcon(QStringLiteral(":/pic/plList.png")), tr("Switch to Play list") );
 
@@ -609,7 +591,6 @@ void CsWinMain::createMenu()
 //=============================================================================================================================
 //                                     Commands
 QMenu *CsWinMain::menuFile;
-QMenu *CsWinMain::menuFilePrevious;
 QMenu *CsWinMain::menuEdit;
 QMenu *CsWinMain::menuView;
 QMenu *CsWinMain::menuPlay;
@@ -628,19 +609,15 @@ QToolBar   *CsWinMain::barPlayList;
 
 
 QActionPtr  CsWinMain::actionFileNew;
-QActionPtr  CsWinMain::actionFileOpen;
+QActionPtr  CsWinMain::actionFileImport;
+QActionPtr  CsWinMain::actionFileCopy;
 QActionPtr  CsWinMain::actionFileLoad;
 QActionPtr  CsWinMain::actionFileSave;
-QActionPtr  CsWinMain::actionFileSaveAs;
-QActionPtr  CsWinMain::actionFileSaveAll;
 QActionPtr  CsWinMain::actionFilePublic;
 QActionPtr  CsWinMain::actionFileExport;
 QActionPtr  CsWinMain::actionFilePrint;
-QActionPtr  CsWinMain::actionFileClose;
-QActionPtr  CsWinMain::actionFileCloseAll;
 QActionPtr  CsWinMain::actionFileExit;
 
-QActionPtr  CsWinMain::actionFilePrevious[CS_PREVIOUS_FILES_COUNT];
 
 QActionPtr  CsWinMain::actionEditUndo;
 QActionPtr  CsWinMain::actionEditRedo;

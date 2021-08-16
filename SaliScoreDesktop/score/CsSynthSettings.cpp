@@ -10,6 +10,21 @@ CsSynthSettings::CsSynthSettings() :
 
   }
 
+
+
+
+void CsSynthSettings::clear()
+  {
+  mVoice = 1;
+  mVoiceDual = 0;
+  mVoiceRight = 0;
+  mStyle = 1;
+  mTempo = 120;
+  }
+
+
+
+
 void CsSynthSettings::jsonWrite(CsJsonWriter &js) const
   {
   js.jsonInt( "voice",      mVoice );

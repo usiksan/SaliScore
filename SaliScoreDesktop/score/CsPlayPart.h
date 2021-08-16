@@ -9,14 +9,31 @@
 
 class CsPlayPart
   {
-    QString        mTitle;
-    QList<QString> mCompositionIdList;
+    QString     mTitle;
+    QStringList mCompositionIdList;
   public:
     CsPlayPart();
+    CsPlayPart( const QString &tit );
 
-    void jsonWrite( CsJsonWriter &writer ) const;
+    QString     title() const { return mTitle; }
 
-    void jsonRead( CsJsonReader &reader );
+    void        titleSet( const QString &tit ) { mTitle = tit; }
+
+    QStringList compositionIdList() const { return mCompositionIdList; }
+
+    int         compositionCount() const { return mCompositionIdList.count(); }
+
+    QString     compositionId( int index ) const { return mCompositionIdList.at(index); }
+
+    void        compositionAppend( const QString &id ) { mCompositionIdList.append( id ); }
+
+    void        compositionRemove( const QString &id ) { mCompositionIdList.removeAll( id ); }
+
+    //void        compositionRename( int index, const QString &id ) { mCompositionIdList[index] = id; }
+
+    void        jsonWrite( CsJsonWriter &js ) const;
+
+    void        jsonRead( CsJsonReader &js );
 
   };
 

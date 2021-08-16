@@ -24,9 +24,13 @@ class CsWinTrain : public CsWinScoreView
   public:
     virtual void setupWinScroll(CsWinScoreMode *winScroll) override;
 
-    // CsWinScoreView interface
-  public:
     virtual void upWheelEvent(QWheelEvent *event) override;
+
+    //!
+    //! \brief compositionChanged Called when composition changed outside
+    //!
+    virtual void compositionChanged() override;
+
   };
 
 #endif // CSWINTRAIN_H

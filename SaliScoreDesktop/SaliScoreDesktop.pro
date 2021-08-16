@@ -63,6 +63,7 @@ SOURCES += \
     windows/CsPainterSettings.cpp \
     windows/CsWinEditor.cpp \
     windows/CsWinHelp.cpp \
+    windows/CsWinIntro.cpp \
     windows/CsWinKaraoke.cpp \
     windows/CsWinMain.cpp \
     windows/CsWinPage.cpp \
@@ -129,6 +130,7 @@ HEADERS += \
     windows/CsPainterSettings.h \
     windows/CsWinEditor.h \
     windows/CsWinHelp.h \
+    windows/CsWinIntro.h \
     windows/CsWinKaraoke.h \
     windows/CsWinMain.h \
     windows/CsWinPage.h \

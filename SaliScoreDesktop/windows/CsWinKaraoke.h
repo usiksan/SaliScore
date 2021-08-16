@@ -22,6 +22,11 @@ class CsWinKaraoke : public CsWinScoreView
     virtual void activate() override;
 
     virtual void paint() override;
+
+    //!
+    //! \brief compositionChanged Called when composition changed outside
+    //!
+    virtual void compositionChanged() override;
   signals:
 
 

@@ -45,6 +45,19 @@ void CsWinKaraoke::paint()
 
 
 
+//!
+//! \brief compositionChanged Called when composition changed outside
+//!
+void CsWinKaraoke::compositionChanged()
+  {
+  CsWinScoreView::compositionChanged();
+  mPageMap.clear();
+  update();
+  }
+
+
+
+
 
 
 

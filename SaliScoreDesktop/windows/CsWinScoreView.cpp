@@ -12,6 +12,12 @@ CsWinScoreView::CsWinScoreView(CsComposition &comp, CsPlay &play, QWidget *paren
 
   }
 
+void CsWinScoreView::compositionChanged()
+  {
+  mPlayer.reset();
+  mPlayer.show(false);
+  }
+
 
 
 

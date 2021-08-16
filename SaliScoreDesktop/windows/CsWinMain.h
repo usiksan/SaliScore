@@ -2,11 +2,22 @@
 #define CSWINMAIN_H
 
 #include "CsConfig.h"
+
+#include "score/CsComposition.h"
+#include "score/CsPlayList.h"
+#include "play/CsPlay.h"
+
+#include "import/CsImportManager.h"
+
 #include "CsWinHelp.h"
-#include "CsWinScore.h"
+#include "CsWinIntro.h"
+#include "CsWinPage.h"
+#include "CsWinScoreMode.h"
+#include "CsWinTrain.h"
+#include "CsWinEditor.h"
+#include "CsWinKaraoke.h"
 #include "CsWinPlayList.h"
 #include "CsWinRemote.h"
-#include "import/CsImportManager.h"
 
 #include <QMainWindow>
 #include <QStackedWidget>
@@ -31,15 +42,26 @@ class CsWinMain : public QMainWindow
 
     QSplitter       *mWSplitter;     //!< Central widget of application, it delimit space into two parts: wiziwig editors and help
     QStackedWidget  *mWLeftPart;     //!< Play list
-    QTabWidget      *mWEditors;      //!< Editors
+    QStackedWidget  *mWCentralPart;  //!< Central part with editor, trainer and karaoke
     CsWinHelp       *mWHelp;         //!< Edge help
 
     CsWinPlayList   *mWPlayList;
     CsWinRemote     *mWRemote;
 
+    CsWinIntro      *mWinIntro;
+    CsWinScoreMode  *mWinEditor;
+    CsWinScoreMode  *mWinTrain;
+    CsWinScoreMode  *mWinKaraoke;
+
     CsMidiSequencer *mMidiSequencer;
 
     CsImportManager  mImportManager; //!< Import files manager. Contains converters from other formats
+
+    CsComposition    mComposition;
+    CsPlay           mPlayer;
+    CsPlayList       mPlayList;
+    bool             mDefferedReset;
+    QTimer           mUpdateTimer;
   public:
     CsWinMain( CsMidiSequencer *midiSequencer, QWidget *parent = nullptr);
     ~CsWinMain();
@@ -48,20 +70,24 @@ class CsWinMain : public QMainWindow
 
     //Menu File
     void cmFileNew();
-    void cmFileOpen();
-    void cmFileLoad();
     void cmFileImport();
+    void cmFileLoad();
     void cmFileSave();
-    void cmFileSaveAs();
-    void cmFileSaveAll();
-    void cmFileClose();
-    void cmFileCloseAll();
-    void cmFilePrevious();
-
+    void cmFileCopy();
+    void cmFilePublic();
+    void cmFileExport();
+    void cmFilePrint();
 
     void cmViewEditor();
     void cmViewTrain();
     void cmViewKaraoke();
+    void cmViewRemark();
+    void cmViewChord();
+    void cmViewNote();
+    void cmViewTranslation();
+
+    void cmPlayStart();
+    void cmPlayStop();
 
     void cmHelpContent();
     void cmHelpAbout();
@@ -72,60 +98,6 @@ class CsWinMain : public QMainWindow
     virtual void closeEvent( QCloseEvent *ev ) override;
 
   private:
-    //!
-    //! \brief activeEditor Returns current actived editor
-    //! \return             Current actived editor or nullptr if none
-    //!
-    CsWinPage  *activeEditor() const;
-
-    //!
-    //! \brief activeScore Returns current actived score editor
-    //! \return            Current actived score editor or nullptr if none
-    //!
-    CsWinScore *activeScore() const { return dynamic_cast<CsWinScore*>(activeEditor()); }
-
-    //!
-    //! \brief editor Retrive editor by tab index
-    //! \param index  Index of tab which editor need to be retrieved
-    //! \return       Editor by tab index or nullptr if no editor in this index
-    //!
-    CsWinPage  *editor( int index ) const;
-
-    //!
-    //! \brief fileSaveIndex Save file which editor on index tab
-    //! \param index         Tab index for editor
-    //!
-    void         fileSaveIndex( int index );
-
-    //!
-    //! \brief fileSaveAsIndex Save file which editor on index tab
-    //! \param index           Tab index for editor
-    //!
-    void         fileSaveAsIndex( int index );
-
-    //!
-    //! \brief fileCloseIndex Closes file editor with index tab
-    //! \param index          Tab index editor which need to be closed
-    //!
-    void         fileCloseIndex( int index );
-
-    //!
-    //! \brief fileOpen Open file with path
-    //! \param path     Path of file
-    //!
-    void         fileOpen( const QString path );
-
-    //!
-    //! \brief appendEditor Appends editor to editors tab
-    //! \param editor       Appended editor
-    //!
-    void         appendEditor(CsWinPage *editor );
-
-    //!
-    //! \brief updateRecentFiles Append file to recent file list
-    //! \param path              File path to append to list
-    //!
-    void         updateRecentFiles(const QString &path);
 
     //!
     //! \brief buildPlayList Builds play list view widget
@@ -139,12 +111,21 @@ class CsWinMain : public QMainWindow
     //!
     QWidget     *buildRemoteFind();
 
+    //!
+    //! \brief canCloseEditor Check, can be closed editor
+    //! \return               true - editor can be closed
+    //!
+    bool         canCloseEditor();
+
+    void         playListLoad();
+
+    void         playListSave();
+
     void         createMenu();
   public:
     //======================================================================================
     //                           Commands
     static QMenu *menuFile;
-    static QMenu *menuFilePrevious;
     static QMenu *menuEdit;
     static QMenu *menuView;
     static QMenu *menuPlay;
@@ -162,25 +143,21 @@ class CsWinMain : public QMainWindow
     static QToolBar *barPlayList;
 
     static QActionPtr  actionFileNew;
-    static QActionPtr  actionFileOpen;
+    static QActionPtr  actionFileImport;
     static QActionPtr  actionFileLoad;
     static QActionPtr  actionFileSave;
-    static QActionPtr  actionFileSaveAs;
-    static QActionPtr  actionFileSaveAll;
+    static QActionPtr  actionFileCopy;
     static QActionPtr  actionFilePublic;
     static QActionPtr  actionFileExport;
     static QActionPtr  actionFilePrint;
-    static QActionPtr  actionFileClose;
-    static QActionPtr  actionFileCloseAll;
     static QActionPtr  actionFileExit;
-
-    static QActionPtr  actionFilePrevious[CS_PREVIOUS_FILES_COUNT];
 
     static QActionPtr  actionEditUndo;
     static QActionPtr  actionEditRedo;
     static QActionPtr  actionEditCut;
     static QActionPtr  actionEditCopy;
     static QActionPtr  actionEditPaste;
+    static QActionPtr  actionEditPasteImport;
     static QActionPtr  actionEditDelete;
     static QActionPtr  actionEditSelectAll;
     static QActionPtr  actionEditUnSelect;

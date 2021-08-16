@@ -82,6 +82,7 @@ History
 
 //Project naming definition
 #define CS_BASE_EXTENSION            ".saliscore"
+#define CS_DATA_DIRECTORY            "/SaliScore/"
 #define CS_DEFAULT_FILE_NAME         "default"
 
 //SaliScore database version
@@ -119,7 +120,6 @@ History
 #define KEY_MAIN_SPLITTER            "MainSplitter"
 #define KEY_WMAIN_MAX                "WMainMax"
 #define KEY_WMAIN_SIZE               "WMainSize"
-#define KEY_RECENT_FILES             "RecentFiles"
 #define KEY_TRAIN_SETTINGS           "TrainSettings"
 #define KEY_EDITOR_SETTINGS          "EditorSettings"
 #define KEY_KARAOKE_SETTINGS         "KaraokeSettings"

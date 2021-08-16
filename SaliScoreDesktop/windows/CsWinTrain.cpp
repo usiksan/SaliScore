@@ -76,3 +76,16 @@ void CsWinTrain::upWheelEvent(QWheelEvent *event)
   mWinScroll->verticalScrollBar()->setValue( mOffsetY );
   update();
   }
+
+
+
+
+//!
+//! \brief compositionChanged Called when composition changed outside
+//!
+void CsWinTrain::compositionChanged()
+  {
+  CsWinScoreView::compositionChanged();
+  mOffsetX = mOffsetY = mSizeY = 0;
+  update();
+  }

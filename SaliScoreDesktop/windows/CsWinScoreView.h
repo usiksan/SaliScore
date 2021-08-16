@@ -20,6 +20,11 @@ class CsWinScoreView : public QWidget
   public:
     explicit CsWinScoreView( CsComposition &comp, CsPlay &play, QWidget *parent = nullptr);
 
+    //!
+    //! \brief compositionChanged Called when composition changed outside
+    //!
+    virtual void compositionChanged();
+
     virtual void activate();
 
     virtual void paint() = 0;

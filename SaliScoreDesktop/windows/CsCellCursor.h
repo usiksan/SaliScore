@@ -29,6 +29,8 @@ class CsCellCursor : public CsCursor
   public:
     CsCellCursor( CsComposition &comp );
 
+    void moveTop();
+
     void move( CsCellCursorOperation oper, bool doSelect = false, int n = 1 );
 
   private:

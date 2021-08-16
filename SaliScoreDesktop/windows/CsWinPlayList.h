@@ -1,14 +1,19 @@
 #ifndef CSWINPLAYLIST_H
 #define CSWINPLAYLIST_H
 
-#include <QWidget>
+#include "score/CsPlayList.h"
 
-class CsWinPlayList : public QWidget
+#include <QTreeWidget>
+
+class CsWinPlayList : public QTreeWidget
   {
     Q_OBJECT
-  public:
-    explicit CsWinPlayList(QWidget *parent = nullptr);
 
+    CsPlayList &mPlayList;
+  public:
+    explicit CsWinPlayList( CsPlayList &pl, QWidget *parent = nullptr);
+
+    void updateContent();
   signals:
 
   };

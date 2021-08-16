@@ -38,15 +38,17 @@ class CsWinEditor : public CsWinScoreView
     // CsWinScoreView interface
   public:
     virtual void setupWinScroll(CsWinScoreMode *winScroll) override;
-
-    // CsWinScoreView interface
-  public:
     virtual void upWheelEvent(QWheelEvent *event) override;
     virtual void upMousePressEvent(QMouseEvent *event) override;
     virtual void upMouseReleaseEvent(QMouseEvent *event) override;
     virtual void upMouseMoveEvent(QMouseEvent *event) override;
     virtual void upKeyPressEvent(QKeyEvent *event) override;
     virtual void upKeyReleaseEvent(QKeyEvent *event) override;
+
+    //!
+    //! \brief compositionChanged Called when composition changed outside
+    //!
+    virtual void compositionChanged() override;
   };
 
 #endif // CSWINEDITOR_H

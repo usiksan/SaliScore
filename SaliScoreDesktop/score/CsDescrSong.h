@@ -23,6 +23,8 @@ class CsDescrSong
 
     QString directory() const { return QString::number(mAuthorSongId,32).right(1); }
 
+    QString path() const;
+
     QString author() const { return mAuthor; }
     void    authorSet( const QString &auth );
 
@@ -42,13 +44,16 @@ class CsDescrSong
     void    isMelodyPresentSet( bool mp ) { mMelodyPresent = mp; }
 
 
+    virtual void clear();
 
     //=================================================================
     //         Settings JSON io
 
-    virtual void jsonWrite( CsJsonWriter &js ) const;
+    virtual void   jsonWrite( CsJsonWriter &js ) const;
 
-    virtual void jsonRead( CsJsonReader &js );
+    virtual void   jsonRead( CsJsonReader &js );
+
+    static QString homeDir( const QString &subDir );
   };
 
 using CsDescrSongList = QList<CsDescrSong>;

@@ -11,6 +11,8 @@ class CsCompositionHeader : public CsDescrSong
   public:
     CsCompositionHeader();
 
+    virtual void clear() override;
+
     //=================================================================
     //         Settings JSON io
 

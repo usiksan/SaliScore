@@ -21,6 +21,14 @@ class CsPlayList
 
     const CsPlayPartList &partList() const { return mPartList; }
 
+    int                   partCount() const { return mPartList.count(); }
+
+    QString               partTitle( int i ) const { return mPartList.at(i).title(); }
+
+    int                   partCompositionCount( int i ) const { return mPartList.at(i).compositionCount(); }
+
+    QString               partCompositionId( int partIndex, int compositionIndex ) const { return mPartList.at(partIndex).compositionId(compositionIndex); }
+
     void                  partAppend( const QString &partName );
 
     void                  partRename( const QString &prevName, const QString &newName );
@@ -35,9 +43,9 @@ class CsPlayList
 
 
 
-    void jsonWrite( SvJsonWriter &writer ) const;
+    void                  jsonWrite(CsJsonWriter &js ) const;
 
-    void jsonRead( SvJsonReaderExtInt &reader );
+    void                  jsonRead( CsJsonReader &js );
   };
 
 #endif // CSPLAYLIST_H

@@ -12,6 +12,14 @@ CsCellCursor::CsCellCursor(CsComposition &comp) :
   }
 
 
+void CsCellCursor::moveTop()
+  {
+  mClass = cccTitle;
+  mPosition = 0;
+  mLineIndex = -1;
+  }
+
+
 
 
 

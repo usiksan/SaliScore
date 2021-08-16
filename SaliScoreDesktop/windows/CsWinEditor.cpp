@@ -200,3 +200,21 @@ void CsWinEditor::upKeyPressEvent(QKeyEvent *event)
 void CsWinEditor::upKeyReleaseEvent(QKeyEvent *event)
   {
   }
+
+
+
+
+void CsWinEditor::compositionChanged()
+  {
+  CsWinScoreView::compositionChanged();
+  mReferenceList.clear();
+  mOffsetX = mOffsetY = mSizeY = 0;
+
+  mCellCursor.moveTop();
+
+  if( mEditor != nullptr ) {
+    delete mEditor;
+    mEditor = nullptr;
+    }
+  update();
+  }
