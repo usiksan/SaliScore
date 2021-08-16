@@ -11,6 +11,12 @@ class CsCompositionHeader : public CsDescrSong
   public:
     CsCompositionHeader();
 
+    //=================================================================
+    //         Settings JSON io
+
+    virtual void jsonWrite( CsJsonWriter &js ) const override;
+
+    virtual void jsonRead( CsJsonReader &js ) override;
   };
 
 #endif // CSCOMPOSITIONHEADER_H

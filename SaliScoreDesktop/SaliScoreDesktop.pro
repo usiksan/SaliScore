@@ -27,14 +27,12 @@ SOURCES += \
     score/CsCompositionSettings.cpp \
     score/CsCursor.cpp \
     score/CsDefinition.cpp \
-    score/CsDescrSinger.cpp \
     score/CsDescrSong.cpp \
     score/CsLine.cpp \
     score/CsLyric.cpp \
     score/CsNote.cpp \
     score/CsNoteKit.cpp \
     score/CsNoteLine.cpp \
-    score/CsPlayComposition.cpp \
     score/CsPlayList.cpp \
     score/CsPlayPart.cpp \
     score/CsPosition.cpp \
@@ -93,7 +91,6 @@ HEADERS += \
     score/CsCompositionSettings.h \
     score/CsCursor.h \
     score/CsDefinition.h \
-    score/CsDescrSinger.h \
     score/CsDescrSong.h \
     score/CsJsonIO.h \
     score/CsLine.h \
@@ -102,7 +99,6 @@ HEADERS += \
     score/CsNoteChord.h \
     score/CsNoteKit.h \
     score/CsNoteLine.h \
-    score/CsPlayComposition.h \
     score/CsPlayList.h \
     score/CsPlayPart.h \
     score/CsPosition.h \

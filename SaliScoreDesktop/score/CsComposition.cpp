@@ -1,6 +1,9 @@
 #include "CsComposition.h"
+#include "CsCompositionSettings.h"
 
 #include "../SvJson/SvJsonIO.h"
+
+#include <QSettings>
 
 CsComposition::CsComposition()
   {
@@ -11,9 +14,19 @@ CsComposition::CsComposition()
 
 
 
+
+void CsComposition::makeCopy()
+  {
+  QSettings s;
+  mHeader.authorSet( s.value( QStringLiteral(KEY_AUTHOR) ).toString() );
+  dirtySet();
+  }
+
+
+
 void CsComposition::remarkAppend(const QString &lang, const QString &descr)
   {
-  mDirty = true;
+  dirtySet();
   //Test if lang already exist
   int index = remarkIndex(lang);
   if( index < 0 ) {
@@ -36,6 +49,7 @@ void CsComposition::remarkAppend(const QString &lang, const QString &descr)
 
 void CsComposition::remarkRename(int index, const QString &lang)
   {
+  dirtySet();
   //Get previous lang
   QString prevLang = mRemarkList.at(index).mName;
   if( prevLang == lang ) return;
@@ -52,6 +66,7 @@ void CsComposition::remarkRename(int index, const QString &lang)
 
 void CsComposition::remarkRemove(int index)
   {
+  dirtySet();
   //Get lang
   QString lang = mRemarkList.at(index).mName;
   //Scan all lines and rename remark
@@ -68,7 +83,7 @@ void CsComposition::remarkRemove(int index)
 
 void CsComposition::chordAppend(const QString &part, const QString &descr)
   {
-  mDirty = true;
+  dirtySet();
   //Test if part already exist
   int index = chordIndex(part);
   if( index < 0 ) {
@@ -91,6 +106,7 @@ void CsComposition::chordAppend(const QString &part, const QString &descr)
 
 void CsComposition::chordRename(int index, const QString &part)
   {
+  dirtySet();
   //Get previous part
   QString prevPart = mChordList.at(index).mName;
   if( prevPart == part ) return;
@@ -107,6 +123,7 @@ void CsComposition::chordRename(int index, const QString &part)
 
 void CsComposition::chordRemove(int index)
   {
+  dirtySet();
   //Get part
   QString part = mChordList.at(index).mName;
   //Scan all lines and remove chord
@@ -123,7 +140,7 @@ void CsComposition::chordRemove(int index)
 
 void CsComposition::noteAppend(const QString &part, const QString &descr, int clef)
   {
-  mDirty = true;
+  dirtySet();
   //Test if part already exist
   int index = noteIndex(part);
   if( index < 0 ) {
@@ -150,6 +167,7 @@ void CsComposition::noteAppend(const QString &part, const QString &descr, int cl
 
 void CsComposition::noteRename(int index, const QString &part)
   {
+  dirtySet();
   //Get previous part
   QString prevPart = mNoteList.at(index).mName;
   if( prevPart == part ) return;
@@ -166,6 +184,7 @@ void CsComposition::noteRename(int index, const QString &part)
 
 void CsComposition::noteRemove(int index)
   {
+  dirtySet();
   //Get part
   QString part = mNoteList.at(index).mName;
   //Scan all lines and remove note
@@ -182,7 +201,7 @@ void CsComposition::noteRemove(int index)
 
 void CsComposition::translationAppend(const QString &lang, const QString &descr)
   {
-  mDirty = true;
+  dirtySet();
   //Test if lang already exist
   int index = translationIndex(lang);
   if( index < 0 ) {
@@ -204,6 +223,7 @@ void CsComposition::translationAppend(const QString &lang, const QString &descr)
 
 void CsComposition::translationRename(int index, const QString &lang)
   {
+  dirtySet();
   //Get previous lang
   QString prevLang = mTranslationList.at(index).mName;
   if( prevLang == lang ) return;
@@ -220,6 +240,7 @@ void CsComposition::translationRename(int index, const QString &lang)
 
 void CsComposition::translationRemove(int index)
   {
+  dirtySet();
   //Get lang
   QString lang = mTranslationList.at(index).mName;
   //Scan all lines and rename translation
@@ -236,7 +257,7 @@ void CsComposition::translationRemove(int index)
 
 int CsComposition::lineInsert(int index, bool rem)
   {
-  mDirty = true;
+  dirtySet();
   //Create new line
   CsLine line;
   if( rem ) {
@@ -281,8 +302,7 @@ int CsComposition::lineInsert(int index, bool rem)
 
 void CsComposition::jsonWrite(CsJsonWriter &js) const
   {
-  js.jsonString( "CompTitle", mTitle );
-  js.jsonString( "CompSinger", mSinger );
+  mHeader.jsonWrite( js );
   js.jsonString( "Composer", mComposer );
   js.jsonString( "CompLyricist", mLyricist );
   js.jsonList<CsLine>( "LineList", mLineList );
@@ -299,8 +319,7 @@ void CsComposition::jsonWrite(CsJsonWriter &js) const
 
 void CsComposition::jsonRead(CsJsonReader &js)
   {
-  js.jsonString( "CompTitle", mTitle );
-  js.jsonString( "CompSinger", mSinger );
+  mHeader.jsonRead( js );
   js.jsonString( "Composer", mComposer );
   js.jsonString( "CompLyricist", mLyricist );
   js.jsonList<CsLine>( "LineList", mLineList );
@@ -312,8 +331,24 @@ void CsComposition::jsonRead(CsJsonReader &js)
 
   js.jsonMapInt( "ClefMap", mClefMap );
 
-  mDirty = false;
+  mStateDirty = mDirty = false;
   }
+
+
+
+void CsComposition::settingsRead(const CsCompositionSettings &settings)
+  {
+  //Setup settings
+  mHeader = settings;
+
+  //Setup visibility lists
+  defListUpdate( mRemarkList, settings.remarkList() );
+  defListUpdate( mChordList,  settings.chordList() );
+  defListUpdate( mNoteList,   settings.noteList() );
+  defListUpdate( mTranslationList, settings.translationList() );
+  }
+
+
 
 
 
@@ -372,5 +407,23 @@ int CsComposition::defListIndex(const CsDefList &list, const QString &key)
 
   //Key not found in list
   return -1;
+  }
+
+
+
+
+void CsComposition::defListUpdate(CsDefList &list, const QStringList &visibleList)
+  {
+  //Make all parts invisible
+  for( int i = 0; i < list.count(); i++ )
+    list[i].mVisible = false;
+
+  //For each item from visibleList we find item in list and change it to visible
+  for( const auto &key : visibleList ) {
+    //Find index for key
+    int index = defListIndex( list, key );
+    if( index >= 0 )
+      list[index].mVisible = true;
+    }
   }
 

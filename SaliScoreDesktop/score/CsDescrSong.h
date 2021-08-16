@@ -46,9 +46,9 @@ class CsDescrSong
     //=================================================================
     //         Settings JSON io
 
-    void    jsonWrite( CsJsonWriter &js ) const;
+    virtual void jsonWrite( CsJsonWriter &js ) const;
 
-    void    jsonRead( CsJsonReader &js );
+    virtual void jsonRead( CsJsonReader &js );
   };
 
 using CsDescrSongList = QList<CsDescrSong>;

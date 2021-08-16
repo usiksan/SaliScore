@@ -24,6 +24,8 @@ Description
 
 using CsClefMap = QMap<QString,int>;
 
+class CsCompositionSettings;
+
 class CsComposition
   {
     CsCompositionHeader mHeader;
@@ -50,23 +52,41 @@ class CsComposition
 
     bool        isDirty() const { return mDirty; }
 
-    void        dirtySet();
-
     //=================================================================
     //         Header part
     QString     title() const { return mHeader.name(); }
-    void        titleSet( const QString &tit ) { mHeader.nameSet( tit ); mStateDirty = mDirty = true; }
+    void        titleSet( const QString &tit ) { mHeader.nameSet( tit ); dirtySet(); }
 
     QString     singer() const { return mHeader.singer(); }
-    void        singerSet( const QString &sing ) { mHeader.singerSet( sing ); mStateDirty = mDirty = true; }
+    void        singerSet( const QString &sing ) { mHeader.singerSet( sing ); dirtySet(); }
 
     QString     composer() const { return mComposer; }
-    void        composerSet( const QString &compos ) { mComposer = compos; mDirty = true; }
+    void        composerSet( const QString &compos ) { mComposer = compos; dirtySet(); }
 
     QString     lyricist() const { return mLyricist; }
-    void        lyricistSet( const QString &lyr ) { mLyricist = lyr; mDirty = true; }
+    void        lyricistSet( const QString &lyr ) { mLyricist = lyr; dirtySet(); }
 
     QString     author() const { return mHeader.author(); }
+
+    QString     voice() const { return mHeader.mSettings.voice(); }
+    void        voiceSet( const QString &voi ) { mHeader.mSettings.voiceSet( voi ); stateDirtySet(); }
+
+    QString     voiceDual() const { return mHeader.mSettings.voiceDual(); }
+    void        voiceDualSet( const QString &voi ) { mHeader.mSettings.voiceDualSet( voi ); stateDirtySet(); }
+
+    QString     voiceRight() const { return mHeader.mSettings.voiceRight(); }
+    void        voiceRightSet( const QString &voi ) { mHeader.mSettings.voiceRightSet( voi ); stateDirtySet(); }
+
+    QString     style() const { return mHeader.mSettings.style(); }
+    void        styleSet( const QString &stl ) { mHeader.mSettings.styleSet( stl ); stateDirtySet(); }
+
+    QString     tempo() const { return mHeader.mSettings.tempo(); }
+    void        tempoSet( const QString &tmp ) { mHeader.mSettings.tempoSet( tmp ); stateDirtySet(); }
+
+    int         version() const { return mHeader.version(); }
+    void        versionUpdate() { mHeader.versionUpdate(); dirtySet(); }
+
+    void        makeCopy();
 
     //=================================================================
     //         Remark part
@@ -87,11 +107,11 @@ class CsComposition
 
     void        remarkRemove( int index );
 
-    bool        remarkToggle( int index ) { return mRemarkList[index].visibleToggle(); }
+    bool        remarkToggle( int index ) { stateDirtySet(); return mRemarkList[index].visibleToggle(); }
 
     auto        remarkGet( int line, const QString &lang ) const { return mLineList.at(line).remarkGet(lang); }
 
-    void        remarkSet( int line, const QString &lang, const QString &rem ) { mDirty = true; mLineList[line].remarkSet(lang,rem); }
+    void        remarkSet( int line, const QString &lang, const QString &rem ) { mLineList[line].remarkSet(lang,rem); dirtySet(); }
 
 
     //=================================================================
@@ -113,11 +133,11 @@ class CsComposition
 
     void        chordRemove( int index );
 
-    bool        chordToggle( int index ) { return mChordList[index].visibleToggle(); }
+    bool        chordToggle( int index ) { stateDirtySet(); return mChordList[index].visibleToggle(); }
 
     auto        chordListGet( int line, const QString &part ) const { return mLineList.at(line).chordListGet(part); }
 
-    void        chordListSet( int line, const QString &part, const CsChordList &list ) { mDirty = true; mLineList[line].chordListSet(part,list); }
+    void        chordListSet( int line, const QString &part, const CsChordList &list ) { mLineList[line].chordListSet(part,list); dirtySet(); }
 
 
 
@@ -136,7 +156,7 @@ class CsComposition
 
     int         noteClefGet( const QString &part ) const { return mClefMap.value(part); }
 
-    void        noteClefSet( const QString &part, int clef ) { mDirty = true; mClefMap.insert( part, clef ); }
+    void        noteClefSet( const QString &part, int clef ) { mClefMap.insert( part, clef ); dirtySet(); }
 
     int         noteIndex( const QString &part ) const { return defListIndex( mNoteList, part ); }
 
@@ -146,18 +166,18 @@ class CsComposition
 
     void        noteRemove( int index );
 
-    bool        noteToggle( int index ) { return mNoteList[index].visibleToggle(); }
+    bool        noteToggle( int index ) { stateDirtySet(); return mNoteList[index].visibleToggle(); }
 
     auto        noteListGet( int line, const QString &part ) const { return mLineList.at(line).noteListGet(part); }
 
-    void        noteListSet( int line, const QString &part, const CsNoteList &list ) { mDirty = true; mLineList[line].noteListSet(part,list); }
+    void        noteListSet( int line, const QString &part, const CsNoteList &list ) { mLineList[line].noteListSet(part,list); dirtySet(); }
 
 
     //=================================================================
     //         Note part
     auto        lyricGet( int line ) const { return mLineList.at(line).lyricGet(); }
 
-    void        lyricSet( int line, const CsLyricList &list ) { mDirty = true; mLineList[line].lyricSet(list); }
+    void        lyricSet( int line, const CsLyricList &list ) { mLineList[line].lyricSet(list); dirtySet(); }
 
 
     //=================================================================
@@ -179,11 +199,11 @@ class CsComposition
 
     void        translationRemove( int index );
 
-    bool        translationToggle( int index ) { return mTranslationList[index].visibleToggle(); }
+    bool        translationToggle( int index ) { stateDirtySet(); return mTranslationList[index].visibleToggle(); }
 
     auto        translationGet( int line, const QString &lang ) const { return mLineList.at(line).translationGet(lang); }
 
-    void        translationSet( int line, const QString &lang, const QString &tran ) { mDirty = true; mLineList[line].translationSet( lang, tran ); }
+    void        translationSet( int line, const QString &lang, const QString &tran ) { mLineList[line].translationSet( lang, tran ); dirtySet(); }
 
 
     //=================================================================
@@ -226,16 +246,13 @@ class CsComposition
 
     void        dirtyReset() { mDirty = false; }
 
-    void        dirtySet() { mDirty = true; }
+    void        dirtySet() { mStateDirty = mDirty = true; }
 
+    void        stateDirtyReset() { mStateDirty = false; }
 
+    void        stateDirtySet() { mStateDirty = true; }
 
-    //=================================================================
-    //         Settings JSON io
-
-    void        settingsWrite( CsJsonWriter &js ) const;
-
-    void        settingsRead( CsJsonReader &js );
+    void        settingsRead( const CsCompositionSettings &settings );
 
   private:
     static QStringList visibleList( const CsDefList &src );
@@ -245,6 +262,8 @@ class CsComposition
     static QString     nextVisible( const CsDefList &list, const QString &key );
 
     static int         defListIndex( const CsDefList &list, const QString &key );
+
+    static void        defListUpdate( CsDefList &list, const QStringList &visibleList );
   };
 
 #endif // CSCOMPOSITION_H

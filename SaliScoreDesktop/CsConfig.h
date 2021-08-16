@@ -124,6 +124,8 @@ History
 #define KEY_EDITOR_SETTINGS          "EditorSettings"
 #define KEY_KARAOKE_SETTINGS         "KaraokeSettings"
 #define KEY_KARAOKE_ANIMATION        "KaraokeAnimation"
+#define KEY_AUTHOR                   "Author"
+#define KEY_REMOTE_SYNC              "RemoteSync"
 
 //#define SDK_PREVIOUS_FILES           "PreviousFiles"
 //#define SDK_GLOBAL_AUTHOR            "Author global id"

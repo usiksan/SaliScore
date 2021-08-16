@@ -27,10 +27,23 @@ void CsDescrSong::versionUpdate()
 
 void CsDescrSong::jsonWrite(CsJsonWriter &js) const
   {
-
+  js.jsonString( "Author", mAuthor );
+  js.jsonString( "Singer", mSinger );
+  js.jsonString( "Name",   mName );
+  js.jsonInt( "AuthorSongId", mAuthorSongId );
+  js.jsonInt( "Version",      mVersion );
+  js.jsonBool( "IsPublic",    mIsPublic );
+  js.jsonBool( "MelodyPresent", mMelodyPresent );
   }
+
 
 void CsDescrSong::jsonRead(CsJsonReader &js)
   {
-
+  js.jsonString( "Author", mAuthor );
+  js.jsonString( "Singer", mSinger );
+  js.jsonString( "Name",   mName );
+  js.jsonInt( "AuthorSongId", mAuthorSongId );
+  js.jsonInt( "Version",      mVersion );
+  js.jsonBool( "IsPublic",    mIsPublic );
+  js.jsonBool( "MelodyPresent", mMelodyPresent );
   }

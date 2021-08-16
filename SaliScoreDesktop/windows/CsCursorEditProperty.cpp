@@ -85,10 +85,6 @@ void CsCursorEditProperty::apply()
       mComposition.styleSet( mString );
       break;
 
-    case cccAuthor :
-      mComposition.authorSet( mString );
-      break;
-
     case cccTempo :
       mComposition.tempoSet( mString );
       break;

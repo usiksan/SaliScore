@@ -4,3 +4,8 @@ CsPlayList::CsPlayList()
   {
 
   }
+
+void CsPlayList::jsonWrite(SvJsonWriter &writer) const
+  {
+
+  }

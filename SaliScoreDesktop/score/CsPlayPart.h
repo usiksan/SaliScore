@@ -1,7 +1,7 @@
 #ifndef CSPLAYPART_H
 #define CSPLAYPART_H
 
-#include "SvJson/SvJsonIO.h"
+#include "CsJsonIO.h"
 
 #include <QString>
 #include <QList>
@@ -10,13 +10,13 @@
 class CsPlayPart
   {
     QString        mTitle;
-    QList<QString> mCompositionList;
+    QList<QString> mCompositionIdList;
   public:
     CsPlayPart();
 
-    void jsonWrite( SvJsonWriter &writer ) const;
+    void jsonWrite( CsJsonWriter &writer ) const;
 
-    void jsonRead( SvJsonReaderExtInt &reader );
+    void jsonRead( CsJsonReader &reader );
 
   };
 
