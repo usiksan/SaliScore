@@ -61,6 +61,7 @@ class CsWinMain : public QMainWindow
     CsPlay           mPlayer;
     CsPlayList       mPlayList;
     bool             mDefferedReset;
+    bool             mNotSaved;
     QTimer           mUpdateTimer;
   public:
     CsWinMain( CsMidiSequencer *midiSequencer, QWidget *parent = nullptr);
@@ -98,6 +99,7 @@ class CsWinMain : public QMainWindow
     virtual void closeEvent( QCloseEvent *ev ) override;
 
   private:
+    void         activateComposition( int partIndex, int compositionIndex );
 
     //!
     //! \brief buildPlayList Builds play list view widget

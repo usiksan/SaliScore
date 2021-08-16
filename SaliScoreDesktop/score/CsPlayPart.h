@@ -5,15 +5,21 @@
 
 #include <QString>
 #include <QList>
+#include <QTreeWidgetItem>
 
+using QTreeWidgetItemPtr = QTreeWidgetItem*;
+
+using CsTreeItemList = QList<QTreeWidgetItemPtr>;
 
 class CsPlayPart
   {
-    QString     mTitle;
-    QStringList mCompositionIdList;
+    QString            mTitle;
+    QStringList        mCompositionIdList;
   public:
+    QTreeWidgetItemPtr mPartItem;
+    CsTreeItemList     mTreeItemList;
+
     CsPlayPart();
-    CsPlayPart( const QString &tit );
 
     QString     title() const { return mTitle; }
 
@@ -25,9 +31,9 @@ class CsPlayPart
 
     QString     compositionId( int index ) const { return mCompositionIdList.at(index); }
 
-    void        compositionAppend( const QString &id ) { mCompositionIdList.append( id ); }
+    bool        compositionAppend( const QString &id );
 
-    void        compositionRemove( const QString &id ) { mCompositionIdList.removeAll( id ); }
+    //void        compositionRemove( const QString &id ) { mCompositionIdList.removeAll( id ); }
 
     //void        compositionRename( int index, const QString &id ) { mCompositionIdList[index] = id; }
 

@@ -5,6 +5,8 @@
 #include "CsCompositionSettings.h"
 
 #include <QMap>
+#include <QTreeWidgetItem>
+#include <functional>
 
 using CsCompositionMap = QMap<QString,CsCompositionSettings>;
 
@@ -19,27 +21,46 @@ class CsPlayList
   public:
     CsPlayList();
 
-    const CsPlayPartList &partList() const { return mPartList; }
+    bool             dirty() const { return mDirty; }
 
-    int                   partCount() const { return mPartList.count(); }
+    void             dirtyReset();
 
-    QString               partTitle( int i ) const { return mPartList.at(i).title(); }
+    int              version() const { return mVersion; }
 
-    int                   partCompositionCount( int i ) const { return mPartList.at(i).compositionCount(); }
+    int              partCount() const { return mPartList.count(); }
 
-    QString               partCompositionId( int partIndex, int compositionIndex ) const { return mPartList.at(partIndex).compositionId(compositionIndex); }
+    QString          partTitle( int i ) const { return mPartList.at(i).title(); }
 
-    void                  partAppend( const QString &partName );
+    void             partTitleSet( int i, const QString &tit );
 
-    void                  partRename( const QString &prevName, const QString &newName );
+    QTreeWidgetItem *partItem( int i ) const { return mPartList.at(i).mPartItem; }
 
-    void                  partRemove( const QString &partName );
+    void             partItemSet( int i, QTreeWidgetItem *item ) { mPartList[i].mPartItem = item; }
+
+    bool             partAppend( const QString &partName );
+
+    int              partCompositionCount( int i ) const { return mPartList.at(i).compositionCount(); }
+
+    QString          partCompositionId( int partIndex, int compositionIndex ) const { return mPartList.at(partIndex).compositionId(compositionIndex); }
+
+    QTreeWidgetItem *partCompositionItem( int partIndex, int compositionIndex ) const { return mPartList.at(partIndex).mTreeItemList.at(compositionIndex); }
+
+    void             partCompositionItemSet( int partIndex, int compositionIndex, QTreeWidgetItem *item );
+
+    bool             partCompositionAppend( int partIndex, const QString &id );
+
+//    void             forEachPart( std::function<void ( *)> fun1 )
+
+
+    //void             partRename( const QString &prevName, const QString &newName );
+
+    //void             partRemove( const QString &partName );
 
 
 
     CsCompositionSettings composition( const QString &id ) const { return mCompositionsMap.value(id); }
 
-    void                  compositionSet( CsComposition &comp );
+    void                  compositionSet( const CsComposition &comp );
 
 
 

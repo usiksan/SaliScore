@@ -26,7 +26,8 @@
 CsWinMain::CsWinMain(CsMidiSequencer *midiSequencer, QWidget *parent) :
   QMainWindow(parent),
   mMidiSequencer(midiSequencer),
-  mPlayer( mComposition )
+  mPlayer( mComposition ),
+  mNotSaved(false)
   {
 
   //At left side - play list
@@ -107,6 +108,7 @@ CsWinMain::~CsWinMain()
 void CsWinMain::cmFileNew()
   {
   if( canCloseEditor() ) {
+    mNotSaved = true;
     mComposition.clear();
     mWinEditor->view()->compositionChanged();
     mWinTrain->view()->compositionChanged();
@@ -132,6 +134,7 @@ void CsWinMain::cmFileImport()
     bool ok = false;
     CsComposition composition = mImportManager.readFile( fname, ok );
     if( ok ) {
+      mNotSaved = true;
       mComposition = composition;
       mWinEditor->view()->compositionChanged();
       mWinTrain->view()->compositionChanged();
@@ -152,7 +155,7 @@ void CsWinMain::cmFileSave()
     mComposition.versionUpdate();
 
   QFile file( mComposition.header().path() );
-  if( file.open(QIODevice::WriteOnly) ) {
+  if( (mComposition.isDirty() || mNotSaved) && file.open(QIODevice::WriteOnly) ) {
     //Create writer and use it to write composition contents to json object
     CsJsonWriter js{};
     mComposition.jsonWrite( js );
@@ -166,10 +169,14 @@ void CsWinMain::cmFileSave()
 
     //Write completed, reset dirty
     mComposition.dirtyReset();
+    mNotSaved = false;
     }
 
-  mPlayList.compositionSet( mComposition );
+  mWPlayList->settingsSave( mComposition );
+  mComposition.stateDirtyReset();
   }
+
+
 
 void CsWinMain::cmFileCopy()
   {
@@ -356,6 +363,7 @@ void CsWinMain::closeEvent(QCloseEvent *ev)
   {
   //If can close editor
   if( canCloseEditor() ) {
+    playListSave();
     //Save settings: main window maximisation and splitter position
     QSettings s;
     s.setValue( QStringLiteral(KEY_WMAIN_MAX), isMaximized() );
@@ -364,6 +372,29 @@ void CsWinMain::closeEvent(QCloseEvent *ev)
     ev->accept();
     }
   else ev->ignore();
+  }
+
+
+
+
+
+void CsWinMain::activateComposition(int partIndex, int compositionIndex)
+  {
+  if( canCloseEditor() ) {
+    QString id = mPlayList.partCompositionId( partIndex, compositionIndex );
+    CsCompositionSettings s = mPlayList.composition( id );
+    bool ok = false;
+    CsComposition composition = mImportManager.readFile( s.path(), ok );
+    if( ok ) {
+      mNotSaved = false;
+      mComposition = composition;
+      mComposition.settingsRead( s );
+      mWinEditor->view()->compositionChanged();
+      mWinTrain->view()->compositionChanged();
+      mWinKaraoke->view()->compositionChanged();
+      }
+
+    }
   }
 
 
@@ -383,6 +414,16 @@ QWidget *CsWinMain::buildPlayList()
   QVBoxLayout *box = new QVBoxLayout();
   box->addWidget( new QLabel(tr("Play List")) );
   box->addWidget( mWPlayList = new CsWinPlayList( mPlayList ), 100 );
+
+  connect( mWPlayList, &CsWinPlayList::currentItemChanged, this, [this] ( QTreeWidgetItem *current, QTreeWidgetItem *previous ) {
+    Q_UNUSED(previous)
+    int partIndex;
+    int compositionIndex;
+    if( mWPlayList->itemPosition( current, partIndex, compositionIndex ) ) {
+      //Make activate composition with compositionIndex from part with partIndex
+      activateComposition( partIndex, compositionIndex );
+      }
+    });
 
   QToolBar *bar = new QToolBar();
   bar->addAction( actionPlMinus );
@@ -450,17 +491,32 @@ void CsWinMain::playListLoad()
   if( file.exists() ) {
     if( file.open( QIODevice::ReadOnly ) ) {
       int version = 0;
-      SvJsonReaderExtInt js( QJsonDocument::fromJson( file.readAll() ).object(), &version );
+      QJsonObject obj = QJsonDocument::fromJson( file.readAll() ).object();
+      SvJsonReaderExtInt js( obj, &version );
       mPlayList.jsonRead( js );
       }
     }
   else {
     //Create default play list
-    mPlayList.partAppend( tr("Examples") );
     mPlayList.partAppend( tr("My songs") );
+    mPlayList.partAppend( tr("Examples") );
     }
 
-  mWPlayList->updateContent();
+  mWPlayList->buildContent();
+  }
+
+
+
+
+void CsWinMain::playListSave()
+  {
+  QFile file( CsDescrSong::homeDir( QString{} ) + "playList.dat" );
+  if( mPlayList.dirty() && file.open( QIODevice::WriteOnly ) ) {
+    mPlayList.dirtyReset();
+    SvJsonWriter js;
+    mPlayList.jsonWrite( js );
+    file.write( QJsonDocument( js.object() ).toJson() );
+    }
   }
 
 
@@ -471,12 +527,12 @@ void CsWinMain::createMenu()
   menuFile = new QMenu( tr("File") );
 
   actionFileNew      = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileNew.png")), tr("New file"), this, &CsWinMain::cmFileNew );
-  actionFileImport   = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileImport.png")), tr("Open file ..."), this, &CsWinMain::cmFileImport );
-  actionFileLoad     = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileDownload.png")), tr("Load from public cloud..."), this, &CsWinMain::cmFileLoad );
+  actionFileImport   = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileOpen.png")), tr("Open file ..."), this, &CsWinMain::cmFileImport );
+  actionFileLoad     = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileCloud.png")), tr("Load from public cloud..."), this, &CsWinMain::cmFileLoad );
   menuFile->addSeparator();
   actionFileSave     = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileSave.png")), tr("Save score"), this, &CsWinMain::cmFileSave );
   actionFileCopy     = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileSaveAs.png")), tr("Make copy score"), this, &CsWinMain::cmFileCopy );
-  actionFilePublic   = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileUpload.png")), tr("Public to cloud"), this, &CsWinMain::cmFilePublic );
+  actionFilePublic   = menuFile->addAction( QIcon(QStringLiteral(":/pic/filePublic.png")), tr("Public to cloud"), this, &CsWinMain::cmFilePublic );
   actionFileExport   = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileExport.png")), tr("Export..."), this,  &CsWinMain::cmFileExport );
   menuFile->addSeparator();
   actionFilePrint    = menuFile->addAction( QIcon(QStringLiteral(":/pic/filePrint.png")), tr("Print..."), this, &CsWinMain::cmFilePrint );

@@ -23,6 +23,13 @@ class CsCompositionSettings : public CsCompositionHeader
     QStringList noteList() const { return mNoteList; }
 
     QStringList translationList() const { return mTranslationList; }
+
+    //=================================================================
+    //         Settings JSON io
+
+    virtual void jsonWrite( CsJsonWriter &js ) const override;
+
+    virtual void jsonRead( CsJsonReader &js ) override;
   };
 
 #endif // CSCOMPOSITIONSETTINGS_H

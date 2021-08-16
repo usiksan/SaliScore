@@ -39,5 +39,10 @@
         <file>pic/plList.png</file>
         <file>pic/plMinus.png</file>
         <file>pic/plPlus.png</file>
+        <file>pic/plPart.png</file>
+        <file>pic/plPrivate.png</file>
+        <file>pic/plPublic.png</file>
+        <file>pic/fileCloud.png</file>
+        <file>pic/filePublic.png</file>
     </qresource>
 </RCC>

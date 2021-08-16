@@ -319,6 +319,7 @@ class SvJsonReader
       {
       list.clear();
       QJsonArray ar = mObject.value( QString(key) ).toArray();
+      list.reserve( ar.count() );
       for( auto i = ar.constBegin(); i != ar.constEnd(); i++ ) {
         int v = i->toInt();
         list.append( v );
@@ -335,6 +336,7 @@ class SvJsonReader
       {
       list.clear();
       QJsonArray ar = mObject.value( QString(key) ).toArray();
+      list.reserve( ar.count() );
       for( auto i = ar.constBegin(); i != ar.constEnd(); i++ ) {
         QString v = i->toString();
         list.append( v );
@@ -354,6 +356,7 @@ class SvJsonReader
       {
       list.clear();
       QJsonArray ar = mObject.value( QString(key) ).toArray();
+      list.reserve( ar.count() );
       for( auto i = ar.constBegin(); i != ar.constEnd(); i++ ) {
         SvClass item;
         SvJsonReader js( i->toObject() );
@@ -377,6 +380,7 @@ class SvJsonReader
       qDeleteAll(list);
       list.clear();
       QJsonArray ar = mObject.value( QString(key) ).toArray();
+      list.reserve( ar.count() );
       for( auto i = ar.constBegin(); i != ar.constEnd(); i++ ) {
         SvJsonReader js( i->toObject() );
         SvClass *item = SvClass::build( js );

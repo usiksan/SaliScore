@@ -59,6 +59,9 @@ History
   08.08.2021 v0.27 Begin creating score edit concept
              v0.28 Append cell drawing with cursor support
   10.08.2021 v0.29 Append editing cursor. Begin creating text editing cursor. Append property title edit
+  16.08.2021 v0.30 Reformat all system: At now base of programm is playList. For compositions now only one
+                   window, which display active song from playList. Compositions are saved in special
+                   dataPlace. There compositions are manadged.
 */
 
 #ifndef CSCONFIG
@@ -72,7 +75,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             28
+#define CS_VERSION_MINOR             30
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"
