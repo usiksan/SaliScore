@@ -1,3 +1,19 @@
+/*
+Project "SaliScore Score music edit, view and tutorial programm"
+
+Author
+  Sibilev Alexander S.
+
+Web
+  www.saliLab.com
+  www.saliLab.ru
+
+Description
+  Chord line variations for different variants
+
+  All variations are organized into map, each element of them
+  represents single variant
+*/
 #ifndef CSCHORDKIT_H
 #define CSCHORDKIT_H
 
@@ -10,7 +26,7 @@ class CsPainter;
 
 class CsChordKit
   {
-    QMap<QString,CsChordLine> mChordMap;
+    QMap<QString,CsChordLine> mChordMap; //!< Chord line variations map
   public:
     CsChordKit();
 

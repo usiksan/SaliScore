@@ -1,3 +1,16 @@
+/*
+Project "SaliScore Score music edit, view and tutorial programm"
+
+Author
+  Sibilev Alexander S.
+
+Web
+  www.saliLab.com
+  www.saliLab.ru
+
+Description
+  Basic painter for score paint
+*/
 #ifndef CSPAINTER_H
 #define CSPAINTER_H
 
@@ -23,11 +36,11 @@ class CsPainter
     const CsPlay     &mPlayer;
 
     //Composition settings
-    QStringList       mVisibleRemark;
-    QStringList       mVisibleChord;
-    QStringList       mVisibleNote;
-    QStringList       mVisibleTranslate;
-    CsClefMap         mClefMap;
+    QStringList       mVisibleRemark;    //!< Visible parts of remark for each line of score
+    QStringList       mVisibleChord;     //!< Visible parts of chord for each line of score
+    QStringList       mVisibleNote;      //!< Visible parts of notes for each line of score
+    QStringList       mVisibleTranslate; //!< Visible parts of lyric translations for each line of score
+    CsClefMap         mClefMap;          //!< Clef classification for each visibile note line
 
     //Loadable view settings
     CsPainterSettings mSettings;
@@ -52,7 +65,7 @@ class CsPainter
     int               mStepPixNote;
     int               mStepPixLyric;
 
-    CsReferenceList   mReferenceList;
+    CsReferenceList   mReferenceList;    //!< Builded by painter reference list for mouse positioning on score
     int               mLineIndex;
     CsCellCursor     *mCellCursor;
 
@@ -133,7 +146,7 @@ class CsPainter
 
     void   drawCellProperty(int x, int y, const QString &value, int height, int propertyId );
 
-    void   drawCellText( int x, int y, const QString &value, int height, bool isCurrent );
+    int    drawCellText( int x, int y, const QString &value, int height, bool isCurrent );
 
     void   drawCellChord( int y , int tickCount, const QString &part );
 

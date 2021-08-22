@@ -97,6 +97,17 @@ void CsCellCursor::move(CsCellCursorOperation oper, bool doSelect, int n)
 
 
 
+void CsCellCursor::jump(int aclass, int aposition, int aline, const QString &apart)
+  {
+  mClass     = aclass;
+  mPosition  = aposition;
+  mLineIndex = aline;
+  mPartName  = apart;
+  }
+
+
+
+
 void CsCellCursor::setPosition(int pos, int step)
   {
   mPosition = qBound( 0, (pos / step) * step, mComposition.lineTickCount(mLineIndex) - step );

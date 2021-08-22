@@ -33,6 +33,12 @@ class CsCellCursor : public CsCursor
 
     void move( CsCellCursorOperation oper, bool doSelect = false, int n = 1 );
 
+    void jump( int aclass, int aposition, int aline, const QString &apart );
+
+    void jump( int aclass, int aposition, int aline ) { jump( aclass, aposition, aline, QString{} ); }
+
+    void jump( int aclass ) { jump( aclass, 0, -1 ); }
+
   private:
     void setPosition( int pos, int step );
 

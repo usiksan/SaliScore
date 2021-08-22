@@ -44,6 +44,10 @@ class CsReference
   public:
     CsReference( QRect r, int type, int line, const QString &part, int index );
 
+    CsReference( int x, int y, int width, int height, int type );
+
+    CsReference( int x, int y, int width, int height, int type, int line, const QString &part, int index );
+
     bool    isHit( QPoint p ) const { return mRect.contains(p); }
 
     int     type() const { return mType; }

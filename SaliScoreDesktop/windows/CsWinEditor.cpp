@@ -33,13 +33,18 @@ void CsWinEditor::paint()
   QPainter painter(this);
   CsPainterEditor cp( &painter, QStringLiteral(KEY_EDITOR_SETTINGS), mComposition, mPlayer, mOffsetX, size(), &mCellCursor, mEditor );
 
-  //Закрасить цветом фона
+  //Fill background
   painter.fillRect( QRect( QPoint(), size() ), cp.backgroundColor() );
 
   //Draw properties
   int posy = cp.drawTitleAndProperties( -mOffsetY, mComposition );
+
+  //Draw lines of score
   for( int i = 0; i < mComposition.lineCount(); i++ )
     posy = cp.drawLine( posy, i, mComposition.line(i), mAutoScroll );
+
+  //Update editor's reference list
+  mReferenceList = cp.referenceList();
 
   //Norm posy to vertical size
   posy += mOffsetY;
@@ -112,6 +117,43 @@ void CsWinEditor::upWheelEvent(QWheelEvent *event)
 
 void CsWinEditor::upMousePressEvent(QMouseEvent *event)
   {
+  if( mEditor != nullptr ) {
+    //If actived editor, then apply changes and finish editing
+    mEditor->apply();
+    delete mEditor;
+    mEditor = nullptr;
+    }
+
+  for( int i = mReferenceList.count() - 1; i >= 0; i-- )
+    if( mReferenceList.at(i).isHit( event->pos() ) ) {
+      const CsReference &ref( mReferenceList.at(i) );
+
+      switch( ref.type() ) {
+        case cccTitle :
+        case cccVoice :
+        case cccSinger :
+        case cccVoiceDual :
+        case cccComposer :
+        case cccVoiceRight :
+        case cccLyricist :
+        case cccStyle :
+        case cccAuthor :
+        case cccTempo :
+          mCellCursor.jump( ref.type() );
+          break;
+
+        case cccRemark :
+        case cccChord :
+        case cccNote :
+        case cccLyric :
+        case cccTranslation :
+          mCellCursor.jump( ref.type(), ref.index(), ref.line(), ref.part() );
+          break;
+
+        }
+      update();
+      return;
+      }
   }
 
 void CsWinEditor::upMouseReleaseEvent(QMouseEvent *event)

@@ -374,9 +374,12 @@ void CsPainter::drawRemark(const QMap<QString, QString> &remarkMap)
 
   //For each remark translations which visible we perform drawing
   for( const auto &lang : qAsConst(mVisibleRemark) ) {
-    if( mCellCursor != nullptr )
-      drawCellText( mLeftGap, mCurY, remarkMap.value(lang), mTranslationTextHeight,
+    if( mCellCursor != nullptr ) {
+      int width = drawCellText( mLeftGap, mCurY, remarkMap.value(lang), mTranslationTextHeight,
                     mCellCursor->isMatch( cccRemark, mLineIndex, lang ) );
+      mReferenceList.append( CsReference( mLeftGap, mCurY, width, mTranslationTextHeight,
+                                          cccRemark, mLineIndex, lang, 0 ) );
+      }
 
     mCurY += mRemarkTextHeight;
     if( isNotEditRemark( lang, mLeftGap, mCurY ) )
@@ -450,9 +453,12 @@ void CsPainter::drawTranslation(const QMap<QString, QString> &translationMap)
 
   //For each translations which visible we perform drawing
   for( const auto &lang : qAsConst(mVisibleTranslate) ) {
-    if( mCellCursor != nullptr )
-      drawCellText( mLeftGap, mCurY, translationMap.value(lang), mTranslationTextHeight,
+    if( mCellCursor != nullptr ) {
+      int width = drawCellText( mLeftGap, mCurY, translationMap.value(lang), mTranslationTextHeight,
                     mCellCursor->isMatch( cccTranslation, mLineIndex, lang ) );
+      mReferenceList.append( CsReference( mLeftGap, mCurY, width, mTranslationTextHeight,
+                                          cccTranslation, mLineIndex, lang, 0 ) );
+      }
 
     mCurY += mTranslationTextHeight;
     drawTranslationImpl( mLeftGap, mCurY, translationMap.value(lang) );
@@ -632,13 +638,15 @@ void CsPainter::drawCellProperty(int x, int y, const QString &value, int height,
   if( mCellCursor == nullptr )
     return;
 
-  drawCellText( x, y, value, height, mCellCursor->cellClass() == propertyId );
+  int width = drawCellText( x, y, value, height, mCellCursor->cellClass() == propertyId );
+
+  mReferenceList.append( CsReference( x, y, width, height, propertyId ) );
   }
 
 
 
 
-void CsPainter::drawCellText(int x, int y, const QString &value, int height, bool isCurrent)
+int CsPainter::drawCellText(int x, int y, const QString &value, int height, bool isCurrent)
   {
   //Calculate width of cell. Width is max of width of value string and 50 pixels
   int width = 50;
@@ -649,6 +657,8 @@ void CsPainter::drawCellText(int x, int y, const QString &value, int height, boo
     }
 
   drawCell( x, y, width, height, isCurrent );
+
+  return width;
   }
 
 
@@ -658,9 +668,12 @@ void CsPainter::drawCellChord(int y, int tickCount, const QString &part )
   if( mCellCursor == nullptr )
     return;
 
-  for( int tick = 0; tick < tickCount; tick += mStepChord )
-    drawCell( visualX( mLeftGap, tick ), y, mStepPixChord, mChordTextHeight,
+  for( int tick = 0; tick < tickCount; tick += mStepChord ) {
+    int x = visualX( mLeftGap, tick );
+    drawCell( x, y, mStepPixChord, mChordTextHeight,
               mCellCursor->isMatch( cccChord, tick, mLineIndex, part ) );
+    mReferenceList.append( CsReference( x, y, mStepPixChord, mChordTextHeight, cccChord, mLineIndex, part, tick ) );
+    }
   }
 
 
@@ -671,9 +684,12 @@ void CsPainter::drawCellNote(int y, int tickCount, const QString &part)
   if( mCellCursor == nullptr )
     return;
 
-  for( int tick = 0; tick < tickCount; tick += mStepNote )
-    drawCell( visualX( mLeftGap, tick ), y, mStepPixNote, 9 * mSettings.mScoreLineDistance,
+  for( int tick = 0; tick < tickCount; tick += mStepNote ) {
+    int x = visualX( mLeftGap, tick );
+    drawCell( x, y, mStepPixNote, 9 * mSettings.mScoreLineDistance,
               mCellCursor->isMatch( cccNote, tick, mLineIndex, part ) );
+    mReferenceList.append( CsReference( x, y, mStepPixNote, 9 * mSettings.mScoreLineDistance, cccNote, mLineIndex, part, tick ) );
+    }
   }
 
 
@@ -685,9 +701,12 @@ void CsPainter::drawCellLyric(int y, int tickCount)
   if( mCellCursor == nullptr )
     return;
 
-  for( int tick = 0; tick < tickCount; tick += mStepLyric )
-    drawCell( visualX( mLeftGap, tick ), y, mStepPixLyric, mLyricTextHeight,
+  for( int tick = 0; tick < tickCount; tick += mStepLyric ) {
+    int x = visualX( mLeftGap, tick );
+    drawCell( x, y, mStepPixLyric, mLyricTextHeight,
               mCellCursor->isMatch( cccLyric, tick, mLineIndex ) );
+    mReferenceList.append( CsReference( x, y, mStepPixLyric, mLyricTextHeight, cccLyric, mLineIndex, QString{}, tick ) );
+    }
   }
 
 
