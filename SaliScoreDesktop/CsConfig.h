@@ -128,6 +128,8 @@ History
 #define KEY_KARAOKE_SETTINGS         "KaraokeSettings"
 #define KEY_KARAOKE_ANIMATION        "KaraokeAnimation"
 #define KEY_AUTHOR                   "Author"
+#define KEY_PASSWORD                 "Password"
+#define KEY_WEB_REPO                 "WebRepo"
 #define KEY_REMOTE_SYNC              "RemoteSync"
 
 //#define SDK_PREVIOUS_FILES           "PreviousFiles"

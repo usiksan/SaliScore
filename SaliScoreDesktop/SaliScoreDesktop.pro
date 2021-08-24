@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -19,6 +19,7 @@ SOURCES += \
     import/saliScore/CsImportSaliScore.cpp \
     import/text/CsImportText.cpp \
     play/CsPlay.cpp \
+    repo/CsRepoClient.cpp \
     score/CsChord.cpp \
     score/CsChordKit.cpp \
     score/CsChordLine.cpp \
@@ -84,6 +85,7 @@ HEADERS += \
     import/saliScore/CsImportSaliScore.h \
     import/text/CsImportText.h \
     play/CsPlay.h \
+    repo/CsRepoClient.h \
     score/CsChord.h \
     score/CsChordKit.h \
     score/CsChordLine.h \
