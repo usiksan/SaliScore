@@ -158,16 +158,8 @@ void CsWinMain::cmFileSave()
 
   QFile file( mComposition.header().path() );
   if( (mComposition.isDirty() || mNotSaved) && file.open(QIODevice::WriteOnly) ) {
-    //Create writer and use it to write composition contents to json object
-    CsJsonWriter js{};
-    mComposition.jsonWrite( js );
-
-    //Append file type and version
-    js.jsonString( CS_BASE_TYPE_KEY, QStringLiteral(CS_BASE_TYPE) );
-    js.jsonInt( CS_BASE_VERSION_KEY, CS_BASE_VERSION );
-
     //Write contents to file
-    file.write( QJsonDocument(js.object()).toJson() );
+    file.write( mComposition.toByteArray() );
 
     //Write completed, reset dirty
     mComposition.dirtyReset();

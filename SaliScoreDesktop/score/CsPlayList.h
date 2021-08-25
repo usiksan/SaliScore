@@ -62,6 +62,8 @@ class CsPlayList
 
     void                  compositionSet( const CsComposition &comp );
 
+    bool                  contains( const QString &id ) const { return mCompositionsMap.contains( id ); }
+
 
 
     void                  jsonWrite(CsJsonWriter &js ) const;

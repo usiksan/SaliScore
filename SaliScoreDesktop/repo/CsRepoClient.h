@@ -16,13 +16,18 @@ class CsRepoClient : public QObject
     enum CsRepoQueryType {
       cpqIdle, //!< No active query
       cpqRegister, //!< Registration
-      cpqLast
+      cpqList,
+      cpqDownloadList,
+      cpqUploadList,
+      cpqDownloadSong,
+      cpqUploadSong
     };
 
     QNetworkAccessManager *mNetworkManager;  //!< Network manager through witch we connect to global repository
     QTimer                 mTimer;           //!< Timer for periodic sync with global repository
     CsPlayList            &mPlayList;        //!< Users play list
     CsRepoQueryType        mQueryType;       //!< Type of remote operation
+    QJsonObject            mUpdateList;
 //    QList<int>             mObjectIndexList; //!< Object index list of newest objects from remote repository
 //    QStringList            mInfoList;       //!< List for information items. When any event happens then information item appends
   public:
@@ -39,6 +44,10 @@ class CsRepoClient : public QObject
 
     //Signal on registration status
     void registerStatus( bool finish, const QString msg );
+
+    void playlistChanged();
+
+    void songChanged( const QString compositionid );
 
   public slots:
 
@@ -60,12 +69,38 @@ class CsRepoClient : public QObject
     //!
     void doRegister(const QString repo, const QString authorName, const QString password, const QString email );
 
+    //!
+    //! \brief doSync Performs syncronization with remote repository
+    //!
+    void doSync();
+
   private:
+
+    void doDownloadPlayList();
+
+    void doUploadPlayList();
+
+    void doDownloadSong();
+
+    void doDownloadSong( const QString compositionid );
+
+    void doUploadSong();
+
     //!
     //! \brief cmRegister Reply received on register query
     //! \param reply      Received reply
     //!
     void    cmRegister( const QJsonObject &reply );
+
+    void    cmList( const QJsonObject &reply );
+
+    void    cmDownloadPlayList( const QJsonObject &reply );
+
+    void    cmUploadPlayList( const QJsonObject &reply );
+
+    void    cmDownloadSong( const QJsonObject &reply );
+
+    QString earlyCompositionId() const;
   };
 
 

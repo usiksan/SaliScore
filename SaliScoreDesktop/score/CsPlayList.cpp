@@ -79,6 +79,7 @@ void CsPlayList::jsonWrite( CsJsonWriter &js ) const
 
 void CsPlayList::jsonRead(CsJsonReader &js)
   {
+  mDirty = false;
   js.jsonInt( "aversion", mVersion );
   js.jsonList<CsPlayPart>( "partList", mPartList );
   js.jsonMap<CsCompositionSettings>( "compositionMap", mCompositionsMap );

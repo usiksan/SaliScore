@@ -259,6 +259,12 @@ class CsComposition
 
     void        clear();
 
+    QByteArray  toByteArray() const;
+
+    void        fromByteArray( const QByteArray &ar );
+
+    void        fileSave() const;
+
   private:
     static QStringList visibleList( const CsDefList &src );
 

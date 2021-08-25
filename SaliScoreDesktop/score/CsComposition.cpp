@@ -4,6 +4,7 @@
 #include "../SvJson/SvJsonIO.h"
 
 #include <QSettings>
+#include <QJsonDocument>
 
 CsComposition::CsComposition()
   {
@@ -369,6 +370,30 @@ void CsComposition::clear()
   mLineList.clear();
 
   mDirty = mStateDirty = false;
+  }
+
+
+
+QByteArray CsComposition::toByteArray() const
+  {
+  //Create writer and use it to write composition contents to json object
+  CsJsonWriter js{};
+  jsonWrite( js );
+
+  //Append file type and version
+  js.jsonString( CS_BASE_TYPE_KEY, QStringLiteral(CS_BASE_TYPE) );
+  js.jsonInt( CS_BASE_VERSION_KEY, CS_BASE_VERSION );
+
+  //Write contents to file
+  return QJsonDocument(js.object()).toJson();
+  }
+
+
+
+
+void CsComposition::fileSave() const
+  {
+
   }
 
 

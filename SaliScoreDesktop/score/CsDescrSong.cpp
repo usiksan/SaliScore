@@ -3,6 +3,8 @@
 #include "SdLib/SdTime2x.h"
 
 #include <QDir>
+#include <QFile>
+#include <QJsonDocument>
 
 CsDescrSong::CsDescrSong() :
   mAuthor(),
@@ -40,6 +42,24 @@ void CsDescrSong::authorSet(const QString &auth)
 void CsDescrSong::versionUpdate()
   {
   mVersion = SdTime2x::current();
+  }
+
+
+
+
+int CsDescrSong::versionFromFile() const
+  {
+  QFile file( path() );
+  if( file.open( QIODevice::ReadOnly ) ) {
+    QByteArray content( file.readAll() );
+    QJsonObject obj = QJsonDocument::fromJson( content ).object();
+    int version = obj.value(QStringLiteral(CS_BASE_VERSION_KEY)).toInt();
+    SvJsonReaderExtInt js( obj, &version );
+    CsDescrSong comp;
+    comp.jsonRead( js );
+    return comp.version();
+    }
+  return version();
   }
 
 

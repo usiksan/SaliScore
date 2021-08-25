@@ -44,6 +44,9 @@ class CsDescrSong
     void    isMelodyPresentSet( bool mp ) { mMelodyPresent = mp; }
 
 
+    int     versionFromFile() const;
+
+
     virtual void clear();
 
     //=================================================================
