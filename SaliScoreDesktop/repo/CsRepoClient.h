@@ -2,6 +2,7 @@
 #define CSREPOCLIENT_H
 
 #include "CsConfig.h"
+#include "score/CsPlayList.h"
 
 #include <QObject>
 #include <QNetworkAccessManager>
@@ -12,13 +13,20 @@ class CsRepoClient : public QObject
   {
     Q_OBJECT
 
+    enum CsRepoQueryType {
+      cpqIdle, //!< No active query
+      cpqRegister, //!< Registration
+      cpqLast
+    };
+
     QNetworkAccessManager *mNetworkManager;  //!< Network manager through witch we connect to global repository
     QTimer                 mTimer;           //!< Timer for periodic sync with global repository
-//    SdRemoteQueryType      mQueryType;       //!< Type of remote operation
+    CsPlayList            &mPlayList;        //!< Users play list
+    CsRepoQueryType        mQueryType;       //!< Type of remote operation
 //    QList<int>             mObjectIndexList; //!< Object index list of newest objects from remote repository
 //    QStringList            mInfoList;       //!< List for information items. When any event happens then information item appends
   public:
-    explicit CsRepoClient(QObject *parent = nullptr);
+    explicit CsRepoClient( CsPlayList &playList, QObject *parent = nullptr);
 
     bool    isRegistered() const;
 
@@ -30,9 +38,16 @@ class CsRepoClient : public QObject
     void connectionStatus( QString msg, bool ok );
 
     //Signal on registration status
-    void registerStatus( const QString msg, const QString email );
+    void registerStatus( bool finish, const QString msg );
 
   public slots:
+
+    //!
+    //! \brief finished Called when network reply finished
+    //! \param reply    Reply witch being finished
+    //!
+    void finished( QNetworkReply *reply );
+
     //!
     //! \brief doRegister Begin registration process or check registration status
     //!                   If this author with this password already registered or
@@ -42,10 +57,19 @@ class CsRepoClient : public QObject
     //! \param authorName Author name for registration
     //! \param password   Password for this author name
     //! \param email      E-mail for password restore
-    //! \param listtime   Time of last editing of playList
-    //! \param playlist   PlayList itself
     //!
-    void doRegister(const QString repo, const QString authorName, const QString password, const QString email, int listtime, QByteArray playlist );
+    void doRegister(const QString repo, const QString authorName, const QString password, const QString email );
+
+  private:
+    //!
+    //! \brief cmRegister Reply received on register query
+    //! \param reply      Received reply
+    //!
+    void    cmRegister( const QJsonObject &reply );
   };
+
+
+//Main object for remote database communication
+extern CsRepoClient *repoClient;
 
 #endif // CSREPOCLIENT_H

@@ -67,6 +67,16 @@ class CsPlayList
     void                  jsonWrite(CsJsonWriter &js ) const;
 
     void                  jsonRead( CsJsonReader &js );
+
+
+    QByteArray            toByteArray() const;
+
+    void                  fromByteArray( const QByteArray &ar );
+
+
+    void                  load();
+
+    void                  save();
   };
 
 #endif // CSPLAYLIST_H

@@ -1,7 +1,10 @@
 #include "CsConfig.h"
 #include "midi/CsMidiSequencer.h"
+#include "score/CsPlayList.h"
 #include "windows/CsWinMain.h"
 #include "windows/CsPainterSettings.h"
+#include "windows/CsDlgRegistration.h"
+#include "repo/CsRepoClient.h"
 
 #include <QApplication>
 #include <QSettings>
@@ -49,6 +52,17 @@ int main(int argc, char *argv[])
 //    ps.write( QStringLiteral(KEY_TRAIN_SETTINGS) );
 //    }
 
+  CsPlayList playList;
+  playList.load();
+
+  //Repo client
+  repoClient = new CsRepoClient( playList );
+
+  if( !repoClient->isRegistered() ) {
+    CsDlgRegistration dlg(nullptr);
+    if( !dlg.exec() )
+      return 0;
+    }
 
   //=============================================================================
   //        MIDI keyboard setup
@@ -56,10 +70,16 @@ int main(int argc, char *argv[])
   QThread *midiThread = new QThread();
   CsMidiSequencer *midiSequencer = new CsMidiSequencer( midiThread );
 
-
-  CsWinMain w( midiSequencer );
+  CsWinMain w( playList, midiSequencer );
   w.show();
 
   midiThread->start();
-  return a.exec();
+  int res = a.exec();
+
+  midiThread->quit();
+  midiThread->wait();
+
+  playList.save();
+
+  return res;
   }

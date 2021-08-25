@@ -1,6 +1,8 @@
 #include "CsPlayList.h"
 #include "SdLib/SdTime2x.h"
 
+#include <QFile>
+#include <QJsonDocument>
 #include <QTreeWidgetItem>
 
 CsPlayList::CsPlayList()
@@ -80,4 +82,54 @@ void CsPlayList::jsonRead(CsJsonReader &js)
   js.jsonInt( "aversion", mVersion );
   js.jsonList<CsPlayPart>( "partList", mPartList );
   js.jsonMap<CsCompositionSettings>( "compositionMap", mCompositionsMap );
+  }
+
+
+
+
+QByteArray CsPlayList::toByteArray() const
+  {
+  SvJsonWriter js;
+  jsonWrite( js );
+  return QJsonDocument( js.object() ).toJson();
+  }
+
+
+
+
+void CsPlayList::fromByteArray(const QByteArray &ar)
+  {
+  int version = 0;
+  QJsonObject obj = QJsonDocument::fromJson( ar ).object();
+  SvJsonReaderExtInt js( obj, &version );
+  jsonRead( js );
+  }
+
+
+
+
+void CsPlayList::load()
+  {
+  QFile file( CsDescrSong::homeDir( QString{} ) + "playList.dat" );
+  if( file.exists() ) {
+    if( file.open( QIODevice::ReadOnly ) )
+      fromByteArray( file.readAll() );
+    }
+  else {
+    //Create default play list
+    mVersion = 1;
+    partAppend( QObject::tr("My songs") );
+    partAppend( QObject::tr("Examples") );
+    }
+  }
+
+
+
+void CsPlayList::save()
+  {
+  QFile file( CsDescrSong::homeDir( QString{} ) + "playList.dat" );
+  if( dirty() )
+    dirtyReset();
+  if( file.open( QIODevice::WriteOnly ) )
+    file.write( toByteArray() );
   }

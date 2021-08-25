@@ -79,7 +79,7 @@ History
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"
-#define CS_DEFAULT_REPO              "repo.salicad.com/"
+#define CS_DEFAULT_REPO              "score.salilab.ru/"
 #define CS_UPGRADE_WEB               "http:/salicad.salilab.com/downloads/"
 
 

@@ -59,12 +59,12 @@ class CsWinMain : public QMainWindow
 
     CsComposition    mComposition;
     CsPlay           mPlayer;
-    CsPlayList       mPlayList;
+    CsPlayList      &mPlayList;
     bool             mDefferedReset;
     bool             mNotSaved;
     QTimer           mUpdateTimer;
   public:
-    CsWinMain( CsMidiSequencer *midiSequencer, QWidget *parent = nullptr);
+    CsWinMain( CsPlayList &playList, CsMidiSequencer *midiSequencer, QWidget *parent = nullptr);
     ~CsWinMain();
 
   private slots:
@@ -118,10 +118,6 @@ class CsWinMain : public QMainWindow
     //! \return               true - editor can be closed
     //!
     bool         canCloseEditor();
-
-    void         playListLoad();
-
-    void         playListSave();
 
     void         createMenu();
   public:

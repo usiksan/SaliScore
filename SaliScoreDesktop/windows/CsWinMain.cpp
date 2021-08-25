@@ -6,6 +6,8 @@
 #include "CsDlgDefChord.h"
 #include "CsDlgDefNote.h"
 #include "CsDlgDefTranslation.h"
+#include "CsDlgRegistration.h"
+#include "repo/CsRepoClient.h"
 
 #include <QSettings>
 #include <QGuiApplication>
@@ -23,10 +25,11 @@
 #include <QJsonDocument>
 
 
-CsWinMain::CsWinMain(CsMidiSequencer *midiSequencer, QWidget *parent) :
+CsWinMain::CsWinMain(CsPlayList &playList, CsMidiSequencer *midiSequencer, QWidget *parent) :
   QMainWindow(parent),
   mMidiSequencer(midiSequencer),
   mPlayer( mComposition ),
+  mPlayList(playList),
   mNotSaved(false)
   {
 
@@ -91,8 +94,7 @@ CsWinMain::CsWinMain(CsMidiSequencer *midiSequencer, QWidget *parent) :
 
   cmViewEditor();
 
-  playListLoad();
-
+  mWPlayList->buildContent();
   }
 
 
@@ -350,7 +352,11 @@ void CsWinMain::cmHelpWeb()
 
 void CsWinMain::cmHelpRegistration()
   {
-
+  //Prepare and display registration dialog
+  CsDlgRegistration dlg(this);
+  //If after registration user yet not registered then exit application
+  if( dlg.exec() == 0 && !repoClient->isRegistered() )
+    close();
   }
 
 
@@ -363,7 +369,6 @@ void CsWinMain::closeEvent(QCloseEvent *ev)
   {
   //If can close editor
   if( canCloseEditor() ) {
-    playListSave();
     //Save settings: main window maximisation and splitter position
     QSettings s;
     s.setValue( QStringLiteral(KEY_WMAIN_MAX), isMaximized() );
@@ -485,39 +490,6 @@ bool CsWinMain::canCloseEditor()
 
 
 
-void CsWinMain::playListLoad()
-  {
-  QFile file( CsDescrSong::homeDir( QString{} ) + "playList.dat" );
-  if( file.exists() ) {
-    if( file.open( QIODevice::ReadOnly ) ) {
-      int version = 0;
-      QJsonObject obj = QJsonDocument::fromJson( file.readAll() ).object();
-      SvJsonReaderExtInt js( obj, &version );
-      mPlayList.jsonRead( js );
-      }
-    }
-  else {
-    //Create default play list
-    mPlayList.partAppend( tr("My songs") );
-    mPlayList.partAppend( tr("Examples") );
-    }
-
-  mWPlayList->buildContent();
-  }
-
-
-
-
-void CsWinMain::playListSave()
-  {
-  QFile file( CsDescrSong::homeDir( QString{} ) + "playList.dat" );
-  if( mPlayList.dirty() && file.open( QIODevice::WriteOnly ) ) {
-    mPlayList.dirtyReset();
-    SvJsonWriter js;
-    mPlayList.jsonWrite( js );
-    file.write( QJsonDocument( js.object() ).toJson() );
-    }
-  }
 
 
 

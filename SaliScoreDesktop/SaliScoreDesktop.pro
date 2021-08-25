@@ -56,6 +56,7 @@ SOURCES += \
     windows/CsDlgDefRemark.cpp \
     windows/CsDlgDefTranslation.cpp \
     windows/CsDlgDefinition.cpp \
+    windows/CsDlgRegistration.cpp \
     windows/CsEditCursor.cpp \
     windows/CsKaraokePage.cpp \
     windows/CsPaintStyle.cpp \
@@ -124,6 +125,7 @@ HEADERS += \
     windows/CsDlgDefRemark.h \
     windows/CsDlgDefTranslation.h \
     windows/CsDlgDefinition.h \
+    windows/CsDlgRegistration.h \
     windows/CsEditCursor.h \
     windows/CsKaraokePage.h \
     windows/CsPaintStyle.h \
