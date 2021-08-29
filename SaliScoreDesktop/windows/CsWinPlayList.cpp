@@ -37,6 +37,7 @@ void CsWinPlayList::settingsSave(const CsComposition &comp)
 
   compositionAppend( partIndex, comp.header().songId() );
   updateContent();
+  mPlayList.save();
   }
 
 

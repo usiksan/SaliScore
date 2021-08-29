@@ -313,7 +313,7 @@ void CsRepoClient::doDownloadSong(const QString compositionid)
 
 void CsRepoClient::doUploadSong()
   {
-
+  //QString
   }
 
 
@@ -419,6 +419,7 @@ void CsRepoClient::cmUploadPlayList(const QJsonObject &reply)
   // 2 - не может подключиться к базе данных
   // 4 - имя уже есть в базе и пароль не совпал
   if( reply.value( QStringLiteral("result") ).toInt() == 0 ) {
+    qDebug() << "Play list uploaded";
     doDownloadSong();
     }
   else
