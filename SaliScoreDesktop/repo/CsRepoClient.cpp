@@ -102,13 +102,10 @@ void CsRepoClient::finished(QNetworkReply *reply)
         cmRegister( QJsonObject{} );
         emit registerStatus( true, tr("Error when transfer: \"%1\"").arg(reply->errorString()) );
         break;
-//      case SdRemoteQueryList :
-//      case SdRemoteQueryNone :
-//      case SdRemoteQueryUploadObject :
-//      case SdRemoteQueryDownloadObject :
-//        qDebug() << "finished Error when transfer " << reply->errorString();
+      default:
+        qDebug() << "finished Error when transfer " << reply->errorString();
 //        emit informationAppended( tr("Error when transfer: \"%1\"").arg(reply->errorString()) );
-//        break;
+        break;
       }
     }
   else {
@@ -121,17 +118,15 @@ void CsRepoClient::finished(QNetworkReply *reply)
       case cpqRegister :
         cmRegister( obj );
         break;
-//      case SdRemoteQueryList :
-//        cmSyncList( obj );
-//        break;
-//      case SdRemoteQueryDownloadObject :
-//        cmDownloadObject( obj );
-//        break;
-//      case SdRemoteQueryUploadObject :
-//        cmUploadObject( obj );
-//        break;
-//      case SdRemoteQueryNone :
-//        break;
+      case cpqList :
+        cmList( obj );
+        break;
+      case cpqDownloadList :
+        cmDownloadPlayList( obj );
+        break;
+      case cpqUploadList :
+        cmUploadPlayList( obj );
+        break;
       }
     }
   reply->deleteLater();
@@ -197,7 +192,8 @@ void CsRepoClient::doSync()
     QString password       = s.value( KEY_PASSWORD ).toString();
     int     remoteSyncTime = s.value( KEY_REMOTE_SYNC ).toInt();
     QString hostRepo       = s.value( KEY_WEB_REPO ).toString();
-    qDebug() << "doSync remoteSyncIndex" << remoteSyncTime;
+    if( remoteSyncTime == 0 ) remoteSyncTime = 1;
+    qDebug() << "doSync remoteSyncIndex" << hostRepo << remoteSyncTime;
       //infoAppend( tr("Do sync...") );
       //Prepare block for transmition
     QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
@@ -216,6 +212,7 @@ void CsRepoClient::doSync()
 
 void CsRepoClient::doDownloadPlayList()
   {
+  qDebug() << "Download play list";
   QSettings s;
   QString author         = s.value( KEY_AUTHOR ).toString();
   QString password       = s.value( KEY_PASSWORD ).toString();
@@ -234,6 +231,7 @@ void CsRepoClient::doDownloadPlayList()
 
 void CsRepoClient::doUploadPlayList()
   {
+  qDebug() << "Upload play list";
   QSettings s;
   QString author         = s.value( KEY_AUTHOR ).toString();
   QString password       = s.value( KEY_PASSWORD ).toString();
@@ -247,7 +245,7 @@ void CsRepoClient::doUploadPlayList()
   sdHttpMultiPartAppendField( multiPart, REPO_FIELD_PLAYLIST, mPlayList.toByteArray() );
 
   mQueryType = cpqUploadList;
-  QNetworkReply *reply = mNetworkManager->post( QNetworkRequest(QUrl( QStringLiteral("http://") + hostRepo + QStringLiteral("list.php"))), multiPart );
+  QNetworkReply *reply = mNetworkManager->post( QNetworkRequest(QUrl( QStringLiteral("http://") + hostRepo + QStringLiteral("uploadlist.php"))), multiPart );
   multiPart->setParent(reply); // delete the multiPart with the reply
   }
 
@@ -313,6 +311,14 @@ void CsRepoClient::doDownloadSong(const QString compositionid)
 
 
 
+void CsRepoClient::doUploadSong()
+  {
+
+  }
+
+
+
+
 
 void CsRepoClient::cmRegister(const QJsonObject &reply)
   {
@@ -356,6 +362,7 @@ void CsRepoClient::cmRegister(const QJsonObject &reply)
     s.remove( QStringLiteral(KEY_AUTHOR) );
     s.remove( QStringLiteral(KEY_PASSWORD) );
     }
+  mQueryType = cpqIdle;
   }
 
 
@@ -368,7 +375,8 @@ void CsRepoClient::cmList(const QJsonObject &reply)
   // 2 - не может подключиться к базе данных
   // 4 - имя уже есть в базе и пароль не совпал
   if( reply.value( QStringLiteral("result") ).toInt() == 0 ) {
-    int listtime = reply.value( QStringLiteral("listtime") ).toInt();
+    qDebug() << "list received";
+    int listtime = reply.value( QStringLiteral("listtime") ).toString().toInt();
     //Retrive object list from reply
     mUpdateList = reply.value( QStringLiteral("list") ).toObject();
     if( mPlayList.version() < listtime )
@@ -393,6 +401,7 @@ void CsRepoClient::cmDownloadPlayList(const QJsonObject &reply)
   // 4 - имя уже есть в базе и пароль не совпал
   if( reply.value( QStringLiteral("result") ).toInt() == 0 ) {
     //Retrive object list from reply
+    qDebug() << "Play list downloaded";
     mPlayList.fromByteArray( reply.value( QStringLiteral("playlist") ).toString().toLatin1() );
     mPlayList.save();
     emit playlistChanged();

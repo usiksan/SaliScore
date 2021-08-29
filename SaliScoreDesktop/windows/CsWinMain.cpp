@@ -89,6 +89,7 @@ CsWinMain::CsWinMain(CsPlayList &playList, CsMidiSequencer *midiSequencer, QWidg
 
   //Notification for tick
   connect( mMidiSequencer, &CsMidiSequencer::tick, this, [this] ( int count ) { mPlayer.next( count ); } );
+  connect( repoClient, &CsRepoClient::playlistChanged, mWPlayList, &CsWinPlayList::buildContent );
 
   mUpdateTimer.setInterval(100);
 

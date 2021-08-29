@@ -5,6 +5,7 @@
 
 #include <QSettings>
 #include <QJsonDocument>
+#include <QFile>
 
 CsComposition::CsComposition()
   {
@@ -391,9 +392,28 @@ QByteArray CsComposition::toByteArray() const
 
 
 
+void CsComposition::fromByteArray(const QByteArray &ar)
+  {
+  QJsonObject obj = QJsonDocument::fromJson( ar ).object();
+
+  //Check object type and scan version
+  if( obj.value( QStringLiteral(CS_BASE_TYPE_KEY) ).toString() == QStringLiteral(CS_BASE_TYPE) ) {
+    int version = obj.value( QStringLiteral(CS_BASE_VERSION_KEY) ).toInt();
+    CsJsonReader js( obj, &version );
+    jsonRead( js );
+    }
+  }
+
+
+
+
 void CsComposition::fileSave() const
   {
-
+  QFile file( mHeader.path() );
+  if( file.open(QIODevice::WriteOnly) ) {
+    //Write contents to file
+    file.write( toByteArray() );
+    }
   }
 
 
