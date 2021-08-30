@@ -100,6 +100,8 @@ class CsRepoClient : public QObject
 
     void    cmDownloadSong( const QJsonObject &reply );
 
+    void    cmUploadSong( const QJsonObject &reply );
+
     QString earlyCompositionId() const;
   };
 
