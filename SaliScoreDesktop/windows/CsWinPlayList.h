@@ -13,8 +13,6 @@ class CsWinPlayList : public QTreeWidget
   public:
     explicit CsWinPlayList( CsPlayList &pl, QWidget *parent = nullptr);
 
-    void buildContent();
-
     void settingsSave( const CsComposition &comp );
 
     void partAppend( const QString &partName );
@@ -26,6 +24,9 @@ class CsWinPlayList : public QTreeWidget
     bool itemPosition( QTreeWidgetItem *item, int &partIndex, int &compositionIndex ) const;
   signals:
 
+  public slots:
+
+    void buildContent();
   };
 
 #endif // CSWINPLAYLIST_H

@@ -12,29 +12,6 @@ CsWinPlayList::CsWinPlayList(CsPlayList &pl, QWidget *parent) :
 
 
 
-void CsWinPlayList::buildContent()
-  {
-  clear();
-  for( int i = 0; i < mPlayList.partCount(); i++ ) {
-    QTreeWidgetItem *top = new QTreeWidgetItem( { QString{}, mPlayList.partTitle(i)} );
-    mPlayList.partItemSet( i, top );
-    top->setIcon( 0, QIcon(QStringLiteral(":/pic/plPart.png")) );
-    insertTopLevelItem( i, top );
-
-    int compositionCount = mPlayList.partCompositionCount(i);
-    for( int compositionIndex = 0; compositionIndex < compositionCount; compositionIndex++ ) {
-      QString id = mPlayList.partCompositionId( i, compositionIndex );
-      CsCompositionSettings s = mPlayList.composition( id );
-      QTreeWidgetItem *item = new QTreeWidgetItem( { QString{}, s.author(), s.singer(), s.name() } );
-      mPlayList.partCompositionItemSet( i, compositionIndex, item );
-      item->setIcon( 0, QIcon( s.isPublic() ? QStringLiteral(":/pic/plPublic.png") : QStringLiteral(":/pic/plPrivate.png")) );
-      top->insertChild( compositionIndex, item );
-      }
-
-    }
-  }
-
-
 
 void CsWinPlayList::settingsSave(const CsComposition &comp)
   {
@@ -60,6 +37,7 @@ void CsWinPlayList::settingsSave(const CsComposition &comp)
 
   compositionAppend( partIndex, comp.header().songId() );
   updateContent();
+  mPlayList.save();
   }
 
 
@@ -125,4 +103,28 @@ bool CsWinPlayList::itemPosition(QTreeWidgetItem *item, int &partIndex, int &com
   partIndex = indexOfTopLevelItem( top );
   compositionIndex = top->indexOfChild( item );
   return true;
+  }
+
+
+
+
+void CsWinPlayList::buildContent()
+  {
+  clear();
+  for( int i = 0; i < mPlayList.partCount(); i++ ) {
+    QTreeWidgetItem *top = new QTreeWidgetItem( { QString{}, mPlayList.partTitle(i)} );
+    mPlayList.partItemSet( i, top );
+    top->setIcon( 0, QIcon(QStringLiteral(":/pic/plPart.png")) );
+    insertTopLevelItem( i, top );
+
+    int compositionCount = mPlayList.partCompositionCount(i);
+    for( int compositionIndex = 0; compositionIndex < compositionCount; compositionIndex++ ) {
+      QString id = mPlayList.partCompositionId( i, compositionIndex );
+      CsCompositionSettings s = mPlayList.composition( id );
+      QTreeWidgetItem *item = new QTreeWidgetItem( { QString{}, s.author(), s.singer(), s.name() } );
+      mPlayList.partCompositionItemSet( i, compositionIndex, item );
+      item->setIcon( 0, QIcon( s.isPublic() ? QStringLiteral(":/pic/plPublic.png") : QStringLiteral(":/pic/plPrivate.png")) );
+      top->insertChild( compositionIndex, item );
+      }
+    }
   }

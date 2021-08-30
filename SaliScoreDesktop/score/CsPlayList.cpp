@@ -1,4 +1,5 @@
 #include "CsPlayList.h"
+#include "repo/CsRepoClient.h"
 #include "SdLib/SdTime2x.h"
 
 #include <QFile>
@@ -62,6 +63,25 @@ void CsPlayList::compositionSet( const CsComposition &comp )
   {
   mCompositionsMap.insert( comp.header().songId(), CsCompositionSettings(comp) );
   mDirty = true;
+  }
+
+
+
+
+QString CsPlayList::compositionUpload( int lasttime, const QString author )
+  {
+  int ctime = 0x7fffffff;
+  QString id;
+  for( auto it = mCompositionsMap.constBegin(); it != mCompositionsMap.constEnd(); it++ ) {
+    if( it.value().author() == author ) {
+      int version = it.value().versionFromFile();
+      if( version > lasttime && version < ctime ) {
+        ctime = version;
+        id = it.key();
+        }
+      }
+    }
+  return id;
   }
 
 

@@ -131,6 +131,7 @@ History
 #define KEY_PASSWORD                 "Password"
 #define KEY_WEB_REPO                 "WebRepo"
 #define KEY_REMOTE_SYNC              "RemoteSync"
+#define KEY_LOCAL_SYNC               "LocalSync"
 
 //#define SDK_PREVIOUS_FILES           "PreviousFiles"
 //#define SDK_GLOBAL_AUTHOR            "Author global id"
