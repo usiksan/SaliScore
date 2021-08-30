@@ -308,11 +308,6 @@ void CsRepoClient::doDownloadSong(const QString compositionid)
   multiPart->setParent(reply); // delete the multiPart with the reply
   }
 
-void CsRepoClient::doUploadSong()
-  {
-
-  }
-
 
 
 

@@ -391,11 +391,6 @@ QByteArray CsComposition::toByteArray() const
 
 
 
-void CsComposition::fromByteArray(const QByteArray &ar)
-  {
-
-  }
-
 
 
 
