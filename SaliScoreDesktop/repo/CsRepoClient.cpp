@@ -401,10 +401,13 @@ void CsRepoClient::cmDownloadPlayList(const QJsonObject &reply)
   // 4 - имя уже есть в базе и пароль не совпал
   if( reply.value( QStringLiteral("result") ).toInt() == 0 ) {
     //Retrive object list from reply
+    QString playlist = reply.value( QStringLiteral("playlist") ).toString();
     qDebug() << "Play list downloaded";
-    mPlayList.fromByteArray( reply.value( QStringLiteral("playlist") ).toString().toLatin1() );
-    mPlayList.save();
-    emit playlistChanged();
+    if( !playlist.isEmpty() ) {
+      mPlayList.fromByteArray( playlist.toUtf8() );
+      mPlayList.save();
+      emit playlistChanged();
+      }
     doDownloadSong();
     }
   }

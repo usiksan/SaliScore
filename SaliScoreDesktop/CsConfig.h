@@ -62,6 +62,7 @@ History
   16.08.2021 v0.30 Reformat all system: At now base of programm is playList. For compositions now only one
                    window, which display active song from playList. Compositions are saved in special
                    dataPlace. There compositions are manadged.
+  30.08.2021 v0.31 Append sync with remote repo. Append sync for playlist: released download and upload
 */
 
 #ifndef CSCONFIG
@@ -75,7 +76,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             30
+#define CS_VERSION_MINOR             31
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"
