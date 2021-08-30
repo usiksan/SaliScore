@@ -66,7 +66,7 @@ CsRepoClient::CsRepoClient(CsPlayList &playList, QObject *parent) :
   mTimer.start();
 
   connect( mNetworkManager, &QNetworkAccessManager::finished, this, &CsRepoClient::finished );
-  connect( &mTimer, &QTimer::timeout, this, &CsRepoClient::doSync );
+  connect( &mTimer, &QTimer::timeout, this, &CsRepoClient::doSyncPlayList );
   }
 
 
@@ -89,12 +89,6 @@ QString CsRepoClient::author() const
   return s.value( KEY_AUTHOR ).toString();
   }
 
-
-
-
-void CsRepoClient::syncStart()
-  {
-  }
 
 
 
@@ -126,14 +120,17 @@ void CsRepoClient::finished(QNetworkReply *reply)
       case cpqRegister :
         cmRegister( obj );
         break;
-      case cpqList :
-        cmList( obj );
+      case cpqSyncList :
+        cmSyncList( obj );
         break;
       case cpqDownloadList :
         cmDownloadPlayList( obj );
         break;
       case cpqUploadList :
         cmUploadPlayList( obj );
+        break;
+      case cpqSyncSong :
+        cmSyncSong( obj );
         break;
       case cpqDownloadSong :
         cmDownloadSong( obj );
@@ -197,33 +194,30 @@ void CsRepoClient::doRegister(const QString repo, const QString authorName, cons
 
 
 
+
 //!
-//! \brief doSync Performs syncronization with remote repository
+//! \brief doSyncPlayList Performs syncronization with remote repository.
+//!                       The first step is get time of user's playlist stored in repository
 //!
-void CsRepoClient::doSync()
+void CsRepoClient::doSyncPlayList()
   {
   if( mQueryType == cpqIdle && isRegistered() ) {
+    mTimer.setInterval( 60000 );
     QSettings s;
     QString author         = s.value( KEY_AUTHOR ).toString();
     QString password       = s.value( KEY_PASSWORD ).toString();
-    int     remoteSyncTime = s.value( KEY_REMOTE_SYNC ).toInt();
     QString hostRepo       = s.value( KEY_WEB_REPO ).toString();
-    if( remoteSyncTime == 0 ) remoteSyncTime = 1;
-    qDebug() << "doSync remoteSyncIndex" << hostRepo << remoteSyncTime;
-      //infoAppend( tr("Do sync...") );
-      //Prepare block for transmition
+    qDebug() << "Do sync: query time of user's playlist";
+
+    //Prepare block for transmition
     QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
     sdHttpMultiPartAppendField( multiPart, REPO_FIELD_AUTHOR, author.toUtf8() );
     sdHttpMultiPartAppendField( multiPart, REPO_FIELD_PASSWORD, password.toUtf8() );
-    sdHttpMultiPartAppendField( multiPart, REPO_FIELD_LASTTIME, remoteSyncTime );
 
-    mQueryType = cpqList;
-    QNetworkReply *reply = mNetworkManager->post( QNetworkRequest(QUrl( QStringLiteral("http://") + hostRepo + QStringLiteral("list.php"))), multiPart );
+    mQueryType = cpqSyncList;
+    QNetworkReply *reply = mNetworkManager->post( QNetworkRequest(QUrl( QStringLiteral("http://") + hostRepo + QStringLiteral("synclist.php"))), multiPart );
     multiPart->setParent(reply); // delete the multiPart with the reply
-    }
-  else {
-
     }
   }
 
@@ -273,39 +267,23 @@ void CsRepoClient::doUploadPlayList()
 
 
 
-void CsRepoClient::doDownloadSong()
+void CsRepoClient::doSyncSong()
   {
-  while( mUpdateList.count() ) {
-    QString compositionid = earlyCompositionId();
-    QJsonObject obj = mUpdateList.value( compositionid ).toObject();
-    int remoteVersion = obj.value( QStringLiteral("version") ).toInt();
-    if( obj.value( QStringLiteral("author") ).toString() == author() ) {
-      //Song of this author
-      if( remoteVersion > mPlayList.composition(compositionid).versionFromFile() ) {
-        //Need download local song
-        doDownloadSong( compositionid );
-        return;
-        }
-      }
-    else if( obj.value( QStringLiteral("ispublic") ).toBool() ) {
-      //Public song of other author
-
-      //Update song in full song list
-
-      if( mPlayList.contains(compositionid) && remoteVersion > mPlayList.composition(compositionid).versionFromFile() ) {
-        //Need download global song
-        doDownloadSong( compositionid );
-        return;
-        }
-      }
-    mUpdateList.remove( compositionid );
-
-    //Update removed song version
+  if( !mNeedSong.isEmpty() )
+    doDownloadSong( mNeedSong );
+  else if( mSyncList.count() ) {
+    qDebug() << "Get repository's version of composition" << mSyncList.first();
     QSettings s;
-    s.setValue( KEY_REMOTE_SYNC, remoteVersion );
-    }
+    QString hostRepo = s.value( KEY_WEB_REPO ).toString();
 
-  doUploadSong();
+    QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
+
+    sdHttpMultiPartAppendField( multiPart, REPO_FIELD_COMPOSITIONID, mSyncList.first().toUtf8() );
+
+    mQueryType = cpqSyncSong;
+    QNetworkReply *reply = mNetworkManager->post( QNetworkRequest(QUrl( QStringLiteral("http://") + hostRepo + QStringLiteral("syncsong.php"))), multiPart );
+    multiPart->setParent(reply); // delete the multiPart with the reply
+    }
   }
 
 
@@ -315,64 +293,56 @@ void CsRepoClient::doDownloadSong(const QString compositionid)
   {
   qDebug() << "Download song" << compositionid;
   QSettings s;
-  QString author         = s.value( KEY_AUTHOR ).toString();
-  QString password       = s.value( KEY_PASSWORD ).toString();
   QString hostRepo       = s.value( KEY_WEB_REPO ).toString();
 
   QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
-  sdHttpMultiPartAppendField( multiPart, REPO_FIELD_AUTHOR, author.toUtf8() );
-  sdHttpMultiPartAppendField( multiPart, REPO_FIELD_PASSWORD, password.toUtf8() );
   sdHttpMultiPartAppendField( multiPart, REPO_FIELD_COMPOSITIONID, compositionid.toUtf8() );
 
   mQueryType = cpqDownloadSong;
-  QNetworkReply *reply = mNetworkManager->post( QNetworkRequest(QUrl( QStringLiteral("http://") + hostRepo + QStringLiteral("download.php"))), multiPart );
+  QNetworkReply *reply = mNetworkManager->post( QNetworkRequest(QUrl( QStringLiteral("http://") + hostRepo + QStringLiteral("downloadsong.php"))), multiPart );
   multiPart->setParent(reply); // delete the multiPart with the reply
   }
 
 
 
 
-void CsRepoClient::doUploadSong()
+void CsRepoClient::doUploadSong(const QString compositionid)
   {
   QSettings s;
   QString author         = s.value( KEY_AUTHOR ).toString();
   QString password       = s.value( KEY_PASSWORD ).toString();
   QString hostRepo       = s.value( KEY_WEB_REPO ).toString();
-  int     localSync      = s.value( KEY_LOCAL_SYNC ).toInt();
 
-  QString uploadCompositionId = mPlayList.compositionUpload( localSync, author );
-  if( !uploadCompositionId.isEmpty() ) {
-    qDebug() << "Upload song" << uploadCompositionId;
-    CsCompositionSettings s = mPlayList.composition( uploadCompositionId );
-    QFile file( s.path() );
-    if( file.open( QIODevice::ReadOnly ) ) {
-      QByteArray composition = file.readAll();
-      QJsonObject obj = QJsonDocument::fromJson( composition ).object();
-      //Check if it composition
-      int baseVersion = obj.value(QStringLiteral(CS_BASE_VERSION_KEY)).toInt();
-      if( obj.value( QStringLiteral(CS_BASE_TYPE_KEY) ).toString() == QStringLiteral(CS_BASE_TYPE) ) {
-        CsJsonReader js( obj, &baseVersion );
-        CsComposition comp;
-        comp.jsonRead( js );
+  qDebug() << "Upload song" << compositionid;
+  CsCompositionSettings settings = mPlayList.composition( compositionid );
+  QFile file( settings.path() );
+  if( file.open( QIODevice::ReadOnly ) ) {
+    QByteArray composition = file.readAll();
+    QJsonObject obj = QJsonDocument::fromJson( composition ).object();
+    //Check if it composition
+    int baseVersion = obj.value(QStringLiteral(CS_BASE_VERSION_KEY)).toInt();
+    if( obj.value( QStringLiteral(CS_BASE_TYPE_KEY) ).toString() == QStringLiteral(CS_BASE_TYPE) ) {
+      CsJsonReader js( obj, &baseVersion );
+      CsComposition comp;
+      comp.jsonRead( js );
 
-        QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
+      QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
-        sdHttpMultiPartAppendField( multiPart, REPO_FIELD_AUTHOR, author.toUtf8() );
-        sdHttpMultiPartAppendField( multiPart, REPO_FIELD_PASSWORD, password.toUtf8() );
-        sdHttpMultiPartAppendField( multiPart, REPO_FIELD_COMPOSITIONID, uploadCompositionId.toUtf8() );
+      sdHttpMultiPartAppendField( multiPart, REPO_FIELD_AUTHOR, author.toUtf8() );
+      sdHttpMultiPartAppendField( multiPart, REPO_FIELD_PASSWORD, password.toUtf8() );
+      sdHttpMultiPartAppendField( multiPart, REPO_FIELD_COMPOSITIONID, compositionid.toUtf8() );
 
-        sdHttpMultiPartAppendField( multiPart, REPO_FIELD_VERSION,  comp.version() );
-        sdHttpMultiPartAppendField( multiPart, REPO_FIELD_SINGER,   comp.singer().toUtf8() );
-        sdHttpMultiPartAppendField( multiPart, REPO_FIELD_TITLE,    comp.title().toUtf8() );
-        sdHttpMultiPartAppendField( multiPart, REPO_FIELD_ISPUBLIC, comp.header().isPublic() );
-        sdHttpMultiPartAppendField( multiPart, REPO_FIELD_MELODYPRESENT, comp.header().isMelodyPresent() );
-        sdHttpMultiPartAppendField( multiPart, REPO_FIELD_SONG,     composition );
+      sdHttpMultiPartAppendField( multiPart, REPO_FIELD_VERSION,  comp.version() );
+      sdHttpMultiPartAppendField( multiPart, REPO_FIELD_SINGER,   comp.singer().toUtf8() );
+      sdHttpMultiPartAppendField( multiPart, REPO_FIELD_TITLE,    comp.title().toUtf8() );
+      sdHttpMultiPartAppendField( multiPart, REPO_FIELD_ISPUBLIC, comp.header().isPublic() );
+      sdHttpMultiPartAppendField( multiPart, REPO_FIELD_MELODYPRESENT, comp.header().isMelodyPresent() );
+      sdHttpMultiPartAppendField( multiPart, REPO_FIELD_SONG,     composition );
 
-        mQueryType = cpqUploadSong;
-        QNetworkReply *reply = mNetworkManager->post( QNetworkRequest(QUrl( QStringLiteral("http://") + hostRepo + QStringLiteral("upload.php"))), multiPart );
-        multiPart->setParent(reply); // delete the multiPart with the reply
-        }
+      mQueryType = cpqUploadSong;
+      QNetworkReply *reply = mNetworkManager->post( QNetworkRequest(QUrl( QStringLiteral("http://") + hostRepo + QStringLiteral("uploadsong.php"))), multiPart );
+      multiPart->setParent(reply); // delete the multiPart with the reply
       }
     }
   }
@@ -429,25 +399,25 @@ void CsRepoClient::cmRegister(const QJsonObject &reply)
 
 
 
-void CsRepoClient::cmList(const QJsonObject &reply)
+void CsRepoClient::cmSyncList(const QJsonObject &reply)
   {
   // 0 - успешное завершение
   // 1 - проблема со входными данными
   // 2 - не может подключиться к базе данных
   // 4 - имя уже есть в базе и пароль не совпал
-  if( reply.value( QStringLiteral("result") ).toInt() == 0 ) {
-    qDebug() << "list received";
-    int listtime = reply.value( QStringLiteral("listtime") ).toString().toInt();
-    //Retrive object list from reply
-    mUpdateList = reply.value( QStringLiteral("list") ).toObject();
+  if( reply.value( REPO_FIELD_RESULT ).toInt() == 0 ) {
+    qDebug() << "time of playlist received";
+    int listtime = reply.value( REPO_FIELD_LISTTIME ).toString().toInt();
     if( mPlayList.version() < listtime )
       //Need update current playlist from repo
       doDownloadPlayList();
     else if( mPlayList.version() > listtime )
       //Need update playlist into repo with current
       doUploadPlayList();
-    else
-      doDownloadSong();
+    else {
+      mSyncList = mPlayList.compositionList();
+      doSyncSong();
+      }
     }
   }
 
@@ -460,16 +430,17 @@ void CsRepoClient::cmDownloadPlayList(const QJsonObject &reply)
   // 1 - проблема со входными данными
   // 2 - не может подключиться к базе данных
   // 4 - имя уже есть в базе и пароль не совпал
-  if( reply.value( QStringLiteral("result") ).toInt() == 0 ) {
+  if( reply.value( REPO_FIELD_RESULT ).toInt() == 0 ) {
     //Retrive object list from reply
-    QString playlist = reply.value( QStringLiteral("playlist") ).toString();
+    QString playlist = reply.value( REPO_FIELD_PLAYLIST ).toString();
     qDebug() << "Play list downloaded";
     if( !playlist.isEmpty() ) {
       mPlayList.fromByteArray( playlist.toUtf8() );
       mPlayList.save();
       emit playlistChanged();
       }
-    doDownloadSong();
+    mSyncList = mPlayList.compositionList();
+    doSyncSong();
     }
   }
 
@@ -482,12 +453,40 @@ void CsRepoClient::cmUploadPlayList(const QJsonObject &reply)
   // 1 - проблема со входными данными
   // 2 - не может подключиться к базе данных
   // 4 - имя уже есть в базе и пароль не совпал
-  if( reply.value( QStringLiteral("result") ).toInt() == 0 ) {
+  if( reply.value( REPO_FIELD_RESULT ).toInt() == 0 ) {
     qDebug() << "Play list uploaded";
-    doDownloadSong();
+    mSyncList = mPlayList.compositionList();
+    doSyncSong();
     }
-  else
-    mUpdateList = QJsonObject{};
+  }
+
+
+
+
+void CsRepoClient::cmSyncSong(const QJsonObject &reply)
+  {
+  // 0 - успешное завершение
+  // 1 - проблема со входными данными
+  // 2 - не может подключиться к базе данных
+  // 4 - имя уже есть в базе и пароль не совпал
+  if( reply.value( REPO_FIELD_RESULT ).toInt() == 0 ) {
+    qDebug() << "Composition version received";
+    QString compositionid = reply.value( REPO_FIELD_COMPOSITIONID ).toString();
+    int version = reply.value( REPO_FIELD_VERSION ).toString().toInt();
+    int fileVersion = mPlayList.composition( compositionid ).versionFromFile();
+    if( version > fileVersion )
+      //In repository is newest version, so download it
+      doDownloadSong( compositionid );
+    else if( version < fileVersion )
+      //Our version is newest, so upload it to repository
+      doUploadSong( compositionid );
+    else {
+      //No need to download or upload
+      //Remove this composition from list of sync
+      mSyncList.removeAll( compositionid );
+      doSyncSong();
+      }
+    }
   }
 
 
@@ -498,10 +497,10 @@ void CsRepoClient::cmDownloadSong(const QJsonObject &reply)
   // 1 - проблема со входными данными
   // 2 - не может подключиться к базе данных
   // 4 - имя уже есть в базе и пароль не совпал
-  if( reply.value( QStringLiteral("result") ).toInt() == 0 ) {
+  if( reply.value( REPO_FIELD_RESULT ).toInt() == 0 ) {
     //Retrive object list from reply
     CsComposition comp;
-    comp.fromByteArray( reply.value( QStringLiteral("song") ).toString().toLatin1() );
+    comp.fromByteArray( reply.value( REPO_FIELD_SONG ).toString().toUtf8() );
     QFile file( comp.header().path() );
     if( file.open(QIODevice::WriteOnly) ) {
       //Write contents to file
@@ -510,15 +509,17 @@ void CsRepoClient::cmDownloadSong(const QJsonObject &reply)
       //Write completed
       emit songChanged( comp.header().songId() );
 
-      //Remove received song from waiting list
-      mUpdateList.remove( comp.header().songId() );
+      if( comp.header().songId() == mNeedSong ) {
+        mNeedSong.clear();
+        emit songLoaded( comp );
+        }
 
-      //Update received version
-      QSettings s;
-      s.setValue( KEY_REMOTE_SYNC, comp.header().version() );
+      //Remove received song from sync list
+      mSyncList.removeAll( comp.header().songId() );
       }
 
-    doDownloadSong();
+    //Continue sync song
+    doSyncSong();
     }
   }
 
@@ -531,12 +532,15 @@ void CsRepoClient::cmUploadSong(const QJsonObject &reply)
   // 1 - проблема со входными данными
   // 2 - не может подключиться к базе данных
   // 4 - имя уже есть в базе и пароль не совпал
-  if( reply.value( QStringLiteral("result") ).toInt() == 0 ) {
+  if( reply.value( REPO_FIELD_RESULT ).toInt() == 0 ) {
     qDebug() << "Song uploaded";
-    int localTime = reply.value( QStringLiteral("version") ).toString().toInt();
-    QSettings s;
-    s.setValue( KEY_LOCAL_SYNC, localTime );
-    doUploadSong();
+    QString compositionid = reply.value( REPO_FIELD_COMPOSITIONID ).toString();
+
+    //Remove uploaded song from sync list
+    mSyncList.removeAll( compositionid );
+
+    //Continue sync song
+    doSyncSong();
     }
   else {
     qDebug() << "Song upload error" << reply.value( QStringLiteral("result") ).toInt();
@@ -544,20 +548,5 @@ void CsRepoClient::cmUploadSong(const QJsonObject &reply)
   }
 
 
-
-
-QString CsRepoClient::earlyCompositionId() const
-  {
-  int version = 0;
-  QString key;
-  for( auto it = mUpdateList.constBegin(); it != mUpdateList.constEnd(); it++ ) {
-    int v = it.value().toObject().value(QStringLiteral("version")).toInt();
-    if( key.isEmpty() || v < version ) {
-      version = v;
-      key = it.key();
-      }
-    }
-  return key;
-  }
 
 

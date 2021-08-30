@@ -79,6 +79,8 @@ class CsWinMain : public QMainWindow
     void cmFileExport();
     void cmFilePrint();
 
+    void cmEditPasteImport();
+
     void cmViewEditor();
     void cmViewTrain();
     void cmViewKaraoke();

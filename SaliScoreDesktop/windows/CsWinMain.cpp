@@ -23,6 +23,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QJsonDocument>
+#include <QClipboard>
 
 
 CsWinMain::CsWinMain(CsPlayList &playList, CsMidiSequencer *midiSequencer, QWidget *parent) :
@@ -191,6 +192,27 @@ void CsWinMain::cmFileExport()
 void CsWinMain::cmFilePrint()
   {
 
+  }
+
+
+
+
+void CsWinMain::cmEditPasteImport()
+  {
+  if( canCloseEditor() ) {
+    QClipboard *clip = QGuiApplication::clipboard();
+    if( !clip->text().isEmpty() ) {
+      bool ok = false;
+      CsComposition composition = mImportManager.read( clip->text().toUtf8(), ok );
+      if( ok ) {
+        mNotSaved = true;
+        mComposition = composition;
+        mWinEditor->view()->compositionChanged();
+        mWinTrain->view()->compositionChanged();
+        mWinKaraoke->view()->compositionChanged();
+        }
+      }
+    }
   }
 
 
@@ -505,6 +527,7 @@ void CsWinMain::createMenu()
   actionFileExit     = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileExit.png")), tr("Exit programm"), this, &CsWinMain::close );
 
   menuEdit = new QMenu( tr("Edit") );
+  actionEditPasteImport = menuEdit->addAction( QIcon(QStringLiteral(":/pic/viewEditor.png")), tr("Import from clipboard"), this, &CsWinMain::cmEditPasteImport );
 
   menuView = new QMenu( tr("View") );
   actionViewEditor  = menuView->addAction( QIcon(QStringLiteral(":/pic/viewEditor.png")), tr("Editor mode"), this, &CsWinMain::cmViewEditor );
@@ -645,6 +668,7 @@ QActionPtr  CsWinMain::actionEditRedo;
 QActionPtr  CsWinMain::actionEditCut;
 QActionPtr  CsWinMain::actionEditCopy;
 QActionPtr  CsWinMain::actionEditPaste;
+QActionPtr  CsWinMain::actionEditPasteImport;
 QActionPtr  CsWinMain::actionEditDelete;
 QActionPtr  CsWinMain::actionEditSelectAll;
 QActionPtr  CsWinMain::actionEditUnSelect;

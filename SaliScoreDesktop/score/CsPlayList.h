@@ -64,6 +64,8 @@ class CsPlayList
 
     bool                  contains( const QString &id ) const { return mCompositionsMap.contains( id ); }
 
+    QStringList           compositionList() const { return mCompositionsMap.keys(); }
+
     QString               compositionUpload(int lasttime , const QString author);
 
 

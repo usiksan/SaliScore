@@ -49,6 +49,7 @@ void CsDescrSong::versionUpdate()
 
 int CsDescrSong::versionFromFile() const
   {
+  //Try extract version from file
   QFile file( path() );
   if( file.open( QIODevice::ReadOnly ) ) {
     QByteArray content( file.readAll() );
@@ -59,7 +60,8 @@ int CsDescrSong::versionFromFile() const
     comp.jsonRead( js );
     return comp.version();
     }
-  return version();
+  //File not exist. We return minimal version
+  return 1;
   }
 
 

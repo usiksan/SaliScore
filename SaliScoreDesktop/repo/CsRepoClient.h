@@ -14,22 +14,22 @@ class CsRepoClient : public QObject
     Q_OBJECT
 
     enum CsRepoQueryType {
-      cpqIdle, //!< No active query
-      cpqRegister, //!< Registration
-      cpqList,
-      cpqDownloadList,
-      cpqUploadList,
-      cpqDownloadSong,
-      cpqUploadSong
+      cpqIdle,         //!< No active query
+      cpqRegister,     //!< Registration
+      cpqSyncList,     //!< Get version of repository user's playlist
+      cpqDownloadList, //!< Download user's playlist from repository
+      cpqUploadList,   //!< Upload current playlist to repository
+      cpqSyncSong,     //!< Get version of composition in repository
+      cpqDownloadSong, //!< Download composition from repository
+      cpqUploadSong    //!< Upload composition to repository
     };
 
     QNetworkAccessManager *mNetworkManager;  //!< Network manager through witch we connect to global repository
     QTimer                 mTimer;           //!< Timer for periodic sync with global repository
     CsPlayList            &mPlayList;        //!< Users play list
     CsRepoQueryType        mQueryType;       //!< Type of remote operation
-    QJsonObject            mUpdateList;
-//    QList<int>             mObjectIndexList; //!< Object index list of newest objects from remote repository
-//    QStringList            mInfoList;       //!< List for information items. When any event happens then information item appends
+    QStringList            mSyncList;        //!< List of composition ids which need to be sync
+    QString                mNeedSong;        //!< Song need to be loaded
   public:
     explicit CsRepoClient( CsPlayList &playList, QObject *parent = nullptr);
 
@@ -49,9 +49,9 @@ class CsRepoClient : public QObject
 
     void songChanged( const QString compositionid );
 
-  public slots:
-    void syncStart();
+    void songLoaded( CsComposition composition );
 
+  public slots:
     //!
     //! \brief finished Called when network reply finished
     //! \param reply    Reply witch being finished
@@ -71,21 +71,23 @@ class CsRepoClient : public QObject
     void doRegister(const QString repo, const QString authorName, const QString password, const QString email );
 
     //!
-    //! \brief doSync Performs syncronization with remote repository
+    //! \brief doSyncPlayList Performs syncronization with remote repository.
+    //!                       The first step is get time of user's playlist stored in repository
     //!
-    void doSync();
+    void doSyncPlayList();
 
   private:
+
 
     void doDownloadPlayList();
 
     void doUploadPlayList();
 
-    void doDownloadSong();
+    void doSyncSong();
 
     void doDownloadSong( const QString compositionid );
 
-    void doUploadSong();
+    void doUploadSong( const QString compositionid );
 
     //!
     //! \brief cmRegister Reply received on register query
@@ -93,17 +95,17 @@ class CsRepoClient : public QObject
     //!
     void    cmRegister( const QJsonObject &reply );
 
-    void    cmList( const QJsonObject &reply );
+    void    cmSyncList( const QJsonObject &reply );
 
     void    cmDownloadPlayList( const QJsonObject &reply );
 
     void    cmUploadPlayList( const QJsonObject &reply );
 
+    void    cmSyncSong( const QJsonObject &reply );
+
     void    cmDownloadSong( const QJsonObject &reply );
 
     void    cmUploadSong( const QJsonObject &reply );
-
-    QString earlyCompositionId() const;
   };
 
 
