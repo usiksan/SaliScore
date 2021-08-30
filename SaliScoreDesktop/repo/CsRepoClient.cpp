@@ -313,6 +313,7 @@ void CsRepoClient::doDownloadSong()
 
 void CsRepoClient::doDownloadSong(const QString compositionid)
   {
+  qDebug() << "Download song" << compositionid;
   QSettings s;
   QString author         = s.value( KEY_AUTHOR ).toString();
   QString password       = s.value( KEY_PASSWORD ).toString();
@@ -325,7 +326,7 @@ void CsRepoClient::doDownloadSong(const QString compositionid)
   sdHttpMultiPartAppendField( multiPart, REPO_FIELD_COMPOSITIONID, compositionid.toUtf8() );
 
   mQueryType = cpqDownloadSong;
-  QNetworkReply *reply = mNetworkManager->post( QNetworkRequest(QUrl( QStringLiteral("http://") + hostRepo + QStringLiteral("downloadsong.php"))), multiPart );
+  QNetworkReply *reply = mNetworkManager->post( QNetworkRequest(QUrl( QStringLiteral("http://") + hostRepo + QStringLiteral("download.php"))), multiPart );
   multiPart->setParent(reply); // delete the multiPart with the reply
   }
 
