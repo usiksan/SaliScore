@@ -390,6 +390,13 @@ QByteArray CsComposition::toByteArray() const
 
 
 
+void CsComposition::fromByteArray(const QByteArray &ar)
+  {
+
+  }
+
+
+
 
 void CsComposition::fileSave() const
   {
