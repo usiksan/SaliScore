@@ -56,7 +56,8 @@ static void sdHttpMultiPartAppendField( QHttpMultiPart *multiPart, const QString
 
 CsRepoClient::CsRepoClient(CsPlayList &playList, QObject *parent) :
   QObject(parent),
-  mPlayList(playList)
+  mPlayList(playList),
+  mQueryType(cpqIdle)
   {
 
   mNetworkManager = new QNetworkAccessManager(this);
@@ -86,6 +87,13 @@ QString CsRepoClient::author() const
   {
   QSettings s;
   return s.value( KEY_AUTHOR ).toString();
+  }
+
+
+
+
+void CsRepoClient::syncStart()
+  {
   }
 
 
@@ -213,6 +221,9 @@ void CsRepoClient::doSync()
     mQueryType = cpqList;
     QNetworkReply *reply = mNetworkManager->post( QNetworkRequest(QUrl( QStringLiteral("http://") + hostRepo + QStringLiteral("list.php"))), multiPart );
     multiPart->setParent(reply); // delete the multiPart with the reply
+    }
+  else {
+
     }
   }
 

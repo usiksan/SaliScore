@@ -50,6 +50,7 @@ class CsRepoClient : public QObject
     void songChanged( const QString compositionid );
 
   public slots:
+    void syncStart();
 
     //!
     //! \brief finished Called when network reply finished
