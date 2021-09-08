@@ -19,20 +19,32 @@ class CsWinEditor : public CsWinScoreView
     int             mOffsetY;
     int             mSizeY;
 
-    CsCellCursor    mCellCursor;
+    CsCellCursor    mCellCursor;   //!< Current cursor position
 
     bool            mAutoScroll;   //!< Automatic scroll content on cursor position changed
 
     CsCursorEdit   *mEditor;       //!< Editor for content
 
-    bool            mShift;
-    bool            mControl;
+    bool            mShift;        //!< True when Shift key pressed
+    bool            mControl;      //!< True when Control key pressed
 
   public:
     explicit CsWinEditor( CsComposition &comp, CsPlay &play, QWidget *parent = nullptr);
 
 
     virtual void paint() override;
+
+  private:
+    //!
+    //! \brief keyLeft Handle key left pressing
+    //!
+    void keyLeft();
+
+    //!
+    //! \brief keyRight Handle key right pressing
+    //!
+    void keyRight();
+
   signals:
 
     // CsWinScoreView interface

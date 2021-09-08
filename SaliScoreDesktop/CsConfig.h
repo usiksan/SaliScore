@@ -63,6 +63,7 @@ History
                    window, which display active song from playList. Compositions are saved in special
                    dataPlace. There compositions are manadged.
   30.08.2021 v0.31 Append sync with remote repo. Append sync for playlist: released download and upload
+  08.09.2021 v0.32 Append left-right moving chord, note and lyric
 */
 
 #ifndef CSCONFIG
@@ -76,7 +77,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             31
+#define CS_VERSION_MINOR             32
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"

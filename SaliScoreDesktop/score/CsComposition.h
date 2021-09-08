@@ -18,6 +18,7 @@ Description
 #include "CsLine.h"
 #include "CsDefinition.h"
 #include "CsCompositionHeader.h"
+#include "CsCursor.h"
 
 #include <QStringList>
 #include <QJsonObject>
