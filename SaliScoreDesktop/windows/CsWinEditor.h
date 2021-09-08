@@ -45,6 +45,13 @@ class CsWinEditor : public CsWinScoreView
     //!
     void keyRight();
 
+    //!
+    //! \brief keyEnd Handle key End pressing
+    //!
+    void keyEnd();
+
+
+
   signals:
 
     // CsWinScoreView interface

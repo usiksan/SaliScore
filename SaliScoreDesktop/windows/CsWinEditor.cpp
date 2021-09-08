@@ -340,6 +340,25 @@ void CsWinEditor::keyRight()
 
 
 
+
+//!
+//! \brief keyEnd Handle key End pressing
+//!
+void CsWinEditor::keyEnd()
+  {
+  if( mControl ) {
+    if( (mCellCursor.cellClass() == cccChord) || (mCellCursor.cellClass() == cccNote) || (mCellCursor.cellClass() == cccLyric) ) {
+      int takt = mCellCursor.position();
+      if( takt & 0xff ) takt = (takt + 255) >> 8;
+      else takt >>= 8;
+      mComposition.lineTaktCountSet( mCellCursor.lineIndex(), takt );
+      }
+    }
+  }
+
+
+
+
 void CsWinEditor::setupWinScroll(CsWinScoreMode *winScroll)
   {
   CsWinScoreView::setupWinScroll( winScroll );
@@ -484,6 +503,13 @@ void CsWinEditor::upKeyPressEvent(QKeyEvent *event)
     case Qt::Key_Insert :
       //Insert new line
       mComposition.lineInsert( qBound( 0, mCellCursor.lineIndex(), mComposition.lineCount() ), false );
+      break;
+
+    case Qt::Key_End :
+      if( mEditor == nullptr )
+        keyEnd();
+      else
+        mEditor->keyPress( key, ch, mEditor );
       break;
 
     case Qt::Key_A :

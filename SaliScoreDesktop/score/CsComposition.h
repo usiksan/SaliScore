@@ -223,6 +223,8 @@ class CsComposition
 
     int         lineTaktCount( int index ) const { return mLineList.at(index).taktCount(); }
 
+    void        lineTaktCountSet( int index, int taktCount ) { mLineList[index].taktCountSet(taktCount); }
+
     int         lineTickCount( int index ) const { return lineTaktCount(index) * 256; }
 
     //=================================================================

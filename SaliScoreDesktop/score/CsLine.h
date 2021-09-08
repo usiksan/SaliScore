@@ -106,6 +106,8 @@ class CsLine
 
     int     taktCount() const { return mTaktCount; }
 
+    void    taktCountSet( int tc ) { mTaktCount = tc; }
+
     //========================================================
     //    json part
     void jsonWrite( CsJsonWriter &js ) const;
