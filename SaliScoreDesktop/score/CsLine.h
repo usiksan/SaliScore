@@ -25,7 +25,7 @@ Description
 #include "CsRemark.h"
 #include "CsChordKit.h"
 #include "CsNoteKit.h"
-#include "CsLyric.h"
+#include "CsLyricSymbol.h"
 
 #include <QList>
 
@@ -34,7 +34,7 @@ class CsLine
     CsRemark              mRemark;
     CsChordKit            mChordKit;
     CsNoteKit             mNoteKit;
-    CsLyricList           mLyricList;
+    CsLyricLine           mLyricLine;
     QMap<QString,QString> mTranslation;
     int                   mTaktCount;   //!<
   public:
@@ -47,7 +47,7 @@ class CsLine
     auto &remarkConst() const { return mRemark; }
     auto &chordKitConst() const { return mChordKit; }
     auto &noteKitConst() const { return mNoteKit; }
-    auto &lyricListConst() const { return mLyricList; }
+    auto &lyricLineConst() const { return mLyricLine; }
     auto &translationConst() const { return mTranslation; }
 
     bool  isRemark() const { return !mRemark.isEmpty(); }
@@ -86,9 +86,9 @@ class CsLine
 
     //========================================================
     //    Lyric part
-    auto    lyricGet() const { return mLyricList; }
+    auto    lyricGet() const { return mLyricLine; }
 
-    void    lyricSet( const CsLyricList &lyricList ) { mLyricList = lyricList; }
+    void    lyricSet( const CsLyricLine &lyricLine ) { mLyricLine = lyricLine; }
 
 
     //========================================================
@@ -110,9 +110,14 @@ class CsLine
 
     //========================================================
     //    json part
-    void jsonWrite( CsJsonWriter &js ) const;
+    void    jsonWrite( CsJsonWriter &js ) const;
 
-    void jsonRead( CsJsonReader &js );
+    void    jsonRead( CsJsonReader &js );
+
+  private:
+    QString lyricToString() const;
+
+    void    stringToLyric( const QString line );
   };
 
 using CsLinePtr = CsLine*;

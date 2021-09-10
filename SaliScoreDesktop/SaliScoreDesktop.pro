@@ -31,6 +31,7 @@ SOURCES += \
     score/CsDescrSong.cpp \
     score/CsLine.cpp \
     score/CsLyric.cpp \
+    score/CsLyricSymbol.cpp \
     score/CsNote.cpp \
     score/CsNoteKit.cpp \
     score/CsNoteLine.cpp \
@@ -99,6 +100,7 @@ HEADERS += \
     score/CsJsonIO.h \
     score/CsLine.h \
     score/CsLyric.h \
+    score/CsLyricSymbol.h \
     score/CsNote.h \
     score/CsNoteChord.h \
     score/CsNoteKit.h \
