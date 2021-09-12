@@ -181,7 +181,7 @@ class CsComposition
     //         Note part
     auto        lyricGet( int line ) const { return mLineList.at(line).lyricGet(); }
 
-    void        lyricSet( int line, const CsLyricList &list ) { mLineList[line].lyricSet(list); dirtySet(); }
+    void        lyricSet( int line, const CsLyricLine &lyricLine ) { mLineList[line].lyricSet(lyricLine); dirtySet(); }
 
 
     //=================================================================
@@ -216,6 +216,8 @@ class CsComposition
     int         lineInsert( int index, bool rem );
 
     int         lineAppend( bool rem ) { return lineInsert( -1, rem ); }
+
+    void        lineRemove( int index );
 
     auto       &line( int index ) const { return mLineList.at(index); }
 

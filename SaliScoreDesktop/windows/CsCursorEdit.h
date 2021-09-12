@@ -2,6 +2,7 @@
 #define CSCURSOREDIT_H
 
 #include "score/CsCursor.h"
+#include "score/CsLyricSymbol.h"
 
 class CsComposition;
 
@@ -23,6 +24,8 @@ class CsCursorEdit : public CsCursor
     virtual void         keyRelease( int key, QChar ch );
 
     virtual QString      getStr() const { return QString{}; }
+
+    virtual CsLyricLine  getLyric() const { return CsLyricLine{}; }
 
     virtual int          duration() const { return 0; }
 

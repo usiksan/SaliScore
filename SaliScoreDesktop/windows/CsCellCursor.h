@@ -31,6 +31,8 @@ class CsCellCursor : public CsCursor
 
     void moveTop();
 
+    void updatePosition();
+
     void move( CsCellCursorOperation oper, bool doSelect = false, int n = 1 );
 
     void jump( int aclass, int aposition, int aline, const QString &apart );

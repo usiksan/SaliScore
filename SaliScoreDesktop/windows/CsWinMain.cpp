@@ -90,6 +90,8 @@ CsWinMain::CsWinMain(CsPlayList &playList, CsMidiSequencer *midiSequencer, QWidg
 
   //Notification for tick
   connect( mMidiSequencer, &CsMidiSequencer::tick, this, [this] ( int count ) { mPlayer.next( count ); } );
+  connect( mMidiSequencer, &CsMidiSequencer::midiStart, this, &CsWinMain::cmPlayStart );
+  connect( mMidiSequencer, &CsMidiSequencer::midiStop, this, &CsWinMain::cmPlayStop );
   connect( repoClient, &CsRepoClient::playlistChanged, mWPlayList, &CsWinPlayList::buildContent );
 
   mUpdateTimer.setInterval(100);
@@ -321,12 +323,18 @@ void CsWinMain::cmPlayStart()
     mPlayer.show(true);
     }
 
-  if( CsWinMain::actionViewKaraoke->isChecked() )
+  if( CsWinMain::actionViewKaraoke->isChecked() ) {
+    mWinKaraoke->view()->playStart();
     connect( &mUpdateTimer, &QTimer::timeout, mWinKaraoke->view(), &CsWinScoreView::viewUpdate );
-  else if( CsWinMain::actionViewTrain->isChecked() )
+    }
+  else if( CsWinMain::actionViewTrain->isChecked() ) {
+    mWinTrain->view()->playStart();
     connect( &mUpdateTimer, &QTimer::timeout, mWinTrain->view(), &CsWinScoreView::viewUpdate );
-  else
+    }
+  else {
+    mWinEditor->view()->playStart();
     connect( &mUpdateTimer, &QTimer::timeout, mWinEditor->view(), &CsWinScoreView::viewUpdate );
+    }
   mUpdateTimer.start();
 
   mMidiSequencer->setRun(true);
@@ -548,9 +556,9 @@ void CsWinMain::createMenu()
   group->addAction( actionViewKaraoke );
 
   menuPlay = new QMenu( tr("Play") );
-  actionPlayStart = menuView->addAction( QIcon(QStringLiteral(":/pic/playStart.png")), tr("Start"), this, &CsWinMain::cmPlayStart );
-  actionPlayPause = menuView->addAction( QIcon(QStringLiteral(":/pic/playPause.png")), tr("Pause"), this, [this] () {  mMidiSequencer->setRun(false); } );
-  actionPlayStop  = menuView->addAction( QIcon(QStringLiteral(":/pic/playStop.png")), tr("Stop"), this, &CsWinMain::cmPlayStop );
+  actionPlayStart = menuPlay->addAction( QIcon(QStringLiteral(":/pic/playStart.png")), tr("Start"), this, &CsWinMain::cmPlayStart );
+  actionPlayPause = menuPlay->addAction( QIcon(QStringLiteral(":/pic/playPause.png")), tr("Pause"), this, [this] () {  mMidiSequencer->setRun(false); } );
+  actionPlayStop  = menuPlay->addAction( QIcon(QStringLiteral(":/pic/playStop.png")), tr("Stop"), this, &CsWinMain::cmPlayStop );
 
   menuScore = new QMenu( tr("Score") );
 

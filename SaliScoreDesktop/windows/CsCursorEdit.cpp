@@ -91,7 +91,7 @@ CsCursorEdit *CsCursorEdit::build(CsCursor &src, CsComposition &comp)
       return new CsCursorEditNote( src.lineIndex(), src.position(), src.partName(), comp );
 
     case cccLyric :
-      return new CsCursorEditLyric( src.lineIndex(), src.position(), comp );
+      return new CsCursorEditLyric( src.lineIndex(), comp );
 
     case cccTranslation :
       return new CsCursorEditTranslation( src.lineIndex(), src.partName(), comp );

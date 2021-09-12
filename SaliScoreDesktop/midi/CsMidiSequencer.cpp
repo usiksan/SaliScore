@@ -59,6 +59,24 @@ void CsMidiSequencer::periodic()
       //Parse bytes
       for( int i = 0; i < r; ++i ) {
         if( buf[i] & 0x80 ) {
+          //Check system command
+          int system = buf[i] & 0x7f;
+          if( system == 0x78 ) {
+            //Timing clock
+            tickGenerate(26666);
+            continue;
+            }
+          if( system == 0x7e )
+            //Active sensing
+            continue;
+          if( system == 0x7a ) {
+            emit midiStart();
+            continue;
+            }
+          if( system == 0x7c ) {
+            emit midiStop();
+            continue;
+            }
           //Control byte i
           if( mDataIndex >= 0 ) {
             midiSignal( mControl, mData0, 0 );
@@ -91,11 +109,7 @@ void CsMidiSequencer::periodic()
     }
   else {
     //No midi device. Make soft tick signal
-    mTickCount += mTickStep;
-    int tc = mTickCount / 10000;
-    mTickCount %= 10000;
-    if( tc > 0 )
-      tickGenerate( tc );
+    tickGenerate( mTickStep );
     }
   }
 
@@ -133,6 +147,9 @@ void CsMidiSequencer::midiSignal(quint8 control, quint8 data0, quint8 data1)
 
 void CsMidiSequencer::tickGenerate(int count)
   {
-  if( mRun )
-    emit tick( count );
+  mTickCount += count;
+  int tc = mTickCount / 10000;
+  mTickCount %= 10000;
+  if( tc > 0 && mRun )
+    emit tick( tc );
   }

@@ -22,6 +22,18 @@ CsLyricSymbol::CsLyricSymbol(char alignCode) :
     mChar = CsLyricAlignPrefix;
   }
 
+
+
+
+CsLyricSymbol::CsLyricSymbol(int align) :
+  mAlign(align)
+  {
+
+  }
+
+
+
+
 QString CsLyricSymbol::string() const
   {
   if( mAlign != 0 )
@@ -33,4 +45,35 @@ void CsLyricSymbol::stringSet(const QChar ch)
   {
   mChar = ch;
   mAlign = 0;
+  }
+
+
+
+
+QString lyricLineToString(const CsLyricLine &line)
+  {
+  QString str;
+  for( auto const &lyricSymbol : line )
+    str.append( lyricSymbol.string() );
+  return str;
+  }
+
+
+
+
+CsLyricLine lyricLineFromString(const QString &str)
+  {
+  CsLyricLine lyricLine;
+  lyricLine.reserve( str.count() );
+  for( int i = 0; i < str.count(); i++ )
+    if( str.at(i) == CsLyricAlignPrefix && (i + 1) < str.count() ) {
+      i++;
+      //Append symbol as alignment
+      lyricLine.append( CsLyricSymbol( str.at(i).toLatin1() ) );
+      }
+    else
+      //Append simple symbol
+      lyricLine.append( CsLyricSymbol( str.at(i) ) );
+
+  return lyricLine;
   }

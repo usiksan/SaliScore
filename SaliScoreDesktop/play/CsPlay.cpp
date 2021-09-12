@@ -43,6 +43,26 @@ void CsPlay::next(int tick)
 
 
 
+
+void CsPlay::jump(int lineIndex, int position)
+  {
+  if( lineIndex < mComposition.lineCount() && !mComposition.line(lineIndex).isRemark() ) {
+    mTickLineStart = 0;
+    for( int index = 0; index < lineIndex; index++ ) {
+      const auto &line = mComposition.line( index );
+      if( !line.isRemark() ) {
+        //Song line found
+        mTickLineStart += line.taktCount() * 256;
+        }
+      }
+    mLineIndex = lineIndex;
+    mTickLineStop = mTickLineStart + mComposition.line(lineIndex).taktCount() * 256;
+    mTickIndex = mTickLineStart + position;
+    }
+  }
+
+
+
 void CsPlay::reset()
   {
   bool isFirst = true;

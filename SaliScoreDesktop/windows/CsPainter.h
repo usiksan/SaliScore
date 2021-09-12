@@ -20,7 +20,7 @@ Description
 #include "score/CsRemark.h"
 #include "score/CsChordLine.h"
 #include "score/CsNoteLine.h"
-#include "score/CsLyric.h"
+#include "score/CsLyricSymbol.h"
 #include "score/CsLine.h"
 #include "score/CsComposition.h"
 #include "score/CsReference.h"
@@ -28,6 +28,18 @@ Description
 
 #include <QPainter>
 #include <QStringList>
+
+//!
+//! \brief The CsLyricDisposition struct represents disposition of each symbol in lyric line
+//!
+struct CsLyricDisposition {
+    int  mWidth;     //!< Width of symbol in pixels
+    int  mPosX;      //!< Visual position of symbol in pixels
+    bool mHighlight; //!< Flag defines highlighting this position
+
+    int  after() const { return mPosX + mWidth; }
+  };
+
 
 class CsPainter
   {
@@ -102,11 +114,15 @@ class CsPainter
 
     virtual bool isNotEditNote(const QString &part, int position, int x, int scoreY, int noteStart);
 
-    virtual bool isNotEditLyric( int position, int x, int y );
+    virtual bool isNotEditLyric( QVector<CsLyricDisposition> &disposition );
 
     virtual bool isNotEditTranslation( const QString &part, int x, int y );
 
     QRect  drawNoteSingle( int x, int scoreY, int noteStart, int noteWhite, int noteDuration, bool noteDies );
+
+    void   buildDisposition( QVector<CsLyricDisposition> &disposition, const CsLyricLine &lyricLine );
+
+    int    visualX( int x, int pos );
 
   private:
     void   drawRemark( const QMap<QString,QString> &remarkMap );
@@ -115,7 +131,7 @@ class CsPainter
 
     void   drawNote( int taktCount, const QMap<QString,CsNoteLine> &noteMap );
 
-    void   drawLyric( const CsLyricList &lyricList );
+    void   drawLyric(const CsLyricLine &lyricLine );
 
     void   drawTranslation( const QMap<QString,QString> &translationMap );
 
@@ -134,8 +150,6 @@ class CsPainter
     void   drawPropertyImpl(int xorigin, int xtab, const QString &title, const QString &value, int propertyId );
 
     void   drawTaktLines( int taktCount, int y0, int y1 );
-
-    int    visualX( int x, int pos );
 
     int    fontHeight( int fontSize ) const;
 

@@ -29,12 +29,12 @@ class CsLyricSymbol
     QString     mChar;  //!< Textual part of symbol
     int         mAlign; //!< Musical alignment of symbol position
   public:
-    mutable int mWidth; //!< Width of symbol in pixels
-    mutable int mPosX;  //!< Visual position of symbol in pixels
 
     CsLyricSymbol( QChar ch );
 
     CsLyricSymbol(char alignCode );
+
+    CsLyricSymbol(int align);
 
     //!
     //! \brief isChar Returns true if this symbol is char
@@ -61,11 +61,26 @@ class CsLyricSymbol
 
     int     align() const { return mAlign; }
 
-    void    alignSet( int al ) { mAlign = al; mChar.clear(); }
+    void    alignSet( int al )
+      {
+      mAlign = qBound( 0, al, 256 * 4);
+      if( mAlign )
+        mChar.clear();
+      else
+        mChar = QChar(' ');
+      }
+
+//    static  CsLyricSymbol fromChar( QChar ch );
+//    static  CsLyricSymbol fromAlignCode( char ch );
+//    static  CsLyricSymbol
 
   };
 
 using CsLyricLine = QList<CsLyricSymbol>;
+
+QString lyricLineToString( const CsLyricLine &line );
+
+CsLyricLine lyricLineFromString( const QString &str );
 
 
 #endif // CSLYRICSYMBOL_H

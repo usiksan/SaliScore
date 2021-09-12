@@ -22,6 +22,37 @@ void CsCellCursor::moveTop()
 
 
 
+void CsCellCursor::updatePosition()
+  {
+  if( mClass >= cccRemark ) {
+    if( mLineIndex >= mComposition.lineCount() ) {
+      //This try move down composition
+      //move to last position of composition
+      mPartName.clear();
+      moveUp();
+      }
+    else {
+      if( mClass == cccRemark ) {
+        if( !mComposition.line(mLineIndex).isRemark() ) {
+          mClass = cccChord;
+          mPartName.clear();
+          mPartName = mComposition.chordNextVisible( mPartName );
+          }
+        }
+      else {
+        if( mComposition.line(mLineIndex).isRemark() ) {
+          mClass = cccRemark;
+          mPartName.clear();
+          mPartName = mComposition.remarkNextVisible( mPartName );
+          }
+        }
+      }
+    }
+  }
+
+
+
+
 
 void CsCellCursor::move(CsCellCursorOperation oper, bool doSelect, int n)
   {
@@ -122,7 +153,7 @@ void CsCellCursor::movePrevPart()
     case cccRemark :
       mPartName = mComposition.remarkPrevVisible( mPartName );
       if( mPartName.isEmpty() ) {
-        mLineIndex--;
+        mLineIndex = qBound( -1, mLineIndex - 1, mComposition.lineCount() - 1 );
         if( mLineIndex >= 0 )
           mClass = mComposition.line(mLineIndex).isRemark() ? cccRemark : cccTranslation;
         }
@@ -131,7 +162,7 @@ void CsCellCursor::movePrevPart()
     case cccChord :
       mPartName = mComposition.chordPrevVisible( mPartName );
       if( mPartName.isEmpty() ) {
-        mLineIndex--;
+        mLineIndex = qBound( -1, mLineIndex - 1, mComposition.lineCount() - 1 );
         if( mLineIndex >= 0 )
           mClass = mComposition.line(mLineIndex).isRemark() ? cccRemark : cccTranslation;
         }

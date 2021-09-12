@@ -68,12 +68,55 @@ bool CsPainterEditor::isNotEditNote(const QString &part, int position, int x, in
 
 
 
-bool CsPainterEditor::isNotEditLyric(int position, int x, int y)
+bool CsPainterEditor::isNotEditLyric( QVector<CsLyricDisposition> &disposition )
   {
-  if( mCursorEdit == nullptr || !mCursorEdit->isMatch( cccLyric, position, mLineIndex ) )
+  if( mCursorEdit == nullptr || !(mCursorEdit->isMatch( cccLyric ) && mCursorEdit->lineIndex() == mLineIndex) )
     return true;
 
-  paintEditText( x, y );
+  const CsLyricLine &line = mCursorEdit->getLyric();
+  buildDisposition( disposition, line );
+
+  //Get over rect of text
+  //QRect over = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, QString("H") );
+
+  //Paint each lyric symbol
+  mPainter->setPen( mSettings.mColorLyric );
+  for( int i = 0; i < line.count(); i++ ) {
+    int x = disposition[i].mPosX;
+    if( line.at(i).isAlign() ) {
+      //Draw align line
+      mPainter->drawLine( x, mCurY, x, mCurY - mLyricTextHeight );
+      }
+    else
+      mPainter->drawText( x, mCurY, line.at(i).string() );
+    }
+
+  //Cursor position
+  int x = visualX( mLeftGap, 0 );
+  if( line.count() ) {
+    int cursorIndex = mCursorEdit->charPosition();
+    if( cursorIndex < line.count() )
+      x = disposition[cursorIndex].mPosX;
+    else
+      x = disposition[line.count() - 1].after();
+    }
+  mPainter->drawLine( x, mCurY + 2, x, mCurY - mLyricTextHeight - 2 );
+
+  if( mCursorEdit->isSelectionPresent() ) {
+    //Fill selection rect
+    int sStart = mCursorEdit->selStart();
+    sStart = sStart < line.count() ? disposition[sStart].mPosX : disposition[line.count() - 1].after();
+
+    int sStop = mCursorEdit->selStop();
+    sStop = sStop < line.count() ? disposition[sStop].mPosX : disposition[line.count() - 1].after();
+
+    QRect res( QPoint( qMin(sStart,sStop), mCurY - mLyricTextHeight ), QPoint( qMax(sStart,sStop), mLyricTextHeight )  );
+
+    mPainter->setPen( QPen( Qt::DotLine ) );
+    mPainter->setBrush( Qt::transparent );
+    mPainter->drawRect( res );
+    }
+
   return false;
   }
 

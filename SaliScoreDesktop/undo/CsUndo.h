@@ -28,7 +28,7 @@ class CsUndo
 
     void changeNoteList( int lineIndex, const QString &partName, const CsNoteList &list );
 
-    void changeLyricList( int lineIndex, const CsLyricList &list );
+    void changeLyricList( int lineIndex, const CsLyricLine &line );
 
     void changeTranslation( int lineIndex, const QString &partName, const QString &tran );
 

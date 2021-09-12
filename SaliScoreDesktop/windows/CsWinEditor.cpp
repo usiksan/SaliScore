@@ -79,6 +79,20 @@ void CsWinEditor::paint()
 
 
 
+
+void CsWinEditor::playStart()
+  {
+  //Begin play from current cursor
+  if( mCellCursor.cellClass() == cccChord || mCellCursor.cellClass() == cccNote ) {
+    mPlayer.jump( mCellCursor.lineIndex(), mCellCursor.position() );
+    }
+  else if( mCellCursor.cellClass() == cccLyric ) {
+    mPlayer.jump( mCellCursor.lineIndex(), 0 );
+    }
+  }
+
+
+
 template <typename Line>
 bool moveLeft( Line &line, int position, int step )
   {
@@ -230,49 +244,21 @@ void CsWinEditor::keyLeft()
     if( mCellCursor.cellClass() == cccChord ) {
       //Get chord line pointed by cursor
       auto chordLine = mComposition.chordListGet( mCellCursor.lineIndex(), mCellCursor.partName() );
-      if( moveLeft( chordLine, mCellCursor.position(), mComposition.stepChord() )  )
+      if( (mShift ? moveLeftAll( chordLine, mCellCursor.position(), mComposition.stepChord() ) :
+          moveLeft( chordLine, mCellCursor.position(), mComposition.stepChord() ))  )
         //Update chord line into composition
         mComposition.chordListSet( mCellCursor.lineIndex(), mCellCursor.partName(), chordLine );
       }
     else if( mCellCursor.cellClass() == cccNote ) {
       //Get note line pointed by cursor
       auto noteLine = mComposition.noteListGet( mCellCursor.lineIndex(), mCellCursor.partName() );
-      if( moveLeft( noteLine, mCellCursor.position(), mComposition.stepNote() )  )
+      if( (mShift ? moveLeftAll( noteLine, mCellCursor.position(), mComposition.stepNote() ) :
+           moveLeft( noteLine, mCellCursor.position(), mComposition.stepNote() ))  )
         //Update note line into composition
         mComposition.noteListSet( mCellCursor.lineIndex(), mCellCursor.partName(), noteLine );
       }
-    else if( mCellCursor.cellClass() == cccLyric ) {
-      //Get lyric line pointed by cursor
-      auto lyricLine = mComposition.lyricGet( mCellCursor.lineIndex() );
-      if( moveLeft( lyricLine, mCellCursor.position(), mComposition.stepLyric() )  )
-        //Update lyric line into composition
-        mComposition.lyricSet( mCellCursor.lineIndex(), lyricLine );
-      }
     }
-  else if( mShift ) {
-    //We move all chord, note or lyric to right
-    if( mCellCursor.cellClass() == cccChord ) {
-      //Get chord line pointed by cursor
-      auto chordLine = mComposition.chordListGet( mCellCursor.lineIndex(), mCellCursor.partName() );
-      if( moveLeftAll( chordLine, mCellCursor.position(), mComposition.stepChord() )  )
-        //Update chord line into composition
-        mComposition.chordListSet( mCellCursor.lineIndex(), mCellCursor.partName(), chordLine );
-      }
-    else if( mCellCursor.cellClass() == cccNote ) {
-      //Get note line pointed by cursor
-      auto noteLine = mComposition.noteListGet( mCellCursor.lineIndex(), mCellCursor.partName() );
-      if( moveLeftAll( noteLine, mCellCursor.position(), mComposition.stepNote() )  )
-        //Update note line into composition
-        mComposition.noteListSet( mCellCursor.lineIndex(), mCellCursor.partName(), noteLine );
-      }
-    else if( mCellCursor.cellClass() == cccLyric ) {
-      //Get lyric line pointed by cursor
-      auto lyricLine = mComposition.lyricGet( mCellCursor.lineIndex() );
-      if( moveLeftAll( lyricLine, mCellCursor.position(), mComposition.stepLyric() )  )
-        //Update lyric line into composition
-        mComposition.lyricSet( mCellCursor.lineIndex(), lyricLine );
-      }
-    }
+
   //Simple cursor moving
   mCellCursor.move( ccoLeft );
   }
@@ -289,51 +275,22 @@ void CsWinEditor::keyRight()
     if( mCellCursor.cellClass() == cccChord ) {
       //Get chord line pointed by cursor
       auto chordLine = mComposition.chordListGet( mCellCursor.lineIndex(), mCellCursor.partName() );
-      if( moveRight( chordLine, mCellCursor.position(), mComposition.stepChord() )  )
+      if( (mShift ? moveRightAll( chordLine, mCellCursor.position(), mComposition.stepChord() ) :
+           moveRight( chordLine, mCellCursor.position(), mComposition.stepChord() ))  )
         //Update chord line into composition
         mComposition.chordListSet( mCellCursor.lineIndex(), mCellCursor.partName(), chordLine );
       }
     else if( mCellCursor.cellClass() == cccNote ) {
       //Get note line pointed by cursor
       auto noteLine = mComposition.noteListGet( mCellCursor.lineIndex(), mCellCursor.partName() );
-      if( moveRight( noteLine, mCellCursor.position(), mComposition.stepNote() )  )
+      if( (mShift ? moveRightAll( noteLine, mCellCursor.position(), mComposition.stepNote() ) :
+           moveRight( noteLine, mCellCursor.position(), mComposition.stepNote() ))  )
         //Update note line into composition
         mComposition.noteListSet( mCellCursor.lineIndex(), mCellCursor.partName(), noteLine );
       }
-    else if( mCellCursor.cellClass() == cccLyric ) {
-      //Get lyric line pointed by cursor
-      auto lyricLine = mComposition.lyricGet( mCellCursor.lineIndex() );
-      if( moveRight( lyricLine, mCellCursor.position(), mComposition.stepLyric() )  )
-        //Update lyric line into composition
-        mComposition.lyricSet( mCellCursor.lineIndex(), lyricLine );
-      }
     }
 
-  else if( mShift ) {
-    //We move all chord, note or lyric to right
-    if( mCellCursor.cellClass() == cccChord ) {
-      //Get chord line pointed by cursor
-      auto chordLine = mComposition.chordListGet( mCellCursor.lineIndex(), mCellCursor.partName() );
-      if( moveRightAll( chordLine, mCellCursor.position(), mComposition.stepChord() )  )
-        //Update chord line into composition
-        mComposition.chordListSet( mCellCursor.lineIndex(), mCellCursor.partName(), chordLine );
-      }
-    else if( mCellCursor.cellClass() == cccNote ) {
-      //Get note line pointed by cursor
-      auto noteLine = mComposition.noteListGet( mCellCursor.lineIndex(), mCellCursor.partName() );
-      if( moveRightAll( noteLine, mCellCursor.position(), mComposition.stepNote() )  )
-        //Update note line into composition
-        mComposition.noteListSet( mCellCursor.lineIndex(), mCellCursor.partName(), noteLine );
-      }
-    else if( mCellCursor.cellClass() == cccLyric ) {
-      //Get lyric line pointed by cursor
-      auto lyricLine = mComposition.lyricGet( mCellCursor.lineIndex() );
-      if( moveRightAll( lyricLine, mCellCursor.position(), mComposition.stepLyric() )  )
-        //Update lyric line into composition
-        mComposition.lyricSet( mCellCursor.lineIndex(), lyricLine );
-      }
-    }
-
+  //Simple cursor moving
   mCellCursor.move( ccoRight );
   }
 
@@ -352,6 +309,39 @@ void CsWinEditor::keyEnd()
       if( takt & 0xff ) takt = (takt + 255) >> 8;
       else takt >>= 8;
       mComposition.lineTaktCountSet( mCellCursor.lineIndex(), takt );
+      }
+    }
+  }
+
+
+
+
+//!
+//! \brief keyTakt Append or remove takt from end of line
+//! \param plus    if true then takt appended in other hand - removed
+//!
+void CsWinEditor::keyTakt(bool plus)
+  {
+  if( (mCellCursor.cellClass() == cccChord) || (mCellCursor.cellClass() == cccNote) || (mCellCursor.cellClass() == cccLyric) ) {
+    int takt = mComposition.lineTaktCount( mCellCursor.lineIndex() );
+    takt = qBound( 1, takt + (plus ? 1 : -1), 32 );
+    mComposition.lineTaktCountSet( mCellCursor.lineIndex(), takt );
+    }
+  }
+
+
+
+
+//!
+//! \brief keyDelete Handle key Delete pressing
+//!
+void CsWinEditor::keyDelete()
+  {
+  if( mControl ) {
+    if( (mCellCursor.cellClass() == cccChord) || (mCellCursor.cellClass() == cccNote) || (mCellCursor.cellClass() == cccLyric) ||
+        (mCellCursor.cellClass() == cccRemark) ) {
+      mComposition.lineRemove( mCellCursor.lineIndex() );
+      mCellCursor.updatePosition();
       }
     }
   }
@@ -450,92 +440,106 @@ void CsWinEditor::upKeyPressEvent(QKeyEvent *event)
   if( !event->text().isEmpty() )
     ch = event->text().at(0);
 
-  switch( key ) {
-    case Qt::Key_Shift :
-      if( mEditor != nullptr )
-        mEditor->keyPress( key, ch, mEditor );
-      else
-        mShift = true;
-      break;
-
-    case Qt::Key_Control :
-      if( mEditor != nullptr )
-        mEditor->keyPress( key, ch, mEditor );
-      else
-        mControl = true;
-      break;
-
-    case Qt::Key_Up :
-      if( mEditor != nullptr )
-        mEditor->keyPress( key, ch, mEditor );
-      if( mEditor == nullptr )
-        mCellCursor.move( ccoUp );
-      break;
-
-    case Qt::Key_Down :
-      if( mEditor != nullptr )
-        mEditor->keyPress( key, ch, mEditor );
-      if( mEditor == nullptr )
-        mCellCursor.move( ccoDown );
-      break;
-
-    case Qt::Key_Left :
-      if( mEditor == nullptr )
-        keyLeft();
-      else
-        mEditor->keyPress( key, ch, mEditor );
-      break;
-
-    case Qt::Key_Right :
-      if( mEditor == nullptr )
-        keyRight();
-      else
-        mEditor->keyPress( key, ch, mEditor );
-      break;
-
-    case Qt::Key_Return :
-      if( mEditor == nullptr )
-        mEditor = CsCursorEdit::build( mCellCursor, mComposition );
-      else
-        mEditor->keyPress( key, ch, mEditor );
-      break;
-
-    case Qt::Key_Insert :
-      //Insert new line
-      mComposition.lineInsert( qBound( 0, mCellCursor.lineIndex(), mComposition.lineCount() ), false );
-      break;
-
-    case Qt::Key_End :
-      if( mEditor == nullptr )
-        keyEnd();
-      else
-        mEditor->keyPress( key, ch, mEditor );
-      break;
-
-    case Qt::Key_A :
-    case Qt::Key_B :
-    case Qt::Key_C :
-    case Qt::Key_D :
-    case Qt::Key_E :
-    case Qt::Key_F :
-    case Qt::Key_G :
-      if( mEditor == nullptr && mCellCursor.isMatchClass( { cccChord, cccNote } ) )
-        mEditor = CsCursorEdit::build( mCellCursor, mComposition );
-
-    default:
-      if( mEditor == nullptr && ch.isPrint() && mCellCursor.isMatchClass( {cccRemark, cccLyric, cccTranslation, cccTitle,   cccVoice,
-                                                                           cccSinger, cccVoiceDual, cccComposer, cccVoiceRight,
-                                                                           cccLyricist, cccStyle, cccAuthor, cccTempo } )  )
-          mEditor = CsCursorEdit::build( mCellCursor, mComposition );
-      if( mEditor != nullptr )
-        mEditor->keyPress( key, ch, mEditor );
-      break;
-    }
-
   if( mEditor != nullptr ) {
-    //When actived editor then we dont accept shift and control
-    mShift = mControl = false;
+    //Handle key press by editor
+
+    //Detect special cases of key: key up and key down
+    switch( key ) {
+      case Qt::Key_Up :
+        mEditor->keyPress( key, ch, mEditor );
+        if( mEditor == nullptr )
+          mCellCursor.move( ccoUp );
+        break;
+
+      case Qt::Key_Down :
+        mEditor->keyPress( key, ch, mEditor );
+        if( mEditor == nullptr )
+          mCellCursor.move( ccoDown );
+        break;
+
+      default:
+        mEditor->keyPress( key, ch, mEditor );
+        break;
+      }
     }
+
+  else {
+    //Handle key press by window
+    switch( key ) {
+      case Qt::Key_Shift :
+        mShift = true;
+        break;
+
+      case Qt::Key_Control :
+        mControl = true;
+        break;
+
+      case Qt::Key_Up :
+        mCellCursor.move( ccoUp );
+        break;
+
+      case Qt::Key_Down :
+        mCellCursor.move( ccoDown );
+        break;
+
+      case Qt::Key_Left :
+        keyLeft();
+        break;
+
+      case Qt::Key_Right :
+        keyRight();
+        break;
+
+      case Qt::Key_Return :
+        mEditor = CsCursorEdit::build( mCellCursor, mComposition );
+        break;
+
+      case Qt::Key_Insert :
+        //Insert new line
+        mComposition.lineInsert( qBound( 0, mCellCursor.lineIndex(), mComposition.lineCount() ), false );
+        break;
+
+      case Qt::Key_Delete :
+        keyDelete();
+        break;
+
+      case Qt::Key_Plus :
+        keyTakt( true );
+        break;
+
+      case Qt::Key_Minus :
+        keyTakt( false );
+        break;
+
+      case Qt::Key_End :
+        keyEnd();
+        break;
+
+      case Qt::Key_A :
+      case Qt::Key_B :
+      case Qt::Key_C :
+      case Qt::Key_D :
+      case Qt::Key_E :
+      case Qt::Key_F :
+      case Qt::Key_G :
+        if( mCellCursor.isMatchClass( { cccChord, cccNote } ) )
+          mEditor = CsCursorEdit::build( mCellCursor, mComposition );
+
+      default:
+        if( ch.isPrint() && mCellCursor.isMatchClass( {cccRemark, cccLyric, cccTranslation, cccTitle,   cccVoice,
+                                                       cccSinger, cccVoiceDual, cccComposer, cccVoiceRight,
+                                                       cccLyricist, cccStyle, cccAuthor, cccTempo } )  )
+            mEditor = CsCursorEdit::build( mCellCursor, mComposition );
+        if( mEditor != nullptr )
+          mEditor->keyPress( key, ch, mEditor );
+        break;
+      }
+
+    if( mEditor != nullptr )
+      //When actived editor then we dont accept shift and control
+      mShift = mControl = false;
+    }
+
 
   mAutoScroll = true;
   event->accept();

@@ -34,6 +34,8 @@ class CsWinEditor : public CsWinScoreView
 
     virtual void paint() override;
 
+    virtual void playStart() override;
+
   private:
     //!
     //! \brief keyLeft Handle key left pressing
@@ -50,7 +52,16 @@ class CsWinEditor : public CsWinScoreView
     //!
     void keyEnd();
 
+    //!
+    //! \brief keyTakt Append or remove takt from end of line
+    //! \param plus    if true then takt appended in other hand - removed
+    //!
+    void keyTakt( bool plus );
 
+    //!
+    //! \brief keyDelete Handle key Delete pressing
+    //!
+    void keyDelete();
 
   signals:
 

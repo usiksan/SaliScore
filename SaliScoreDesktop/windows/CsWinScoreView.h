@@ -25,6 +25,8 @@ class CsWinScoreView : public QWidget
     //!
     virtual void compositionChanged();
 
+    virtual void playStart() {}
+
     virtual void activate();
 
     virtual void paint() = 0;

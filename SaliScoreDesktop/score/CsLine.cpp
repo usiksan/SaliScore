@@ -59,24 +59,12 @@ void CsLine::jsonRead(CsJsonReader &js)
 
 QString CsLine::lyricToString() const
   {
-  QString line;
-  for( auto const &lyricSymbol : mLyricLine )
-    line.append( lyricSymbol.string() );
-  return line;
+  return lyricLineToString( mLyricLine );
   }
 
 
 
 void CsLine::stringToLyric(const QString line)
   {
-  mLyricLine.clear();
-  for( int i = 0; i < line.count(); i++ )
-    if( line.at(i) == CsLyricAlignPrefix && (i + 1) < line.count() ) {
-      i++;
-      //Append symbol as alignment
-      mLyricLine.append( CsLyricSymbol( line.at(i).toLatin1() ) );
-      }
-    else
-      //Append simple symbol
-      mLyricLine.append( CsLyricSymbol( line.at(i) ) );
+  mLyricLine = lyricLineFromString( line );
   }

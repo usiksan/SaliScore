@@ -2,7 +2,8 @@
 
 #include <QTransform>
 #include <QSettings>
-#include <QJsonDocument>
+//#include <QJsonDocument>
+#include <QVector>
 
 CsPainter::CsPainter(QPainter *painter, const QString &keyViewSettings, const CsComposition &comp, const CsPlay &player , int offsetX, QSize size, CsCellCursor *cellCursor) :
   mPainter(painter),
@@ -123,7 +124,7 @@ int CsPainter::drawLine(int y, int lineIndex, const CsLine &line, bool fullDrawi
     drawChord( line.taktCount(), line.chordKitConst().chordMapConst() );
     drawNote( line.taktCount(), line.noteKitConst().noteMapConst() );
     drawCellLyric( mCurY, line.taktCount() * 256 );
-    drawLyric( line.lyricListConst() );
+    drawLyric( line.lyricLineConst() );
     drawTranslation( line.translationConst() );
     mCurY += mSettings.mLineGap;
     }
@@ -201,11 +202,9 @@ bool CsPainter::isNotEditNote(const QString &part, int position, int x, int scor
 
 
 
-bool CsPainter::isNotEditLyric(int position, int x, int y)
+bool CsPainter::isNotEditLyric(QVector<CsLyricDisposition> &disposition)
   {
-  Q_UNUSED(position)
-  Q_UNUSED(x)
-  Q_UNUSED(y)
+  Q_UNUSED(disposition)
   return true;
   }
 
@@ -362,6 +361,50 @@ QRect CsPainter::drawNoteSingle(int x, int scoreY, int noteStart, int noteWhite,
 
 
 
+void CsPainter::buildDisposition(QVector<CsLyricDisposition> &disposition, const CsLyricLine &lyricLine)
+  {
+  //Preserve amount of internal array
+  if( lyricLine.count() > disposition.count() )
+    disposition.resize( lyricLine.count() );
+
+
+  //At first, we calculate width of each symbol
+  int curX = visualX( mLeftGap, 0 );
+  int pos = 0;
+  for( int i = 0; i < lyricLine.count(); i++ ) {
+    if( lyricLine.at(i).isAlign() ) {
+      pos = (pos & ~0xff) + lyricLine.at(i).align();
+      curX = visualX( mLeftGap, pos );
+      disposition[i].mWidth = 2;
+      //Align all previous non-delimiter symbols to right
+      int prevX = curX;
+      for( int k = i - 1; k >= 0 && !lyricLine.at(k).isDelimiter(); k-- ) {
+        prevX -= disposition[k].mWidth;
+        disposition[k].mPosX = prevX;
+        }
+      }
+    else {
+      QRect r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, lyricLine.at(i).string() );
+      disposition[i].mWidth = r.width();
+      }
+    disposition[i].mPosX = curX;
+    curX += disposition[i].mWidth;
+    disposition[i].mHighlight = isHighlight( pos, 256 - (pos & 0xff) );
+    }
+  }
+
+
+
+
+
+
+int CsPainter::visualX(int x, int pos)
+  {
+  return x + (pos * mSettings.mPixelPerTakt >> 8);
+  }
+
+
+
 
 
 
@@ -425,19 +468,36 @@ void CsPainter::drawNote(int taktCount, const QMap<QString, CsNoteLine> &noteMap
 
 
 
-void CsPainter::drawLyric(const CsLyricList &lyricList)
+
+
+
+
+
+void CsPainter::drawLyric(const CsLyricLine &lyricLine)
   {
+  static QVector<CsLyricDisposition> lyricDisposition(1024);
+
   mCurY += mLyricTextHeight;
-  if( lyricList.count() > 0 )
+  if( lyricLine.count() > 0 )
     mPainter->setFont( QFont( mSettings.mFontName, mSettings.mLyricFontSize ) );
 
-  //Paint each lyric
-  for( auto const &lyric : lyricList ) {
-    mPainter->setPen( isHighlight( lyric.position(), lyric.duration() ) ? mSettings.mColorLyricHighlight : mSettings.mColorLyric );
-    int visx = visualX( mLeftGap, lyric.position() );
-    if( isNotEditLyric( lyric.position(), visx, mCurY ) )
-      mPainter->drawText( visx, mCurY, lyric.lyric() );
+  if( isNotEditLyric( lyricDisposition ) ) {
+    buildDisposition( lyricDisposition, lyricLine );
+
+    //Paint each lyric symbol
+    for( int i = 0; i < lyricLine.count(); i++ ) {
+      mPainter->setPen( lyricDisposition[i].mHighlight ? mSettings.mColorLyricHighlight : mSettings.mColorLyric );
+      int x = lyricDisposition[i].mPosX;
+      if( lyricLine.at(i).isAlign() ) {
+        //Draw align line
+        mPainter->drawLine( x, mCurY, x, mCurY - mLyricTextHeight );
+        }
+      else
+        mPainter->drawText( x, mCurY, lyricLine.at(i).string() );
+      }
+
     }
+
   mCurY += mSettings.mTextGap;
   }
 
@@ -600,12 +660,6 @@ void CsPainter::drawTaktLines(int taktCount, int y0, int y1)
     }
   }
 
-
-
-int CsPainter::visualX(int x, int pos)
-  {
-  return x + (pos * mSettings.mPixelPerTakt >> 8);
-  }
 
 
 

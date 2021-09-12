@@ -123,7 +123,7 @@ CsComposition CsImportText::read(const QByteArray &fileContent, bool &ok)
       else {
         //Lyric line
         CsChordList chordList;
-        CsLyricList lyricList;
+        CsLyricLine lyricLine;
         int i;
         int lyricPartStart = 0;
         int pos = 0;
@@ -133,8 +133,12 @@ CsComposition CsImportText::read(const QByteArray &fileContent, bool &ok)
           //At i position there is chord
 
           //Append lyric part
-          if( lyricPartStart < line.count() && i != lyricPartStart )
-            lyricList.append( CsLyric( pos, duraHole, line.mid( lyricPartStart, i - lyricPartStart) ) );
+          if( lyricPartStart < line.count() && i != lyricPartStart ) {
+            int lyricPartCount = qMin( i, line.count()) - lyricPartStart;
+            for( int k = 0; k < lyricPartCount; k++ )
+              lyricLine.append( CsLyricSymbol( line.at(lyricPartStart + k) ) );
+            lyricLine.append( CsLyricSymbol(256) );
+            }
 
           lyricPartStart = i;
 
@@ -154,12 +158,15 @@ CsComposition CsImportText::read(const QByteArray &fileContent, bool &ok)
           }
 
         //Finish lyric
-        if( lyricPartStart < line.count() )
-          lyricList.append( CsLyric( pos, duraHole, line.mid( lyricPartStart, -1) ) );
+        if( lyricPartStart < line.count() ) {
+          int lyricPartCount = line.count() - lyricPartStart;
+          for( int k = 0; k < lyricPartCount; k++ )
+            lyricLine.append( CsLyricSymbol( line.at(lyricPartStart + k) ) );
+          }
 
         int ln = comp.lineAppend(false);
         comp.chordListSet( ln, QStringLiteral("chords"), chordList );
-        comp.lyricSet( ln, lyricList );
+        comp.lyricSet( ln, lyricLine );
         }
       }
     if( chordProbe(line) ) {

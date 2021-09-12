@@ -25,9 +25,12 @@ class CsPlay
 
     void next( int tick );
 
+    void jump( int lineIndex, int position );
+
     void reset();
 
     bool isShow() const { return mShow; }
+
     void show( bool sh ) { mShow = sh; }
   };
 

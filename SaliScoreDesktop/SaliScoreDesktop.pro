@@ -30,7 +30,6 @@ SOURCES += \
     score/CsDefinition.cpp \
     score/CsDescrSong.cpp \
     score/CsLine.cpp \
-    score/CsLyric.cpp \
     score/CsLyricSymbol.cpp \
     score/CsNote.cpp \
     score/CsNoteKit.cpp \
@@ -58,7 +57,6 @@ SOURCES += \
     windows/CsDlgDefTranslation.cpp \
     windows/CsDlgDefinition.cpp \
     windows/CsDlgRegistration.cpp \
-    windows/CsEditCursor.cpp \
     windows/CsKaraokePage.cpp \
     windows/CsPaintStyle.cpp \
     windows/CsPainter.cpp \
@@ -99,7 +97,6 @@ HEADERS += \
     score/CsDescrSong.h \
     score/CsJsonIO.h \
     score/CsLine.h \
-    score/CsLyric.h \
     score/CsLyricSymbol.h \
     score/CsNote.h \
     score/CsNoteChord.h \
@@ -128,7 +125,6 @@ HEADERS += \
     windows/CsDlgDefTranslation.h \
     windows/CsDlgDefinition.h \
     windows/CsDlgRegistration.h \
-    windows/CsEditCursor.h \
     windows/CsKaraokePage.h \
     windows/CsPaintStyle.h \
     windows/CsPainter.h \

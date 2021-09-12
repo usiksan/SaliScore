@@ -35,6 +35,10 @@ class CsMidiSequencer : public QObject
   signals:
     void tick( int count );
 
+    void midiStart();
+
+    void midiStop();
+
     void midiLink( bool on );
 
   private:

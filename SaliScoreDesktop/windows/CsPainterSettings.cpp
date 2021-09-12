@@ -27,7 +27,7 @@ void CsPainterSettings::setDefault()
   mColorLyricHighlight = QColor(Qt::blue);
   mColorTranslation    = QColor(Qt::black);
   mColorTakt           = QColor(Qt::lightGray);
-  mPixelPerTakt        = 200;
+  mPixelPerTakt        = 300;
   mScoreLineDistance   = 8;
   mRemarkFontSize      = 12;
   mChordFontSize       = 16;

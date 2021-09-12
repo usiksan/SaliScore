@@ -299,6 +299,14 @@ int CsComposition::lineInsert(int index, bool rem)
 
 
 
+void CsComposition::lineRemove(int index)
+  {
+  mLineList.removeAt( index );
+  }
+
+
+
+
 
 
 
