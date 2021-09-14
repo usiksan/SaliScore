@@ -14,6 +14,7 @@ CsMidiSequencer::CsMidiSequencer(QThread *th, QObject *parent) :
   mTickCount(0),      //!< Current tick in nanoSec. When count over 10ms sended one or more ticks
   mMidiHandle(-1),    //!< Handle to midi keyboard
   mDataIndex(-1),
+  mSysExIndex(-1),
   mRun(false)
   {
   moveToThread( th );
@@ -45,12 +46,24 @@ void CsMidiSequencer::setTempo(int tempo)
 
 
 
+void CsMidiSequencer::midiSend(int count, quint8 *array)
+  {
+  if( mMidiHandle >= 0 ) {
+#ifdef Q_OS_LINUX
+    write( mMidiHandle, array, count );
+#endif
+    }
+  }
+
+
+
+
 void CsMidiSequencer::periodic()
   {
   if( mMidiHandle >= 0 ) {
 #ifdef Q_OS_LINUX
     //There is opened midi device. Parse incomming messages
-    char buf[30];
+    char buf[33];
     ssize_t r;
     do {
       //Read buffer
@@ -77,6 +90,19 @@ void CsMidiSequencer::periodic()
             emit midiStop();
             continue;
             }
+          if( system == 0x70 ) {
+            //Begin of sysEx message
+            qDebug() << "Begin sysEx";
+            mSysExIndex = 0;
+            continue;
+            }
+          if( system == 0x77 ) {
+            //End of sysEx message
+            qDebug() << "End sysEx";
+            parseSysEx();
+            mSysExIndex = -1;
+            continue;
+            }
           //Control byte i
           if( mDataIndex >= 0 ) {
             midiSignal( mControl, mData0, 0 );
@@ -88,6 +114,12 @@ void CsMidiSequencer::periodic()
           }
         else {
           //Data byte
+          if( mSysExIndex >= 0 ) {
+            //This byte for sysEx
+            mSysExBuf[mSysExIndex++] = buf[i] & 0x7f;
+            if( mSysExIndex >= 1024 ) mSysExIndex = 1023;
+            continue;
+            }
           if( mDataIndex == 0 ) {
             mData0 = buf[i] & 0x7f;
             mDataIndex = 1;
@@ -152,4 +184,15 @@ void CsMidiSequencer::tickGenerate(int count)
   mTickCount %= 10000;
   if( tc > 0 && mRun )
     emit tick( tc );
+  }
+
+
+
+
+void CsMidiSequencer::parseSysEx()
+  {
+  qDebug() << "====SysEx:" << mSysExIndex;
+  for( int i = 0; i < mSysExIndex; i++ )
+    qDebug() << mSysExBuf[i];
+  qDebug() << "----";
   }

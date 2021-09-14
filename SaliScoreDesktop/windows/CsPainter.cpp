@@ -755,12 +755,8 @@ void CsPainter::drawCellLyric(int y, int tickCount)
   if( mCellCursor == nullptr )
     return;
 
-  for( int tick = 0; tick < tickCount; tick += mStepLyric ) {
-    int x = visualX( mLeftGap, tick );
-    drawCell( x, y, mStepPixLyric, mLyricTextHeight,
-              mCellCursor->isMatch( cccLyric, tick, mLineIndex ) );
-    mReferenceList.append( CsReference( x, y, mStepPixLyric, mLyricTextHeight, cccLyric, mLineIndex, QString{}, tick ) );
-    }
+  int x = visualX( mLeftGap, 0 );
+  drawCell( x, y, mStepPixLyric * (tickCount / mStepLyric), mLyricTextHeight, mCellCursor->isMatch( cccLyric ) && mCellCursor->lineIndex() == mLineIndex );
   }
 
 

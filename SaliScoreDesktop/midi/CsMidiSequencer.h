@@ -20,6 +20,9 @@ class CsMidiSequencer : public QObject
     quint8  mControl;
     quint8  mData0;
 
+    quint8  mSysExBuf[1024];
+    int     mSysExIndex;
+
     bool    mRun;
   public:
     explicit CsMidiSequencer( QThread *th, QObject *parent = nullptr);
@@ -31,6 +34,9 @@ class CsMidiSequencer : public QObject
     void setRun( bool on );
 
     void setTempo( int tempo );
+
+    void midiSend( int count, quint8 *array );
+
 
   signals:
     void tick( int count );
@@ -49,6 +55,8 @@ class CsMidiSequencer : public QObject
     void midiSignal( quint8 control, quint8 data0, quint8 data1 );
 
     void tickGenerate( int count );
+
+    void parseSysEx();
   };
 
 #endif // CSMIDISEQUENCER_H
