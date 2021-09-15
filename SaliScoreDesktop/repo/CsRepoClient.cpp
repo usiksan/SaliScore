@@ -329,13 +329,20 @@ void CsRepoClient::doUploadSong(const QString compositionid)
 
       QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
+      //Exclude potencial empty strings
+      QString singer = comp.singer();
+      if( singer.isEmpty() ) singer = tr("Not assigned");
+
+      QString title = comp.title();
+      if( title.isEmpty() ) title = tr("Not defined");
+
       sdHttpMultiPartAppendField( multiPart, REPO_FIELD_AUTHOR, author.toUtf8() );
       sdHttpMultiPartAppendField( multiPart, REPO_FIELD_PASSWORD, password.toUtf8() );
       sdHttpMultiPartAppendField( multiPart, REPO_FIELD_COMPOSITIONID, compositionid.toUtf8() );
 
       sdHttpMultiPartAppendField( multiPart, REPO_FIELD_VERSION,  comp.version() );
-      sdHttpMultiPartAppendField( multiPart, REPO_FIELD_SINGER,   comp.singer().toUtf8() );
-      sdHttpMultiPartAppendField( multiPart, REPO_FIELD_TITLE,    comp.title().toUtf8() );
+      sdHttpMultiPartAppendField( multiPart, REPO_FIELD_SINGER,   singer.toUtf8() );
+      sdHttpMultiPartAppendField( multiPart, REPO_FIELD_TITLE,    title.toUtf8() );
       sdHttpMultiPartAppendField( multiPart, REPO_FIELD_ISPUBLIC, comp.header().isPublic() );
       sdHttpMultiPartAppendField( multiPart, REPO_FIELD_MELODYPRESENT, comp.header().isMelodyPresent() );
       sdHttpMultiPartAppendField( multiPart, REPO_FIELD_SONG,     composition );

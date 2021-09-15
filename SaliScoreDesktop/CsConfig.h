@@ -64,6 +64,7 @@ History
                    dataPlace. There compositions are manadged.
   30.08.2021 v0.31 Append sync with remote repo. Append sync for playlist: released download and upload
   08.09.2021 v0.32 Append left-right moving chord, note and lyric
+  15.09.2021 v0.33 Fix: with empty singer or title song not uploaded
 */
 
 #ifndef CSCONFIG
@@ -77,7 +78,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             32
+#define CS_VERSION_MINOR             33
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"
