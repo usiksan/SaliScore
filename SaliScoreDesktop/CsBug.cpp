@@ -8,8 +8,6 @@
 // Errors and bugs
 //TODO B001 Lyric not selected by mouse
 
-//TODO B002 In chord parser # not parsed
-
 //TO   DO B003
 
 //B003 bugs
@@ -46,4 +44,6 @@
 
 //===================================================================================
 //Fixed:
+//B002 In chord parser # not parsed
+
 

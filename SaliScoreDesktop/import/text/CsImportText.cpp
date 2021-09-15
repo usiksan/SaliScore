@@ -188,49 +188,50 @@ bool CsImportText::chordParser(const QString name, int &note, int &chord) const
   {
   //Note detect
   QString chordName;
-  if( name.startsWith( QStringLiteral("C") ) ) {
+  //At first must be more lenght sentences
+  if( name.startsWith( QStringLiteral("C#") ) || name.startsWith( QStringLiteral("Db") ) ) {
+      note = noteCd;
+      chordName = name.mid( 2 );
+      }
+  else if( name.startsWith( QStringLiteral("C") ) ) {
     note = noteC;
-    chordName = name.mid( 1 );
-    }
-  else if( name.startsWith( QStringLiteral("C#") ) || name.startsWith( QStringLiteral("Db") ) ) {
-    note = noteCd;
-    chordName = name.mid( 2 );
-    }
-  else if( name.startsWith( QStringLiteral("D") ) ) {
-    note = noteD;
     chordName = name.mid( 1 );
     }
   else if( name.startsWith( QStringLiteral("D#") ) || name.startsWith( QStringLiteral("Eb") ) ) {
     note = noteDd;
     chordName = name.mid( 2 );
     }
-  else if( name.startsWith( QStringLiteral("E") ) ) {
-    note = noteE;
+  else if( name.startsWith( QStringLiteral("D") ) ) {
+    note = noteD;
     chordName = name.mid( 1 );
     }
-  else if( name.startsWith( QStringLiteral("F") ) ) {
-    note = noteF;
+  else if( name.startsWith( QStringLiteral("E") ) ) {
+    note = noteE;
     chordName = name.mid( 1 );
     }
   else if( name.startsWith( QStringLiteral("F#") ) || name.startsWith( QStringLiteral("Gb") ) ) {
     note = noteFd;
     chordName = name.mid( 2 );
     }
-  else if( name.startsWith( QStringLiteral("G") ) ) {
-    note = noteG;
+  else if( name.startsWith( QStringLiteral("F") ) ) {
+    note = noteF;
     chordName = name.mid( 1 );
     }
   else if( name.startsWith( QStringLiteral("G#") ) || name.startsWith( QStringLiteral("Ab") ) ) {
     note = noteGd;
     chordName = name.mid( 2 );
     }
-  else if( name.startsWith( QStringLiteral("A") ) ) {
+  else if( name.startsWith( QStringLiteral("G") ) ) {
     note = noteG;
     chordName = name.mid( 1 );
     }
   else if( name.startsWith( QStringLiteral("A#") ) || name.startsWith( QStringLiteral("Bb") ) ) {
     note = noteAd;
     chordName = name.mid( 2 );
+    }
+  else if( name.startsWith( QStringLiteral("A") ) ) {
+    note = noteG;
+    chordName = name.mid( 1 );
     }
   else if( name.startsWith( QStringLiteral("B") ) ) {
     note = noteB;
