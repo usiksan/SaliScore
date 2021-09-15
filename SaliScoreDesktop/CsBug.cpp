@@ -1,10 +1,43 @@
 ﻿//First FREE numbers
-//B001 bugs
-//F001 fatal
+
+//===================================================================================
+// Critical errors
 //C001 critical
-//D001 do
+
+//===================================================================================
+// Errors and bugs
+//TODO B001 Lyric not selected by mouse
+
+//TODO B002 In chord parser # not parsed
+
+//TO   DO B003
+
+//B003 bugs
 
 
+
+
+//===================================================================================
+// Road map
+//TODO D001 Append one half to left of song line
+
+//TODO D002 Append auto scroll to play
+
+//TODO D003 Append fragment support (up to 4)
+
+//TODO D004 When edit lyric exclude lyric intersection
+
+//TODO D005 Append horizontal scaling
+
+//TODO D006 Automatic takt per line detection in import
+
+//TODO D007 Vocal note detection system
+
+//TODO D008 Append song finder system
+
+//TODO D009 Append remark string for style, voice, tempo and so on
+
+//D010 do
 
 
 //===================================================================================
