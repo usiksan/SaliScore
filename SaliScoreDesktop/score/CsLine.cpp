@@ -1,7 +1,10 @@
 #include "CsLine.h"
+#include "CsNoteChord.h"
 #include "../SvJson/SvJsonIO.h"
 
 CsLine::CsLine() :
+  mTickOffset(0),
+  mTickPerTakt(duraHole),
   mTaktCount(8)
   {
 
@@ -28,6 +31,8 @@ void CsLine::jsonWrite(CsJsonWriter &js) const
   js.jsonObject<CsChordKit>( "ChordKit", mChordKit );
   js.jsonObject<CsNoteKit>( "NoteKit", mNoteKit );
   js.jsonMapString( "Translation", mTranslation );
+  js.jsonInt( "tickOffset", mTickOffset );
+  js.jsonInt( "tickPerTakt", mTickPerTakt );
   js.jsonInt( "taktCount", mTaktCount );
 
   //Write packet lyric
@@ -45,12 +50,16 @@ void CsLine::jsonRead(CsJsonReader &js)
   js.jsonObject<CsChordKit>( "ChordKit", mChordKit );
   js.jsonObject<CsNoteKit>( "NoteKit", mNoteKit );
   js.jsonMapString( "Translation", mTranslation );
+  js.jsonInt( "tickOffset", mTickOffset );
+  js.jsonInt( "tickPerTakt", mTickPerTakt );
   js.jsonInt( "taktCount", mTaktCount );
 
   //Read packet lyric
   QString lyricString;
   js.jsonString( "LyricLine", lyricString );
   stringToLyric( lyricString );
+
+  if( mTickPerTakt == 0 ) mTickPerTakt = duraHole;
   }
 
 

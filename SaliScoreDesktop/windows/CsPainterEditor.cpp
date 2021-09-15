@@ -85,7 +85,7 @@ bool CsPainterEditor::isNotEditLyric( QVector<CsLyricDisposition> &disposition )
     int x = disposition[i].mPosX;
     if( line.at(i).isAlign() ) {
       //Draw align line
-      mPainter->drawLine( x, mCurY, x, mCurY - mLyricTextHeight );
+      mPainter->drawLine( x, mCurY, x, mCurY - mLyricTextHeight.mHeight );
       }
     else
       mPainter->drawText( x, mCurY, line.at(i).string() );
@@ -100,7 +100,7 @@ bool CsPainterEditor::isNotEditLyric( QVector<CsLyricDisposition> &disposition )
     else
       x = disposition[line.count() - 1].after();
     }
-  mPainter->drawLine( x, mCurY + 2, x, mCurY - mLyricTextHeight - 2 );
+  mPainter->drawLine( x, mCurY + 2, x, mCurY - mLyricTextHeight.mHeight - 2 );
 
   if( mCursorEdit->isSelectionPresent() ) {
     //Fill selection rect
@@ -110,7 +110,7 @@ bool CsPainterEditor::isNotEditLyric( QVector<CsLyricDisposition> &disposition )
     int sStop = mCursorEdit->selStop();
     sStop = sStop < line.count() ? disposition[sStop].mPosX : disposition[line.count() - 1].after();
 
-    QRect res( QPoint( qMin(sStart,sStop), mCurY - mLyricTextHeight ), QPoint( qMax(sStart,sStop), mLyricTextHeight )  );
+    QRect res( QPoint( qMin(sStart,sStop), mCurY - mLyricTextHeight.mHeight ), QPoint( qMax(sStart,sStop), mLyricTextHeight.mHeight )  );
 
     mPainter->setPen( QPen( Qt::DotLine ) );
     mPainter->setBrush( Qt::transparent );

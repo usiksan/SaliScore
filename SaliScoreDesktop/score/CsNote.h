@@ -7,16 +7,6 @@
 
 #include <QList>
 
-#define duraBreve                  512 // 2
-#define duraHole                   256 // 1
-#define duraHalf                   128 // 1/2
-#define duraQuarter                 64 // 1/4
-#define duraEighth                  32 // 1/8
-#define duraSixteenth               16 // 1/16
-#define duraThirtySecond             8 // 1/32
-#define duraSixtyFourth              4 // 1/64
-#define duraOneHundredTwentyEighth   2 // 1/128
-
 class CsNote : public CsPosition
   {
     int mPitch;    //!< Pitch from begin of one-lined octave

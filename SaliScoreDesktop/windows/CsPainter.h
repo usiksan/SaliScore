@@ -41,6 +41,12 @@ struct CsLyricDisposition {
   };
 
 
+struct CsTextHeight {
+    int mHeight; //!< Full height of text line
+    int mOffset; //!< Vertical offset text
+  };
+
+
 class CsPainter
   {
   protected:
@@ -59,12 +65,12 @@ class CsPainter
 
     //Operative values
     int               mCurY;
-    int               mRemarkTextHeight;
-    int               mChordTextHeight;
-    int               mLyricTextHeight;
-    int               mTranslationTextHeight;
-    int               mTitleHeight;
-    int               mPropertiesHeight;
+    CsTextHeight      mRemarkTextHeight;
+    CsTextHeight      mChordTextHeight;
+    CsTextHeight      mLyricTextHeight;
+    CsTextHeight      mTranslationTextHeight;
+    CsTextHeight      mTitleHeight;
+    CsTextHeight      mPropertiesHeight;
     int               mLeftGap;
     int               mClefPos;
     int               mDenominatorPos;
@@ -125,50 +131,50 @@ class CsPainter
     int    visualX( int x, int pos );
 
   private:
-    void   drawRemark( const QMap<QString,QString> &remarkMap );
+    void         drawRemark( const QMap<QString,QString> &remarkMap );
 
-    void   drawChord(int taktCount, const QMap<QString, CsChordLine> &chordMap );
+    void         drawChord(int taktCount, const QMap<QString, CsChordLine> &chordMap );
 
-    void   drawNote( int taktCount, const QMap<QString,CsNoteLine> &noteMap );
+    void         drawNote( int taktCount, const QMap<QString,CsNoteLine> &noteMap );
 
-    void   drawLyric(const CsLyricLine &lyricLine );
+    void         drawLyric(const CsLyricLine &lyricLine );
 
-    void   drawTranslation( const QMap<QString,QString> &translationMap );
+    void         drawTranslation( const QMap<QString,QString> &translationMap );
 
-    void   drawPlayPosition(int markHeight);
-
-
-
-    void   drawRemarkImpl( int x, int y, const QString &rem );
-
-    void   drawChordImpl(const QString &part, const CsChordLine &chordLine );
-
-    void   drawNoteImpl(int clef, int taktCount, const QString &part, const CsNoteLine &noteLine );
-
-    void   drawTranslationImpl( int x, int y, const QString &tran );
-
-    void   drawPropertyImpl(int xorigin, int xtab, const QString &title, const QString &value, int propertyId );
-
-    void   drawTaktLines( int taktCount, int y0, int y1 );
-
-    int    fontHeight( int fontSize ) const;
-
-    bool   isPlayerOnCurrentLine() const { return mPlayer.isShow() && mPlayer.lineIndex() == mLineIndex; }
-
-    bool   isHighlight( int position, int duration ) const;
+    void         drawPlayPosition(int markHeight);
 
 
-    void   drawCellProperty(int x, int y, const QString &value, int height, int propertyId );
 
-    int    drawCellText( int x, int y, const QString &value, int height, bool isCurrent );
+    void         drawRemarkImpl( int x, int y, const QString &rem );
 
-    void   drawCellChord( int y , int tickCount, const QString &part );
+    void         drawChordImpl(const QString &part, const CsChordLine &chordLine );
 
-    void   drawCellNote( int y, int tickCount, const QString &part );
+    void         drawNoteImpl(int clef, int taktCount, const QString &part, const CsNoteLine &noteLine );
 
-    void   drawCellLyric( int y, int tickCount );
+    void         drawTranslationImpl( int x, int y, const QString &tran );
 
-    void   drawCell( int x, int y, int width, int height, bool isCurrent );
+    void         drawPropertyImpl(int xorigin, int xtab, const QString &title, const QString &value, int propertyId );
+
+    void         drawTaktLines( int taktCount, int y0, int y1 );
+
+    CsTextHeight fontHeight( int fontSize ) const;
+
+    bool         isPlayerOnCurrentLine() const { return mPlayer.isShow() && mPlayer.lineIndex() == mLineIndex; }
+
+    bool         isHighlight( int position, int duration ) const;
+
+
+    void         drawCellProperty(int x, int y, const QString &value, int height, int propertyId );
+
+    int          drawCellText( int x, int y, const QString &value, int height, bool isCurrent );
+
+    void         drawCellChord( int y , int tickCount, const QString &part );
+
+    void         drawCellNote( int y, int tickCount, const QString &part );
+
+    void         drawCellLyric( int y, int tickCount );
+
+    void         drawCell( int x, int y, int width, int height, bool isCurrent );
   };
 
 #endif // CSPAINTER_H

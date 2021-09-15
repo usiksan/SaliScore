@@ -197,6 +197,9 @@ void CsCursorEditLyric::keyPress(int key, QChar ch, CsCursorEditPtr &ptr)
     case Qt::Key_Enter :
       CsCursorEdit::keyPress( key, ch, ptr );
       break;
+    case Qt::Key_Tab : // 1/4
+      insertAlign( 64 );
+      break;
     case Qt::Key_Left :
       movePos( mCharPos - 1, mShift );
       break;

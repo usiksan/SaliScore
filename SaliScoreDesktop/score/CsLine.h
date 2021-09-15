@@ -31,12 +31,14 @@ Description
 
 class CsLine
   {
-    CsRemark              mRemark;
-    CsChordKit            mChordKit;
-    CsNoteKit             mNoteKit;
-    CsLyricLine           mLyricLine;
-    QMap<QString,QString> mTranslation;
-    int                   mTaktCount;   //!<
+    CsRemark              mRemark;      //!< Any remark text
+    CsChordKit            mChordKit;    //!< Chord for different parts (variants)
+    CsNoteKit             mNoteKit;     //!< Notes for different parts (variants)
+    CsLyricLine           mLyricLine;   //!< Lyric line
+    QMap<QString,QString> mTranslation; //!< Translations of lyric on other languages
+    int                   mTickOffset;  //!< Line division not by takt bound
+    int                   mTickPerTakt; //!< Tick per takt
+    int                   mTaktCount;   //!< Takt count per line
   public:
     CsLine();
 
@@ -102,7 +104,15 @@ class CsLine
     void    translationRemove( const QString &lang ) { mTranslation.remove( lang ); }
 
     //========================================================
-    //    Takt count
+    //   Tick and Takt
+
+    int     tickOffset() const { return mTickOffset; }
+
+    void    tickOffsetSet( int to ) { mTickOffset = to; }
+
+    int     tickPerTakt() const { return mTickPerTakt; }
+
+    void    tickPerTaktSet( int tpt ) { mTickPerTakt = tpt; }
 
     int     taktCount() const { return mTaktCount; }
 
