@@ -62,9 +62,17 @@ void CsCursorEdit::keyRelease(int key, QChar ch)
 
 
 
-CsCursorEdit *CsCursorEdit::build(CsCursor &src, CsComposition &comp)
+CsCursorEdit *CsCursorEdit::build(CsCursor &src, CsComposition &comp )
   {
-  switch( src.cellClass() ) {
+  return build( src.cellClass(), src.lineIndex(), src.position(), src.partName(), comp );
+  }
+
+
+
+
+CsCursorEdit *CsCursorEdit::build( CsClass cellClass, int lineIndex, int position, const QString partName, CsComposition &comp)
+  {
+  switch( cellClass ) {
     case cccTitle :
     case cccVoice :
     case cccSinger :
@@ -79,22 +87,25 @@ CsCursorEdit *CsCursorEdit::build(CsCursor &src, CsComposition &comp)
     //case cccAuthor :
 
     case cccTempo :
-      return new CsCursorEditProperty( src.cellClass(), comp );
+      return new CsCursorEditProperty( cellClass, comp );
 
     case cccRemark :
-      return new CsCursorEditRemark( src.lineIndex(), src.partName(), comp );
+      return new CsCursorEditRemark( lineIndex, partName, comp );
 
     case cccChord :
-      return new CsCursorEditChord( src.lineIndex(), src.position(), src.partName(), comp );
+      return new CsCursorEditChord( lineIndex, position, partName, comp );
 
     case cccNote :
-      return new CsCursorEditNote( src.lineIndex(), src.position(), src.partName(), comp );
+      return new CsCursorEditNote( lineIndex, position, partName, comp );
 
     case cccLyric :
-      return new CsCursorEditLyric( src.lineIndex(), comp );
+      return new CsCursorEditLyric( lineIndex, comp, -1 );
+
+    case cccLyricSymbol :
+      return new CsCursorEditLyric( lineIndex, comp, position );
 
     case cccTranslation :
-      return new CsCursorEditTranslation( src.lineIndex(), src.partName(), comp );
+      return new CsCursorEditTranslation( lineIndex, partName, comp );
 
     default:
       return nullptr;

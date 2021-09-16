@@ -51,7 +51,9 @@ class CsCursorEdit : public CsCursor
 
     virtual void         clipboardCopy() {}
 
-    static CsCursorEdit *build( CsCursor &src, CsComposition &comp );
+    static CsCursorEdit *build(CsCursor &src, CsComposition &comp );
+
+    static CsCursorEdit *build(CsClass cellClass, int lineIndex, int position, const QString partName, CsComposition &comp );
   };
 
 #endif // CSCURSOREDIT_H

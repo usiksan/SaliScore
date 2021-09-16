@@ -11,7 +11,7 @@ class CsCursorEditLyric : public CsCursorEdit
     int         mStartSel;   //!< Char start select position
     int         mStopSel;    //!< Char stop select position
   public:
-    CsCursorEditLyric(int lineIndex, CsComposition &comp );
+    CsCursorEditLyric(int lineIndex, CsComposition &comp, int charIndex );
 
   protected:
 

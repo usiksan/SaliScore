@@ -419,6 +419,12 @@ void CsWinEditor::upMousePressEvent(QMouseEvent *event)
           mCellCursor.jump( ref.type(), ref.index(), ref.line(), ref.part() );
           break;
 
+        case cccLyricSymbol :
+          if( mEditor == nullptr ) {
+            mCellCursor.jump( cccLyric, 0, ref.line(), ref.part() );
+            mEditor = CsCursorEdit::build( cccLyricSymbol, ref.line(), ref.index(), ref.part(), mComposition );
+            }
+          break;
         }
       update();
       return;

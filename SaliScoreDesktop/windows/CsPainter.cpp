@@ -53,7 +53,7 @@ int CsPainter::drawTitleAndProperties(int y, const CsComposition &comp)
   mPainter->setFont( QFont(mSettings.mFontName, mSettings.mTitleFontSize) );
   QRect r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, comp.title() );
   int x = (mSize.width() - r.width()) / 2;
-  drawCellProperty( x - mOffsetX, y, comp.title(), mTitleHeight.mHeight, cccTitle );
+  drawCellProperty( x - mOffsetX, y + mTitleHeight.mOffset, comp.title(), mTitleHeight.mHeight, cccTitle );
   if( isNotEditProperty( cccTitle, x - mOffsetX, y + mTitleHeight.mHeight )  )
     mPainter->drawText( x - mOffsetX, y + mTitleHeight.mHeight, comp.title() );
   mCurY += mTitleHeight.mHeight + mSettings.mTextGap;
@@ -485,6 +485,16 @@ void CsPainter::drawLyric(const CsLyricLine &lyricLine)
   if( isNotEditLyric( lyricDisposition ) ) {
     buildDisposition( lyricDisposition, lyricLine );
 
+    //Append lyric symbol reference
+    for( int i = 0; i < lyricLine.count(); i++ ) {
+      //Position x of symbol
+      int x = lyricDisposition[i].mPosX;
+      //Width of area ocupied by symbol
+      int w = (i + 1) < lyricLine.count() ? lyricDisposition[i + 1].mPosX - x : lyricDisposition[i].mWidth;
+      //Append reference
+      mReferenceList.append( CsReference( QRect( x, mCurY - mLyricTextHeight.mHeight + mLyricTextHeight.mOffset, w, mLyricTextHeight.mHeight ), cccLyricSymbol, mLineIndex, QString{}, i ) );
+      }
+
     //Paint each lyric symbol
     for( int i = 0; i < lyricLine.count(); i++ ) {
       mPainter->setPen( lyricDisposition[i].mHighlight ? mSettings.mColorLyricHighlight : mSettings.mColorLyric );
@@ -515,9 +525,9 @@ void CsPainter::drawTranslation(const QMap<QString, QString> &translationMap)
   //For each translations which visible we perform drawing
   for( const auto &lang : qAsConst(mVisibleTranslate) ) {
     if( mCellCursor != nullptr ) {
-      int width = drawCellText( mLeftGap, mCurY, translationMap.value(lang), mTranslationTextHeight.mHeight,
+      int width = drawCellText( mLeftGap, mCurY + mTranslationTextHeight.mOffset, translationMap.value(lang), mTranslationTextHeight.mHeight,
                     mCellCursor->isMatch( cccTranslation, mLineIndex, lang ) );
-      mReferenceList.append( CsReference( mLeftGap, mCurY, width, mTranslationTextHeight.mHeight,
+      mReferenceList.append( CsReference( mLeftGap, mCurY + mTranslationTextHeight.mOffset, width, mTranslationTextHeight.mHeight,
                                           cccTranslation, mLineIndex, lang, 0 ) );
       }
 
@@ -642,7 +652,7 @@ void CsPainter::drawPropertyImpl(int xorigin, int xtab, const QString &title, co
   {
   mCurY += mPropertiesHeight.mHeight;
   mPainter->drawText( xorigin, mCurY, title );
-  drawCellProperty( xorigin + xtab, mCurY - mPropertiesHeight.mHeight, value, mPropertiesHeight.mHeight, propertyId );
+  drawCellProperty( xorigin + xtab, mCurY - mPropertiesHeight.mHeight + mPropertiesHeight.mOffset, value, mPropertiesHeight.mHeight, propertyId );
   if( isNotEditProperty( propertyId, xorigin + xtab, mCurY )  )
     mPainter->drawText( xorigin + xtab, mCurY, value );
   mCurY += mSettings.mTextGap;
@@ -671,7 +681,7 @@ CsTextHeight CsPainter::fontHeight(int fontSize) const
   QRect r = met.boundingRect( QChar(u'Д') );
   //qDebug() << r;
   CsTextHeight hs;
-  hs.mHeight = r.height();
+  hs.mHeight = r.height() + 1;
   hs.mOffset = r.height() + r.y();
   //qDebug() << hs.mHeight << hs.mOffset;
   return hs;
@@ -762,7 +772,9 @@ void CsPainter::drawCellLyric(int y, int tickCount)
     return;
 
   int x = visualX( mLeftGap, 0 );
-  drawCell( x, y, mStepPixLyric * (tickCount / mStepLyric), mLyricTextHeight.mHeight, mCellCursor->isMatch( cccLyric ) && mCellCursor->lineIndex() == mLineIndex );
+  int w = visualX( mLeftGap, tickCount ) - x;
+  drawCell( x, y + mLyricTextHeight.mOffset, w, mLyricTextHeight.mHeight, mCellCursor->isMatch( cccLyric ) && mCellCursor->lineIndex() == mLineIndex );
+  mReferenceList.append( CsReference( x, y + mLyricTextHeight.mOffset, w, mLyricTextHeight.mHeight, cccLyric, mLineIndex, QString{}, 0 ) );
   }
 
 

@@ -29,6 +29,8 @@ enum CsClass {
   cccLyric,
   cccTranslation,
 
+  cccLyricSymbol,
+
   cccChordLine,
   cccChordPlacehold,
   cccClef,

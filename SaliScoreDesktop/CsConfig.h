@@ -66,6 +66,8 @@ History
   08.09.2021 v0.32 Append left-right moving chord, note and lyric
   15.09.2021 v0.33 Fix: with empty singer or title song not uploaded
              v0.34 Fix: chord like F# not detected right because F# detection resides AFTER F but must be earlear
+  16.09.2021 v0.35 Ajust cell display for all cell class
+                   Append mouse point for lyric symbols
 */
 
 #ifndef CSCONFIG
@@ -79,7 +81,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             34
+#define CS_VERSION_MINOR             35
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"

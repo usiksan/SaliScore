@@ -5,7 +5,7 @@
 #include <QApplication>
 
 
-CsCursorEditLyric::CsCursorEditLyric(int lineIndex, CsComposition &comp) :
+CsCursorEditLyric::CsCursorEditLyric(int lineIndex, CsComposition &comp, int charIndex) :
   CsCursorEdit( comp )
   {
   mClass = cccLyric;
@@ -15,6 +15,9 @@ CsCursorEditLyric::CsCursorEditLyric(int lineIndex, CsComposition &comp) :
   mLyricLine = mComposition.lyricGet( mLineIndex );
 
   mStartSel = mStopSel = mCharPos = mLyricLine.count();
+
+  if( 0 <= charIndex && charIndex < mLyricLine.count() )
+    mStartSel = mStopSel = mCharPos = charIndex;
   }
 
 
