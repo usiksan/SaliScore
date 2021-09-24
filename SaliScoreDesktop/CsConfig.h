@@ -73,6 +73,7 @@ History
                    Append Delete key to chord edit
                    Append right key to end chord edit and move right
                    Fix: selection box for lyric
+             v0.37 Append shift cursor when insert align
 */
 
 #ifndef CSCONFIG
@@ -86,7 +87,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             36
+#define CS_VERSION_MINOR             37
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"

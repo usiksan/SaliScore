@@ -4,7 +4,7 @@
 
 CsLine::CsLine() :
   mTickPerTakt(duraHole),
-  mTaktCount(8)
+  mTaktCount(4)
   {
 
   }

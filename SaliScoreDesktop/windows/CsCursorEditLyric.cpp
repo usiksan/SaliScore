@@ -156,8 +156,10 @@ void CsCursorEditLyric::insertAlign(int align)
     mLyricLine[mCharPos-1].alignSet( mLyricLine[mCharPos-1].align() + align );
   else if( mCharPos < mLyricLine.count() && mLyricLine.at(mCharPos).isAlign() )
     mLyricLine[mCharPos].alignSet( mLyricLine[mCharPos].align() + align );
-  else if( align > 0 )
+  else if( align > 0 ) {
     mLyricLine.insert( mCharPos, CsLyricSymbol(align) );
+    mCharPos++;
+    }
   }
 
 
