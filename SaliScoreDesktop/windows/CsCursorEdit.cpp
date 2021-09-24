@@ -80,7 +80,7 @@ CsCursorEdit *CsCursorEdit::build( CsClass cellClass, int lineIndex, int positio
     case cccVoiceDual :
     case cccComposer :
 
-    case cccVoiceRight :
+    case cccVoiceLeft :
     case cccLyricist :
 
     case cccStyle :

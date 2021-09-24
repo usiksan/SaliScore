@@ -9,7 +9,7 @@ class CsSynthSettings
   {
     int  mVoice;
     int  mVoiceDual;
-    int  mVoiceRight;
+    int  mVoiceLeft;
     int  mStyle;
     int  mTempo;
   public:
@@ -21,8 +21,8 @@ class CsSynthSettings
     QString voiceDual() const { return QString::number( mVoiceDual); }
     void    voiceDualSet( const QString &voi ) { mVoiceDual = voi.toInt(); }
 
-    QString voiceRight() const { return QString::number( mVoiceRight ); }
-    void    voiceRightSet( const QString &voi ) { mVoiceRight = voi.toInt(); }
+    QString voiceLeft() const { return QString::number( mVoiceLeft ); }
+    void    voiceLeftSet( const QString &voi ) { mVoiceLeft = voi.toInt(); }
 
     QString style() const { return QString::number( mStyle ); }
     void    styleSet( const QString &stl ) { mStyle = stl.toInt(); }

@@ -31,6 +31,11 @@ CsPainter::CsPainter(QPainter *painter, const QString &keyViewSettings, const Cs
   mTitleHeight           = fontHeight( mSettings.mTitleFontSize );
   mPropertiesHeight      = fontHeight( mSettings.mPropertiesFontSize );
 
+  //Get tick per part
+  mTickPerTakt = comp.tickPerTakt();
+  if( mTickPerTakt <= 0 )
+    mTickPerTakt = 256;
+
   //First takt offset
   mClefPos = mSettings.mLeftMenuSize + 15 - mOffsetX;
   mDenominatorPos = mClefPos + 20 - mOffsetX;
@@ -77,10 +82,43 @@ int CsPainter::drawTitleAndProperties(int y, const CsComposition &comp)
   r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, author );
   w = qMax( r.width(), w );
   w += 5;
+  int storedY = mCurY;
   drawPropertyImpl( mClefPos, w, singer, comp.singer(), cccSinger );
   drawPropertyImpl( mClefPos, w, composer, comp.composer(), cccComposer );
   drawPropertyImpl( mClefPos, w, lyricist, comp.lyricist(), cccLyricist );
   drawPropertyImpl( mClefPos, w, author, comp.author(), cccAuthor );
+
+  //Restore Y to draw right side of properties
+  mCurY = storedY;
+
+  //At right side properties
+  QString voice = QObject::tr("Voice:");
+  QString voiceDual = QObject::tr("Voice dual:");
+  QString voiceLeft = QObject::tr("Voice left:");
+  QString style = QObject::tr("Style:");
+  QString tempo = QObject::tr("Tempo:");
+
+  r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, voice );
+  w = r.width();
+
+  r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, voiceDual );
+  w = qMax( r.width(), w );
+
+  r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, voiceLeft );
+  w = qMax( r.width(), w );
+
+  r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, style );
+  w = qMax( r.width(), w );
+
+  r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, composer );
+  w = qMax( r.width(), w );
+
+  int rightX = mSize.width() - w * 2;
+  drawPropertyImpl( rightX, w, voice, comp.voice(), cccVoice );
+  drawPropertyImpl( rightX, w, voiceDual, comp.voiceDual(), cccVoiceDual );
+  drawPropertyImpl( rightX, w, voiceLeft, comp.voiceLeft(), cccVoiceLeft );
+  drawPropertyImpl( rightX, w, style, comp.style(), cccStyle );
+  drawPropertyImpl( rightX, w, tempo, comp.tempo(), cccTempo );
 
   return mCurY;
   }
@@ -125,7 +163,7 @@ int CsPainter::drawLine(int y, int lineIndex, const CsLine &line, bool fullDrawi
     //Draw line content
     drawChord( line.taktCount(), line.chordKitConst().chordMapConst() );
     drawNote( line.taktCount(), line.noteKitConst().noteMapConst() );
-    drawCellLyric( mCurY, line.taktCount() * 256 );
+    drawCellLyric( mCurY, line.taktCount() * mTickPerTakt );
     drawLyric( line.lyricLineConst() );
     drawTranslation( line.translationConst() );
     mCurY += mSettings.mLineGap;
@@ -394,7 +432,7 @@ void CsPainter::buildDisposition(QVector<CsLyricDisposition> &disposition, const
       }
     disposition[i].mPosX = curX;
     curX += disposition[i].mWidth;
-    disposition[i].mHighlight = isHighlight( pos, 256 - (pos & 0xff) );
+    disposition[i].mHighlight = isHighlight( pos, mTickPerTakt - (pos % mTickPerTakt) );
     }
   }
 
@@ -447,7 +485,7 @@ void CsPainter::drawChord( int taktCount, const QMap<QString, CsChordLine> &chor
   //For each chord line which visible we perform drawing
   for( const auto &chordKey : qAsConst(mVisibleChord) ) {
     drawTaktLines( taktCount, mCurY - mChordTextHeight.mOffset, mCurY + mChordTextHeight.mHeight );
-    drawCellChord( mCurY, taktCount * 256, chordKey );
+    drawCellChord( mCurY, taktCount * mTickPerTakt, chordKey );
     mCurY += mChordTextHeight.mHeight;
     drawChordImpl( chordKey, chordMap.value(chordKey) );
     mCurY += mSettings.mTextGap;
@@ -464,7 +502,7 @@ void CsPainter::drawNote(int taktCount, const QMap<QString, CsNoteLine> &noteMap
 
   //For each note line which visible we perform drawing
   for( const auto &noteKey : qAsConst(mVisibleNote) ) {
-    drawCellNote( mCurY, taktCount * 256, noteKey );
+    drawCellNote( mCurY, taktCount * mTickPerTakt, noteKey );
     drawNoteImpl( mClefMap.value(noteKey), taktCount, noteKey, noteMap.value(noteKey) );
     mCurY += 9 * mSettings.mScoreLineDistance;
     }
@@ -549,8 +587,12 @@ void CsPainter::drawPlayPosition( int markHeight )
     return;
 
   int posx = visualX( mLeftGap, mPlayer.lineTickIndex() );
+
+  //Set current play position
+  mPlayerLine = QLine( posx, mCurY, posx, mCurY + markHeight );
+
   mPainter->setPen( QPen( QBrush(mSettings.mPlayMarkColor), mSettings.mPlayMarkWidth ) );
-  mPainter->drawLine( posx, mCurY, posx, mCurY + markHeight );
+  mPainter->drawLine( mPlayerLine );
   }
 
 
@@ -604,7 +646,7 @@ void CsPainter::drawNoteImpl( int clef, int taktCount, const QString &part, cons
   mPainter->setPen( mSettings.mColorNote );
   //Draw five lines of score
   for( int i = 0; i < 5; i++ )
-    mPainter->drawLine( mClefPos - 5, scoreY + i * mSettings.mScoreLineDistance, visualX( mLeftGap, taktCount * 256) + 5, scoreY + i * mSettings.mScoreLineDistance );
+    mPainter->drawLine( mClefPos - 5, scoreY + i * mSettings.mScoreLineDistance, visualX( mLeftGap, taktCount * mTickPerTakt) + 5, scoreY + i * mSettings.mScoreLineDistance );
 
   //Note abowe line 0
   int noteStart = whiteOctaveFirst + whiteC;
@@ -671,7 +713,7 @@ void CsPainter::drawTaktLines(int taktCount, int y0, int y1)
     //If no offset of line start then takt line on one more
     int tc = taktCount + (mLineStartOffset == 0 ? 1 : 0);
     for( int i = 0; i < tc; i++ ) {
-      int x = visualX( mLeftGap, mLineStartOffset + i * 256 );
+      int x = visualX( mLeftGap, mLineStartOffset + i * mTickPerTakt );
       mPainter->drawLine( x, y0, x, y1 );
       }
     }
@@ -724,12 +766,11 @@ void CsPainter::drawCellProperty(int x, int y, const QString &value, int height,
 
 int CsPainter::drawCellText(int x, int y, const QString &value, int height, bool isCurrent)
   {
-  //Calculate width of cell. Width is max of width of value string and 50 pixels
-  int width = 50;
+  //Calculate width of cell. Width is max of width of value string and 200 pixels
+  int width = 200;
   if( !value.isEmpty() ) {
     QRect r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, value );
-    if( r.width() > 50 )
-      width = r.width();
+    width = qMax( 50, r.width() );
     }
 
   drawCell( x, y, width, height, isCurrent );
@@ -790,9 +831,9 @@ void CsPainter::drawCell(int x, int y, int width, int height, bool isCurrent)
   {
   if( isCurrent ) {
     //Draw current cell background
-    mPainter->setPen( Qt::transparent );
-    mPainter->setBrush( mSettings.mColorCellCurrent );
-    mPainter->drawRect( x, y, width, height );
+    mPainter->setPen( mSettings.mColorCellCurrent );
+    mPainter->setBrush( mSettings.mColorCellCurrent.lighter(140) );
+    mPainter->drawRoundedRect( x, y, width, height, 3, 3 );
     mCellCursorRect.setRect( x, y, width, height );
     }
   else {
@@ -805,5 +846,4 @@ void CsPainter::drawCell(int x, int y, int width, int height, bool isCurrent)
     }
 
   mPainter->setPen( Qt::black );
-
   }

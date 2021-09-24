@@ -74,6 +74,11 @@ History
                    Append right key to end chord edit and move right
                    Fix: selection box for lyric
              v0.37 Append shift cursor when insert align
+             v0.38 Set musical size as global to hole composition
+                   Refactor current position display
+                   Append display and edit synth settings (voice, style and so on)
+                   Append autoscroll by player
+                   Append hide player position when stop
 */
 
 #ifndef CSCONFIG
@@ -87,7 +92,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             37
+#define CS_VERSION_MINOR             38
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"

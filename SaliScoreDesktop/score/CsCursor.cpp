@@ -8,6 +8,15 @@ CsCursor::CsCursor() :
 
   }
 
+
+
+
+
+//!
+//! \brief isMatchClass Returns true if cursor's class match to any of classes in vector
+//! \param v            Vector of classes
+//! \return             true if cursor's class match to any of classes in vector
+//!
 bool CsCursor::isMatchClass(const QVector<int> &v) const
   {
   for( auto val : v )

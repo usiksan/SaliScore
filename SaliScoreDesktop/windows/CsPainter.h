@@ -77,6 +77,8 @@ class CsPainter
 
     int               mLineStartOffset;        //!< Offset of line start in tick
 
+    int               mTickPerTakt;
+
     int               mStepChord;
     int               mStepNote;
     int               mStepLyric;
@@ -94,6 +96,7 @@ class CsPainter
     QSize             mSize;                   //!< Drawable area size
 
     QRect             mCellCursorRect;         //!< Current cell rectangle
+    QLine             mPlayerLine;             //!< Current play position
   public:
     CsPainter( QPainter *painter, const QString &keyViewSettings, const CsComposition &comp, const CsPlay &player, int offsetX, QSize size, CsCellCursor *cellCursor = nullptr );
 
@@ -103,7 +106,13 @@ class CsPainter
 
     QColor           backgroundColor() const { return mSettings.mColorBackground; }
 
+    //!
+    //! \brief cellCursorRect Returns current cursor cell position rect
+    //! \return               Current cursor cell position rect
+    //!
     QRect            cellCursorRect() const { return mCellCursorRect; }
+
+    QLine            playerLine() const { return mPlayerLine; }
 
     int              drawTitleAndProperties( int y, const CsComposition &comp );
 

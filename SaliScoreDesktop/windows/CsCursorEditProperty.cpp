@@ -8,39 +8,39 @@ CsCursorEditProperty::CsCursorEditProperty(int propertyId, CsComposition &comp) 
 
   switch( propertyId ) {
     case cccTitle :
-      setText( comp.title(), false );
+      setText( comp.title(), true );
       break;
 
     case cccVoice :
-      setText( comp.voice(), false );
+      setText( comp.voice(), true );
       break;
 
     case cccSinger :
-      setText( comp.singer(), false );
+      setText( comp.singer(), true );
       break;
 
     case cccVoiceDual :
-      setText( comp.voiceDual(), false );
+      setText( comp.voiceDual(), true );
       break;
 
     case cccComposer :
-      setText( comp.composer(), false );
+      setText( comp.composer(), true );
       break;
 
-    case cccVoiceRight :
-      setText( comp.voiceRight(), false );
+    case cccVoiceLeft :
+      setText( comp.voiceLeft(), true );
       break;
 
     case cccLyricist :
-      setText( comp.lyricist(), false );
+      setText( comp.lyricist(), true );
       break;
 
     case cccStyle :
-      setText( comp.style(), false );
+      setText( comp.style(), true );
       break;
 
     case cccTempo :
-      setText( comp.tempo(), false );
+      setText( comp.tempo(), true );
       break;
     }
 
@@ -73,8 +73,8 @@ void CsCursorEditProperty::apply()
       mComposition.composerSet( mString );
       break;
 
-    case cccVoiceRight :
-      mComposition.voiceRightSet( mString );
+    case cccVoiceLeft :
+      mComposition.voiceLeftSet( mString );
       break;
 
     case cccLyricist :

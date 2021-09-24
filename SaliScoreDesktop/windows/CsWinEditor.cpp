@@ -57,7 +57,23 @@ void CsWinEditor::paint()
     //verticalScrollBar()->setValue( -mOrigin.y() );
     }
 
-  if( mAutoScroll ) {
+  //Roll by player
+  if( mPlayer.isShow() ) {
+    //Vertical autoscroll
+    QLine ln( cp.playerLine() );
+    int top = qMin(ln.y1(),ln.y2());
+    int bot = qMax(ln.y1(),ln.y2());
+    if( top < 0 ) {
+      mOffsetY = qBound( 0, mOffsetY + top, mSizeY );
+      update();
+      }
+    else if( bot > size().height() - 50 ) {
+      mOffsetY = qBound( 0, mOffsetY + bot - size().height() / 3, mSizeY );
+      update();
+      }
+    }
+
+  else if( mAutoScroll ) {
     QRect r( cp.cellCursorRect() );
     //Vertical autoscroll
     //qDebug() << "offy" << mOffsetY << r.top() << r.bottom() << mSizeY;
@@ -409,7 +425,7 @@ void CsWinEditor::upMousePressEvent(QMouseEvent *event)
         case cccSinger :
         case cccVoiceDual :
         case cccComposer :
-        case cccVoiceRight :
+        case cccVoiceLeft :
         case cccLyricist :
         case cccStyle :
         case cccAuthor :
@@ -551,7 +567,7 @@ void CsWinEditor::upKeyPressEvent(QKeyEvent *event)
 
       default:
         if( ch.isPrint() && mCellCursor.isMatchClass( {cccRemark, cccLyric, cccTranslation, cccTitle,   cccVoice,
-                                                       cccSinger, cccVoiceDual, cccComposer, cccVoiceRight,
+                                                       cccSinger, cccVoiceDual, cccComposer, cccVoiceLeft,
                                                        cccLyricist, cccStyle, cccAuthor, cccTempo } )  )
             mEditor = CsCursorEdit::build( mCellCursor, mComposition );
         if( mEditor != nullptr )

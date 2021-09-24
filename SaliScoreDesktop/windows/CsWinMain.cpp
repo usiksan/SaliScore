@@ -348,8 +348,16 @@ void CsWinMain::cmPlayStop()
   {
   mMidiSequencer->setRun(false);
 
-  if( mDefferedReset )
+  if( mDefferedReset ) {
     mPlayer.show(false);
+    //Update view to remove player position
+    if( CsWinMain::actionViewKaraoke->isChecked() )
+      mWinKaraoke->view()->viewUpdate();
+    else if( CsWinMain::actionViewTrain->isChecked() )
+      mWinTrain->view()->viewUpdate();
+    else
+      mWinEditor->view()->viewUpdate();
+    }
   mDefferedReset = true;
   mUpdateTimer.stop();
   mUpdateTimer.disconnect();

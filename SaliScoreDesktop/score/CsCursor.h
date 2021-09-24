@@ -15,7 +15,7 @@ enum CsClass {
   cccVoiceDual,
   cccComposer,
 
-  cccVoiceRight,
+  cccVoiceLeft,
   cccLyricist,
 
   cccStyle,
@@ -81,6 +81,11 @@ class CsCursor
     //!
     QString  partName() const { return mPartName; }
 
+    //!
+    //! \brief isMatchClass Returns true if cursor's class match to any of classes in vector
+    //! \param v            Vector of classes
+    //! \return             true if cursor's class match to any of classes in vector
+    //!
     bool     isMatchClass( const QVector<int> &v ) const;
 
     //!

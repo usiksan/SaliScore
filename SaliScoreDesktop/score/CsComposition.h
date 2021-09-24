@@ -34,6 +34,8 @@ class CsComposition
     QString             mLyricist;
 
     int                 mLineStartOffset;        //!< Offset of line start in tick
+    int                 mTickPerPart;            //!< Part duration in tick
+    int                 mPartPerTakt;            //!< Part count per takt
 
     int                 mStepChord;
     int                 mStepNote;
@@ -80,8 +82,8 @@ class CsComposition
     QString     voiceDual() const { return mHeader.mSettings.voiceDual(); }
     void        voiceDualSet( const QString &voi ) { mHeader.mSettings.voiceDualSet( voi ); stateDirtySet(); }
 
-    QString     voiceRight() const { return mHeader.mSettings.voiceRight(); }
-    void        voiceRightSet( const QString &voi ) { mHeader.mSettings.voiceRightSet( voi ); stateDirtySet(); }
+    QString     voiceLeft() const { return mHeader.mSettings.voiceLeft(); }
+    void        voiceLeftSet( const QString &voi ) { mHeader.mSettings.voiceLeftSet( voi ); stateDirtySet(); }
 
     QString     style() const { return mHeader.mSettings.style(); }
     void        styleSet( const QString &stl ) { mHeader.mSettings.styleSet( stl ); stateDirtySet(); }
@@ -229,7 +231,7 @@ class CsComposition
 
     void        lineTaktCountSet( int index, int taktCount ) { mLineList[index].taktCountSet(taktCount); }
 
-    int         lineTickCount( int index ) const { return lineTaktCount(index) * 256; }
+    int         lineTickCount( int index ) const { return lineTaktCount(index) * tickPerTakt(); }
 
     int         lineStartOffset() const { return mLineStartOffset; }
 
@@ -239,6 +241,16 @@ class CsComposition
     //         Tick
 
     int         tickCount() const;
+
+    int         tickPerPart() const { return mTickPerPart; }
+
+    void        tickPerPartSet( int tpp ) { mTickPerPart = tpp; dirtySet(); }
+
+    int         partPerTakt() const { return mPartPerTakt; }
+
+    void        partPerTaktSet( int ppt ) { mPartPerTakt = ppt; dirtySet(); }
+
+    int         tickPerTakt() const { return mTickPerPart * mPartPerTakt; }
 
 
     //=================================================================

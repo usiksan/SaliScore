@@ -12,6 +12,16 @@ CsPlay::CsPlay(CsComposition &comp) :
 
   }
 
+
+
+
+
+//!
+//! \brief isHit    Returns true if current play position is hit into given interval
+//! \param position Start position of interval
+//! \param duration Duration of interval
+//! \return         true if current play position is hit into given interval
+//!
 bool CsPlay::isHit(int position, int duration) const
   {
   int tick = lineTickIndex();
@@ -20,6 +30,14 @@ bool CsPlay::isHit(int position, int duration) const
 
 
 
+
+
+
+
+//!
+//! \brief next Move play position to the next position by adding tick to current position
+//! \param tick Count of tick added to current position
+//!
 void CsPlay::next(int tick)
   {
   mTickIndex += tick;
@@ -32,7 +50,7 @@ void CsPlay::next(int tick)
         qDebug() << "CsPlay:new line" << index;
         mLineIndex = index;
         mTickLineStart = mTickLineStop;
-        mTickLineStop = mTickLineStart + line.taktCount() * 256;
+        mTickLineStop = mTickLineStart + line.taktCount() * mComposition.tickPerTakt();
         return;
         }
       }
@@ -44,38 +62,55 @@ void CsPlay::next(int tick)
 
 
 
+
+//!
+//! \brief jump      Jump to random position in score
+//! \param lineIndex Line index of new position
+//! \param position  Position inside of line
+//!
 void CsPlay::jump(int lineIndex, int position)
   {
   if( lineIndex < mComposition.lineCount() && !mComposition.line(lineIndex).isRemark() ) {
-    mTickLineStart = 0;
+    //We begin always from compositions line start offset
+    mTickLineStart = mComposition.lineStartOffset();
+
+    //Scan all lines previous for lineIndex and calculate line start position
     for( int index = 0; index < lineIndex; index++ ) {
       const auto &line = mComposition.line( index );
       if( !line.isRemark() ) {
         //Song line found
-        mTickLineStart += line.taktCount() * 256;
+        mTickLineStart += line.taktCount() * mComposition.tickPerTakt();
         }
       }
     mLineIndex = lineIndex;
-    mTickLineStop = mTickLineStart + mComposition.line(lineIndex).taktCount() * 256;
+    mTickLineStop = mTickLineStart + mComposition.line(lineIndex).taktCount() * mComposition.tickPerTakt();
     mTickIndex = mTickLineStart + position;
     }
   }
 
 
 
+
+
+//!
+//! \brief reset Resets player to initial state (begin of score and no show)
+//!
 void CsPlay::reset()
   {
+
   bool isFirst = true;
-  mTickCount = mTickIndex = 0;
+  mTickCount = mTickIndex = mComposition.lineStartOffset();
+  //Calculate tick count of hole composition
+  // and sametime find line with begin of composition
   for( int index = 0; index < mComposition.lineCount(); index++ ) {
     const auto &line = mComposition.line( index );
     if( !line.isRemark() ) {
-      mTickCount += line.taktCount() * 256;
+      mTickCount += line.taktCount() * mComposition.tickPerTakt();
 
       if( isFirst ) {
         mLineIndex = index;
         mTickLineStart = 0;
-        mTickLineStop = line.taktCount() * 256;
+        mTickLineStop = line.taktCount() * mComposition.tickPerTakt();
         isFirst = false;
         }
       }
