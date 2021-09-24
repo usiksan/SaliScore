@@ -33,6 +33,8 @@ class CsComposition
     QString             mComposer;
     QString             mLyricist;
 
+    int                 mLineStartOffset;        //!< Offset of line start in tick
+
     int                 mStepChord;
     int                 mStepNote;
     int                 mStepLyric;
@@ -228,6 +230,10 @@ class CsComposition
     void        lineTaktCountSet( int index, int taktCount ) { mLineList[index].taktCountSet(taktCount); }
 
     int         lineTickCount( int index ) const { return lineTaktCount(index) * 256; }
+
+    int         lineStartOffset() const { return mLineStartOffset; }
+
+    void        lineStartOffsetSet( int offset ) { mLineStartOffset = offset; dirtySet(); }
 
     //=================================================================
     //         Tick

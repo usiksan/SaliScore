@@ -14,6 +14,7 @@ CsPainter::CsPainter(QPainter *painter, const QString &keyViewSettings, const Cs
   mVisibleNote(comp.noteVisible()),
   mVisibleTranslate(comp.translationVisible()),
   mClefMap(comp.noteClefMap()),
+  mLineStartOffset(comp.lineStartOffset()),
   mCellCursor(cellCursor),
   mOffsetX(offsetX),
   mSize(size)
@@ -369,12 +370,15 @@ void CsPainter::buildDisposition(QVector<CsLyricDisposition> &disposition, const
     disposition.resize( lyricLine.count() );
 
 
-  //At first, we calculate width of each symbol
+  //At first, we calculate width of each symbol and their positions
   int curX = visualX( mLeftGap, 0 );
   int pos = 0;
   for( int i = 0; i < lyricLine.count(); i++ ) {
     if( lyricLine.at(i).isAlign() ) {
-      pos = (pos & ~0xff) + lyricLine.at(i).align();
+      if( pos >= mLineStartOffset )
+        pos = mLineStartOffset + ((pos - mLineStartOffset) & ~0xff) + lyricLine.at(i).align();
+      else
+        pos = lyricLine.at(i).align();
       curX = visualX( mLeftGap, pos );
       disposition[i].mWidth = 2;
       //Align all previous non-delimiter symbols to right
@@ -664,8 +668,10 @@ void CsPainter::drawTaktLines(int taktCount, int y0, int y1)
   {
   if( taktCount ) {
     mPainter->setPen( mSettings.mColorTakt );
-    for( int i = 0; i < taktCount + 1; i++ ) {
-      int x = visualX( mLeftGap, i * 256 );
+    //If no offset of line start then takt line on one more
+    int tc = taktCount + (mLineStartOffset == 0 ? 1 : 0);
+    for( int i = 0; i < tc; i++ ) {
+      int x = visualX( mLeftGap, mLineStartOffset + i * 256 );
       mPainter->drawLine( x, y0, x, y1 );
       }
     }

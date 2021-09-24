@@ -176,6 +176,7 @@ void CsCursorEditLyric::keyPress(int key, QChar ch, CsCursorEditPtr &ptr)
       case Qt::Key_2 : //1/2
         insertAlign( 128 );
         return;
+      case Qt::Key_Tab : // 1/4
       case Qt::Key_4 : //1/4
         insertAlign( 64 );
         return;
@@ -199,9 +200,6 @@ void CsCursorEditLyric::keyPress(int key, QChar ch, CsCursorEditPtr &ptr)
     case Qt::Key_Return :
     case Qt::Key_Enter :
       CsCursorEdit::keyPress( key, ch, ptr );
-      break;
-    case Qt::Key_Tab : // 1/4
-      insertAlign( 64 );
       break;
     case Qt::Key_Left :
       movePos( mCharPos - 1, mShift );
@@ -246,67 +244,6 @@ void CsCursorEditLyric::keyPress(int key, QChar ch, CsCursorEditPtr &ptr)
         }
       break;
     }
-
-  /*
-  else if( ch == QChar('*') ) {
-    //Split or move current lyric
-    if( mCharPos == 0 ) {
-      //Move current lyric
-      int newPosition = mPosition + mComposition.stepLyric();
-      if( mLyricIndex + 1 < mLyricList.count() && mLyricList.at(mLyricIndex+1).position() <= newPosition ) {
-        //Need union with next lyric
-        mIsEdit = true;
-
-        //Remove current
-        mLyricList.removeAt( mLyricIndex );
-
-        //At now next lyric is current, update string
-        setText( mString + mLyricList.at(mLyricIndex).lyric(), false );
-        movePos( 0, false );
-
-        mPosition = mLyricList.at(mLyricIndex).position();
-        }
-      else {
-        //Simple move on one step
-        mPosition = newPosition;
-        mLyricList[mLyricIndex].positionSet( newPosition );
-        }
-      }
-    else {
-      mIsEdit = true;
-      //Split current string
-      mLyricList[mLyricIndex].lyricSet( mString.left(mCharPos) );
-
-      //Update second part
-      setText( mString.mid( mCharPos ), false );
-      movePos( 0, false );
-
-      int newPosition = mPosition + mComposition.stepLyric();
-      if( mLyricIndex + 1 < mLyricList.count() && mLyricList.at(mLyricIndex+1).position() <= newPosition ) {
-        //Need union with next lyric
-
-        //At now next lyric is current, update string
-        setText( mString + mLyricList.at(mLyricIndex).lyric(), false );
-        movePos( 0, false );
-
-        mPosition = mLyricList.at(mLyricIndex).position();
-        }
-      else {
-        //Simple insert new lyric
-        CsLyric lyric( newPosition, mComposition.stepLyric(), mString );
-
-        mLyricIndex = csPositionInsert<CsLyric>( lyric, mLyricList );
-
-        mPosition = newPosition;
-        }
-      }
-
-    //Update lyric list into composition
-    mComposition.lyricSet( mLineIndex, mLyricList );
-    }
-
-  else CsCursorEditString::keyPress( key, ch, ptr );
-  */
   }
 
 

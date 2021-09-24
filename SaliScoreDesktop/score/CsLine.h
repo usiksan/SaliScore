@@ -36,7 +36,6 @@ class CsLine
     CsNoteKit             mNoteKit;     //!< Notes for different parts (variants)
     CsLyricLine           mLyricLine;   //!< Lyric line
     QMap<QString,QString> mTranslation; //!< Translations of lyric on other languages
-    int                   mTickOffset;  //!< Line division not by takt bound
     int                   mTickPerTakt; //!< Tick per takt
     int                   mTaktCount;   //!< Takt count per line
   public:
@@ -105,10 +104,6 @@ class CsLine
 
     //========================================================
     //   Tick and Takt
-
-    int     tickOffset() const { return mTickOffset; }
-
-    void    tickOffsetSet( int to ) { mTickOffset = to; }
 
     int     tickPerTakt() const { return mTickPerTakt; }
 

@@ -110,7 +110,7 @@ bool CsPainterEditor::isNotEditLyric( QVector<CsLyricDisposition> &disposition )
     int sStop = mCursorEdit->selStop();
     sStop = sStop < line.count() ? disposition[sStop].mPosX : disposition[line.count() - 1].after();
 
-    QRect res( QPoint( qMin(sStart,sStop), mCurY - mLyricTextHeight.mHeight ), QPoint( qMax(sStart,sStop), mLyricTextHeight.mHeight )  );
+    QRect res( QPoint( qMin(sStart,sStop), mCurY - mLyricTextHeight.mHeight ), QPoint( qMax(sStart,sStop), mCurY )  );
 
     mPainter->setPen( QPen( Qt::DotLine ) );
     mPainter->setBrush( Qt::transparent );

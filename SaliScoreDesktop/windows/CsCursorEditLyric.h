@@ -48,6 +48,10 @@ class CsCursorEditLyric : public CsCursorEdit
     //!
     void delSelected();
 
+    //!
+    //! \brief insertAlign Inserts align symbol in lyric string
+    //! \param align       Align value
+    //!
     void insertAlign( int align );
 
     // CsCursorEdit interface

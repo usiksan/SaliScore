@@ -9,6 +9,7 @@
 
 CsComposition::CsComposition()
   {
+  mLineStartOffset = 0;
   mStepChord = 64;
   mStepNote  = 16;
   mStepLyric = 16;
@@ -316,6 +317,7 @@ void CsComposition::jsonWrite(CsJsonWriter &js) const
   js.jsonString( "Composer", mComposer );
   js.jsonString( "CompLyricist", mLyricist );
   js.jsonList<CsLine>( "LineList", mLineList );
+  js.jsonInt( "LineStartOffset", mLineStartOffset );
 
   js.jsonList<CsDefinition>( "RemarkDefList", mRemarkList );
   js.jsonList<CsDefinition>( "ChordDefList", mChordList );
@@ -333,6 +335,7 @@ void CsComposition::jsonRead(CsJsonReader &js)
   js.jsonString( "Composer", mComposer );
   js.jsonString( "CompLyricist", mLyricist );
   js.jsonList<CsLine>( "LineList", mLineList );
+  js.jsonInt( "LineStartOffset", mLineStartOffset );
 
   js.jsonList<CsDefinition>( "RemarkDefList", mRemarkList );
   js.jsonList<CsDefinition>( "ChordDefList", mChordList );
@@ -365,6 +368,8 @@ void CsComposition::clear()
   mHeader.clear();
   mComposer.clear();
   mLyricist.clear();
+
+  mLineStartOffset = 0;
 
   mStepChord = 64;
   mStepNote  = 16;

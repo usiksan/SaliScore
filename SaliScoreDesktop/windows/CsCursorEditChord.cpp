@@ -153,6 +153,20 @@ void CsCursorEditChord::keyPress(int key, QChar ch, CsCursorEditPtr &ptr)
           }
         break;
 
+      case Qt::Key_Delete :
+        //Remove chord
+        mChordList.removeAt( mChordIndex );
+        mComposition.chordListSet( mLineIndex, mPartName, mChordList );
+        delete ptr;
+        ptr = nullptr;
+        return;
+
+      case Qt::Key_Right :
+        apply();
+        delete ptr;
+        ptr = nullptr;
+        return;
+
       default:
         CsCursorEdit::keyPress( key, ch, ptr );
       }

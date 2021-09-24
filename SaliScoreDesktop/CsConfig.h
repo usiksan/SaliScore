@@ -68,6 +68,11 @@ History
              v0.34 Fix: chord like F# not detected right because F# detection resides AFTER F but must be earlear
   16.09.2021 v0.35 Ajust cell display for all cell class
                    Append mouse point for lyric symbols
+  24.09.2021 v0.36 Append line offset for all composition with takt lines offset
+                   Append special key Ctrl+Tab for +1/4 align
+                   Append Delete key to chord edit
+                   Append right key to end chord edit and move right
+                   Fix: selection box for lyric
 */
 
 #ifndef CSCONFIG
@@ -81,7 +86,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             35
+#define CS_VERSION_MINOR             36
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"

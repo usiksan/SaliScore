@@ -344,6 +344,12 @@ void CsWinEditor::keyDelete()
       mCellCursor.updatePosition();
       }
     }
+  else {
+    if( mCellCursor.cellClass() == cccChord || mCellCursor.cellClass() == cccNote ) {
+      mEditor = CsCursorEdit::build( mCellCursor, mComposition );
+      mEditor->keyPress( Qt::Key_Delete, QChar{}, mEditor );
+      }
+    }
   }
 
 
@@ -461,6 +467,18 @@ void CsWinEditor::upKeyPressEvent(QKeyEvent *event)
         mEditor->keyPress( key, ch, mEditor );
         if( mEditor == nullptr )
           mCellCursor.move( ccoDown );
+        break;
+
+      case Qt::Key_Right :
+        mEditor->keyPress( key, ch, mEditor );
+        if( mEditor == nullptr )
+          mCellCursor.move( ccoRight );
+        break;
+
+      case Qt::Key_Left :
+        mEditor->keyPress( key, ch, mEditor );
+        if( mEditor == nullptr )
+          mCellCursor.move( ccoLeft );
         break;
 
       default:

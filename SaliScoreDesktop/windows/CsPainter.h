@@ -75,6 +75,8 @@ class CsPainter
     int               mClefPos;
     int               mDenominatorPos;
 
+    int               mLineStartOffset;        //!< Offset of line start in tick
+
     int               mStepChord;
     int               mStepNote;
     int               mStepLyric;

@@ -3,7 +3,6 @@
 #include "../SvJson/SvJsonIO.h"
 
 CsLine::CsLine() :
-  mTickOffset(0),
   mTickPerTakt(duraHole),
   mTaktCount(8)
   {
@@ -31,7 +30,6 @@ void CsLine::jsonWrite(CsJsonWriter &js) const
   js.jsonObject<CsChordKit>( "ChordKit", mChordKit );
   js.jsonObject<CsNoteKit>( "NoteKit", mNoteKit );
   js.jsonMapString( "Translation", mTranslation );
-  js.jsonInt( "tickOffset", mTickOffset );
   js.jsonInt( "tickPerTakt", mTickPerTakt );
   js.jsonInt( "taktCount", mTaktCount );
 
@@ -50,7 +48,6 @@ void CsLine::jsonRead(CsJsonReader &js)
   js.jsonObject<CsChordKit>( "ChordKit", mChordKit );
   js.jsonObject<CsNoteKit>( "NoteKit", mNoteKit );
   js.jsonMapString( "Translation", mTranslation );
-  js.jsonInt( "tickOffset", mTickOffset );
   js.jsonInt( "tickPerTakt", mTickPerTakt );
   js.jsonInt( "taktCount", mTaktCount );
 
