@@ -126,6 +126,7 @@ class CsWinMain : public QMainWindow
     //======================================================================================
     //                           Commands
     static QMenu *menuFile;
+    static QMenu *menuEditDisabled;
     static QMenu *menuEdit;
     static QMenu *menuView;
     static QMenu *menuPlay;

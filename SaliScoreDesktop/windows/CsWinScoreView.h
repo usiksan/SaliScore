@@ -43,6 +43,14 @@ class CsWinScoreView : public QWidget
 
   public slots:
     void viewUpdate();
+
+    //Menu Edit
+    virtual void cmEditUndo() {}
+    virtual void cmEditRedo() {}
+    virtual void cmEditCut() {}
+    virtual void cmEditCopy() {}
+    virtual void cmEditPaste() {}
+    virtual void cmEditDelete() {}
   };
 
 #endif // CSWINSCOREVIEW_H

@@ -107,6 +107,36 @@ void CsWinEditor::playStart()
     }
   }
 
+void CsWinEditor::cmEditUndo()
+  {
+
+  }
+
+void CsWinEditor::cmEditRedo()
+  {
+
+  }
+
+void CsWinEditor::cmEditCut()
+  {
+
+  }
+
+void CsWinEditor::cmEditCopy()
+  {
+
+  }
+
+void CsWinEditor::cmEditPaste()
+  {
+
+  }
+
+void CsWinEditor::cmEditDelete()
+  {
+
+  }
+
 
 
 template <typename Line>

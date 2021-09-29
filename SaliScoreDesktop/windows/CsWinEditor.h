@@ -36,6 +36,15 @@ class CsWinEditor : public CsWinScoreView
 
     virtual void playStart() override;
 
+  public slots:
+    //Menu Edit
+    virtual void cmEditUndo() override;
+    virtual void cmEditRedo() override;
+    virtual void cmEditCut() override;
+    virtual void cmEditCopy() override;
+    virtual void cmEditPaste() override;
+    virtual void cmEditDelete() override;
+
   private:
     //!
     //! \brief keyLeft Handle key left pressing

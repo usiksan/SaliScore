@@ -80,6 +80,7 @@ History
                    Append autoscroll by player
                    Append hide player position when stop
   29.09.2021 v0.39 Block edit possibilities when mode other than editor
+             v0.40 Append different edit menu in edit mode and others modes
 */
 
 #ifndef CSCONFIG
@@ -93,7 +94,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             39
+#define CS_VERSION_MINOR             40
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"

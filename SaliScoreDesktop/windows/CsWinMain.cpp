@@ -231,6 +231,9 @@ void CsWinMain::cmViewEditor()
   //Show active bar
   barEditor->show();
   actionViewEditor->setChecked(true);
+  //Show edit menu
+  menuEditDisabled->hide();
+  menuEdit->show();
   //Activate karaoke
   mWinEditor->view()->activate();
   }
@@ -249,6 +252,9 @@ void CsWinMain::cmViewTrain()
   //Show active bar
   barTrain->show();
   actionViewTrain->setChecked(true);
+  //Hide edit menu
+  menuEdit->hide();
+  menuEditDisabled->show();
   //Activate karaoke
   mWinTrain->view()->activate();
   }
@@ -267,6 +273,9 @@ void CsWinMain::cmViewKaraoke()
   //Show active bar
   barKaraoke->show();
   actionViewKaraoke->setChecked(true);
+  //Hide edit menu
+  menuEdit->hide();
+  menuEditDisabled->show();
   //Activate karaoke
   mWinKaraoke->view()->activate();
   }
@@ -542,8 +551,17 @@ void CsWinMain::createMenu()
   menuFile->addSeparator();
   actionFileExit     = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileExit.png")), tr("Exit programm"), this, &CsWinMain::close );
 
+  menuEditDisabled = new QMenu( tr("Edit") );
+  actionEditPasteImport = menuEditDisabled->addAction( QIcon(QStringLiteral(":/pic/viewEditor.png")), tr("Import from clipboard"), this, &CsWinMain::cmEditPasteImport );
+
   menuEdit = new QMenu( tr("Edit") );
-  actionEditPasteImport = menuEdit->addAction( QIcon(QStringLiteral(":/pic/viewEditor.png")), tr("Import from clipboard"), this, &CsWinMain::cmEditPasteImport );
+  actionEditUndo = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editUndo.png")), tr("Undo last edit operation"), mWinEditor->view(), &CsWinScoreView::cmEditUndo );
+  actionEditRedo = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editRedo.png")), tr("Redo last undoed operation"), mWinEditor->view(), &CsWinScoreView::cmEditRedo );
+  menuEdit->addSeparator();
+  actionEditCopy = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editCopy.png")), tr("Copy selection to clipboard"), mWinEditor->view(), &CsWinScoreView::cmEditCopy );
+  actionEditCut  = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editCut.png")), tr("Cut selection to clipboard"), mWinEditor->view(), &CsWinScoreView::cmEditCut );
+  actionEditPaste = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editPaste.png")), tr("Paste from clipboard"), mWinEditor->view(), &CsWinScoreView::cmEditPaste );
+  actionEditDelete = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editDelete.png")), tr("Delete slection"), mWinEditor->view(), &CsWinScoreView::cmEditDelete );
 
   menuView = new QMenu( tr("View") );
   actionViewEditor  = menuView->addAction( QIcon(QStringLiteral(":/pic/viewEditor.png")), tr("Editor mode"), this, &CsWinMain::cmViewEditor );
@@ -651,6 +669,7 @@ void CsWinMain::createMenu()
 //=============================================================================================================================
 //                                     Commands
 QMenu *CsWinMain::menuFile;
+QMenu *CsWinMain::menuEditDisabled;
 QMenu *CsWinMain::menuEdit;
 QMenu *CsWinMain::menuView;
 QMenu *CsWinMain::menuPlay;

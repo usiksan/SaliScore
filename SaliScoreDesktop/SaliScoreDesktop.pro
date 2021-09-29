@@ -70,7 +70,6 @@ SOURCES += \
     windows/CsWinPage.cpp \
     windows/CsWinPlayList.cpp \
     windows/CsWinRemote.cpp \
-    windows/CsWinScore.cpp \
     windows/CsWinScoreMode.cpp \
     windows/CsWinScoreView.cpp \
     windows/CsWinTrain.cpp
@@ -138,7 +137,6 @@ HEADERS += \
     windows/CsWinPage.h \
     windows/CsWinPlayList.h \
     windows/CsWinRemote.h \
-    windows/CsWinScore.h \
     windows/CsWinScoreMode.h \
     windows/CsWinScoreView.h \
     windows/CsWinTrain.h
