@@ -276,7 +276,7 @@ void CsWinMain::cmViewKaraoke()
 
 void CsWinMain::cmViewRemark()
   {
-  CsDlgDefRemark dlgRem( mComposition, this );
+  CsDlgDefRemark dlgRem( actionViewEditor->isChecked(), mComposition, this );
   dlgRem.fill();
   dlgRem.exec();
   }
@@ -286,7 +286,7 @@ void CsWinMain::cmViewRemark()
 
 void CsWinMain::cmViewChord()
   {
-  CsDlgDefChord dlgChord( mComposition, this );
+  CsDlgDefChord dlgChord( actionViewEditor->isChecked(), mComposition, this );
   dlgChord.fill();
   dlgChord.exec();
   }
@@ -296,7 +296,7 @@ void CsWinMain::cmViewChord()
 
 void CsWinMain::cmViewNote()
   {
-  CsDlgDefNote dlgNote( mComposition, this );
+  CsDlgDefNote dlgNote( actionViewEditor->isChecked(), mComposition, this );
   dlgNote.fill();
   dlgNote.exec();
   }
@@ -306,7 +306,7 @@ void CsWinMain::cmViewNote()
 
 void CsWinMain::cmViewTranslation()
   {
-  CsDlgDefTranslation dlgTranslation( mComposition, this );
+  CsDlgDefTranslation dlgTranslation( actionViewEditor->isChecked(), mComposition, this );
   dlgTranslation.fill();
   dlgTranslation.exec();
   }

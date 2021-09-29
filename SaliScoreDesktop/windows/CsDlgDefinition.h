@@ -12,10 +12,12 @@ class CsDlgDefinition : public QDialog
   {
     Q_OBJECT
 
-    QTableWidget *mDefTable;
-    bool          mEditEnable;
+    QTableWidget *mDefTable;    //!< Visual table with parts list
+    bool          mEditEnable;  //!< Internal flag to prevent recursive update visual table when edit it
+    bool          mEditable;    //!< When true - dialog works in editable mode, i.e. enable to append, edit and delete parts
+                                //!  when false - append, edit and delete are disabled
   public:
-    CsDlgDefinition( QWidget *parent = nullptr );
+    CsDlgDefinition( bool editable, QWidget *parent = nullptr );
 
     void fill();
   public slots:

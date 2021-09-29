@@ -1,7 +1,7 @@
 #include "CsDlgDefTranslation.h"
 
-CsDlgDefTranslation::CsDlgDefTranslation(CsComposition &comp, QWidget *parent) :
-  CsDlgDefinition( parent ),
+CsDlgDefTranslation::CsDlgDefTranslation(bool editable, CsComposition &comp, QWidget *parent) :
+  CsDlgDefinition( editable, parent ),
   mComposition(comp)
   {
 

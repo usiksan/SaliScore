@@ -6,14 +6,19 @@
 #include <QMessageBox>
 #include <QIcon>
 
-CsDlgDefinition::CsDlgDefinition(QWidget *parent) :
+CsDlgDefinition::CsDlgDefinition(bool editable, QWidget *parent) :
   QDialog(parent),
-  mEditEnable(true)
+  mEditEnable(true),
+  mEditable(editable)
   {
   mDefTable = new QTableWidget();
   QPushButton *butAppend = new QPushButton(tr("Append"));
   QPushButton *butDelete = new QPushButton(tr("Delete"));
   QPushButton *butClose  = new QPushButton(tr("Close"));
+
+  //Enable (disable) edit operations
+  butAppend->setEnabled( editable );
+  butDelete->setEnabled( editable );
 
   QVBoxLayout *vbox = new QVBoxLayout();
   vbox->addWidget( butAppend );
@@ -174,8 +179,9 @@ void CsDlgDefinition::fillRow(int row, const CsDefinition &def)
 
   mDefTable->setRowHeight( row, 25 );
 
+  //Part name
   QTableWidgetItem *item = new QTableWidgetItem(def.mName);
-  item->setFlags( Qt::ItemIsEnabled | Qt::ItemIsEditable );
+  item->setFlags( mEditable ? Qt::ItemIsEnabled | Qt::ItemIsEditable : Qt::ItemIsEnabled );
   mDefTable->setItem( row, 0, item );
 
   //Visibility
@@ -186,7 +192,7 @@ void CsDlgDefinition::fillRow(int row, const CsDefinition &def)
 
   //Description
   item = new QTableWidgetItem(def.mDescription);
-  item->setFlags( Qt::ItemIsEnabled | Qt::ItemIsEditable );
+  item->setFlags( mEditable ? Qt::ItemIsEnabled | Qt::ItemIsEditable : Qt::ItemIsEnabled );
   mDefTable->setItem( row, 2, item );
 
   mEditEnable = true;

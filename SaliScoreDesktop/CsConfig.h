@@ -79,6 +79,7 @@ History
                    Append display and edit synth settings (voice, style and so on)
                    Append autoscroll by player
                    Append hide player position when stop
+  29.09.2021 v0.39 Block edit possibilities when mode other than editor
 */
 
 #ifndef CSCONFIG
@@ -92,7 +93,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             38
+#define CS_VERSION_MINOR             39
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"

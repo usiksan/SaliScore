@@ -12,7 +12,7 @@ class CsDlgDefTranslation : public CsDlgDefinition
 
     CsComposition &mComposition;
   public:
-    CsDlgDefTranslation( CsComposition &comp, QWidget *parent );
+    CsDlgDefTranslation( bool editable, CsComposition &comp, QWidget *parent );
 
     // CsDlgDefinition interface
   protected:

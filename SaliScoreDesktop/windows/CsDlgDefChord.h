@@ -12,7 +12,7 @@ class CsDlgDefChord : public CsDlgDefinition
 
     CsComposition &mComposition;
   public:
-    CsDlgDefChord( CsComposition &comp, QWidget *parent );
+    CsDlgDefChord( bool editable, CsComposition &comp, QWidget *parent );
 
     // CsDlgDefinition interface
   protected:

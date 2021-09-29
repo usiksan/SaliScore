@@ -1,7 +1,7 @@
 #include "CsDlgDefNote.h"
 
-CsDlgDefNote::CsDlgDefNote(CsComposition &comp, QWidget *parent) :
-  CsDlgDefinition( parent ),
+CsDlgDefNote::CsDlgDefNote(bool editable, CsComposition &comp, QWidget *parent) :
+  CsDlgDefinition( editable, parent ),
   mComposition(comp)
   {
 

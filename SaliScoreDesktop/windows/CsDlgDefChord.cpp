@@ -1,7 +1,7 @@
 #include "CsDlgDefChord.h"
 
-CsDlgDefChord::CsDlgDefChord( CsComposition &comp, QWidget *parent ) :
-  CsDlgDefinition(parent),
+CsDlgDefChord::CsDlgDefChord(bool editable, CsComposition &comp, QWidget *parent ) :
+  CsDlgDefinition( editable, parent ),
   mComposition(comp)
   {
 

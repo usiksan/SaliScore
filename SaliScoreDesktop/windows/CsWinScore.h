@@ -46,10 +46,6 @@ class CsWinScore : public CsWinPage
     void cmViewEditor();
     void cmViewTrain();
     void cmViewKaraoke();
-    void cmViewRemark();
-    void cmViewChord();
-    void cmViewNote();
-    void cmViewTranslation();
 
     void playStart();
     void playStop();

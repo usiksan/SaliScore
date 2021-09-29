@@ -12,7 +12,7 @@ class CsDlgDefNote : public CsDlgDefinition
 
     CsComposition &mComposition;
   public:
-    CsDlgDefNote( CsComposition &comp, QWidget *parent );
+    CsDlgDefNote( bool editable, CsComposition &comp, QWidget *parent );
 
     // CsDlgDefinition interface
   protected:
