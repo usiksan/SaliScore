@@ -134,6 +134,7 @@ class CsWinMain : public QMainWindow
     static QMenu *menuTools;
     static QMenu *menuHelp;
 
+    static QActionPtr actionMenuEditDisabled;
     static QActionPtr actionMenuEdit;
 
     //Tool bars for editor command

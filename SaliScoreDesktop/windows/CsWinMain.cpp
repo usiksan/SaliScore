@@ -64,6 +64,11 @@ CsWinMain::CsWinMain(CsPlayList &playList, CsMidiSequencer *midiSequencer, QWidg
       resize( s.value(QStringLiteral(KEY_WMAIN_SIZE)).toSize() );
     }
 
+  //Build edit, train and karaoke windows
+  mWCentralPart->addWidget( mWinTrain = new CsWinScoreMode( new CsWinTrain( mComposition, mPlayer ) ) );
+  mWCentralPart->addWidget( mWinKaraoke = new CsWinScoreMode( new CsWinKaraoke( mComposition, mPlayer ) ) );
+  mWCentralPart->addWidget( mWinEditor = new CsWinScoreMode( new CsWinEditor( mComposition, mPlayer ) ) );
+
 
   createMenu();
 
@@ -76,10 +81,6 @@ CsWinMain::CsWinMain(CsPlayList &playList, CsMidiSequencer *midiSequencer, QWidg
   mWLeftPart->setCurrentIndex(WIN_INDEX_PLAY_LIST);
 
   //mWCentralPart->addWidget( mWinIntro = new CsWinIntro() );
-  mWCentralPart->addWidget( mWinTrain = new CsWinScoreMode( new CsWinTrain( mComposition, mPlayer ) ) );
-  mWCentralPart->addWidget( mWinKaraoke = new CsWinScoreMode( new CsWinKaraoke( mComposition, mPlayer ) ) );
-  mWCentralPart->addWidget( mWinEditor = new CsWinScoreMode( new CsWinEditor( mComposition, mPlayer ) ) );
-
 
   //Create imports
   mImportManager.registerImport( new CsImportSaliScore() );
@@ -232,8 +233,8 @@ void CsWinMain::cmViewEditor()
   barEditor->show();
   actionViewEditor->setChecked(true);
   //Show edit menu
-  menuEditDisabled->hide();
-  menuEdit->show();
+  actionMenuEditDisabled->setVisible(false);
+  actionMenuEdit->setVisible(true);
   //Activate karaoke
   mWinEditor->view()->activate();
   }
@@ -253,8 +254,8 @@ void CsWinMain::cmViewTrain()
   barTrain->show();
   actionViewTrain->setChecked(true);
   //Hide edit menu
-  menuEdit->hide();
-  menuEditDisabled->show();
+  actionMenuEdit->setVisible(false);
+  actionMenuEditDisabled->setVisible(true);
   //Activate karaoke
   mWinTrain->view()->activate();
   }
@@ -274,8 +275,8 @@ void CsWinMain::cmViewKaraoke()
   barKaraoke->show();
   actionViewKaraoke->setChecked(true);
   //Hide edit menu
-  menuEdit->hide();
-  menuEditDisabled->show();
+  actionMenuEdit->setVisible(false);
+  actionMenuEditDisabled->setVisible(true);
   //Activate karaoke
   mWinKaraoke->view()->activate();
   }
@@ -605,6 +606,7 @@ void CsWinMain::createMenu()
 
   QMenuBar *bar = menuBar();
   bar->addMenu( menuFile );
+  actionMenuEditDisabled = bar->addMenu( menuEditDisabled );
   actionMenuEdit = bar->addMenu( menuEdit );
   bar->addMenu( menuView );
   bar->addMenu( menuPlay );
@@ -677,6 +679,7 @@ QMenu *CsWinMain::menuScore;
 QMenu *CsWinMain::menuTools;
 QMenu *CsWinMain::menuHelp;
 
+QActionPtr  CsWinMain::actionMenuEditDisabled;
 QActionPtr  CsWinMain::actionMenuEdit;
 
 //Tool bars for editor command
