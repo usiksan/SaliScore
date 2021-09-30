@@ -235,7 +235,7 @@ void CsWinMain::cmEditSettings()
 
 void CsWinMain::cmViewEditor()
   {
-  mWCentralPart->setCurrentWidget( mWinEditor );
+  mWCentralPart->setCurrentWidget( mWinEditor->winScoreMode() );
   //Hide toolbars
   barPlayList->hide();
   barTrain->hide();
@@ -256,7 +256,7 @@ void CsWinMain::cmViewEditor()
 
 void CsWinMain::cmViewTrain()
   {
-  mWCentralPart->setCurrentWidget( mWinTrain );
+  mWCentralPart->setCurrentWidget( mWinTrain->winScoreMode() );
   //Hide toolbars
   barPlayList->hide();
   barKaraoke->hide();
@@ -277,7 +277,7 @@ void CsWinMain::cmViewTrain()
 
 void CsWinMain::cmViewKaraoke()
   {
-  mWCentralPart->setCurrentWidget( mWinKaraoke );
+  mWCentralPart->setCurrentWidget( mWinKaraoke->winScoreMode() );
   //Hide toolbars
   barPlayList->hide();
   barTrain->hide();
