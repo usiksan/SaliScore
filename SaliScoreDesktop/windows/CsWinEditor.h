@@ -15,14 +15,8 @@ class CsWinEditor : public CsWinScoreView
     Q_OBJECT
 
     CsReferenceList mReferenceList;
-    int             mOffsetX;
-    int             mOffsetY;
-    int             mSizeY;
 
     CsCellCursor    mCellCursor;   //!< Current cursor position
-
-    bool            mAutoScroll;   //!< Automatic scroll content on cursor position changed
-
     CsCursorEdit   *mEditor;       //!< Editor for content
 
     bool            mShift;        //!< True when Shift key pressed

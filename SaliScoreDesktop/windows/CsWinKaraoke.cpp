@@ -16,6 +16,9 @@ void CsWinKaraoke::activate()
   mPlayer.reset();
   }
 
+
+
+
 void CsWinKaraoke::paint()
   {
   QPainter painter(this);
@@ -31,7 +34,7 @@ void CsWinKaraoke::paint()
     }
 
   //Fill background by background color
-  painter.fillRect( QRect( QPoint(), size() ), cp.backgroundColor() );
+  cp.fillBackground();
 
   //How much tick elapsed from begin of current line
   int lineTickElapsed = mPlayer.lineTickElapsed();

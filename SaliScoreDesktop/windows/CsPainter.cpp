@@ -53,6 +53,14 @@ CsPainter::CsPainter(QPainter *painter, const QString &keyViewSettings, const Cs
 
 
 
+void CsPainter::fillBackground()
+  {
+  mPainter->fillRect( QRect( QPoint(), mSize ), mSettings.mColorBackground );
+  }
+
+
+
+
 int CsPainter::drawTitleAndProperties(int y, const CsComposition &comp)
   {
   //Draw title and properties

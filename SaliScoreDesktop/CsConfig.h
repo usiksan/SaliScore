@@ -83,6 +83,7 @@ History
              v0.40 Append different edit menu in edit mode and others modes
   30.09.2021 v0.41 Append score settings dialog
                    Append numerator and denominator display
+             v0.42 Union paint algorithm for edit mode and training mode
 */
 
 #ifndef CSCONFIG
@@ -96,7 +97,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             41
+#define CS_VERSION_MINOR             42
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"

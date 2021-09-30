@@ -68,7 +68,6 @@ SOURCES += \
     windows/CsWinIntro.cpp \
     windows/CsWinKaraoke.cpp \
     windows/CsWinMain.cpp \
-    windows/CsWinPage.cpp \
     windows/CsWinPlayList.cpp \
     windows/CsWinRemote.cpp \
     windows/CsWinScoreMode.cpp \
@@ -136,7 +135,6 @@ HEADERS += \
     windows/CsWinIntro.h \
     windows/CsWinKaraoke.h \
     windows/CsWinMain.h \
-    windows/CsWinPage.h \
     windows/CsWinPlayList.h \
     windows/CsWinRemote.h \
     windows/CsWinScoreMode.h \

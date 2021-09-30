@@ -16,7 +16,11 @@ class CsWinScoreView : public QWidget
   protected:
     CsComposition  &mComposition;
     CsPlay         &mPlayer;
-    CsWinScoreMode *mWinScroll;   //!< Parent window which is QAbstractScrollArea
+    CsWinScoreMode *mWinScroll;    //!< Parent window which is QAbstractScrollArea
+    bool            mAutoScroll;   //!< Automatic scroll content on cursor position changed
+    int             mOffsetX;
+    int             mOffsetY;
+    int             mSizeY;
   public:
     explicit CsWinScoreView( CsComposition &comp, CsPlay &play, QWidget *parent = nullptr);
 
@@ -51,6 +55,9 @@ class CsWinScoreView : public QWidget
     virtual void cmEditCopy() {}
     virtual void cmEditPaste() {}
     virtual void cmEditDelete() {}
+
+  protected:
+    void paintScore( CsPainter &cp );
   };
 
 #endif // CSWINSCOREVIEW_H

@@ -106,7 +106,7 @@ class CsPainter
 
     CsReferenceList  referenceList() const { return mReferenceList; }
 
-    QColor           backgroundColor() const { return mSettings.mColorBackground; }
+    virtual void     fillBackground();
 
     //!
     //! \brief cellCursorRect Returns current cursor cell position rect

@@ -17,29 +17,17 @@ CsWinTrain::CsWinTrain(CsComposition &comp, CsPlay &play, QWidget *parent) :
 
   }
 
+
+
 void CsWinTrain::paint()
   {
   QPainter painter(this);
   CsPainter cp( &painter, QStringLiteral(KEY_TRAIN_SETTINGS), mComposition, mPlayer, mOffsetX, size() );
 
-  //Закрасить цветом фона
-  painter.fillRect( QRect( QPoint(), size() ), cp.backgroundColor() );
+  paintScore( cp );
 
-  //Draw properties
-  int posy = cp.drawTitleAndProperties( -mOffsetY, mComposition );
-  for( int i = 0; i < mComposition.lineCount(); i++ )
-    posy = cp.drawLine( posy, i, mComposition.line(i) );
-
-  //Norm posy to vertical size
-  posy += mOffsetY;
-  if( posy != mSizeY ) {
-    //Height changed - update scrollbars
-    mSizeY = posy;
-    mWinScroll->verticalScrollBar()->setRange( 0, posy );
-    mWinScroll->verticalScrollBar()->setSingleStep( size().height() / 100 );
-    mWinScroll->verticalScrollBar()->setPageStep( size().height() * 9 / 10 );
-    //verticalScrollBar()->setValue( -mOrigin.y() );
-    }
+  //Update editor's reference list
+  //mReferenceList = cp.referenceList();
   }
 
 
