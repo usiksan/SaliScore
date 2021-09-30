@@ -23,6 +23,9 @@ CsPainter::CsPainter(QPainter *painter, const QString &keyViewSettings, const Cs
   if( s.contains(keyViewSettings) ) {
     }
 
+  mNumerator = QString::number( comp.partPerTakt() );
+  mDenominator = QString::number( comp.denominator() );
+
   //Calculate font height
   mRemarkTextHeight      = fontHeight( mSettings.mRemarkFontSize );
   mChordTextHeight       = fontHeight( mSettings.mChordFontSize );
@@ -37,9 +40,9 @@ CsPainter::CsPainter(QPainter *painter, const QString &keyViewSettings, const Cs
     mTickPerTakt = 256;
 
   //First takt offset
-  mClefPos = mSettings.mLeftMenuSize + 15 - mOffsetX;
-  mDenominatorPos = mClefPos + 20 - mOffsetX;
-  mLeftGap = mDenominatorPos + 20 - mOffsetX;
+  mClefPos = mSettings.mLeftMenuSize + 25 - mOffsetX;
+  mDenominatorPos = mClefPos + 25;
+  mLeftGap = mDenominatorPos + 15;
 
   //Step width in pixels
   mStepPixChord = visualX( 0, mStepChord = comp.stepChord() );
@@ -497,9 +500,6 @@ void CsPainter::drawChord( int taktCount, const QMap<QString, CsChordLine> &chor
 
 void CsPainter::drawNote(int taktCount, const QMap<QString, CsNoteLine> &noteMap)
   {
-  if( mVisibleNote.count() > 0 )
-    mPainter->setFont( QFont( mSettings.mFontName, 4 * mSettings.mScoreLineDistance ) );
-
   //For each note line which visible we perform drawing
   for( const auto &noteKey : qAsConst(mVisibleNote) ) {
     drawCellNote( mCurY, taktCount * mTickPerTakt, noteKey );
@@ -647,6 +647,13 @@ void CsPainter::drawNoteImpl( int clef, int taktCount, const QString &part, cons
   //Draw five lines of score
   for( int i = 0; i < 5; i++ )
     mPainter->drawLine( mClefPos - 5, scoreY + i * mSettings.mScoreLineDistance, visualX( mLeftGap, taktCount * mTickPerTakt) + 5, scoreY + i * mSettings.mScoreLineDistance );
+
+  //Numerator and denominator
+  mPainter->setFont( QFont( mSettings.mFontName, 2 * mSettings.mScoreLineDistance ) );
+  mPainter->drawText( mDenominatorPos, scoreY + 2 * mSettings.mScoreLineDistance, mNumerator );
+  mPainter->drawText( mDenominatorPos, scoreY + 4 * mSettings.mScoreLineDistance, mDenominator );
+
+  mPainter->setFont( QFont( mSettings.mFontName, 4 * mSettings.mScoreLineDistance ) );
 
   //Note abowe line 0
   int noteStart = whiteOctaveFirst + whiteC;

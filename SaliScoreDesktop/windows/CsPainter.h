@@ -59,6 +59,8 @@ class CsPainter
     QStringList       mVisibleNote;      //!< Visible parts of notes for each line of score
     QStringList       mVisibleTranslate; //!< Visible parts of lyric translations for each line of score
     CsClefMap         mClefMap;          //!< Clef classification for each visibile note line
+    QString           mNumerator;
+    QString           mDenominator;
 
     //Loadable view settings
     CsPainterSettings mSettings;

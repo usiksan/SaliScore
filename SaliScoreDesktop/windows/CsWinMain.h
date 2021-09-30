@@ -1,3 +1,20 @@
+/*
+Project "SaliScore Score music edit, view and tutorial programm"
+
+Author
+  Sibilev Alexander S.
+
+Web
+  www.saliLab.com
+  www.saliLab.ru
+
+Description
+  Main window of application. It consists from menu bar, tool bar, play list window and score window.
+  Score window may be in three mode: edit mode, teache mode and karaoke mode
+
+  This application support only single active score. So, MainWindow contains this score, which is
+  distributed to other windows
+*/
 #ifndef CSWINMAIN_H
 #define CSWINMAIN_H
 
@@ -45,19 +62,19 @@ class CsWinMain : public QMainWindow
     QStackedWidget  *mWCentralPart;  //!< Central part with editor, trainer and karaoke
     CsWinHelp       *mWHelp;         //!< Edge help
 
-    CsWinPlayList   *mWPlayList;
-    CsWinRemote     *mWRemote;
+    CsWinPlayList   *mWPlayList;     //!< Play list window
+    CsWinRemote     *mWRemote;       //!< Window to find compositions in remote server
 
     CsWinIntro      *mWinIntro;
-    CsWinScoreMode  *mWinEditor;
-    CsWinScoreMode  *mWinTrain;
-    CsWinScoreMode  *mWinKaraoke;
+    CsWinScoreMode  *mWinEditor;     //!< Score editor
+    CsWinScoreMode  *mWinTrain;      //!< Score trainer
+    CsWinScoreMode  *mWinKaraoke;    //!< Karaoke player
 
     CsMidiSequencer *mMidiSequencer;
 
     CsImportManager  mImportManager; //!< Import files manager. Contains converters from other formats
 
-    CsComposition    mComposition;
+    CsComposition    mComposition;   //!< Current composition
     CsPlay           mPlayer;
     CsPlayList      &mPlayList;
     bool             mDefferedReset;
@@ -80,6 +97,7 @@ class CsWinMain : public QMainWindow
     void cmFilePrint();
 
     void cmEditPasteImport();
+    void cmEditSettings();
 
     void cmViewEditor();
     void cmViewTrain();
@@ -163,6 +181,7 @@ class CsWinMain : public QMainWindow
     static QActionPtr  actionEditDelete;
     static QActionPtr  actionEditSelectAll;
     static QActionPtr  actionEditUnSelect;
+    static QActionPtr  actionEditSettings;
 
     static QActionPtr  actionViewEditor;
     static QActionPtr  actionViewTrain;

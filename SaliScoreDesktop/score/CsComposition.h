@@ -242,9 +242,13 @@ class CsComposition
 
     int         tickCount() const;
 
-    int         tickPerPart() const { return mTickPerPart; }
+    int         tickPerPart() const { return qBound( 1, mTickPerPart, 256 ); }
 
     void        tickPerPartSet( int tpp ) { mTickPerPart = tpp; dirtySet(); }
+
+    int         denominator() const { return 256 / tickPerPart(); }
+
+    void        denominatorSet( int deno ) { tickPerPartSet( 256 / qBound(1, deno, 32) ); }
 
     int         partPerTakt() const { return mPartPerTakt; }
 

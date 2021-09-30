@@ -7,6 +7,7 @@
 #include "CsDlgDefNote.h"
 #include "CsDlgDefTranslation.h"
 #include "CsDlgRegistration.h"
+#include "CsDlgScoreSettings.h"
 #include "repo/CsRepoClient.h"
 
 #include <QSettings>
@@ -216,6 +217,16 @@ void CsWinMain::cmEditPasteImport()
         }
       }
     }
+  }
+
+
+
+
+void CsWinMain::cmEditSettings()
+  {
+  CsDlgScoreSettings dlg( mComposition, this );
+  if( dlg.exec() )
+    mWinEditor->view()->update();
   }
 
 
@@ -563,6 +574,8 @@ void CsWinMain::createMenu()
   actionEditCut  = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editCut.png")), tr("Cut selection to clipboard"), mWinEditor->view(), &CsWinScoreView::cmEditCut );
   actionEditPaste = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editPaste.png")), tr("Paste from clipboard"), mWinEditor->view(), &CsWinScoreView::cmEditPaste );
   actionEditDelete = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editDelete.png")), tr("Delete slection"), mWinEditor->view(), &CsWinScoreView::cmEditDelete );
+  menuEdit->addSeparator();
+  actionEditSettings = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editSettings.png")), tr("Edit score settings"), this, &CsWinMain::cmEditSettings );
 
   menuView = new QMenu( tr("View") );
   actionViewEditor  = menuView->addAction( QIcon(QStringLiteral(":/pic/viewEditor.png")), tr("Editor mode"), this, &CsWinMain::cmViewEditor );
@@ -710,6 +723,7 @@ QActionPtr  CsWinMain::actionEditPasteImport;
 QActionPtr  CsWinMain::actionEditDelete;
 QActionPtr  CsWinMain::actionEditSelectAll;
 QActionPtr  CsWinMain::actionEditUnSelect;
+QActionPtr  CsWinMain::actionEditSettings;
 
 QActionPtr  CsWinMain::actionViewEditor;
 QActionPtr  CsWinMain::actionViewTrain;

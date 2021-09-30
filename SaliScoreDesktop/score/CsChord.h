@@ -9,7 +9,7 @@ Web
   www.saliLab.ru
 
 Description
-  Chord model
+  Chord model. Chord consists tonica and chord variant, all are predefined enumerations
 */
 #ifndef CSCHORD_H
 #define CSCHORD_H

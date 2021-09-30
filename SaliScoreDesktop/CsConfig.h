@@ -81,6 +81,8 @@ History
                    Append hide player position when stop
   29.09.2021 v0.39 Block edit possibilities when mode other than editor
              v0.40 Append different edit menu in edit mode and others modes
+  30.09.2021 v0.41 Append score settings dialog
+                   Append numerator and denominator display
 */
 
 #ifndef CSCONFIG
@@ -94,7 +96,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             40
+#define CS_VERSION_MINOR             41
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"
