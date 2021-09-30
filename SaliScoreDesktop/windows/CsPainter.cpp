@@ -797,12 +797,10 @@ int CsPainter::drawCellText(int x, int y, const QString &value, int height, bool
 
 void CsPainter::drawCellChord(int y, int tickCount, const QString &part )
   {
-  if( mCellCursor == nullptr )
-    return;
-
   for( int tick = 0; tick < tickCount; tick += mStepChord ) {
     int x = visualX( mLeftGap, tick );
-    drawCell( x, y + mChordTextHeight.mOffset, mStepPixChord, mChordTextHeight.mHeight,
+    if( mCellCursor != nullptr )
+      drawCell( x, y + mChordTextHeight.mOffset, mStepPixChord, mChordTextHeight.mHeight,
               mCellCursor->isMatch( cccChord, tick, mLineIndex, part ) );
     mReferenceList.append( CsReference( x, y + mChordTextHeight.mOffset, mStepPixChord, mChordTextHeight.mHeight, cccChord, mLineIndex, part, tick ) );
     }
@@ -813,12 +811,10 @@ void CsPainter::drawCellChord(int y, int tickCount, const QString &part )
 
 void CsPainter::drawCellNote(int y, int tickCount, const QString &part)
   {
-  if( mCellCursor == nullptr )
-    return;
-
   for( int tick = 0; tick < tickCount; tick += mStepNote ) {
     int x = visualX( mLeftGap, tick );
-    drawCell( x, y, mStepPixNote, 9 * mSettings.mScoreLineDistance,
+    if( mCellCursor != nullptr )
+      drawCell( x, y, mStepPixNote, 9 * mSettings.mScoreLineDistance,
               mCellCursor->isMatch( cccNote, tick, mLineIndex, part ) );
     mReferenceList.append( CsReference( x, y, mStepPixNote, 9 * mSettings.mScoreLineDistance, cccNote, mLineIndex, part, tick ) );
     }
@@ -830,12 +826,10 @@ void CsPainter::drawCellNote(int y, int tickCount, const QString &part)
 
 void CsPainter::drawCellLyric(int y, int tickCount)
   {
-  if( mCellCursor == nullptr )
-    return;
-
   int x = visualX( mLeftGap, 0 );
   int w = visualX( mLeftGap, tickCount ) - x;
-  drawCell( x, y + mLyricTextHeight.mOffset, w, mLyricTextHeight.mHeight, mCellCursor->isMatch( cccLyric ) && mCellCursor->lineIndex() == mLineIndex );
+  if( mCellCursor != nullptr )
+    drawCell( x, y + mLyricTextHeight.mOffset, w, mLyricTextHeight.mHeight, mCellCursor->isMatch( cccLyric ) && mCellCursor->lineIndex() == mLineIndex );
   mReferenceList.append( CsReference( x, y + mLyricTextHeight.mOffset, w, mLyricTextHeight.mHeight, cccLyric, mLineIndex, QString{}, 0 ) );
   }
 

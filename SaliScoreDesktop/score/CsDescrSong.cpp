@@ -1,3 +1,16 @@
+/*
+Project "SaliScore Score music edit, view and tutorial programm"
+
+Author
+  Sibilev Alexander S.
+
+Web
+  www.saliLab.com
+  www.saliLab.ru
+
+Description
+  Song description. Contains some field with common information about composition
+*/
 #include "CsConfig.h"
 #include "CsDescrSong.h"
 #include "SdLib/SdTime2x.h"
@@ -12,8 +25,7 @@ CsDescrSong::CsDescrSong() :
   mName(),
   mAuthorSongId(0),
   mVersion(0),
-  mIsPublic(false),
-  mMelodyPresent(false)
+  mIsPublic(false)
   {
 
   }
@@ -73,7 +85,7 @@ void CsDescrSong::clear()
   mSinger.clear();
   mName.clear();
   mAuthorSongId = mVersion = 0;
-  mIsPublic = mMelodyPresent = false;
+  mIsPublic = false;
   }
 
 
@@ -87,7 +99,6 @@ void CsDescrSong::jsonWrite(CsJsonWriter &js) const
   js.jsonInt( "AuthorSongId", mAuthorSongId );
   js.jsonInt( "Version",      mVersion );
   js.jsonBool( "IsPublic",    mIsPublic );
-  js.jsonBool( "MelodyPresent", mMelodyPresent );
   }
 
 
@@ -101,7 +112,6 @@ void CsDescrSong::jsonRead(CsJsonReader &js)
   js.jsonInt( "AuthorSongId", mAuthorSongId );
   js.jsonInt( "Version",      mVersion );
   js.jsonBool( "IsPublic",    mIsPublic );
-  js.jsonBool( "MelodyPresent", mMelodyPresent );
   }
 
 

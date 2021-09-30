@@ -1,5 +1,6 @@
 #include "CsWinTrain.h"
 #include "CsWinScoreMode.h"
+#include "CsWinMain.h"
 #include "CsPainter.h"
 
 #include <QPaintEvent>
@@ -9,10 +10,7 @@
 #include <QWheelEvent>
 
 CsWinTrain::CsWinTrain(CsComposition &comp, CsPlay &play, QWidget *parent) :
-  CsWinScoreView( comp, play, parent ),
-  mOffsetX(0),
-  mOffsetY(0),
-  mSizeY(0)
+  CsWinScoreView( comp, play, parent )
   {
 
   }
@@ -27,7 +25,15 @@ void CsWinTrain::paint()
   paintScore( cp );
 
   //Update editor's reference list
-  //mReferenceList = cp.referenceList();
+  mReferenceList = cp.referenceList();
+  }
+
+
+
+
+void CsWinTrain::playStart()
+  {
+
   }
 
 
@@ -55,6 +61,41 @@ void CsWinTrain::setupWinScroll(CsWinScoreMode *winScroll)
   winScroll->horizontalScrollBar()->setPageStep( 128 );
   //horizontalScrollBar()->setValue( mOrigin.x() );
   }
+
+
+
+
+
+void CsWinTrain::upMousePressEvent(QMouseEvent *event)
+  {
+  for( int i = mReferenceList.count() - 1; i >= 0; i-- )
+    if( mReferenceList.at(i).isHit( event->pos() ) ) {
+      const CsReference &ref( mReferenceList.at(i) );
+
+      switch( ref.type() ) {
+        case cccChord :
+        case cccNote :
+          CsWinMain::actionPlayStop->trigger();
+          mPlayer.jump( ref.line(), ref.index() );
+          mPlayer.show(true);
+          break;
+
+        case cccRemark :
+        case cccLyric :
+        case cccTranslation :
+        case cccLyricSymbol :
+          CsWinMain::actionPlayStop->trigger();
+          mPlayer.jump( ref.line(), 0 );
+          mPlayer.show(true);
+          break;
+
+        }
+      update();
+      return;
+      }
+  }
+
+
 
 
 void CsWinTrain::upWheelEvent(QWheelEvent *event)

@@ -1,3 +1,16 @@
+/*
+Project "SaliScore Score music edit, view and tutorial programm"
+
+Author
+  Sibilev Alexander S.
+
+Web
+  www.saliLab.com
+  www.saliLab.ru
+
+Description
+  Song description. Contains some field with common information about composition
+*/
 #ifndef CSDESCRSONG_H
 #define CSDESCRSONG_H
 
@@ -9,13 +22,12 @@
 
 class CsDescrSong
   {
-    QString mAuthor;
-    QString mSinger;
-    QString mName;
-    int     mAuthorSongId;
-    int     mVersion;
-    bool    mIsPublic;
-    bool    mMelodyPresent;
+    QString mAuthor;         //!< Author who creates composition score
+    QString mSinger;         //!< Singer is common singer of composition
+    QString mName;           //!< Composition name
+    int     mAuthorSongId;   //!< Unical id of composition for this author
+    int     mVersion;        //!< Version of composition score (time of last edit)
+    bool    mIsPublic;       //!< When true, then author make it available for public, otherway its private for author
   public:
     CsDescrSong();
 
@@ -39,10 +51,6 @@ class CsDescrSong
 
     bool    isPublic() const { return mIsPublic; }
     void    isPublicSet( bool pub ) { mIsPublic = pub; }
-
-    bool    isMelodyPresent() const { return mMelodyPresent; }
-    void    isMelodyPresentSet( bool mp ) { mMelodyPresent = mp; }
-
 
     int     versionFromFile() const;
 

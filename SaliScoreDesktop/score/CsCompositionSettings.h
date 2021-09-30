@@ -1,3 +1,16 @@
+/*
+Project "SaliScore Score music edit, view and tutorial programm"
+
+Author
+  Sibilev Alexander S.
+
+Web
+  www.saliLab.com
+  www.saliLab.ru
+
+Description
+  Composition settings is composition header with visual represent flags and other local (for user) information
+*/
 #ifndef CSCOMPOSITIONSETTINGS_H
 #define CSCOMPOSITIONSETTINGS_H
 
@@ -8,10 +21,11 @@
 
 class CsCompositionSettings : public CsCompositionHeader
   {
-    QStringList mRemarkList;
-    QStringList mChordList;
-    QStringList mNoteList;
-    QStringList mTranslationList;
+    //Visible list is list of part which are visible on screen. Others parts are hide
+    QStringList mRemarkList;      //!< Visible remark list
+    QStringList mChordList;       //!< Visible chord list
+    QStringList mNoteList;        //!< Visible note list
+    QStringList mTranslationList; //!< Visible translation list
   public:
     CsCompositionSettings();
     CsCompositionSettings( const CsComposition &comp );

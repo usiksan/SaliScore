@@ -41,11 +41,11 @@ class CsComposition
     int                 mStepNote;
     int                 mStepLyric;
 
-    CsDefList           mRemarkList;
-    CsDefList           mChordList;
-    CsDefList           mNoteList;
-    CsDefList           mTranslationList;
-    CsClefMap           mClefMap;
+    CsDefList           mRemarkList;             //!< List of remark parts. Each part may be in different language
+    CsDefList           mChordList;              //!< List of chord parts. Each part may be for different accompanement or difficulties
+    CsDefList           mNoteList;               //!< List of note parts. Each part may be for different instrument or difficulties
+    CsDefList           mTranslationList;        //!< List of translation parts. Each part is translation of lyric to single language
+    CsClefMap           mClefMap;                //!< Clef map. Contains clef definition for each part of notes.
 
     CsLineList          mLineList;
 
@@ -93,6 +93,8 @@ class CsComposition
 
     int         version() const { return mHeader.version(); }
     void        versionUpdate() { mHeader.versionUpdate(); dirtySet(); }
+
+    int         isMelodyPresent() const { return mNoteList.count(); }
 
     void        makeCopy();
 

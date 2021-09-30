@@ -14,13 +14,13 @@ class CsWinEditor : public CsWinScoreView
   {
     Q_OBJECT
 
-    CsReferenceList mReferenceList;
+    CsReferenceList mReferenceList; //!< List of areas on screen with appropriate reference to position in score
 
-    CsCellCursor    mCellCursor;   //!< Current cursor position
-    CsCursorEdit   *mEditor;       //!< Editor for content
+    CsCellCursor    mCellCursor;    //!< Current cursor position
+    CsCursorEdit   *mEditor;        //!< Editor for content
 
-    bool            mShift;        //!< True when Shift key pressed
-    bool            mControl;      //!< True when Control key pressed
+    bool            mShift;         //!< True when Shift key pressed
+    bool            mControl;       //!< True when Control key pressed
 
   public:
     explicit CsWinEditor( CsComposition &comp, CsPlay &play, QWidget *parent = nullptr);
@@ -28,16 +28,15 @@ class CsWinEditor : public CsWinScoreView
 
     virtual void paint() override;
 
-    virtual void playStart() override;
 
   public slots:
     //Menu Edit
-    virtual void cmEditUndo() override;
-    virtual void cmEditRedo() override;
-    virtual void cmEditCut() override;
-    virtual void cmEditCopy() override;
-    virtual void cmEditPaste() override;
-    virtual void cmEditDelete() override;
+    void cmEditUndo();
+    void cmEditRedo();
+    void cmEditCut();
+    void cmEditCopy();
+    void cmEditPaste();
+    void cmEditDelete();
 
   private:
     //!
@@ -70,6 +69,7 @@ class CsWinEditor : public CsWinScoreView
 
     // CsWinScoreView interface
   public:
+    virtual void playStart() override;
     virtual void setupWinScroll(CsWinScoreMode *winScroll) override;
     virtual void upWheelEvent(QWheelEvent *event) override;
     virtual void upMousePressEvent(QMouseEvent *event) override;

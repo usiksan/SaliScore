@@ -1,9 +1,7 @@
 #include "CsCursor.h"
 
 CsCursor::CsCursor() :
-  mClass(cccInvalid), //!< Class of cursor, one of CsClass
-  mPosition(0),       //!< Position of cursor in tick
-  mLineIndex(-1)      //!< Line index of cursor
+  mClass(cccInvalid) //!< Class of cursor, one of CsClass
   {
 
   }

@@ -84,6 +84,7 @@ History
   30.09.2021 v0.41 Append score settings dialog
                    Append numerator and denominator display
              v0.42 Union paint algorithm for edit mode and training mode
+             v0.43 Refactor view windows from common scroll widget to concrete view widget
 */
 
 #ifndef CSCONFIG
@@ -97,7 +98,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             42
+#define CS_VERSION_MINOR             43
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"

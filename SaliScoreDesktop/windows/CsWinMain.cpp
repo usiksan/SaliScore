@@ -66,9 +66,9 @@ CsWinMain::CsWinMain(CsPlayList &playList, CsMidiSequencer *midiSequencer, QWidg
     }
 
   //Build edit, train and karaoke windows
-  mWCentralPart->addWidget( mWinTrain = new CsWinScoreMode( new CsWinTrain( mComposition, mPlayer ) ) );
-  mWCentralPart->addWidget( mWinKaraoke = new CsWinScoreMode( new CsWinKaraoke( mComposition, mPlayer ) ) );
-  mWCentralPart->addWidget( mWinEditor = new CsWinScoreMode( new CsWinEditor( mComposition, mPlayer ) ) );
+  mWCentralPart->addWidget( new CsWinScoreMode( mWinTrain = new CsWinTrain( mComposition, mPlayer ) ) );
+  mWCentralPart->addWidget( new CsWinScoreMode( mWinKaraoke = new CsWinKaraoke( mComposition, mPlayer ) ) );
+  mWCentralPart->addWidget( new CsWinScoreMode( mWinEditor = new CsWinEditor( mComposition, mPlayer ) ) );
 
 
   createMenu();
@@ -118,9 +118,9 @@ void CsWinMain::cmFileNew()
   if( canCloseEditor() ) {
     mNotSaved = true;
     mComposition.clear();
-    mWinEditor->view()->compositionChanged();
-    mWinTrain->view()->compositionChanged();
-    mWinKaraoke->view()->compositionChanged();
+    mWinEditor->compositionChanged();
+    mWinTrain->compositionChanged();
+    mWinKaraoke->compositionChanged();
     }
   }
 
@@ -144,9 +144,9 @@ void CsWinMain::cmFileImport()
     if( ok ) {
       mNotSaved = true;
       mComposition = composition;
-      mWinEditor->view()->compositionChanged();
-      mWinTrain->view()->compositionChanged();
-      mWinKaraoke->view()->compositionChanged();
+      mWinEditor->compositionChanged();
+      mWinTrain->compositionChanged();
+      mWinKaraoke->compositionChanged();
       }
     }
   }
@@ -211,9 +211,9 @@ void CsWinMain::cmEditPasteImport()
       if( ok ) {
         mNotSaved = true;
         mComposition = composition;
-        mWinEditor->view()->compositionChanged();
-        mWinTrain->view()->compositionChanged();
-        mWinKaraoke->view()->compositionChanged();
+        mWinEditor->compositionChanged();
+        mWinTrain->compositionChanged();
+        mWinKaraoke->compositionChanged();
         }
       }
     }
@@ -226,7 +226,7 @@ void CsWinMain::cmEditSettings()
   {
   CsDlgScoreSettings dlg( mComposition, this );
   if( dlg.exec() )
-    mWinEditor->view()->update();
+    mWinEditor->update();
   }
 
 
@@ -247,7 +247,7 @@ void CsWinMain::cmViewEditor()
   actionMenuEditDisabled->setVisible(false);
   actionMenuEdit->setVisible(true);
   //Activate karaoke
-  mWinEditor->view()->activate();
+  mWinEditor->activate();
   }
 
 
@@ -268,7 +268,7 @@ void CsWinMain::cmViewTrain()
   actionMenuEdit->setVisible(false);
   actionMenuEditDisabled->setVisible(true);
   //Activate karaoke
-  mWinTrain->view()->activate();
+  mWinTrain->activate();
   }
 
 
@@ -289,7 +289,7 @@ void CsWinMain::cmViewKaraoke()
   actionMenuEdit->setVisible(false);
   actionMenuEditDisabled->setVisible(true);
   //Activate karaoke
-  mWinKaraoke->view()->activate();
+  mWinKaraoke->activate();
   }
 
 
@@ -340,21 +340,21 @@ void CsWinMain::cmPlayStart()
   {
   if( mDefferedReset ) {
     mDefferedReset = false;
-    mPlayer.reset();
+    //mPlayer.reset();
     mPlayer.show(true);
     }
 
   if( CsWinMain::actionViewKaraoke->isChecked() ) {
-    mWinKaraoke->view()->playStart();
-    connect( &mUpdateTimer, &QTimer::timeout, mWinKaraoke->view(), &CsWinScoreView::viewUpdate );
+    mWinKaraoke->playStart();
+    connect( &mUpdateTimer, &QTimer::timeout, mWinKaraoke, &CsWinScoreView::viewUpdate );
     }
   else if( CsWinMain::actionViewTrain->isChecked() ) {
-    mWinTrain->view()->playStart();
-    connect( &mUpdateTimer, &QTimer::timeout, mWinTrain->view(), &CsWinScoreView::viewUpdate );
+    mWinTrain->playStart();
+    connect( &mUpdateTimer, &QTimer::timeout, mWinTrain, &CsWinScoreView::viewUpdate );
     }
   else {
-    mWinEditor->view()->playStart();
-    connect( &mUpdateTimer, &QTimer::timeout, mWinEditor->view(), &CsWinScoreView::viewUpdate );
+    mWinEditor->playStart();
+    connect( &mUpdateTimer, &QTimer::timeout, mWinEditor, &CsWinScoreView::viewUpdate );
     }
   mUpdateTimer.start();
 
@@ -373,11 +373,11 @@ void CsWinMain::cmPlayStop()
     mPlayer.show(false);
     //Update view to remove player position
     if( CsWinMain::actionViewKaraoke->isChecked() )
-      mWinKaraoke->view()->viewUpdate();
+      mWinKaraoke->viewUpdate();
     else if( CsWinMain::actionViewTrain->isChecked() )
-      mWinTrain->view()->viewUpdate();
+      mWinTrain->viewUpdate();
     else
-      mWinEditor->view()->viewUpdate();
+      mWinEditor->viewUpdate();
     }
   mDefferedReset = true;
   mUpdateTimer.stop();
@@ -446,9 +446,9 @@ void CsWinMain::activateComposition(int partIndex, int compositionIndex)
       mNotSaved = false;
       mComposition = composition;
       mComposition.settingsRead( s );
-      mWinEditor->view()->compositionChanged();
-      mWinTrain->view()->compositionChanged();
-      mWinKaraoke->view()->compositionChanged();
+      mWinEditor->compositionChanged();
+      mWinTrain->compositionChanged();
+      mWinKaraoke->compositionChanged();
       }
 
     }
@@ -567,13 +567,13 @@ void CsWinMain::createMenu()
   actionEditPasteImport = menuEditDisabled->addAction( QIcon(QStringLiteral(":/pic/viewEditor.png")), tr("Import from clipboard"), this, &CsWinMain::cmEditPasteImport );
 
   menuEdit = new QMenu( tr("Edit") );
-  actionEditUndo = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editUndo.png")), tr("Undo last edit operation"), mWinEditor->view(), &CsWinScoreView::cmEditUndo );
-  actionEditRedo = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editRedo.png")), tr("Redo last undoed operation"), mWinEditor->view(), &CsWinScoreView::cmEditRedo );
+  actionEditUndo = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editUndo.png")), tr("Undo last edit operation"), mWinEditor, &CsWinEditor::cmEditUndo );
+  actionEditRedo = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editRedo.png")), tr("Redo last undoed operation"), mWinEditor, &CsWinEditor::cmEditRedo );
   menuEdit->addSeparator();
-  actionEditCopy = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editCopy.png")), tr("Copy selection to clipboard"), mWinEditor->view(), &CsWinScoreView::cmEditCopy );
-  actionEditCut  = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editCut.png")), tr("Cut selection to clipboard"), mWinEditor->view(), &CsWinScoreView::cmEditCut );
-  actionEditPaste = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editPaste.png")), tr("Paste from clipboard"), mWinEditor->view(), &CsWinScoreView::cmEditPaste );
-  actionEditDelete = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editDelete.png")), tr("Delete slection"), mWinEditor->view(), &CsWinScoreView::cmEditDelete );
+  actionEditCopy = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editCopy.png")), tr("Copy selection to clipboard"), mWinEditor, &CsWinEditor::cmEditCopy );
+  actionEditCut  = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editCut.png")), tr("Cut selection to clipboard"), mWinEditor, &CsWinEditor::cmEditCut );
+  actionEditPaste = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editPaste.png")), tr("Paste from clipboard"), mWinEditor, &CsWinEditor::cmEditPaste );
+  actionEditDelete = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editDelete.png")), tr("Delete slection"), mWinEditor, &CsWinEditor::cmEditDelete );
   menuEdit->addSeparator();
   actionEditSettings = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editSettings.png")), tr("Edit score settings"), this, &CsWinMain::cmEditSettings );
 

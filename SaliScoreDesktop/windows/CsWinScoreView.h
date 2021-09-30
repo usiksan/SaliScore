@@ -18,11 +18,13 @@ class CsWinScoreView : public QWidget
     CsPlay         &mPlayer;
     CsWinScoreMode *mWinScroll;    //!< Parent window which is QAbstractScrollArea
     bool            mAutoScroll;   //!< Automatic scroll content on cursor position changed
-    int             mOffsetX;
-    int             mOffsetY;
-    int             mSizeY;
+    int             mOffsetX;      //!< Offset of horizontal begin view port in score (in pixels)
+    int             mOffsetY;      //!< Offset of vertical begin view port in score (in pixels)
+    int             mSizeY;        //!< Vertical size of hole composition (in pixels)
   public:
     explicit CsWinScoreView( CsComposition &comp, CsPlay &play, QWidget *parent = nullptr);
+
+    CsWinScoreMode *winScoreMode() const { return mWinScroll; }
 
     //!
     //! \brief compositionChanged Called when composition changed outside
@@ -47,14 +49,6 @@ class CsWinScoreView : public QWidget
 
   public slots:
     void viewUpdate();
-
-    //Menu Edit
-    virtual void cmEditUndo() {}
-    virtual void cmEditRedo() {}
-    virtual void cmEditCut() {}
-    virtual void cmEditCopy() {}
-    virtual void cmEditPaste() {}
-    virtual void cmEditDelete() {}
 
   protected:
     void paintScore( CsPainter &cp );

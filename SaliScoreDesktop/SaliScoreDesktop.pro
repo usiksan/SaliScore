@@ -27,6 +27,7 @@ SOURCES += \
     score/CsCompositionHeader.cpp \
     score/CsCompositionSettings.cpp \
     score/CsCursor.cpp \
+    score/CsCursorPosition.cpp \
     score/CsDefinition.cpp \
     score/CsDescrSong.cpp \
     score/CsLine.cpp \
@@ -40,6 +41,7 @@ SOURCES += \
     score/CsReference.cpp \
     score/CsRemark.cpp \
     score/CsSynthSettings.cpp \
+    score/CsTrainInterval.cpp \
     undo/CsUndo.cpp \
     undo/CsUndoItem.cpp \
     windows/CsCellCursor.cpp \
@@ -92,6 +94,7 @@ HEADERS += \
     score/CsCompositionHeader.h \
     score/CsCompositionSettings.h \
     score/CsCursor.h \
+    score/CsCursorPosition.h \
     score/CsDefinition.h \
     score/CsDescrSong.h \
     score/CsJsonIO.h \
@@ -107,6 +110,7 @@ HEADERS += \
     score/CsReference.h \
     score/CsRemark.h \
     score/CsSynthSettings.h \
+    score/CsTrainInterval.h \
     undo/CsUndo.h \
     undo/CsUndoItem.h \
     windows/CsCellCursor.h \

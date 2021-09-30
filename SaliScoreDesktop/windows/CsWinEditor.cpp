@@ -38,17 +38,6 @@ void CsWinEditor::paint()
 
 
 
-void CsWinEditor::playStart()
-  {
-  //Begin play from current cursor
-  if( mCellCursor.cellClass() == cccChord || mCellCursor.cellClass() == cccNote ) {
-    mPlayer.jump( mCellCursor.lineIndex(), mCellCursor.position() );
-    }
-  else if( mCellCursor.cellClass() == cccLyric ) {
-    mPlayer.jump( mCellCursor.lineIndex(), 0 );
-    }
-  }
-
 void CsWinEditor::cmEditUndo()
   {
 
@@ -337,6 +326,20 @@ void CsWinEditor::keyDelete()
       mEditor = CsCursorEdit::build( mCellCursor, mComposition );
       mEditor->keyPress( Qt::Key_Delete, QChar{}, mEditor );
       }
+    }
+  }
+
+
+
+
+void CsWinEditor::playStart()
+  {
+  //Begin play from current cursor
+  if( mCellCursor.cellClass() == cccChord || mCellCursor.cellClass() == cccNote ) {
+    mPlayer.jump( mCellCursor.lineIndex(), mCellCursor.position() );
+    }
+  else if( mCellCursor.cellClass() == cccLyric ) {
+    mPlayer.jump( mCellCursor.lineIndex(), 0 );
     }
   }
 

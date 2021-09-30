@@ -1,6 +1,8 @@
 #ifndef CSCURSOR_H
 #define CSCURSOR_H
 
+#include "CsCursorPosition.h"
+
 #include <QString>
 #include <QVector>
 
@@ -44,12 +46,10 @@ enum CsClass {
   };
 
 
-class CsCursor
+class CsCursor : public CsCursorPosition
   {
   protected:
     int     mClass;     //!< Class of cursor, one of CsClass
-    int     mPosition;  //!< Position of cursor in tick
-    int     mLineIndex; //!< Line index of cursor
     QString mPartName;  //!< Part name inside line
   public:
     CsCursor();
@@ -62,18 +62,6 @@ class CsCursor
     //! \return          Class of cursor, one of CsClass
     //!
     CsClass  cellClass() const { return static_cast<CsClass>(mClass); }
-
-    //!
-    //! \brief position Returns position of cursor in tick
-    //! \return         Position of cursor in tick
-    //!
-    int      position() const { return mPosition; }
-
-    //!
-    //! \brief lineIndex Returns line index of cursor
-    //! \return          Line index of cursor
-    //!
-    int      lineIndex() const { return mLineIndex; }
 
     //!
     //! \brief partName Returns part name inside line for current cursor position

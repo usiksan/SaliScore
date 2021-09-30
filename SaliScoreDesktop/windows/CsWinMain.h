@@ -65,9 +65,9 @@ class CsWinMain : public QMainWindow
     CsWinRemote     *mWRemote;       //!< Window to find compositions in remote server
 
     CsWinIntro      *mWinIntro;
-    CsWinScoreMode  *mWinEditor;     //!< Score editor
-    CsWinScoreMode  *mWinTrain;      //!< Score trainer
-    CsWinScoreMode  *mWinKaraoke;    //!< Karaoke player
+    CsWinEditor     *mWinEditor;     //!< Score editor
+    CsWinTrain      *mWinTrain;      //!< Score trainer
+    CsWinKaraoke    *mWinKaraoke;    //!< Karaoke player
 
     CsMidiSequencer *mMidiSequencer;
 

@@ -344,7 +344,7 @@ void CsRepoClient::doUploadSong(const QString compositionid)
       sdHttpMultiPartAppendField( multiPart, REPO_FIELD_SINGER,   singer.toUtf8() );
       sdHttpMultiPartAppendField( multiPart, REPO_FIELD_TITLE,    title.toUtf8() );
       sdHttpMultiPartAppendField( multiPart, REPO_FIELD_ISPUBLIC, comp.header().isPublic() );
-      sdHttpMultiPartAppendField( multiPart, REPO_FIELD_MELODYPRESENT, comp.header().isMelodyPresent() );
+      sdHttpMultiPartAppendField( multiPart, REPO_FIELD_MELODYPRESENT, comp.isMelodyPresent() );
       sdHttpMultiPartAppendField( multiPart, REPO_FIELD_SONG,     composition );
 
       mQueryType = cpqUploadSong;

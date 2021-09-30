@@ -18,8 +18,6 @@
 // Road map
 //TODO D001 Append one half to left of song line
 
-//TODO D002 Append auto scroll to play
-
 //TODO D003 Append fragment support (up to 4)
 
 //TODO D004 When edit lyric exclude lyric intersection
@@ -43,6 +41,8 @@
 
 //===================================================================================
 //Fixed:
+//D002 Append auto scroll to play
+
 //B002 In chord parser # not parsed
 
 //B001 Lyric not selected by mouse
