@@ -12,15 +12,26 @@ class CsWinTrain : public CsWinScoreView
     Q_OBJECT
 
     CsReferenceList mReferenceList; //!< List of areas on screen with appropriate reference to position in score
+    int             mFragment;      //!< Active fragment
   public:
     explicit CsWinTrain( CsComposition &comp, CsPlay &play, QWidget *parent = nullptr);
 
     virtual void paint() override;
+
+  public slots:
+    void cmFragmentTrain();
+
+    void cmFragment0();
+    void cmFragment1();
+    void cmFragment2();
+    void cmFragmentStart();
+    void cmFragmentStop();
   signals:
 
 
     // CsWinScoreView interface
   public:
+    virtual void activate() override;
     virtual void playStart() override;
     virtual void setupWinScroll(CsWinScoreMode *winScroll) override;
     virtual void upMousePressEvent(QMouseEvent *event) override;
@@ -31,6 +42,8 @@ class CsWinTrain : public CsWinScoreView
     //!
     virtual void compositionChanged() override;
 
+  private:
+    void updateActions() const;
   };
 
 #endif // CSWINTRAIN_H

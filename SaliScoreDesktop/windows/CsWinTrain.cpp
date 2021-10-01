@@ -1,7 +1,7 @@
 #include "CsWinTrain.h"
 #include "CsWinScoreMode.h"
 #include "CsWinMain.h"
-#include "CsPainter.h"
+#include "CsPainterTrain.h"
 
 #include <QPaintEvent>
 #include <QPainter>
@@ -10,7 +10,8 @@
 #include <QWheelEvent>
 
 CsWinTrain::CsWinTrain(CsComposition &comp, CsPlay &play, QWidget *parent) :
-  CsWinScoreView( comp, play, parent )
+  CsWinScoreView( comp, play, parent ),
+  mFragment(0)
   {
 
   }
@@ -20,12 +21,82 @@ CsWinTrain::CsWinTrain(CsComposition &comp, CsPlay &play, QWidget *parent) :
 void CsWinTrain::paint()
   {
   QPainter painter(this);
-  CsPainter cp( &painter, QStringLiteral(KEY_TRAIN_SETTINGS), mComposition, mPlayer, mOffsetX, size() );
+  CsPainterTrain cp( &painter, QStringLiteral(KEY_TRAIN_SETTINGS), mComposition, mPlayer, mOffsetX, size(), mFragment );
 
   paintScore( cp );
 
   //Update editor's reference list
   mReferenceList = cp.referenceList();
+  }
+
+
+
+
+void CsWinTrain::cmFragmentTrain()
+  {
+
+  }
+
+
+
+
+void CsWinTrain::cmFragment0()
+  {
+  mFragment = 0;
+  updateActions();
+  update();
+  }
+
+
+
+
+void CsWinTrain::cmFragment1()
+  {
+  mFragment = 1;
+  updateActions();
+  update();
+  }
+
+
+
+
+void CsWinTrain::cmFragment2()
+  {
+  mFragment = 2;
+  updateActions();
+  update();
+  }
+
+
+
+
+
+void CsWinTrain::cmFragmentStart()
+  {
+  if( mFragment ) {
+    mComposition.fragmentStartSet( mFragment - 1, mPlayer.lineIndex(), mPlayer.lineTickIndex() );
+    update();
+    }
+  }
+
+
+
+
+
+void CsWinTrain::cmFragmentStop()
+  {
+  if( mFragment ) {
+    mComposition.fragmentStopSet( mFragment - 1, mPlayer.lineIndex(), mPlayer.lineTickIndex() );
+    update();
+    }
+  }
+
+
+
+
+void CsWinTrain::activate()
+  {
+  CsWinScoreView::activate();
   }
 
 
@@ -116,5 +187,18 @@ void CsWinTrain::compositionChanged()
   {
   CsWinScoreView::compositionChanged();
   mOffsetX = mOffsetY = mSizeY = 0;
+  mFragment = 0;
+  updateActions();
   update();
+  }
+
+
+
+void CsWinTrain::updateActions() const
+  {
+  CsWinMain::actionFragment0->setChecked( mFragment == 0 );
+  CsWinMain::actionFragment1->setChecked( mFragment == 1 );
+  CsWinMain::actionFragment2->setChecked( mFragment == 2 );
+  CsWinMain::actionFragmentStart->setDisabled( mFragment == 0 );
+  CsWinMain::actionFragmentStop->setDisabled( mFragment == 0 );
   }

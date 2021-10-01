@@ -37,6 +37,8 @@ class CsCursorPosition
     //!
     int      lineIndex() const { return mLineIndex; }
 
+    void     set( int line, int pos ) { mLineIndex = line; mPosition = pos; }
+
     //!
     //! \brief jsonWrite Writes content into json writer object
     //! \param js        JSON writer object

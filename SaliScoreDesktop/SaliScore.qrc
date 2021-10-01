@@ -45,5 +45,10 @@
         <file>pic/fileCloud.png</file>
         <file>pic/filePublic.png</file>
         <file>pic/editSettings.png</file>
+        <file>pic/fragmentStop.png</file>
+        <file>pic/fragmentStart.png</file>
+        <file>pic/fragment0.png</file>
+        <file>pic/fragment2.png</file>
+        <file>pic/fragment1.png</file>
     </qresource>
 </RCC>

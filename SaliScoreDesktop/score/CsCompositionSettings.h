@@ -22,10 +22,10 @@ Description
 class CsCompositionSettings : public CsCompositionHeader
   {
     //Visible list is list of part which are visible on screen. Others parts are hide
-    QStringList mRemarkList;      //!< Visible remark list
-    QStringList mChordList;       //!< Visible chord list
-    QStringList mNoteList;        //!< Visible note list
-    QStringList mTranslationList; //!< Visible translation list
+    QStringList     mRemarkList;      //!< Visible remark list
+    QStringList     mChordList;       //!< Visible chord list
+    QStringList     mNoteList;        //!< Visible note list
+    QStringList     mTranslationList; //!< Visible translation list
   public:
     CsCompositionSettings();
     CsCompositionSettings( const CsComposition &comp );
@@ -37,6 +37,7 @@ class CsCompositionSettings : public CsCompositionHeader
     QStringList noteList() const { return mNoteList; }
 
     QStringList translationList() const { return mTranslationList; }
+
 
     //=================================================================
     //         Settings JSON io

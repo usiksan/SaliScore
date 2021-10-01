@@ -147,12 +147,14 @@ class CsWinMain : public QMainWindow
     static QMenu *menuEdit;
     static QMenu *menuView;
     static QMenu *menuPlay;
+    static QMenu *menuTrain;
     static QMenu *menuScore;
     static QMenu *menuTools;
     static QMenu *menuHelp;
 
     static QActionPtr actionMenuEditDisabled;
     static QActionPtr actionMenuEdit;
+    static QActionPtr actionMenuTrain;
 
     //Tool bars for editor command
     static QToolBar *barMain;
@@ -193,7 +195,13 @@ class CsWinMain : public QMainWindow
     static QActionPtr  actionPlayStart;
     static QActionPtr  actionPlayPause;
     static QActionPtr  actionPlayStop;
-    static QActionPtr  actionPlayTrain;
+
+    static QActionPtr  actionFragmentTrain;
+    static QActionPtr  actionFragment0;
+    static QActionPtr  actionFragment1;
+    static QActionPtr  actionFragment2;
+    static QActionPtr  actionFragmentStart;
+    static QActionPtr  actionFragmentStop;
 
     static QActionPtr  actionScoreRemark;
     static QActionPtr  actionScoreRemarkManage;

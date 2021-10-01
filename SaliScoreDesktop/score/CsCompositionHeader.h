@@ -3,11 +3,14 @@
 
 #include "CsDescrSong.h"
 #include "CsSynthSettings.h"
+#include "CsTrainInterval.h"
 
 class CsCompositionHeader : public CsDescrSong
   {
   public:
     CsSynthSettings mSettings;
+
+    CsTrainInterval mFragments[2];
   public:
     CsCompositionHeader();
 

@@ -85,6 +85,7 @@ History
                    Append numerator and denominator display
              v0.42 Union paint algorithm for edit mode and training mode
              v0.43 Refactor view windows from common scroll widget to concrete view widget
+  01.10.2021 v0.44 Appended fragment support in train mode
 */
 
 #ifndef CSCONFIG
@@ -98,7 +99,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             43
+#define CS_VERSION_MINOR             44
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"

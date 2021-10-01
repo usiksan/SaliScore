@@ -246,6 +246,8 @@ void CsWinMain::cmViewEditor()
   //Show edit menu
   actionMenuEditDisabled->setVisible(false);
   actionMenuEdit->setVisible(true);
+  //Hide train menu
+  actionMenuTrain->setVisible(false);
   //Activate karaoke
   mWinEditor->activate();
   }
@@ -267,6 +269,8 @@ void CsWinMain::cmViewTrain()
   //Hide edit menu
   actionMenuEdit->setVisible(false);
   actionMenuEditDisabled->setVisible(true);
+  //Show train menu
+  actionMenuTrain->setVisible(true);
   //Activate karaoke
   mWinTrain->activate();
   }
@@ -288,6 +292,8 @@ void CsWinMain::cmViewKaraoke()
   //Hide edit menu
   actionMenuEdit->setVisible(false);
   actionMenuEditDisabled->setVisible(true);
+  //Hide train menu
+  actionMenuTrain->setVisible(false);
   //Activate karaoke
   mWinKaraoke->activate();
   }
@@ -600,6 +606,17 @@ void CsWinMain::createMenu()
   actionPlayPause = menuPlay->addAction( QIcon(QStringLiteral(":/pic/playPause.png")), tr("Pause"), this, [this] () {  mMidiSequencer->setRun(false); } );
   actionPlayStop  = menuPlay->addAction( QIcon(QStringLiteral(":/pic/playStop.png")), tr("Stop"), this, &CsWinMain::cmPlayStop );
 
+  menuTrain = new QMenu( tr("Train") );
+  actionFragmentTrain = menuTrain->addAction( QIcon(QStringLiteral(":/pic/playTrain.png")), tr("Fragment train"), mWinTrain, &CsWinTrain::cmFragmentTrain );
+  actionFragment0     = menuTrain->addAction( QIcon(QStringLiteral(":/pic/fragment0.png")), tr("All composition"), mWinTrain, &CsWinTrain::cmFragment0 );
+  actionFragment1     = menuTrain->addAction( QIcon(QStringLiteral(":/pic/fragment1.png")), tr("Fragment 1"), mWinTrain, &CsWinTrain::cmFragment1 );
+  actionFragment2     = menuTrain->addAction( QIcon(QStringLiteral(":/pic/fragment2.png")), tr("Fragment 2"), mWinTrain, &CsWinTrain::cmFragment2 );
+  actionFragmentStart = menuTrain->addAction( QIcon(QStringLiteral(":/pic/fragmentStart.png")), tr("Fix fragment start"), mWinTrain, &CsWinTrain::cmFragmentStart );
+  actionFragmentStop  = menuTrain->addAction( QIcon(QStringLiteral(":/pic/fragmentStop.png")), tr("Fix fragment stop"), mWinTrain, &CsWinTrain::cmFragmentStop );
+  actionFragment0->setCheckable(true);
+  actionFragment1->setCheckable(true);
+  actionFragment2->setCheckable(true);
+
   menuScore = new QMenu( tr("Score") );
 
   menuTools = new QMenu( tr("Tools") );
@@ -623,6 +640,7 @@ void CsWinMain::createMenu()
   actionMenuEdit = bar->addMenu( menuEdit );
   bar->addMenu( menuView );
   bar->addMenu( menuPlay );
+  actionMenuTrain = bar->addMenu( menuTrain );
   bar->addMenu( menuScore );
   bar->addMenu( menuTools );
   bar->addMenu( menuHelp );
@@ -638,6 +656,12 @@ void CsWinMain::createMenu()
   barEditor->addAction( actionViewTrain );
   barEditor->addAction( actionViewKaraoke );
   barEditor->addSeparator();
+  barEditor->addAction( actionEditPaste );
+  barEditor->addAction( actionEditCopy );
+  barEditor->addAction( actionEditCut );
+  barEditor->addSeparator();
+  barEditor->addAction( actionEditUndo );
+  barEditor->addAction( actionEditRedo );
   barEditor->addSeparator();
   barEditor->addAction( actionPlayStart );
   barEditor->addAction( actionPlayPause );
@@ -652,6 +676,13 @@ void CsWinMain::createMenu()
   barTrain->addAction( actionPlayStart );
   barTrain->addAction( actionPlayPause );
   barTrain->addAction( actionPlayStop );
+  barTrain->addSeparator();
+  barTrain->addAction( actionFragmentTrain );
+  barTrain->addAction( actionFragment0 );
+  barTrain->addAction( actionFragment1 );
+  barTrain->addAction( actionFragment2 );
+  barTrain->addAction( actionFragmentStart );
+  barTrain->addAction( actionFragmentStop );
   addToolBar( barTrain );
 
   barKaraoke  = new QToolBar( tr("Karaoke") );
@@ -688,12 +719,14 @@ QMenu *CsWinMain::menuEditDisabled;
 QMenu *CsWinMain::menuEdit;
 QMenu *CsWinMain::menuView;
 QMenu *CsWinMain::menuPlay;
+QMenu *CsWinMain::menuTrain;
 QMenu *CsWinMain::menuScore;
 QMenu *CsWinMain::menuTools;
 QMenu *CsWinMain::menuHelp;
 
 QActionPtr  CsWinMain::actionMenuEditDisabled;
 QActionPtr  CsWinMain::actionMenuEdit;
+QActionPtr  CsWinMain::actionMenuTrain;
 
 //Tool bars for editor command
 QToolBar   *CsWinMain::barMain;
@@ -736,7 +769,13 @@ QActionPtr  CsWinMain::actionViewTranslation;
 QActionPtr  CsWinMain::actionPlayStart;
 QActionPtr  CsWinMain::actionPlayPause;
 QActionPtr  CsWinMain::actionPlayStop;
-QActionPtr  CsWinMain::actionPlayTrain;
+
+QActionPtr  CsWinMain::actionFragmentTrain;
+QActionPtr  CsWinMain::actionFragment0;
+QActionPtr  CsWinMain::actionFragment1;
+QActionPtr  CsWinMain::actionFragment2;
+QActionPtr  CsWinMain::actionFragmentStart;
+QActionPtr  CsWinMain::actionFragmentStop;
 
 QActionPtr  CsWinMain::actionScoreRemark;
 QActionPtr  CsWinMain::actionScoreRemarkManage;

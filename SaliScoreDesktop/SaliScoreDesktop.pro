@@ -65,6 +65,7 @@ SOURCES += \
     windows/CsPainter.cpp \
     windows/CsPainterEditor.cpp \
     windows/CsPainterSettings.cpp \
+    windows/CsPainterTrain.cpp \
     windows/CsWinEditor.cpp \
     windows/CsWinHelp.cpp \
     windows/CsWinIntro.cpp \
@@ -134,6 +135,7 @@ HEADERS += \
     windows/CsPainter.h \
     windows/CsPainterEditor.h \
     windows/CsPainterSettings.h \
+    windows/CsPainterTrain.h \
     windows/CsWinEditor.h \
     windows/CsWinHelp.h \
     windows/CsWinIntro.h \

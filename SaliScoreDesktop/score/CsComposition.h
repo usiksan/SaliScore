@@ -62,6 +62,8 @@ class CsComposition
 
     const CsCompositionHeader &header() const { return mHeader; }
 
+    const CsTrainInterval     &fragment( int index ) const { return mHeader.mFragments[index]; }
+
     QString     title() const { return mHeader.name(); }
     void        titleSet( const QString &tit ) { mHeader.nameSet( tit ); dirtySet(); }
 
@@ -95,6 +97,10 @@ class CsComposition
     void        versionUpdate() { mHeader.versionUpdate(); dirtySet(); }
 
     int         isMelodyPresent() const { return mNoteList.count(); }
+
+    void        fragmentStartSet( int index, int line, int pos ) { mHeader.mFragments[index].mStart.set( line, pos ); stateDirtySet(); }
+
+    void        fragmentStopSet( int index, int line, int pos ) { mHeader.mFragments[index].mStop.set( line, pos ); stateDirtySet(); }
 
     void        makeCopy();
 

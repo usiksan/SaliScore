@@ -166,6 +166,10 @@ int CsPainter::drawLine(int y, int lineIndex, const CsLine &line, bool fullDrawi
     return y + fullLineHeight;
 
   mCurY = y;
+
+  //Fill line background
+  drawLineBackground( fullLineHeight );
+
   if( line.isRemark() )
     drawRemark( line.remarkConst().remarkMapConst() );
   else {

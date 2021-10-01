@@ -124,6 +124,7 @@ class CsPainter
 
     int              lineSongHeight() const;
 
+    virtual void     drawLineBackground( int lineHeight ) { Q_UNUSED(lineHeight) }
   protected:
     virtual bool isNotEditProperty( int propertyId, int x, int y );
 
