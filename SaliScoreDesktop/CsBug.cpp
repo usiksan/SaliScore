@@ -18,10 +18,6 @@
 // Road map
 //TODO D001 Append one half to left of song line
 
-//TODO D003 Append fragment support (up to 4)
-
-//TODO D004 When edit lyric exclude lyric intersection
-
 //TODO D005 Append horizontal scaling
 
 //TODO D006 Automatic takt per line detection in import
@@ -41,6 +37,10 @@
 
 //===================================================================================
 //Fixed:
+//D003 Append fragment support (up to 4)
+
+//D004 When edit lyric exclude lyric intersection
+
 //D002 Append auto scroll to play
 
 //B002 In chord parser # not parsed

@@ -449,6 +449,14 @@ void CsPainter::buildDisposition(QVector<CsLyricDisposition> &disposition, const
     curX += disposition[i].mWidth;
     disposition[i].mHighlight = isHighlight( pos, mTickPerTakt - (pos % mTickPerTakt) );
     }
+
+  //Remove symbols overlapping
+  //int appendOffset = 0;
+  for( int i = 0; i < lyricLine.count() - 1; i++ ) {
+    if( disposition[i].after() > disposition[i+1].mPosX ) {
+      disposition[i+1].mPosX = disposition[i].after();
+      }
+    }
   }
 
 
