@@ -573,6 +573,8 @@ void CsWinMain::createMenu()
   actionEditPasteImport = menuEditDisabled->addAction( QIcon(QStringLiteral(":/pic/viewEditor.png")), tr("Import from clipboard"), this, &CsWinMain::cmEditPasteImport );
 
   menuEdit = new QMenu( tr("Edit") );
+  menuEdit->addAction( QIcon(QStringLiteral(":/pic/viewEditor.png")), tr("Import from clipboard"), this, &CsWinMain::cmEditPasteImport );
+  menuEdit->addSeparator();
   actionEditUndo = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editUndo.png")), tr("Undo last edit operation"), mWinEditor, &CsWinEditor::cmEditUndo );
   actionEditRedo = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editRedo.png")), tr("Redo last undoed operation"), mWinEditor, &CsWinEditor::cmEditRedo );
   menuEdit->addSeparator();

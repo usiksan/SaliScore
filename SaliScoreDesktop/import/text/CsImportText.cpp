@@ -88,6 +88,8 @@ CsComposition CsImportText::read(const QByteArray &fileContent, bool &ok)
     }
 
   CsComposition comp;
+  comp.tickPerPartSet( duraQuarter );
+  comp.partPerTaktSet( 4 );
   comp.remarkAppend( QStringLiteral("input"), QStringLiteral("Source file") );
   comp.chordAppend( QStringLiteral("chords"), QStringLiteral("Detected chords") );
 
@@ -230,7 +232,7 @@ bool CsImportText::chordParser(const QString name, int &note, int &chord) const
     chordName = name.mid( 2 );
     }
   else if( name.startsWith( QStringLiteral("A") ) ) {
-    note = noteG;
+    note = noteA;
     chordName = name.mid( 1 );
     }
   else if( name.startsWith( QStringLiteral("B") ) ) {
