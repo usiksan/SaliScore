@@ -85,7 +85,7 @@ void CsWinScoreView::paintScore(CsPainter &cp)
       mOffsetY = qBound( 0, mOffsetY + top, mSizeY );
       update();
       }
-    else if( bot > size().height() - 50 ) {
+    else if( bot > size().height() * 2 / 3 ) {
       mOffsetY = qBound( 0, mOffsetY + bot - size().height() / 3, mSizeY );
       update();
       }
