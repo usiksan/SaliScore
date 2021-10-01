@@ -170,6 +170,11 @@ int CsPainter::drawLine(int y, int lineIndex, const CsLine &line, bool fullDrawi
   //Fill line background
   drawLineBackground( fullLineHeight );
 
+  //Draw menu zone
+  if( mCellCursor != nullptr )
+    drawCell( -mOffsetX, y, mSettings.mLeftMenuSize, fullLineHeight, false );
+  mReferenceList.append( CsReference( -mOffsetX, y, mSettings.mLeftMenuSize, fullLineHeight, cccLineSelect, mLineIndex, QString{}, 0 ) );
+
   if( line.isRemark() )
     drawRemark( line.remarkConst().remarkMapConst() );
   else {

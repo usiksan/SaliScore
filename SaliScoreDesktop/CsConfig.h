@@ -87,6 +87,7 @@ History
              v0.43 Refactor view windows from common scroll widget to concrete view widget
   01.10.2021 v0.44 Appended fragment support in train mode
              v0.45 When edit lyric exclude lyric intersection
+             v0.46 Append score clipboard operations
 */
 
 #ifndef CSCONFIG
@@ -100,7 +101,7 @@ History
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             45
+#define CS_VERSION_MINOR             46
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"

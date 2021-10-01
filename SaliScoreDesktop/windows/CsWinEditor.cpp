@@ -1,6 +1,7 @@
 #include "CsWinEditor.h"
 #include "CsWinScoreMode.h"
 #include "CsPainterEditor.h"
+#include "CsWinMain.h"
 
 #include <QPaintEvent>
 #include <QPainter>
@@ -27,7 +28,7 @@ CsWinEditor::CsWinEditor(CsComposition &comp, CsPlay &play, QWidget *parent) :
 void CsWinEditor::paint()
   {
   QPainter painter(this);
-  CsPainterEditor cp( &painter, QStringLiteral(KEY_EDITOR_SETTINGS), mComposition, mPlayer, mOffsetX, size(), &mCellCursor, mEditor );
+  CsPainterEditor cp( &painter, QStringLiteral(KEY_EDITOR_SETTINGS), mComposition, mPlayer, mOffsetX, size(), &mCellCursor, mEditor, mSelectedLines );
 
   paintScore( cp );
 
@@ -48,24 +49,103 @@ void CsWinEditor::cmEditRedo()
 
   }
 
+
+
+
 void CsWinEditor::cmEditCut()
   {
-
+  editCopy();
+  cmEditDelete();
   }
+
+
+
 
 void CsWinEditor::cmEditCopy()
   {
+  editCopy();
 
+  //Remove selection
+  unselectAll();
   }
+
+
 
 void CsWinEditor::cmEditPaste()
   {
 
+  int insertLine = mCellCursor.lineIndex() >= 0 ? mCellCursor.lineIndex() : 0;
+
+  const auto remarkList = mComposition.remarkDefList();
+  const auto chordList  = mComposition.chordDefList();
+  const auto noteList   = mComposition.noteDefList();
+  const auto translationList = mComposition.translationDefList();
+
+  //Insert lines from local clipboard to current position
+  for( int i = 0; i < mLineClipboard.count(); i++ ) {
+    //Insert empty line
+    mComposition.lineInsert( insertLine, mLineClipboard.at(i).isRemark() );
+
+    //Fill inserted line with information
+    //Simple inserting not good idea because beatween copy and paste user can
+    // change part listing
+
+    if( mLineClipboard.at(i).isRemark() ) {
+      //For remark update all parts
+      for( auto const &def : qAsConst(remarkList) )
+        mComposition.remarkSet( insertLine, def.mName, mLineClipboard.at(i).remarkGet(def.mName) );
+      }
+    else {
+      //Update chord parts
+      for( auto const &def : qAsConst(chordList) )
+        mComposition.chordListSet( insertLine, def.mName, mLineClipboard.at(i).chordListGet(def.mName) );
+
+      //Update note parts
+      for( auto const &def : qAsConst(noteList) )
+        mComposition.noteListSet( insertLine, def.mName, mLineClipboard.at(i).noteListGet(def.mName) );
+
+      //Update lyric
+      mComposition.lyricSet( insertLine, mLineClipboard.at(i).lyricLineConst() );
+
+      //Update translation parts
+      for( auto const &def : qAsConst(translationList) )
+        mComposition.translationSet( insertLine, def.mName, mLineClipboard.at(i).translationGet(def.mName) );
+      }
+
+    //Move to next insert position
+    insertLine++;
+    }
+  update();
   }
+
+
 
 void CsWinEditor::cmEditDelete()
   {
+  //Delete all selected lines
+  //Because when line deleted all downer lines are shifted up then we must
+  //delete lines from end
+  for( int line = mComposition.lineCount() - 1; line >= 0; line-- )
+    if( mSelectedLines.contains(line) )
+      mComposition.lineRemove( line );
+  unselectAll();
+  }
 
+
+
+
+//!
+//! \brief editCopy Copies selected lines to local clipboard
+//!
+void CsWinEditor::editCopy()
+  {
+  //Copy selected lines to local clipboard
+  mLineClipboard.clear();
+  for( int line = 0; line < mComposition.lineCount(); line++ )
+    if( mSelectedLines.contains(line) )
+      mLineClipboard.append( mComposition.line(line) );
+
+  CsWinMain::actionEditPaste->setEnabled( mLineClipboard.count() != 0 );
   }
 
 
@@ -314,7 +394,9 @@ void CsWinEditor::keyTakt(bool plus)
 //!
 void CsWinEditor::keyDelete()
   {
-  if( mControl ) {
+  if( mSelectedLines.count() )
+    cmEditDelete();
+  else if( mControl ) {
     if( (mCellCursor.cellClass() == cccChord) || (mCellCursor.cellClass() == cccNote) || (mCellCursor.cellClass() == cccLyric) ||
         (mCellCursor.cellClass() == cccRemark) ) {
       mComposition.lineRemove( mCellCursor.lineIndex() );
@@ -327,6 +409,21 @@ void CsWinEditor::keyDelete()
       mEditor->keyPress( Qt::Key_Delete, QChar{}, mEditor );
       }
     }
+  }
+
+
+
+
+//!
+//! \brief unselectAll Remove all selections
+//!
+void CsWinEditor::unselectAll()
+  {
+  mSelectedLines.clear();
+  CsWinMain::actionEditCopy->setEnabled( false );
+  CsWinMain::actionEditCut->setEnabled( false );
+  CsWinMain::actionEditDelete->setEnabled( false );
+  update();
   }
 
 
@@ -420,7 +517,18 @@ void CsWinEditor::upMousePressEvent(QMouseEvent *event)
           if( mEditor == nullptr ) {
             mCellCursor.jump( cccLyric, 0, ref.line(), ref.part() );
             mEditor = CsCursorEdit::build( cccLyricSymbol, ref.line(), ref.index(), ref.part(), mComposition );
+            mSelectedLines.clear();
             }
+          break;
+
+        case cccLineSelect :
+          if( mSelectedLines.contains( ref.line() ) )
+            mSelectedLines.remove( ref.line() );
+          else
+            mSelectedLines.insert( ref.line() );
+          CsWinMain::actionEditCopy->setEnabled( mSelectedLines.count() != 0 );
+          CsWinMain::actionEditCut->setEnabled( mSelectedLines.count() != 0 );
+          CsWinMain::actionEditDelete->setEnabled( mSelectedLines.count() != 0 );
           break;
         }
       update();
@@ -602,5 +710,7 @@ void CsWinEditor::compositionChanged()
     delete mEditor;
     mEditor = nullptr;
     }
-  update();
+
+  unselectAll();
+  CsWinMain::actionEditPaste->setEnabled( mLineClipboard.count() != 0 );
   }

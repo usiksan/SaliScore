@@ -33,6 +33,8 @@ enum CsClass {
 
   cccLyricSymbol,
 
+  cccLineSelect,
+
   cccChordLine,
   cccChordPlacehold,
   cccClef,

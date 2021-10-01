@@ -8,6 +8,7 @@
 #include "score/CsReference.h"
 
 #include <QWidget>
+#include <QSet>
 
 
 class CsWinEditor : public CsWinScoreView
@@ -18,9 +19,12 @@ class CsWinEditor : public CsWinScoreView
 
     CsCellCursor    mCellCursor;    //!< Current cursor position
     CsCursorEdit   *mEditor;        //!< Editor for content
+    QSet<int>       mSelectedLines; //!< Set of selected lines
 
     bool            mShift;         //!< True when Shift key pressed
     bool            mControl;       //!< True when Control key pressed
+
+    CsLineList      mLineClipboard; //!< Local clipboard for selected lines
 
   public:
     explicit CsWinEditor( CsComposition &comp, CsPlay &play, QWidget *parent = nullptr);
@@ -39,6 +43,11 @@ class CsWinEditor : public CsWinScoreView
     void cmEditDelete();
 
   private:
+    //!
+    //! \brief editCopy Copies selected lines to local clipboard
+    //!
+    void editCopy();
+
     //!
     //! \brief keyLeft Handle key left pressing
     //!
@@ -64,6 +73,11 @@ class CsWinEditor : public CsWinScoreView
     //! \brief keyDelete Handle key Delete pressing
     //!
     void keyDelete();
+
+    //!
+    //! \brief unselectAll Remove all selections
+    //!
+    void unselectAll();
 
   signals:
 

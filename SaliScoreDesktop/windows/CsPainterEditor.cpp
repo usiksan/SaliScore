@@ -1,8 +1,9 @@
 #include "CsPainterEditor.h"
 
-CsPainterEditor::CsPainterEditor(QPainter *painter, const QString &keyViewSettings, const CsComposition &comp, const CsPlay &player, int offsetX, QSize size, CsCellCursor *cellCursor, CsCursorEdit *cursorEdit) :
+CsPainterEditor::CsPainterEditor(QPainter *painter, const QString &keyViewSettings, const CsComposition &comp, const CsPlay &player, int offsetX, QSize size, CsCellCursor *cellCursor, CsCursorEdit *cursorEdit, const QSet<int> selectedLines) :
   CsPainter( painter, keyViewSettings, comp, player, offsetX, size, cellCursor ),
-  mCursorEdit(cursorEdit)
+  mCursorEdit(cursorEdit),
+  mSelectedLines(selectedLines)
   {
 
   }
@@ -173,3 +174,14 @@ void CsPainterEditor::paintEditText(int x, int y)
 
 
 
+
+
+void CsPainterEditor::drawLineBackground(int lineHeight)
+  {
+  if( mSelectedLines.contains(mLineIndex) ) {
+    //Downlight full line
+    mPainter->setBrush( Qt::lightGray );
+    mPainter->setPen( Qt::lightGray );
+    mPainter->drawRect( mSettings.mLeftMenuSize - mOffsetX, mCurY, 2048 * mSettings.mPixelPerTakt >> 8, lineHeight );
+    }
+  }
