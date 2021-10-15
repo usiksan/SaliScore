@@ -1,0 +1,39 @@
+package salilab.saliscore;
+
+public interface CsChordVar {
+  int chordMaj          = 0;//0,4,7
+  int chordMaj6         = 1;//0,4,7,9
+  int chordMaj7         = 2;//0,4,7,11
+  int chordMaj7sharp11  = 3;//0,4,6,7,11
+  int chordMaj_9_       = 4;//0,2,4,7
+  int chordMaj7_9_      = 5;//0,2,4,7,11
+  int chordMaj6_9_      = 6;//0,2,4,7,9
+  int chordAug          = 7;//0,4,8
+  int chordMin          = 8;//0,3,7
+  int chordMin6         = 9;//0,3,7,9
+  int chordMin7         = 10;//0,3,7,10
+  int chordMin7b5       = 11;//0,3,6,10
+  int chordMin_9_       = 12;//0,2,3,7
+  int chordMin7_9_      = 13;//0,2,3,7,10
+  int chordMin7_11_     = 14;//0,3,5,7,10
+  int chordMinMaj7      = 15;//0,3,7,11
+  int chordMinMaj7_9_   = 16;//0,2,3,7,11
+  int chordDim          = 17;//0,3,6
+  int chordDim7         = 18;//0,3,6,9
+  int chord7th          = 19;//0,4,7,10
+  int chord7sus4        = 20;//0,5,7,10
+  int chord7b5          = 21;//0,4,6,10
+  int chord7_9_         = 22;//0,2,4,7,10
+  int chord7sharp11     = 23;//0,4,6,7,10
+  int chord7_13_        = 24;//0,4,7,9,10
+  int chord7_b9_        = 25;//0,1,4,7,10
+  int chord7_b13_       = 26;//0,4,7,8,10
+  int chord7_sharp9_    = 27;//0,3,4,7,10
+  int chordMaj7aug      = 28;//0,4,8,11
+  int chord7aug         = 29;//0,4,8,10
+  int chord1plus8       = 30;//0
+  int chord1plus5       = 31;//0,7
+  int chordSus4         = 32;//0,5,7
+  int chord1plus2plus5  = 33;//0,2,7
+  int chordCancel = 34;
+}
