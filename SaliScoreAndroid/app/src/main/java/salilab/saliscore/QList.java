@@ -2,38 +2,27 @@ package salilab.saliscore;
 
 import java.util.ArrayList;
 
-public class QList<SvClass extends CsJsonWritable> {
-  private class PrivateList<SvClass> {
-    ArrayList<SvClass> mData;
-    int                mRefCount;
-
-    PrivateList() {
-      mData = new ArrayList<>();
-      mRefCount = 1;
-    }
-  }
-
-  private PrivateList<SvClass> mList;
+public class QList<SvClass extends CsJsonWritable> extends ArrayList<SvClass> {
 
   QList() {
-    mList = new PrivateList<>();
+    super();
   }
 
   QList( QList<SvClass> src ) {
-    mList = src.mList;
-    mList.mRefCount++;
+    super();
+    for( SvClass item : src )
+      add( (SvClass)item.copy() );
   }
 
-  private void deepCopy() {
-    if( mList.mRefCount > 1 ) {
-      PrivateList<SvClass> newList = new PrivateList<>();
-      for( SvClass item : mList.mData )
-        newList.mData.add( (SvClass)item.copy() );
-      mList.mRefCount--;
-      mList = newList;
-    }
-  }
+  SvClass at(int index) { return get(index); }
 
-  SvClass at
+  void    append( SvClass item ) { add( (SvClass) item.copy() ); }
 
+  void    insert( int index, SvClass item ) { add( index, (SvClass) item.copy() ); }
+
+  //void    remove( int index ) { mList.remove( index ); }
+
+  //void    clear() { mList.clear(); }
+
+  int     count() { return size(); }
 }

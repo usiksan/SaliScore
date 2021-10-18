@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import android.graphics.Color;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
@@ -66,7 +67,7 @@ public class SvJsonReader {
   //! \param key         Key for list
   //! \param list        List to transfer
   //!
-  public void jsonListInt( String key, Vector<Integer> list ) throws Exception {
+  public void jsonListInt( String key, ArrayList<Integer> list ) throws Exception {
     list.clear();
     JSONArray ar = mObject.getJSONArray( key );
     list.ensureCapacity( ar.length() );
@@ -80,7 +81,7 @@ public class SvJsonReader {
   //! \param key            Key for list
   //! \param list           List to transfer
   //!
-  public void jsonListString( String key, Vector<String> list ) throws Exception {
+  public void jsonListString( String key, ArrayList<String> list ) throws Exception {
     list.clear();
     JSONArray ar = mObject.getJSONArray( key );
     list.ensureCapacity( ar.length() );
@@ -97,12 +98,12 @@ public class SvJsonReader {
   //! \param list     List to transfer
   //!
   public <SvClass extends CsJsonWritable>
-  void jsonList(String key, @org.jetbrains.annotations.NotNull Vector<SvClass> list, Class<SvClass> cls ) throws Exception {
+  void jsonList(String key, QList<SvClass> list, Class<SvClass> cls ) throws Exception {
+    SvClass item = cls.newInstance();
     list.clear();
     JSONArray ar = mObject.getJSONArray( key );
     list.ensureCapacity( ar.length() );
     for( int i = 0; i < ar.length(); i++ ) {
-      SvClass item = cls.newInstance();
       SvJsonReader js = new SvJsonReader( ar.getJSONObject(i) );
       item.jsonRead( js );
       list.add( item );
@@ -155,7 +156,7 @@ public class SvJsonReader {
   //! \param list    Map to transfer
   //!
   public <SvClass extends CsJsonWritable>
-  void jsonMap( String key, Map<String,SvClass> map, Class<SvClass> cls ) throws Exception
+  void jsonMap( String key, TreeMap<String,SvClass> map, Class<SvClass> cls ) throws Exception
   {
     map.clear();
     JSONObject obj = mObject.getJSONObject( key );

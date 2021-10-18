@@ -16,6 +16,10 @@ public class CsChord extends CsPosition {
     mChord = CsUtils.qBound( CsChordVar.chordMaj, chord, CsChordVar.chord1plus2plus5 );
   }
 
+  CsChord( CsChord ch ) {
+    this( ch.mPosition, ch.mDuration, ch.mNote, ch.mChord );
+  }
+
   public String chordText() {
     return notes[mNote] + chords[mChord];
   }

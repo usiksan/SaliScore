@@ -12,10 +12,10 @@ public class CsChordLine extends CsJsonWritable {
     mList = new CsChordList();
   }
   CsChordLine( CsChordList list ) {
-    mList = list.copy();
+    mList = new CsChordList(list);
   }
 
-  CsChordList chordListConst()  { return (CsChordList) Collections.unmodifiableList( mList ); }
+  CsChordList chordListConst()  { return mList; }
 
   @Override
   public void jsonWrite( SvJsonWriter js ) throws Exception {

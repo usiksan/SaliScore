@@ -1,6 +1,8 @@
 package salilab.saliscore;
 
 import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.TreeMap;
 
 public class CsChordKit extends CsJsonWritable {
@@ -8,6 +10,13 @@ public class CsChordKit extends CsJsonWritable {
 
   CsChordKit() {
     mChordMap = new TreeMap<>();
+  }
+
+  CsChordKit( CsChordKit kit ) {
+    mChordMap = new TreeMap<>();
+    Set<String> keys = kit.mChordMap.keySet();
+    for( String key : keys )
+      mChordMap.put( key, (CsChordLine) kit.mChordMap.get(key).copy() );
   }
 
   //auto &chordMapConst() const { return mChordMap; }
@@ -39,6 +48,6 @@ public class CsChordKit extends CsJsonWritable {
 
   @Override
   public CsJsonWritable copy() {
-    return new CsPosition( mPosition, mDuration );
+    return new CsChordKit( this );
   }
 }

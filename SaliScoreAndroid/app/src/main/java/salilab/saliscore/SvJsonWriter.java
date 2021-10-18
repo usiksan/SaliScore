@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import android.graphics.Color;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
@@ -84,7 +85,7 @@ public class SvJsonWriter {
     //! \param key         Key for list
     //! \param list        List to transfer
     //!
-    public void jsonListInt( String key, Vector<Integer> list ) throws Exception {
+    public void jsonListInt( String key, ArrayList<Integer> list ) throws Exception {
         JSONArray ar = new JSONArray();
         for( Integer item : list )
           ar.put( item.intValue() );
@@ -97,7 +98,7 @@ public class SvJsonWriter {
     //! \param key            Key for list
     //! \param list           List to transfer
     //!
-    public void jsonListString( String key, Vector<String> list ) throws Exception {
+    public void jsonListString( String key, ArrayList<String> list ) throws Exception {
         JSONArray ar = new JSONArray();
         for( String item : list )
             ar.put( item );
@@ -115,7 +116,7 @@ public class SvJsonWriter {
     //! \param list     List to transfer
     //!
     public <SvClass extends CsJsonWritable>
-    void jsonList(String key, @org.jetbrains.annotations.NotNull Vector<SvClass> list, Class<SvClass> cls ) throws Exception {
+    void jsonList(String key, QList<SvClass> list, Class<SvClass> cls ) throws Exception {
         JSONArray ar = new JSONArray();
         for( SvClass item : list ) {
           SvJsonWriter js = new SvJsonWriter();
@@ -166,7 +167,7 @@ public class SvJsonWriter {
     //! \param list    Map to transfer
     //!
     public <SvClass extends CsJsonWritable>
-    void jsonMap( String key, Map<String,SvClass> map, Class<SvClass> cls ) throws Exception
+    void jsonMap( String key, TreeMap<String,SvClass> map, Class<SvClass> cls ) throws Exception
     {
         JSONObject obj = new JSONObject();
         Set<String> keys = map.keySet();

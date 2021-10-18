@@ -1,6 +1,5 @@
 package salilab.saliscore;
 
-import java.util.Vector;
 
 public class CsPosition extends CsJsonWritable {
     protected Integer mPosition; //!< Position in time scale, tick
@@ -9,6 +8,11 @@ public class CsPosition extends CsJsonWritable {
     CsPosition( int pos, int duration ) {
       mPosition = pos;
       mDuration = duration;
+    }
+
+    CsPosition( CsPosition p ) {
+        mPosition = p.mPosition;
+        mDuration = p.mDuration;
     }
 
     public int  position() { return mPosition; }
@@ -35,28 +39,28 @@ public class CsPosition extends CsJsonWritable {
     }
 
 
-    static int csPositionFind(int position, Vector<? extends CsPosition> list )
+    static int csPositionFind(int position, QList<? extends CsPosition> list )
     {
-        for( int i = 0; i < list.size(); i++ )
-            if( list.get(i).position() == position )
+        for( int i = 0; i < list.count(); i++ )
+            if( list.at(i).position() == position )
                 return i;
         return -1;
     }
 
     static <Position extends CsPosition>
-    int csPositionInsert( Position p, Vector<Position> list )
+    int csPositionInsert( Position p, QList<Position> list )
     {
         //Find index at which need to be inserted
         int index;
-        for( index = 0; index < list.size(); index++ )
-            if( list.get(index).position() > p.position() )
+        for( index = 0; index < list.count(); index++ )
+            if( list.at(index).position() > p.position() )
                 break;
 
-        if( index >= list.size() )
+        if( index >= list.count() )
             //Simple append
-            list.add( p );
+            list.append( p );
         else
-            list.add( index, p );
+            list.insert( index, p );
 
         return index;
     }
