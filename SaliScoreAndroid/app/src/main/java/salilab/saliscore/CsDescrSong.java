@@ -23,9 +23,9 @@ public class CsDescrSong extends CsJsonWritable {
     mAuthor = src.mAuthor;
     mSinger = src.mSinger;
     mName   = src.mName;
-    mAuthorSongId = src.mAuthorSongId;
-    mVersion      = src.mVersion;
-    mIsPublic     = src.mIsPublic;
+    mAuthorSongId = src.mAuthorSongId.intValue();
+    mVersion      = src.mVersion.intValue();
+    mIsPublic     = src.mIsPublic.booleanValue();
   }
 
   String songId() { return mAuthor + "_" + Integer.toString( mAuthorSongId, 16 ); }
@@ -79,7 +79,8 @@ public class CsDescrSong extends CsJsonWritable {
     mAuthor = new String();
     mSinger = new String();
     mName   = new String();
-    mAuthorSongId = mVersion = 0;
+    mAuthorSongId = 0;
+    mVersion = 0;
     mIsPublic = false;
   }
 

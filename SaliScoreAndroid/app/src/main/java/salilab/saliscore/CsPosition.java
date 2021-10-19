@@ -11,8 +11,7 @@ public class CsPosition extends CsJsonWritable {
     }
 
     CsPosition( CsPosition p ) {
-        mPosition = p.mPosition;
-        mDuration = p.mDuration;
+        this( p.mPosition, p.mDuration );
     }
 
     public int  position() { return mPosition; }

@@ -23,8 +23,8 @@ public class CsCursorPosition extends CsJsonWritable {
   }
 
   CsCursorPosition( CsCursorPosition cur ) {
-    mPosition = cur.mPosition;
-    mLineIndex = cur.mLineIndex;
+    mPosition = cur.mPosition.intValue();
+    mLineIndex = cur.mLineIndex.intValue();
   }
 
   //!
