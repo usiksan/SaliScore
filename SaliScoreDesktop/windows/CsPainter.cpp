@@ -444,6 +444,8 @@ void CsPainter::buildDisposition(QVector<CsLyricDisposition> &disposition, const
       for( int k = i - 1; k >= 0 && !lyricLine.at(k).isDelimiter(); k-- ) {
         prevX -= disposition[k].mWidth;
         disposition[k].mPosX = prevX;
+        //Change highlighting previous symbols to previous quarter
+        disposition[k].mHighlight = isHighlight( pos - duraQuarter, duraQuarter );
         }
       }
     else {

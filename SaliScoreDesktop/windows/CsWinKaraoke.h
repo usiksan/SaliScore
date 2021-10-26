@@ -8,7 +8,9 @@
 #include <QWidget>
 
 enum CsAnimationMode {
-  camSingleLine
+  camSingleLine,
+  camDoubleLine,
+  camTwinLine
 };
 
 class CsWinKaraoke : public CsWinScoreView
@@ -32,6 +34,10 @@ class CsWinKaraoke : public CsWinScoreView
 
   private:
     void buildSingleLine(CsPainter &cp);
+
+    void buildDoubleLine( CsPainter &cp );
+
+    void buildTwinLine( CsPainter &cp );
   };
 
 #endif // CSWINKARAOKE_H

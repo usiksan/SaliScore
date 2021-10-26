@@ -97,6 +97,7 @@ void CsWinTrain::cmFragmentStop()
 void CsWinTrain::activate()
   {
   CsWinScoreView::activate();
+  updateActions();
   }
 
 
@@ -104,7 +105,10 @@ void CsWinTrain::activate()
 
 void CsWinTrain::playStart()
   {
-
+  if( !mPlayer.isShow() ) {
+    //Begin from start of fragment
+    mPlayer.setTrainFragment( mFragment );
+    }
   }
 
 
@@ -196,6 +200,7 @@ void CsWinTrain::compositionChanged()
 
 void CsWinTrain::updateActions() const
   {
+  mPlayer.setTrainFragment( mFragment );
   CsWinMain::actionFragment0->setChecked( mFragment == 0 );
   CsWinMain::actionFragment1->setChecked( mFragment == 1 );
   CsWinMain::actionFragment2->setChecked( mFragment == 2 );

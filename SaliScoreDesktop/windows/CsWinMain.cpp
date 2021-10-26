@@ -92,6 +92,7 @@ CsWinMain::CsWinMain(CsPlayList &playList, CsMidiSequencer *midiSequencer, QWidg
 
   //Notification for tick
   connect( mMidiSequencer, &CsMidiSequencer::tick, this, [this] ( int count ) { mPlayer.next( count ); } );
+  connect( mMidiSequencer, &CsMidiSequencer::noteOn, this, [this] ( int note ) { mPlayer.noteOn( note ); } );
   connect( mMidiSequencer, &CsMidiSequencer::midiStart, this, &CsWinMain::cmPlayStart );
   connect( mMidiSequencer, &CsMidiSequencer::midiStop, this, &CsWinMain::cmPlayStop );
   connect( repoClient, &CsRepoClient::playlistChanged, mWPlayList, &CsWinPlayList::buildContent );
@@ -344,12 +345,6 @@ void CsWinMain::cmViewTranslation()
 
 void CsWinMain::cmPlayStart()
   {
-  if( mDefferedReset ) {
-    mDefferedReset = false;
-    //mPlayer.reset();
-    mPlayer.show(true);
-    }
-
   if( CsWinMain::actionViewKaraoke->isChecked() ) {
     mWinKaraoke->playStart();
     connect( &mUpdateTimer, &QTimer::timeout, mWinKaraoke, &CsWinScoreView::viewUpdate );
@@ -362,9 +357,8 @@ void CsWinMain::cmPlayStart()
     mWinEditor->playStart();
     connect( &mUpdateTimer, &QTimer::timeout, mWinEditor, &CsWinScoreView::viewUpdate );
     }
+  mPlayer.start();
   mUpdateTimer.start();
-
-  mMidiSequencer->setRun(true);
   }
 
 
@@ -373,19 +367,15 @@ void CsWinMain::cmPlayStart()
 
 void CsWinMain::cmPlayStop()
   {
-  mMidiSequencer->setRun(false);
+  mPlayer.stop();
 
-  if( mDefferedReset ) {
-    mPlayer.show(false);
-    //Update view to remove player position
-    if( CsWinMain::actionViewKaraoke->isChecked() )
-      mWinKaraoke->viewUpdate();
-    else if( CsWinMain::actionViewTrain->isChecked() )
-      mWinTrain->viewUpdate();
-    else
-      mWinEditor->viewUpdate();
-    }
-  mDefferedReset = true;
+  //Update view to remove player position
+  if( CsWinMain::actionViewKaraoke->isChecked() )
+    mWinKaraoke->viewUpdate();
+  else if( CsWinMain::actionViewTrain->isChecked() )
+    mWinTrain->viewUpdate();
+  else
+    mWinEditor->viewUpdate();
   mUpdateTimer.stop();
   mUpdateTimer.disconnect();
   }
@@ -605,7 +595,7 @@ void CsWinMain::createMenu()
 
   menuPlay = new QMenu( tr("Play") );
   actionPlayStart = menuPlay->addAction( QIcon(QStringLiteral(":/pic/playStart.png")), tr("Start"), this, &CsWinMain::cmPlayStart );
-  actionPlayPause = menuPlay->addAction( QIcon(QStringLiteral(":/pic/playPause.png")), tr("Pause"), this, [this] () {  mMidiSequencer->setRun(false); } );
+  actionPlayPause = menuPlay->addAction( QIcon(QStringLiteral(":/pic/playPause.png")), tr("Pause"), this, [this] () {  mPlayer.pause(); } );
   actionPlayStop  = menuPlay->addAction( QIcon(QStringLiteral(":/pic/playStop.png")), tr("Stop"), this, &CsWinMain::cmPlayStop );
 
   menuTrain = new QMenu( tr("Train") );

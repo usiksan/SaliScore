@@ -7,7 +7,8 @@ CsPlay::CsPlay(CsComposition &comp) :
   mTickLineStart(0),
   mTickLineStop(0),
   mTickCount(0),
-  mShow(false)
+  mShow(false),
+  mRun(false)
   {
 
   }
@@ -40,22 +41,33 @@ bool CsPlay::isHit(int position, int duration) const
 //!
 void CsPlay::next(int tick)
   {
-  mTickIndex += tick;
-  if( mTickIndex >= mTickLineStop ) {
-    //Find next line
-    for( int index = mLineIndex + 1; index < mComposition.lineCount(); index++ ) {
-      const auto &line = mComposition.line( index );
-      if( !line.isRemark() ) {
-        //Next song line found
-        qDebug() << "CsPlay:new line" << index;
-        mLineIndex = index;
-        mTickLineStart = mTickLineStop;
-        mTickLineStop = mTickLineStart + line.taktCount() * mComposition.tickPerTakt();
-        return;
+  if( mRun ) {
+    mTickIndex += tick;
+    if( mTickIndex >= mTickLineStop ) {
+      //Find next line
+      for( int index = mLineIndex + 1; index < mComposition.lineCount(); index++ ) {
+        const auto &line = mComposition.line( index );
+        if( !line.isRemark() ) {
+          //Next song line found
+          qDebug() << "CsPlay:new line" << index;
+          mLineIndex = index;
+          mTickLineStart = mTickLineStop;
+          mTickLineStop = mTickLineStart + line.taktCount() * mComposition.tickPerTakt();
+          return;
+          }
+        }
+      //Next line not found. Song is finished
+      mTickIndex = mTickLineStop;
+      }
+
+    //Check if play position reach end of fragment
+    if( mTrainFragment ) {
+      if( lineIndex() > mComposition.header().mFragments[mTrainFragment-1].mStop.lineIndex() ||
+          (lineIndex() == mComposition.header().mFragments[mTrainFragment-1].mStop.lineIndex() && lineTickIndex() >= mComposition.header().mFragments[mTrainFragment-1].mStop.position() ) ) {
+        //Jump to begin of fragment
+        setTrainFragment( mTrainFragment );
         }
       }
-    //Next line not found. Song is finished
-    mTickIndex = mTickLineStop;
     }
   }
 
@@ -97,7 +109,7 @@ void CsPlay::jump(int lineIndex, int position)
 //!
 void CsPlay::reset()
   {
-
+  stop();
   bool isFirst = true;
   mTickCount = mTickIndex = mComposition.lineStartOffset();
   //Calculate tick count of hole composition
@@ -114,5 +126,78 @@ void CsPlay::reset()
         isFirst = false;
         }
       }
+    }
+  }
+
+
+
+
+//!
+//! \brief train    Start a train process for part with partName
+//! \param partName Name of training part
+//!
+void CsPlay::train(const QString &partName)
+  {
+  mTrainPart = partName;
+  start();
+  }
+
+
+
+
+//!
+//! \brief start Run player from current state
+//!
+void CsPlay::start()
+  {
+  mShow = true;
+  mRun  = true;
+  }
+
+
+
+
+//!
+//! \brief pause Puases player bun not hide it
+//!
+void CsPlay::pause()
+  {
+  mRun = false;
+  }
+
+
+
+
+//!
+//! \brief stop Stops player and hide it
+//!
+void CsPlay::stop()
+  {
+  mShow = false;
+  mRun  = false;
+  mTrainPart.clear();
+  }
+
+
+
+
+//!
+//! \brief noteOn Called when user press any piano key
+//! \param note   Piano key midi code
+//!
+void CsPlay::noteOn(int note)
+  {
+
+  }
+
+
+
+void CsPlay::setTrainFragment(int fragmentIndex)
+  {
+  mTrainFragment = fragmentIndex;
+  if( mTrainFragment == 0 )
+    reset();
+  else {
+    jump( mComposition.header().mFragments[mTrainFragment-1].mStart.lineIndex(), mComposition.header().mFragments[mTrainFragment-1].mStart.position() );
     }
   }

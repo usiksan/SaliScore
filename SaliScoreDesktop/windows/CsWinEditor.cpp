@@ -20,7 +20,8 @@ CsWinEditor::CsWinEditor(CsComposition &comp, CsPlay &play, QWidget *parent) :
   mShift(false),
   mControl(false)
   {
-
+  //Set autoscroll to scroll when cursor position changed
+  mAutoScroll = true;
   }
 
 
@@ -431,12 +432,14 @@ void CsWinEditor::unselectAll()
 
 void CsWinEditor::playStart()
   {
-  //Begin play from current cursor
-  if( mCellCursor.cellClass() == cccChord || mCellCursor.cellClass() == cccNote ) {
-    mPlayer.jump( mCellCursor.lineIndex(), mCellCursor.position() );
-    }
-  else if( mCellCursor.cellClass() == cccLyric ) {
-    mPlayer.jump( mCellCursor.lineIndex(), 0 );
+  //Begin play from current cursor only if new restart
+  if( !mPlayer.isShow() ) {
+    if( mCellCursor.cellClass() == cccChord || mCellCursor.cellClass() == cccNote ) {
+      mPlayer.jump( mCellCursor.lineIndex(), mCellCursor.position() );
+      }
+    else if( mCellCursor.cellClass() == cccLyric ) {
+      mPlayer.jump( mCellCursor.lineIndex(), 0 );
+      }
     }
   }
 

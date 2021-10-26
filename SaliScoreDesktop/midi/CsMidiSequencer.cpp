@@ -14,8 +14,7 @@ CsMidiSequencer::CsMidiSequencer(QThread *th, QObject *parent) :
   mTickCount(0),      //!< Current tick in nanoSec. When count over 10ms sended one or more ticks
   mMidiHandle(-1),    //!< Handle to midi keyboard
   mDataIndex(-1),
-  mSysExIndex(-1),
-  mRun(false)
+  mSysExIndex(-1)
   {
   moveToThread( th );
   connect( th, &QThread::started, this, &CsMidiSequencer::onStart );
@@ -32,11 +31,6 @@ CsMidiSequencer::~CsMidiSequencer()
 #endif
   }
 
-void CsMidiSequencer::setRun(bool on)
-  {
-  mRun = on;
-  mTickCount = 0;
-  }
 
 void CsMidiSequencer::setTempo(int tempo)
   {
@@ -172,6 +166,8 @@ void CsMidiSequencer::onStart()
 
 void CsMidiSequencer::midiSignal(quint8 control, quint8 data0, quint8 data1)
   {
+  if( (control & 0xf0) == 0x90 && data1 != 0 )
+    emit noteOn( data0 );
   qDebug() << "Midi " << control << data0 << data1;
   }
 
@@ -182,7 +178,7 @@ void CsMidiSequencer::tickGenerate(int count)
   mTickCount += count;
   int tc = mTickCount / 10000;
   mTickCount %= 10000;
-  if( tc > 0 && mRun )
+  if( tc > 0 )
     emit tick( tc );
   }
 

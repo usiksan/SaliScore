@@ -18,13 +18,16 @@ Description
 
 class CsPlay
   {
-    CsComposition &mComposition;    //!< Composition on which player works
-    int            mTickIndex;      //!< Current position of tick count
-    int            mLineIndex;      //!< Index of current played line
-    int            mTickLineStart;  //!< Tick position of current line start
-    int            mTickLineStop;   //!< Tick position of current line end
-    int            mTickCount;      //!< Tick count of hole composition
-    bool           mShow;           //!< When true current play position is displayed
+    CsComposition  &mComposition;    //!< Composition on which player works
+    int             mTickIndex;      //!< Current position of tick count
+    int             mLineIndex;      //!< Index of current played line
+    int             mTickLineStart;  //!< Tick position of current line start
+    int             mTickLineStop;   //!< Tick position of current line end
+    int             mTickCount;      //!< Tick count of hole composition
+    bool            mShow;           //!< When true current play position is displayed
+    bool            mRun;            //!< When true then played
+    QString         mTrainPart;      //!< Note train part. If empty then no note train
+    int             mTrainFragment;  //!< Train fragment index - 1
   public:
     CsPlay( CsComposition &comp );
 
@@ -76,6 +79,10 @@ class CsPlay
     //! \brief isShow Returns current show state
     //! \return       Current show state
     //!
+    //! mShow flag with mRun defines all possible states of player
+    //! false           false - player stoped
+    //! true            false - player paused
+    //! true            true  - player runing
     bool isShow() const { return mShow; }
 
     //!
@@ -83,6 +90,41 @@ class CsPlay
     //! \param sh   New state of show flag
     //!
     void show( bool sh ) { mShow = sh; }
+
+    //!
+    //! \brief isRun Returns current run state
+    //! \return      Current run state
+    //!
+    bool isRun() const { return mRun; }
+
+    //!
+    //! \brief train    Start a train process for part with partName
+    //! \param partName Name of training part
+    //!
+    void train( const QString &partName );
+
+    //!
+    //! \brief start Run player from current state
+    //!
+    void start();
+
+    //!
+    //! \brief pause Puases player bun not hide it
+    //!
+    void pause();
+
+    //!
+    //! \brief stop Stops player and hide it
+    //!
+    void stop();
+
+    //!
+    //! \brief noteOn Called when user press any piano key
+    //! \param note   Piano key midi code
+    //!
+    void noteOn( int note );
+
+    void setTrainFragment( int fragmentIndex );
   };
 
 #endif // CSPLAY_H

@@ -27,9 +27,11 @@ void CsWinKaraoke::paint()
   if( mPageMap.isEmpty() ) {
     //Build page map
     QSettings s;
-    int animationMode = s.value( QStringLiteral(KEY_KARAOKE_ANIMATION), 0 ).toInt();
+    int animationMode = camTwinLine; // s.value( QStringLiteral(KEY_KARAOKE_ANIMATION), 0 ).toInt();
     switch( animationMode ) {
-      case camSingleLine : buildSingleLine( cp );
+      case camSingleLine : buildSingleLine( cp ); break;
+      case camDoubleLine : buildDoubleLine( cp ); break;
+      case camTwinLine   : buildTwinLine( cp ); break;
       }
     }
 
@@ -83,5 +85,83 @@ void CsWinKaraoke::buildSingleLine( CsPainter &cp )
       //Insert page to map
       mPageMap.insert( lineIndex, page );
       }
+    }
+  }
+
+
+
+
+void CsWinKaraoke::buildDoubleLine(CsPainter &cp)
+  {
+  //Line height
+  int lineHeight = cp.lineSongHeight();
+  int posY = (size().height() - lineHeight * 2) / 2;
+  CsKaraokeLineList lineList;
+  for( int lineIndex = 0; lineIndex < mComposition.lineCount(); lineIndex++ ) {
+    const auto &line = mComposition.line(lineIndex);
+    if( !line.isRemark() ) {
+      //Bild line list
+      CsKaraokeLine karaokeLine( posY + lineList.count() * lineHeight, lineIndex );
+      lineList.append( karaokeLine );
+
+      if( lineList.count() == 2 ) {
+        //From list build page
+        CsKaraokePage page( cklmSimple, lineList );
+
+        //Insert page to map
+        mPageMap.insert( lineList.at(0).mNewLine, page );
+        mPageMap.insert( lineList.at(1).mNewLine, page );
+
+        lineList.clear();
+        }
+      }
+    }
+
+  if( lineList.count() ) {
+    //From list build page
+    CsKaraokePage page( cklmSimple, lineList );
+
+    //Insert page to map
+    mPageMap.insert( lineList.at(0).mNewLine, page );
+    }
+  }
+
+
+
+void CsWinKaraoke::buildTwinLine(CsPainter &cp)
+  {
+  //Line height
+  int lineHeight = cp.lineSongHeight();
+  int posY = (size().height() - lineHeight * 2) / 2;
+  CsKaraokeLineList lineList;
+  for( int lineIndex = 0; lineIndex < mComposition.lineCount(); lineIndex++ ) {
+    const auto &line = mComposition.line(lineIndex);
+    if( !line.isRemark() ) {
+      //Bild line list
+      CsKaraokeLine karaokeLine( posY + lineList.count() * lineHeight, lineIndex );
+      lineList.append( karaokeLine );
+
+      if( lineList.count() == 2 ) {
+        //From list build page
+        CsKaraokePage page( cklmSimple, lineList );
+
+        //Insert page to map
+        mPageMap.insert( lineList.at(0).mNewLine, page );
+
+        lineList.clear();
+
+        //Current line which is second line we set as first line for next page
+        CsKaraokeLine karaokeLine( posY + lineList.count() * lineHeight, lineIndex );
+        lineList.append( karaokeLine );
+        }
+      }
+    }
+
+  if( lineList.count() ) {
+    //From list build page
+    CsKaraokePage page( cklmSimple, lineList );
+
+    //Insert page to map
+    mPageMap.insert( lineList.at(0).mNewLine, page );
     }
   }

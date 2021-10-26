@@ -22,16 +22,11 @@ class CsMidiSequencer : public QObject
 
     quint8  mSysExBuf[1024];
     int     mSysExIndex;
-
-    bool    mRun;
   public:
     explicit CsMidiSequencer( QThread *th, QObject *parent = nullptr);
     ~CsMidiSequencer();
 
     bool isLink() const { return mMidiHandle >= 0; }
-
-    bool isRun() const { return mRun; }
-    void setRun( bool on );
 
     void setTempo( int tempo );
 
@@ -40,6 +35,8 @@ class CsMidiSequencer : public QObject
 
   signals:
     void tick( int count );
+
+    void noteOn( int note );
 
     void midiStart();
 

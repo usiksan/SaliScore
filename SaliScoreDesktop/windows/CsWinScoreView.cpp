@@ -31,6 +31,7 @@ void CsWinScoreView::compositionChanged()
 
 void CsWinScoreView::activate()
   {
+  mPlayer.reset();
   setFocus();
   update();
   }
@@ -76,7 +77,7 @@ void CsWinScoreView::paintScore(CsPainter &cp)
     }
 
   //Roll by player
-  if( mPlayer.isShow() ) {
+  if( mPlayer.isRun() ) {
     //Vertical autoscroll
     QLine ln( cp.playerLine() );
     int top = qMin(ln.y1(),ln.y2());
