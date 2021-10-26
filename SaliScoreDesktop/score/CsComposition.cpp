@@ -15,6 +15,7 @@ CsComposition::CsComposition()
   mStepChord = 64;
   mStepNote  = 16;
   mStepLyric = 16;
+  mDirty = mStateDirty = false;
   }
 
 

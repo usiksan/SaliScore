@@ -76,7 +76,6 @@ class CsWinMain : public QMainWindow
     CsComposition    mComposition;   //!< Current composition
     CsPlay           mPlayer;
     CsPlayList      &mPlayList;
-    bool             mDefferedReset;
     bool             mNotSaved;
     QTimer           mUpdateTimer;
   public:
