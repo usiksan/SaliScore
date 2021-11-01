@@ -34,6 +34,7 @@ void CsWinTrain::paint()
 
 void CsWinTrain::cmFragmentTrain()
   {
+  //Show dialog to select training track
 
   }
 
@@ -99,6 +100,9 @@ void CsWinTrain::activate()
   CsWinScoreView::activate();
   updateActions();
   }
+
+
+
 
 
 

@@ -50,5 +50,6 @@
         <file>pic/fragment0.png</file>
         <file>pic/fragment2.png</file>
         <file>pic/fragment1.png</file>
+        <file>pic/playTrain.png</file>
     </qresource>
 </RCC>

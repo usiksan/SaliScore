@@ -206,14 +206,14 @@ void CsCellCursor::moveNextPart()
       break;
 
     case cccChord :
-      mPartName = mComposition.chordPrevVisible( mPartName );
+      mPartName = mComposition.chordNextVisible( mPartName );
       if( mPartName.isEmpty() )
         mClass = cccNote;
       else normPosition( mComposition.stepChord() );
       break;
 
     case cccNote :
-      mPartName = mComposition.notePrevVisible( mPartName );
+      mPartName = mComposition.noteNextVisible( mPartName );
       if( mPartName.isEmpty() ) {
         mClass = cccLyric;
         normPosition( mComposition.stepLyric() );
@@ -226,7 +226,7 @@ void CsCellCursor::moveNextPart()
       break;
 
     case cccTranslation :
-      mPartName = mComposition.translationPrevVisible( mPartName );
+      mPartName = mComposition.translationNextVisible( mPartName );
       if( mPartName.isEmpty() ) {
         mLineIndex++;
         if( mLineIndex < mComposition.lineCount() )

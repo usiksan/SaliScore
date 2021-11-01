@@ -343,6 +343,9 @@ void CsWinMain::cmViewTranslation()
 
 
 
+
+
+
 void CsWinMain::cmPlayStart()
   {
   if( CsWinMain::actionViewKaraoke->isChecked() ) {
@@ -605,6 +608,7 @@ void CsWinMain::createMenu()
   actionFragment2     = menuTrain->addAction( QIcon(QStringLiteral(":/pic/fragment2.png")), tr("Fragment 2"), mWinTrain, &CsWinTrain::cmFragment2 );
   actionFragmentStart = menuTrain->addAction( QIcon(QStringLiteral(":/pic/fragmentStart.png")), tr("Fix fragment start"), mWinTrain, &CsWinTrain::cmFragmentStart );
   actionFragmentStop  = menuTrain->addAction( QIcon(QStringLiteral(":/pic/fragmentStop.png")), tr("Fix fragment stop"), mWinTrain, &CsWinTrain::cmFragmentStop );
+  actionFragmentTrain->setCheckable(true);
   actionFragment0->setCheckable(true);
   actionFragment1->setCheckable(true);
   actionFragment2->setCheckable(true);
