@@ -1,30 +1,23 @@
 #include "MainWindow.h"
 
+#include <QDebug>
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QtAndroidExtras>
+#include <QtAndroid>
 
-#ifdef Q_OS_LINUX
-#include <sys/ioctl.h>
-#include <unistd.h>
-#include <fcntl.h>
-#endif
 
 MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent)
   {
-//  QVBoxLayout *lay = new QVBoxLayout();
-//  lay->addWidget( new QLabel(QStringLiteral("Primer. Hello.") ) );
-//  setLayout( lay );
-#ifdef Q_OS_LINUX
-  int mMidiHandle = open( "/dev/snd/midiC1D0", O_RDONLY | O_NONBLOCK );
-  QString str;
-  if( mMidiHandle >= 0 ) {
-    str = QStringLiteral("Open successfull");
+  QString str("1");
+  if(QAndroidJniObject::isClassAvailable("CsMidiAndroid")) {
+    QAndroidJniObject someJavaObject = QAndroidJniObject("CsMidiAndroid","(Landroid/content/Context;)V", QtAndroid::androidContext().object() );
+    str = someJavaObject.callObjectMethod<jstring>("sayHello").toString();
     }
   else {
-    str = QStringLiteral("Not open");
+    str = QStringLiteral("SOME JAVA CLASS UNAVAIABLE!");
     }
-#endif
 
   setCentralWidget( new QLabel( str )  );
   }
