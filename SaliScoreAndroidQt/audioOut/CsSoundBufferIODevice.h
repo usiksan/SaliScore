@@ -22,16 +22,25 @@
 
 #include <QIODevice>
 
+class QAudioOutput;
 
 class CsSoundBufferIODevice : public QIODevice
   {
     Q_OBJECT
 
-    QList<CsSoundSourcePtr> mActiveSounds; //!< List of current actived sounds
-  public:
+    QList<CsSoundSourcePtr>       mActiveSounds; //!< List of current actived sounds
+
+    static CsSoundBufferIODevice *mSoundBuffer;  //!< Single audio buffer
+    static QAudioOutput          *mAudioOutput;  //!< Audio output
+
     CsSoundBufferIODevice();
+  public:
 
-
+    //!
+    //! \brief soundBuffer Returns single sound buffer
+    //! \return            Single sound buffer
+    //!
+    static CsSoundBufferIODevice *soundBuffer();
   public slots:
     //!
     //! \brief addNote Append sound to active sound list

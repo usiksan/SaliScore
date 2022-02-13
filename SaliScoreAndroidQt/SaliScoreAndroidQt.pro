@@ -1,4 +1,8 @@
-QT       += core gui androidextras network multimedia
+QT       += core gui network multimedia
+
+android {
+  QT       += androidextras
+  }
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -11,14 +15,16 @@ CONFIG += c++17
 SOURCES += \
     audioOut/CsSoundBufferIODevice.cpp \
     main.cpp \
-    MainWindow.cpp
+    MainWindow.cpp \
+    synth/CsSynthMeandr.cpp
 
 HEADERS += \
     MainWindow.h \
     audioOut/CsSoundBufferIODevice.h \
     audioOut/CsSoundSample.h \
     audioOut/CsSoundSource.h \
-    config.h
+    config.h \
+    synth/CsSynthMeandr.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
