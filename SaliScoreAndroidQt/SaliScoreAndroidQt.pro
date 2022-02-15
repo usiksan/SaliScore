@@ -43,7 +43,8 @@ SOURCES += \
     visual/CsAndroidWinMain.cpp \
     visual/CsVisualAbstractList.cpp \
     visual/CsVisualAbstractListView.cpp \
-    visual/CsVisualList.cpp
+    visual/CsVisualPartList.cpp \
+    visual/CsVisualPlayList.cpp
 
 HEADERS += \
     SdLib/SdTime2x.h \
@@ -80,7 +81,8 @@ HEADERS += \
     visual/CsAndroidWinMain.h \
     visual/CsVisualAbstractList.h \
     visual/CsVisualAbstractListView.h \
-    visual/CsVisualList.h
+    visual/CsVisualPartList.h \
+    visual/CsVisualPlayList.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

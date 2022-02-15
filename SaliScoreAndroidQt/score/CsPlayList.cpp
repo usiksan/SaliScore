@@ -111,7 +111,7 @@ QByteArray CsPlayList::toByteArray() const
   {
   SvJsonWriter js;
   jsonWrite( js );
-  return QJsonDocument( js.object() ).toJson();
+  return QJsonDocument( js.object() ).toJson(QJsonDocument::Compact);
   }
 
 

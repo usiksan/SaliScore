@@ -12,18 +12,18 @@
 #include <QLineEdit>
 
 class CsPlayList;
-class CsVisualList;
+class CsVisualPlayList;
 
 class CsAndroidWinMain : public QMainWindow
   {
     Q_OBJECT
 
-    QSplitter       *mWSplitter;     //!< Central widget of application, it delimit space into two parts: wiziwig editors and help
-    QStackedWidget  *mWLeftPart;     //!< Left part of main window. Contains play list
-    CsVisualList    *mWLeftPlayList;
-    QStackedWidget  *mWCentralPart;  //!< Central part with editor, trainer and karaoke
+    QSplitter        *mWSplitter;     //!< Central widget of application, it delimit space into two parts: wiziwig editors and help
+    QStackedWidget   *mWLeftPart;     //!< Left part of main window. Contains play list
+    CsVisualPlayList *mWLeftPlayList; //!< Widget with play list
+    QStackedWidget   *mWCentralPart;  //!< Central part with editor, trainer and karaoke
 
-    CsPlayList      &mPlayList;      //!< Main play list
+    CsPlayList       &mPlayList;      //!< Main play list
   public:
     CsAndroidWinMain( CsPlayList &playList, QWidget *parent = nullptr);
     ~CsAndroidWinMain();

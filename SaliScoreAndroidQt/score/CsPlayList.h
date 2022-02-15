@@ -39,6 +39,8 @@ class CsPlayList
 
     bool             partAppend( const QString &partName );
 
+    void             partDelete( int i ) { mPartList.removeAt(i); mDirty = true; }
+
     int              partCompositionCount( int i ) const { return mPartList.at(i).compositionCount(); }
 
     QString          partCompositionId( int partIndex, int compositionIndex ) const { return mPartList.at(partIndex).compositionId(compositionIndex); }

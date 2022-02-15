@@ -15,6 +15,7 @@
     One takt is one hole note
 
   History
+    15.02.2022 v0.1   Append play list widget universal for desktop and android
 */
 #ifndef CONFIG_H
 #define CONFIG_H

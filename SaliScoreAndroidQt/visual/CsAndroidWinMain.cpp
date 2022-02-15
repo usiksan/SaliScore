@@ -1,7 +1,6 @@
 #include "config.h"
 #include "CsAndroidWinMain.h"
-#include "CsVisualList.h"
-#include "CsVisualAbstractList.h"
+#include "CsVisualPlayList.h"
 
 #include <QDebug>
 #include <QLabel>
@@ -33,19 +32,13 @@ CsAndroidWinMain::CsAndroidWinMain(CsPlayList &playList, QWidget *parent) :
 
   setCentralWidget( mWSplitter );
 
-//  QTableWidget *table = new QTableWidget();
-//  table->setColumnCount(3);
-//  table->setRowCount(10);
-//  table->setColumnWidth( 0, 32 );
-//  table->setShowGrid(false);
-//  table->horizontalHeader()->hide();
-//  table->verticalHeader()->hide();
 
-  mWLeftPlayList = new CsVisualList( mPlayList );
+  mWLeftPlayList = new CsVisualPlayList( mPlayList );
   mWLeftPart->addWidget( mWLeftPlayList );
   mWCentralPart->addWidget( new CsVisualAbstractList() );
 
   QToolBar *tlBar = addToolBar( QString("ToolBar") );
+  tlBar->setIconSize( QSize(32,32) );
   tlBar->setFloatable(false);
   tlBar->setMovable(false);
   tlBar->addAction( QIcon(QString(":/pic/androidMenu.png")), tr("Menu"), this, [this] () {
