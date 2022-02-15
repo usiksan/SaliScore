@@ -13,18 +13,74 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    SdLib/SdTime2x.cpp \
+    SvJson/SvJsonIO.cpp \
     audioOut/CsSoundBufferIODevice.cpp \
     main.cpp \
-    MainWindow.cpp \
-    synth/CsSynthMeandr.cpp
+    score/CsChord.cpp \
+    score/CsChordKit.cpp \
+    score/CsChordLine.cpp \
+    score/CsComposition.cpp \
+    score/CsCompositionHeader.cpp \
+    score/CsCompositionSettings.cpp \
+    score/CsCursor.cpp \
+    score/CsCursorPosition.cpp \
+    score/CsDefinition.cpp \
+    score/CsDescrSong.cpp \
+    score/CsLine.cpp \
+    score/CsLyricSymbol.cpp \
+    score/CsNote.cpp \
+    score/CsNoteKit.cpp \
+    score/CsNoteLine.cpp \
+    score/CsPlayList.cpp \
+    score/CsPlayPart.cpp \
+    score/CsPosition.cpp \
+    score/CsReference.cpp \
+    score/CsRemark.cpp \
+    score/CsSynthSettings.cpp \
+    score/CsTrainInterval.cpp \
+    synth/CsSynthMeandr.cpp \
+    visual/CsAndroidWinMain.cpp \
+    visual/CsVisualAbstractList.cpp \
+    visual/CsVisualAbstractListView.cpp \
+    visual/CsVisualList.cpp
 
 HEADERS += \
-    MainWindow.h \
+    SdLib/SdTime2x.h \
+    SvJson/SvJsonIO.h \
     audioOut/CsSoundBufferIODevice.h \
     audioOut/CsSoundSample.h \
     audioOut/CsSoundSource.h \
     config.h \
-    synth/CsSynthMeandr.h
+    score/CsChord.h \
+    score/CsChordKit.h \
+    score/CsChordLine.h \
+    score/CsComposition.h \
+    score/CsCompositionHeader.h \
+    score/CsCompositionSettings.h \
+    score/CsCursor.h \
+    score/CsCursorPosition.h \
+    score/CsDefinition.h \
+    score/CsDescrSong.h \
+    score/CsJsonIO.h \
+    score/CsLine.h \
+    score/CsLyricSymbol.h \
+    score/CsNote.h \
+    score/CsNoteChord.h \
+    score/CsNoteKit.h \
+    score/CsNoteLine.h \
+    score/CsPlayList.h \
+    score/CsPlayPart.h \
+    score/CsPosition.h \
+    score/CsReference.h \
+    score/CsRemark.h \
+    score/CsSynthSettings.h \
+    score/CsTrainInterval.h \
+    synth/CsSynthMeandr.h \
+    visual/CsAndroidWinMain.h \
+    visual/CsVisualAbstractList.h \
+    visual/CsVisualAbstractListView.h \
+    visual/CsVisualList.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -49,3 +105,6 @@ ANDROID_MIN_SDK_VERSION = 24
 ANDROID_TARGET_SDK_VERSION = 25
 
 ANDROID_FEATURES += android.software.midi
+
+RESOURCES += \
+  SaliScore.qrc

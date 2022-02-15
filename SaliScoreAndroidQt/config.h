@@ -22,7 +22,7 @@
 #define CS_AUTHOR                    "Alexander Sibilev"
 #define CS_ORGANIZATION_NAME         "SaliLAB"
 #define CS_ORGANIZATION_DOMAIN       "http://SaliLab.com/"
-#define CS_APPLICATION_NAME          "SaliScoreDesktop"
+#define CS_APPLICATION_NAME          "SaliScoreAndroid"
 
 //Version definition
 #define CS_VERSION_MAJOR             0
@@ -65,5 +65,19 @@
 #define CS_CLIP_FORMAT_SELECTOR      "bin/saliscore-CsSelector"
 
 
+//Settings key names
+#define KEY_LANGUAGE                 "Language"
+#define KEY_MAIN_SPLITTER            "MainSplitter"
+#define KEY_WMAIN_MAX                "WMainMax"
+#define KEY_WMAIN_SIZE               "WMainSize"
+#define KEY_TRAIN_SETTINGS           "TrainSettings"
+#define KEY_EDITOR_SETTINGS          "EditorSettings"
+#define KEY_KARAOKE_SETTINGS         "KaraokeSettings"
+#define KEY_KARAOKE_ANIMATION        "KaraokeAnimation"
+#define KEY_AUTHOR                   "Author"
+#define KEY_PASSWORD                 "Password"
+#define KEY_WEB_REPO                 "WebRepo"
+#define KEY_REMOTE_SYNC              "RemoteSync"
+#define KEY_LOCAL_SYNC               "LocalSync"
 
 #endif // CONFIG_H
