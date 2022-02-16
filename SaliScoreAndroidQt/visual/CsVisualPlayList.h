@@ -16,11 +16,11 @@ class CsVisualPlayList : public CsVisualAbstractList
 
     virtual int  itemHeight( int index ) const override;
 
-    virtual int  paintItem( int index, int y, QPainter &painter ) override;
+    virtual int  itemPaint( int index, int y, QPainter &painter ) override;
 
-    virtual int  count() const override { return mPlayList.partCount() + 8; }
+    virtual int  itemCount() const override { return mPlayList.partCount() + 8; }
 
-    virtual void clicked( int x, int itemIndex ) override;
+    virtual void itemClicked( int x, int itemIndex ) override;
 
   signals:
     //!

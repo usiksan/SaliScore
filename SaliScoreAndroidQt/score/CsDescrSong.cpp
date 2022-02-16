@@ -125,5 +125,5 @@ QString CsDescrSong::homeDir( const QString &subDir )
    dirPath.append( subDir );
   QDir dir;
   dir.mkpath( dirPath );
-  return dirPath  + QStringLiteral("/");
+  return dirPath;
   }

@@ -60,7 +60,7 @@ bool CsPlayList::partCompositionAppend(int partIndex, const QString &id)
 
 void CsPlayList::compositionSet( const CsComposition &comp )
   {
-  mCompositionsMap.insert( comp.header().songId(), CsCompositionSettings(comp) );
+  mCompositionsMap.insert( comp.songId(), CsCompositionSettings(comp) );
   mDirty = true;
   }
 
@@ -131,6 +131,7 @@ void CsPlayList::fromByteArray(const QByteArray &ar)
 void CsPlayList::load()
   {
   QFile file( CsDescrSong::homeDir( QString{} ) + "playList.dat" );
+  qDebug() << file.fileName();
   if( file.exists() ) {
     if( file.open( QIODevice::ReadOnly ) )
       fromByteArray( file.readAll() );
@@ -140,6 +141,13 @@ void CsPlayList::load()
     mVersion = 1;
     partAppend( QObject::tr("My songs") );
     partAppend( QObject::tr("Examples") );
+
+    CsComposition comp;
+    comp.singerSet("Цой");
+    comp.titleSet("Кукушка");
+    compositionSet( comp );
+    partCompositionAppend( 0, comp.songId() );
+    partCompositionAppend( 1, comp.songId() );
     }
   }
 

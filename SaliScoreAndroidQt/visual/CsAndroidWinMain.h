@@ -13,6 +13,7 @@
 
 class CsPlayList;
 class CsVisualPlayList;
+class CsVisualPartList;
 
 class CsAndroidWinMain : public QMainWindow
   {
@@ -21,6 +22,7 @@ class CsAndroidWinMain : public QMainWindow
     QSplitter        *mWSplitter;     //!< Central widget of application, it delimit space into two parts: wiziwig editors and help
     QStackedWidget   *mWLeftPart;     //!< Left part of main window. Contains play list
     CsVisualPlayList *mWLeftPlayList; //!< Widget with play list
+    CsVisualPartList *mWLeftPartList; //!< Widget with part list
     QStackedWidget   *mWCentralPart;  //!< Central part with editor, trainer and karaoke
 
     CsPlayList       &mPlayList;      //!< Main play list

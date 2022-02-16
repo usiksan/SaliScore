@@ -20,7 +20,7 @@ int CsVisualPlayList::itemHeight(int index) const
 
 
 
-int CsVisualPlayList::paintItem(int index, int y, QPainter &painter)
+int CsVisualPlayList::itemPaint(int index, int y, QPainter &painter)
   {
   int w = viewport()->size().width();
   if( index == 3 || index == 6 ) {
@@ -45,7 +45,7 @@ int CsVisualPlayList::paintItem(int index, int y, QPainter &painter)
   }
 
 
-void CsVisualPlayList::clicked(int x, int itemIndex)
+void CsVisualPlayList::itemClicked(int x, int itemIndex)
   {
   switch( itemIndex ) {
     case 0 :
@@ -108,8 +108,11 @@ void CsVisualPlayList::clicked(int x, int itemIndex)
 //!
 void CsVisualPlayList::playListUpgrade()
   {
-
+  mStartY = mStartIndex = 0;
+  updateContent();
   }
+
+
 
 QString CsVisualPlayList::title(int itemIndex)
   {

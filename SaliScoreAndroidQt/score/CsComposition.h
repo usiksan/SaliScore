@@ -64,6 +64,8 @@ class CsComposition
 
     const CsTrainInterval     &fragment( int index ) const { return mHeader.mFragments[index]; }
 
+    QString     songId() const { return mHeader.songId(); }
+
     QString     title() const { return mHeader.name(); }
     void        titleSet( const QString &tit ) { mHeader.nameSet( tit ); dirtySet(); }
 

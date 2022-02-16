@@ -44,7 +44,8 @@ SOURCES += \
     visual/CsVisualAbstractList.cpp \
     visual/CsVisualAbstractListView.cpp \
     visual/CsVisualPartList.cpp \
-    visual/CsVisualPlayList.cpp
+    visual/CsVisualPlayList.cpp \
+    visual/CsVisualRegularList.cpp
 
 HEADERS += \
     SdLib/SdTime2x.h \
@@ -82,7 +83,8 @@ HEADERS += \
     visual/CsVisualAbstractList.h \
     visual/CsVisualAbstractListView.h \
     visual/CsVisualPartList.h \
-    visual/CsVisualPlayList.h
+    visual/CsVisualPlayList.h \
+    visual/CsVisualRegularList.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

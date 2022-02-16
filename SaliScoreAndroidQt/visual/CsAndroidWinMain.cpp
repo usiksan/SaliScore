@@ -1,6 +1,7 @@
 #include "config.h"
 #include "CsAndroidWinMain.h"
 #include "CsVisualPlayList.h"
+#include "CsVisualPartList.h"
 
 #include <QDebug>
 #include <QLabel>
@@ -35,6 +36,17 @@ CsAndroidWinMain::CsAndroidWinMain(CsPlayList &playList, QWidget *parent) :
 
   mWLeftPlayList = new CsVisualPlayList( mPlayList );
   mWLeftPart->addWidget( mWLeftPlayList );
+
+  mWLeftPartList = new CsVisualPartList( mPlayList );
+  mWLeftPart->addWidget( mWLeftPartList );
+
+  mWLeftPart->setCurrentWidget( mWLeftPlayList );
+  connect( mWLeftPlayList, &CsVisualPlayList::selectPart, this, [this] ( int partIndex ) {
+    mWLeftPart->setCurrentWidget( mWLeftPartList );
+    mWLeftPartList->setPart( partIndex );
+    });
+  connect( mWLeftPartList, &CsVisualPartList::clickBack, this, [this] () { mWLeftPart->setCurrentWidget( mWLeftPlayList ); } );
+
   mWCentralPart->addWidget( new CsVisualAbstractList() );
 
   QToolBar *tlBar = addToolBar( QString("ToolBar") );
@@ -43,8 +55,15 @@ CsAndroidWinMain::CsAndroidWinMain(CsPlayList &playList, QWidget *parent) :
   tlBar->setMovable(false);
   tlBar->addAction( QIcon(QString(":/pic/androidMenu.png")), tr("Menu"), this, [this] () {
     //Toggle left part view
-    if( mWLeftPart->isHidden() ) mWLeftPart->show();
-    else mWLeftPart->hide();
+    if( mWLeftPart->isHidden() ) {
+      mWLeftPart->show();
+      if( width() < height() )
+        mWCentralPart->hide();
+      }
+    else {
+      mWLeftPart->hide();
+      mWCentralPart->show();
+      }
     });
 
   //Restore splitter positions

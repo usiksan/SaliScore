@@ -34,12 +34,14 @@ void CsVisualAbstractList::paintContent(QPainter &painter)
   {
   painter.fillRect( QRect( QPoint(), viewport()->size() ), QColor(Qt::white) );
 
+  mFooterBoundY = viewport()->size().height() - footerHeight();
+
   //Skip top not displayed items
   int index = 0;
-  int posY = -mStartY;
-  while( index < count() ) {
+  int posY = -mStartY + headerHeight();
+  while( index < itemCount() ) {
     int height = itemHeight(index);
-    if( posY + height > 0 ) break;
+    if( posY + height > headerHeight() ) break;
     index++;
     posY += height;
     }
@@ -47,23 +49,29 @@ void CsVisualAbstractList::paintContent(QPainter &painter)
   //Draw visible list content
   mStartIndex = index;
   mItemBounds.clear();
-  if( index < count() ) {
+  if( index < itemCount() ) {
     //Max Y to which need draw
-    int lastY = viewport()->size().height();
-    while( index < count() && posY < lastY ) {
-      posY += paintItem( index, posY, painter );
+    int lastY = viewport()->size().height() - footerHeight();
+    while( index < itemCount() && posY < lastY ) {
+      posY += itemPaint( index, posY, painter );
       mItemBounds.append( posY );
       index++;
       }
 
     //Calculate full content lenght
-    while( index < count() ) {
+    while( index < itemCount() ) {
       posY += itemHeight(index++);
       }
     }
 
+  //Draw header. It must overdraw top part of view
+  headerPaint( painter );
+
+  //Draw footer. It must overdraw bottom part of view
+  footerPaint( painter );
+
   //Correct full list height when needed
-  posY += mStartY;
+  posY += mStartY - headerHeight();
   if( mFullHeight != posY ) {
     mFullHeight = posY;
 
@@ -76,7 +84,7 @@ void CsVisualAbstractList::paintContent(QPainter &painter)
 
 
 
-int CsVisualAbstractList::paintItem(int index, int y, QPainter &painter)
+int CsVisualAbstractList::itemPaint(int index, int y, QPainter &painter)
   {
   painter.setPen( Qt::black );
   painter.drawText( 10, y, QString("Item %1").arg(index) );
@@ -109,6 +117,8 @@ void CsVisualAbstractList::mousePressEvent(QMouseEvent *event)
   mMouseStartY = mStartY;
   }
 
+
+
 void CsVisualAbstractList::mouseReleaseEvent(QMouseEvent *event)
   {
   mMousePress = false;
@@ -116,12 +126,23 @@ void CsVisualAbstractList::mouseReleaseEvent(QMouseEvent *event)
     //This is click
     mStartY = mMouseStartY;
 
-    //Find item index
-    for( int i = 0; i < mItemBounds.count(); i++ )
-      if( mItemBounds.at(i) > event->y() ) {
-        clicked( event->x(), i + mStartIndex );
-        break;
-        }
+    if( event->y() < headerHeight() ) {
+      //Pressed in header area
+      headerClicked( event->x(), event->y() );
+      }
+    else if( event->y() > mFooterBoundY ) {
+      //Pressed in footer area
+      footerClicked( event->x(), event->y() - mFooterBoundY );
+      }
+    else {
+      //Pressed if item list area
+      //Find item index
+      for( int i = 0; i < mItemBounds.count(); i++ )
+        if( mItemBounds.at(i) > event->y() ) {
+          itemClicked( event->x(), i + mStartIndex );
+          break;
+          }
+      }
     }
   }
 
