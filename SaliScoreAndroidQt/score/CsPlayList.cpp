@@ -21,7 +21,7 @@ void CsPlayList::dirtyReset()
 void CsPlayList::partTitleSet(int i, const QString &tit)
   {
   mPartList[i].titleSet( tit );
-  partItem( i )->setText( 1, tit );
+  mDirty = true;
   }
 
 
@@ -36,22 +36,44 @@ bool CsPlayList::partAppend(const QString &partName)
   CsPlayPart part;
   part.titleSet( partName );
   mPartList.append( part );
+  mDirty = true;
   return true;
   }
 
 
 
 
-void CsPlayList::partCompositionItemSet(int partIndex, int compositionIndex, QTreeWidgetItem *item)
+void CsPlayList::partDelete(int i)
   {
-  mPartList[partIndex].mTreeItemList[compositionIndex] = item;
+  mPartList.removeAt(i);
+  garbageCollection();
+  mDirty = true;
   }
+
+
+
 
 
 
 bool CsPlayList::partCompositionAppend(int partIndex, const QString &id)
   {
-  return mPartList[partIndex].compositionAppend( id );
+  if( mPartList[partIndex].compositionAppend( id ) ) {
+    mDirty = true;
+    return true;
+    }
+  return false;
+  }
+
+
+
+bool CsPlayList::partCompositionRemove(int partIndex, const QString &id)
+  {
+  if( mPartList[partIndex].compositionRemove(id) ) {
+    garbageCollection();
+    mDirty = true;
+    return true;
+    }
+  return false;
   }
 
 
@@ -65,23 +87,6 @@ void CsPlayList::compositionSet( const CsComposition &comp )
   }
 
 
-
-
-QString CsPlayList::compositionUpload( int lasttime, const QString author )
-  {
-  int ctime = 0x7fffffff;
-  QString id;
-  for( auto it = mCompositionsMap.constBegin(); it != mCompositionsMap.constEnd(); it++ ) {
-    if( it.value().author() == author ) {
-      int version = it.value().versionFromFile();
-      if( version > lasttime && version < ctime ) {
-        ctime = version;
-        id = it.key();
-        }
-      }
-    }
-  return id;
-  }
 
 
 
@@ -130,8 +135,7 @@ void CsPlayList::fromByteArray(const QByteArray &ar)
 
 void CsPlayList::load()
   {
-  QFile file( CsDescrSong::homeDir( QString{} ) + "playList.dat" );
-  qDebug() << file.fileName();
+  QFile file( fileName() );
   if( file.exists() ) {
     if( file.open( QIODevice::ReadOnly ) )
       fromByteArray( file.readAll() );
@@ -146,6 +150,7 @@ void CsPlayList::load()
     comp.singerSet("Цой");
     comp.titleSet("Кукушка");
     compositionSet( comp );
+    comp.fileSave();
     partCompositionAppend( 0, comp.songId() );
     partCompositionAppend( 1, comp.songId() );
     }
@@ -155,9 +160,40 @@ void CsPlayList::load()
 
 void CsPlayList::save()
   {
-  QFile file( CsDescrSong::homeDir( QString{} ) + "playList.dat" );
+  QFile file( fileName() );
   if( dirty() )
     dirtyReset();
   if( file.open( QIODevice::WriteOnly ) )
     file.write( toByteArray() );
+  }
+
+
+
+
+void CsPlayList::garbageCollection()
+  {
+  QStringList deletionList( compositionList() );
+  QSet<QString> deletionSet( deletionList.begin(), deletionList.end() );
+  //Scan all parts and remove from deletionSet all existing ids
+  for( const auto &part : qAsConst( mPartList )  ) {
+    for( int i = 0; i < part.compositionCount(); i++ )
+      deletionSet.remove( part.compositionId(i) );
+    }
+
+  //At this moment in deletionSet remain ids which must be deleted
+  //Convert set to list
+  deletionList = deletionSet.values();
+  if( deletionList.count() ) {
+    //For each id from deletion list we delete associated composition
+    for( const auto &id : qAsConst(deletionList) )
+      mCompositionsMap.remove( id );
+    mDirty = true;
+    }
+  }
+
+
+
+QString CsPlayList::fileName()
+  {
+  return CsComposition::mSongRepo.repoHomeDir( QString{} ) + QStringLiteral("playList.dat");
   }

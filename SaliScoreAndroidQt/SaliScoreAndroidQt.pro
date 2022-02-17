@@ -17,6 +17,7 @@ SOURCES += \
     SvJson/SvJsonIO.cpp \
     audioOut/CsSoundBufferIODevice.cpp \
     main.cpp \
+    repo/CsRepoClient.cpp \
     score/CsChord.cpp \
     score/CsChordKit.cpp \
     score/CsChordLine.cpp \
@@ -37,6 +38,7 @@ SOURCES += \
     score/CsPosition.cpp \
     score/CsReference.cpp \
     score/CsRemark.cpp \
+    score/CsSongLocalRepo.cpp \
     score/CsSynthSettings.cpp \
     score/CsTrainInterval.cpp \
     synth/CsSynthMeandr.cpp \
@@ -54,6 +56,7 @@ HEADERS += \
     audioOut/CsSoundSample.h \
     audioOut/CsSoundSource.h \
     config.h \
+    repo/CsRepoClient.h \
     score/CsChord.h \
     score/CsChordKit.h \
     score/CsChordLine.h \
@@ -76,6 +79,7 @@ HEADERS += \
     score/CsPosition.h \
     score/CsReference.h \
     score/CsRemark.h \
+    score/CsSongLocalRepo.h \
     score/CsSynthSettings.h \
     score/CsTrainInterval.h \
     synth/CsSynthMeandr.h \

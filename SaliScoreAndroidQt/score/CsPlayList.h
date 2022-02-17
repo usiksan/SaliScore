@@ -12,54 +12,47 @@ using CsCompositionMap = QMap<QString,CsCompositionSettings>;
 
 class CsPlayList
   {
-    int              mVersion;
-    CsPlayPartList   mPartList;
+    int              mVersion;         //!< Version (time of last changes)
+    CsPlayPartList   mPartList;        //!< Part list
 
-    CsCompositionMap mCompositionsMap;
+    CsCompositionMap mCompositionsMap; //!< Map of composition Id and accosiated composition settings
 
-    bool             mDirty;
+    bool             mDirty;           //!< When true list need to be saved
   public:
     CsPlayList();
 
-    bool             dirty() const { return mDirty; }
+    bool                  dirty() const { return mDirty; }
 
-    void             dirtyReset();
+    void                  dirtyReset();
 
-    int              version() const { return mVersion; }
+    int                   version() const { return mVersion; }
 
-    int              partCount() const { return mPartList.count(); }
+    //====================================================================================
+    //           Part list level
+    int                   partCount() const { return mPartList.count(); }
 
-    QString          partTitle( int i ) const { return mPartList.at(i).title(); }
+    QString               partTitle( int i ) const { return mPartList.at(i).title(); }
 
-    void             partTitleSet( int i, const QString &tit );
+    void                  partTitleSet( int i, const QString &tit );
 
-    QTreeWidgetItem *partItem( int i ) const { return mPartList.at(i).mPartItem; }
+    bool                  partAppend( const QString &partName );
 
-    void             partItemSet( int i, QTreeWidgetItem *item ) { mPartList[i].mPartItem = item; }
-
-    bool             partAppend( const QString &partName );
-
-    void             partDelete( int i ) { mPartList.removeAt(i); mDirty = true; }
-
-    int              partCompositionCount( int i ) const { return mPartList.at(i).compositionCount(); }
-
-    QString          partCompositionId( int partIndex, int compositionIndex ) const { return mPartList.at(partIndex).compositionId(compositionIndex); }
-
-    QTreeWidgetItem *partCompositionItem( int partIndex, int compositionIndex ) const { return mPartList.at(partIndex).mTreeItemList.at(compositionIndex); }
-
-    void             partCompositionItemSet( int partIndex, int compositionIndex, QTreeWidgetItem *item );
-
-    bool             partCompositionAppend( int partIndex, const QString &id );
-
-//    void             forEachPart( std::function<void ( *)> fun1 )
+    void                  partDelete( int i );
 
 
-    //void             partRename( const QString &prevName, const QString &newName );
+    //====================================================================================
+    //           Single part level
+    int                   partCompositionCount( int i ) const { return mPartList.at(i).compositionCount(); }
 
-    //void             partRemove( const QString &partName );
+    QString               partCompositionId( int partIndex, int compositionIndex ) const { return mPartList.at(partIndex).compositionId(compositionIndex); }
+
+    bool                  partCompositionAppend( int partIndex, const QString &id );
+
+    bool                  partCompositionRemove( int partIndex, const QString &id );
 
 
-
+    //====================================================================================
+    //           Composition map
     CsCompositionSettings composition( const QString &id ) const { return mCompositionsMap.value(id); }
 
     void                  compositionSet( const CsComposition &comp );
@@ -67,8 +60,6 @@ class CsPlayList
     bool                  contains( const QString &id ) const { return mCompositionsMap.contains( id ); }
 
     QStringList           compositionList() const { return mCompositionsMap.keys(); }
-
-    QString               compositionUpload(int lasttime , const QString author);
 
 
 
@@ -85,6 +76,11 @@ class CsPlayList
     void                  load();
 
     void                  save();
+
+  private:
+    void                  garbageCollection();
+
+    static QString        fileName();
   };
 
 #endif // CSPLAYLIST_H

@@ -15,10 +15,6 @@ Description
 #include "CsDescrSong.h"
 #include "SdLib/SdTime2x.h"
 
-#include <QDir>
-#include <QFile>
-#include <QJsonDocument>
-
 CsDescrSong::CsDescrSong() :
   mAuthor(),
   mSinger(),
@@ -31,13 +27,6 @@ CsDescrSong::CsDescrSong() :
   }
 
 
-
-
-
-QString CsDescrSong::path() const
-  {
-  return homeDir( directory() ) + songId() + QStringLiteral(CS_BASE_EXTENSION);
-  }
 
 
 
@@ -57,24 +46,6 @@ void CsDescrSong::versionUpdate()
   }
 
 
-
-
-int CsDescrSong::versionFromFile() const
-  {
-  //Try extract version from file
-  QFile file( path() );
-  if( file.open( QIODevice::ReadOnly ) ) {
-    QByteArray content( file.readAll() );
-    QJsonObject obj = QJsonDocument::fromJson( content ).object();
-    int version = obj.value(QStringLiteral(CS_BASE_VERSION_KEY)).toInt();
-    SvJsonReaderExtInt js( obj, &version );
-    CsDescrSong comp;
-    comp.jsonRead( js );
-    return comp.version();
-    }
-  //File not exist. We return minimal version
-  return 1;
-  }
 
 
 
@@ -115,15 +86,3 @@ void CsDescrSong::jsonRead(CsJsonReader &js)
   }
 
 
-
-
-
-QString CsDescrSong::homeDir( const QString &subDir )
-  {
-  QString dirPath = QDir::homePath() + QStringLiteral(CS_DATA_DIRECTORY);
-  if( !subDir.isEmpty() )
-   dirPath.append( subDir );
-  QDir dir;
-  dir.mkpath( dirPath );
-  return dirPath;
-  }

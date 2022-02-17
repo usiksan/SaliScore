@@ -7,6 +7,8 @@
 #include <QJsonDocument>
 #include <QFile>
 
+CsSongLocalRepo CsComposition::mSongRepo;
+
 CsComposition::CsComposition()
   {
   mLineStartOffset = 0;
@@ -414,7 +416,7 @@ QByteArray CsComposition::toByteArray() const
 
 
 
-void CsComposition::fromByteArray(const QByteArray &ar)
+bool CsComposition::fromByteArray(const QByteArray &ar)
   {
   QJsonObject obj = QJsonDocument::fromJson( ar ).object();
 
@@ -423,20 +425,38 @@ void CsComposition::fromByteArray(const QByteArray &ar)
     int version = obj.value( QStringLiteral(CS_BASE_VERSION_KEY) ).toInt();
     CsJsonReader js( obj, &version );
     jsonRead( js );
+    return true;
     }
+  return false;
   }
 
 
 
 
-void CsComposition::fileSave() const
+bool CsComposition::fileSave() const
   {
-  QFile file( mHeader.path() );
+  QFile file( mSongRepo.repoSongPath( mHeader.songId() )  );
   if( file.open(QIODevice::WriteOnly) ) {
     //Write contents to file
     file.write( toByteArray() );
+    //Store to local repository
+    mSongRepo.songStore( mHeader.songId(), mHeader.version() );
+    return true;
     }
+  return false;
   }
+
+
+
+
+bool CsComposition::fileLoad(const QString &songId)
+  {
+  QFile file( mSongRepo.repoSongPath(songId) );
+  if( file.open( QIODevice::ReadOnly ) )
+    return fromByteArray( file.readAll() );
+  return false;
+  }
+
 
 
 

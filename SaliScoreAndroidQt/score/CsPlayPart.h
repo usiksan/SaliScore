@@ -7,18 +7,12 @@
 #include <QList>
 #include <QTreeWidgetItem>
 
-using QTreeWidgetItemPtr = QTreeWidgetItem*;
-
-using CsTreeItemList = QList<QTreeWidgetItemPtr>;
 
 class CsPlayPart
   {
     QString            mTitle;
     QStringList        mCompositionIdList;
   public:
-    QTreeWidgetItemPtr mPartItem;
-    CsTreeItemList     mTreeItemList;
-
     CsPlayPart();
 
     QString     title() const { return mTitle; }
@@ -33,9 +27,7 @@ class CsPlayPart
 
     bool        compositionAppend( const QString &id );
 
-    //void        compositionRemove( const QString &id ) { mCompositionIdList.removeAll( id ); }
-
-    //void        compositionRename( int index, const QString &id ) { mCompositionIdList[index] = id; }
+    bool        compositionRemove( const QString &id ) { return mCompositionIdList.removeAll( id ) != 0; }
 
     void        jsonWrite( CsJsonWriter &js ) const;
 

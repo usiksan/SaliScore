@@ -19,6 +19,7 @@ Description
 #include "CsDefinition.h"
 #include "CsCompositionHeader.h"
 #include "CsCursor.h"
+#include "CsSongLocalRepo.h"
 
 #include <QStringList>
 #include <QJsonObject>
@@ -298,20 +299,27 @@ class CsComposition
 
     QByteArray  toByteArray() const;
 
-    void        fromByteArray( const QByteArray &ar );
+    bool        fromByteArray( const QByteArray &ar );
 
-    void        fileSave() const;
+    bool        fileSave() const;
+
+    bool        fileLoad( const QString &songId );
+
+    //=================================================================
+    //         Composition local repository
+    static CsSongLocalRepo mSongRepo;
+
 
   private:
-    static QStringList visibleList( const CsDefList &src );
+    static QStringList     visibleList( const CsDefList &src );
 
-    static QString     prevVisible( const CsDefList &list, const QString &key );
+    static QString         prevVisible( const CsDefList &list, const QString &key );
 
-    static QString     nextVisible( const CsDefList &list, const QString &key );
+    static QString         nextVisible( const CsDefList &list, const QString &key );
 
-    static int         defListIndex( const CsDefList &list, const QString &key );
+    static int             defListIndex( const CsDefList &list, const QString &key );
 
-    static void        defListUpdate( CsDefList &list, const QStringList &visibleList );
+    static void            defListUpdate( CsDefList &list, const QStringList &visibleList );
   };
 
 #endif // CSCOMPOSITION_H
