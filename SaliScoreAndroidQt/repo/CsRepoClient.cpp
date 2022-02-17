@@ -28,6 +28,11 @@
 
 #define REPO_FIELD_LASTTIME      QStringLiteral("lasttime")
 
+#define REPO_FIELD_FIND_PARAM1   QStringLiteral("find1")
+#define REPO_FIELD_FIND_PARAM2   QStringLiteral("find2")
+#define REPO_FIELD_FIND_PARAM3   QStringLiteral("find3")
+#define REPO_FIELD_FIND_PARAM4   QStringLiteral("find4")
+
 
 //Main object for remote database communication
 CsRepoClient *repoClient;
@@ -141,6 +146,9 @@ void CsRepoClient::finished(QNetworkReply *reply)
       case cpqDeleteSong :
         cmDeleteSong( obj );
         break;
+      case cpqFindSong :
+        cmFindSong( obj );
+        break;
       case cpqIdle :
         break;
       }
@@ -222,6 +230,16 @@ void CsRepoClient::doSyncPlayList()
     QNetworkReply *reply = mNetworkManager->post( QNetworkRequest(QUrl( QStringLiteral("http://") + hostRepo + QStringLiteral("synclist.php"))), multiPart );
     multiPart->setParent(reply); // delete the multiPart with the reply
     }
+  }
+
+
+
+
+void CsRepoClient::doFindSong(const QString &strToFind)
+  {
+  mFindQuery = strToFind;
+  if( mQueryType == cpqIdle )
+    doFindSong();
   }
 
 
@@ -376,6 +394,46 @@ void CsRepoClient::doDeletionSong()
       multiPart->setParent(reply); // delete the multiPart with the reply
       return;
       }
+
+  //No need to deletion
+  mQueryType = cpqIdle;
+  doFindSong();
+  }
+
+
+
+void CsRepoClient::doFindSong()
+  {
+  if( !mFindQuery.isEmpty() ) {
+    //Split single string into separate substrings
+    QStringList paramList = mFindQuery.split( QChar(' ') );
+    mFindQuery.clear();
+
+    //Remove from list empty and too short strings
+    for( int i = paramList.count() - 1; i > 0; i-- )
+      if( paramList.at(i).length() < 2 )
+        paramList.removeAt(i);
+
+    //Fill unused substring
+    while( paramList.count() < 4 )
+      paramList.append( QString("-----") );
+
+    //Build query
+    QSettings s;
+    QString hostRepo       = s.value( KEY_WEB_REPO ).toString();
+
+    QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
+
+    sdHttpMultiPartAppendField( multiPart, REPO_FIELD_FIND_PARAM1, paramList.at(0).toLower().toUtf8() );
+    sdHttpMultiPartAppendField( multiPart, REPO_FIELD_FIND_PARAM2, paramList.at(1).toLower().toUtf8() );
+    sdHttpMultiPartAppendField( multiPart, REPO_FIELD_FIND_PARAM3, paramList.at(2).toLower().toUtf8() );
+    sdHttpMultiPartAppendField( multiPart, REPO_FIELD_FIND_PARAM4, paramList.at(3).toLower().toUtf8() );
+
+
+    mQueryType = cpqFindSong;
+    QNetworkReply *reply = mNetworkManager->post( QNetworkRequest(QUrl( QStringLiteral("http://") + hostRepo + QStringLiteral("findsong.php"))), multiPart );
+    multiPart->setParent(reply); // delete the multiPart with the reply
+    }
   }
 
 
@@ -450,6 +508,11 @@ void CsRepoClient::cmSyncList(const QJsonObject &reply)
       doSyncSong();
       }
     }
+  else {
+    //Some error
+    qDebug() << "repo cmSyncList error" << reply.value( REPO_FIELD_RESULT ).toInt();
+    mQueryType = cpqIdle;
+    }
   }
 
 
@@ -473,6 +536,11 @@ void CsRepoClient::cmDownloadPlayList(const QJsonObject &reply)
     mSyncList = mPlayList.compositionList();
     doSyncSong();
     }
+  else {
+    //Some error
+    qDebug() << "repo cmDownloadPlayList error" << reply.value( REPO_FIELD_RESULT ).toInt();
+    mQueryType = cpqIdle;
+    }
   }
 
 
@@ -488,6 +556,11 @@ void CsRepoClient::cmUploadPlayList(const QJsonObject &reply)
     qDebug() << "Play list uploaded";
     mSyncList = mPlayList.compositionList();
     doSyncSong();
+    }
+  else {
+    //Some error
+    qDebug() << "repo cmUploadPlayList error" << reply.value( REPO_FIELD_RESULT ).toInt();
+    mQueryType = cpqIdle;
     }
   }
 
@@ -518,6 +591,11 @@ void CsRepoClient::cmSyncSong(const QJsonObject &reply)
       doSyncSong();
       }
     }
+  else {
+    //Some error
+    qDebug() << "repo cmSyncSong error" << reply.value( REPO_FIELD_RESULT ).toInt();
+    mQueryType = cpqIdle;
+    }
   }
 
 
@@ -530,6 +608,7 @@ void CsRepoClient::cmDownloadSong(const QJsonObject &reply)
   // 4 - имя уже есть в базе и пароль не совпал
   if( reply.value( REPO_FIELD_RESULT ).toInt() == 0 ) {
     //Retrive object list from reply
+    qDebug() << "Composition downloaded" << reply.value( REPO_FIELD_COMPOSITIONID ).toString();
     CsComposition comp;
     comp.fromByteArray( reply.value( REPO_FIELD_SONG ).toString().toUtf8() );
     if( comp.fileSave() ) {
@@ -547,6 +626,11 @@ void CsRepoClient::cmDownloadSong(const QJsonObject &reply)
 
     //Continue sync song
     doSyncSong();
+    }
+  else {
+    //Some error
+    qDebug() << "repo cmDownloadSong error" << reply.value( REPO_FIELD_RESULT ).toInt();
+    mQueryType = cpqIdle;
     }
   }
 
@@ -570,7 +654,9 @@ void CsRepoClient::cmUploadSong(const QJsonObject &reply)
     doSyncSong();
     }
   else {
-    qDebug() << "Song upload error" << reply.value( QStringLiteral("result") ).toInt();
+    //Some error
+    qDebug() << "repo cmUploadSong error" << reply.value( REPO_FIELD_RESULT ).toInt();
+    mQueryType = cpqIdle;
     }
   }
 
@@ -582,7 +668,7 @@ void CsRepoClient::cmDeleteSong(const QJsonObject &reply)
   // 1 - проблема со входными данными
   // 2 - не может подключиться к базе данных
   // 4 - имя уже есть в базе и пароль не совпал
-  if( reply.value( REPO_FIELD_RESULT ).toInt() == 0 ) {
+  if( reply.value( REPO_FIELD_RESULT ).toInt() == 0 || reply.value( REPO_FIELD_RESULT ).toInt() == 3 ) {
     qDebug() << "Song deleted";
     QString compositionid = reply.value( REPO_FIELD_COMPOSITIONID ).toString();
 
@@ -593,7 +679,47 @@ void CsRepoClient::cmDeleteSong(const QJsonObject &reply)
     doDeletionSong();
     }
   else {
-    qDebug() << "Song deletion error" << reply.value( QStringLiteral("result") ).toInt();
+    //Some error
+    qDebug() << "repo cmDeleteSong error" << reply.value( REPO_FIELD_RESULT ).toInt();
+    mQueryType = cpqIdle;
+    }
+  }
+
+
+
+
+void CsRepoClient::cmFindSong(const QJsonObject &reply)
+  {
+  // 0 - успешное завершение
+  // 1 - проблема со входными данными
+  // 2 - не может подключиться к базе данных
+  // 3 - не найдено подходящих песен
+  // 4 - имя уже есть в базе и пароль не совпал
+  if( reply.value( REPO_FIELD_RESULT ).toInt() == 0 ) {
+    //Received list of matched songs
+    mFindSongList.clear();
+    QJsonObject list = reply.value( REPO_FIELD_PLAYLIST ).toObject();
+    //Fill internal list with received songs
+    for( auto it = list.constBegin(); it != list.constEnd(); it++ ) {
+      CsFindSongItem item;
+      item.mCompositionId = it.key();
+      QJsonObject obj = it.value().toObject();
+      item.mAuthor = obj.value( QStringLiteral("author") ).toString();
+      item.mSinger = obj.value( QStringLiteral("singer") ).toString();
+      item.mTitle  = obj.value( QStringLiteral("title") ).toString();
+      mFindSongList.append( item );
+      }
+    emit findSongComplete();
+    }
+  else if( reply.value( REPO_FIELD_RESULT ).toInt() == 3 ) {
+    //No songs found
+    mFindSongList.clear();
+    emit findSongComplete();
+    }
+  else {
+    //Some error
+    qDebug() << "repo cmFindSong error" << reply.value( REPO_FIELD_RESULT ).toInt();
+    mQueryType = cpqIdle;
     }
   }
 

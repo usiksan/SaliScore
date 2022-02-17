@@ -53,7 +53,10 @@ int main(int argc, char *argv[])
   CsPlayList playList;
   playList.load();
 
-  //Repo client
+  //Local repo
+  CsComposition::mSongRepo.repoInit();
+
+  //Remote repo client
   repoClient = new CsRepoClient( playList );
 
   if( !repoClient->isRegistered() ) {

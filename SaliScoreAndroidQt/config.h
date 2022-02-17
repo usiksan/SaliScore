@@ -17,6 +17,7 @@
   History
     15.02.2022 v0.1   Append play list widget universal for desktop and android
     17.02.2022 v0.2   Append remote repository support
+               v0.3   Append finding in repository
 */
 #ifndef CONFIG_H
 #define CONFIG_H
@@ -28,7 +29,7 @@
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             2
+#define CS_VERSION_MINOR             3
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"

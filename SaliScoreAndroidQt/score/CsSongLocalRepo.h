@@ -26,6 +26,11 @@ class CsSongLocalRepo
     CsSongLocalRepo();
 
     //!
+    //! \brief repoInit Init local repository
+    //!
+    void        repoInit();
+
+    //!
     //! \brief songList Returns full file list as list of compositionId
     //! \return         List of compositionId
     //!

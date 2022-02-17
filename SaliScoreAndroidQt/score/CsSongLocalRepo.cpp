@@ -10,6 +10,18 @@
 CsSongLocalRepo::CsSongLocalRepo()
   {
 
+  }
+
+
+
+
+
+
+//!
+//! \brief repoInit Init local repository
+//!
+void CsSongLocalRepo::repoInit()
+  {
   QFile file( repoPath() );
   if( file.open(QIODevice::ReadOnly) ) {
     QByteArray ar = file.readAll();

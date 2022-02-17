@@ -2,6 +2,7 @@
 #include "CsAndroidWinMain.h"
 #include "CsVisualPlayList.h"
 #include "CsVisualPartList.h"
+#include "repo/CsRepoClient.h"
 
 #include <QDebug>
 #include <QLabel>
@@ -46,6 +47,15 @@ CsAndroidWinMain::CsAndroidWinMain(CsPlayList &playList, QWidget *parent) :
     mWLeftPartList->setPart( partIndex );
     });
   connect( mWLeftPartList, &CsVisualPartList::clickBack, this, [this] () { mWLeftPart->setCurrentWidget( mWLeftPlayList ); } );
+  connect( repoClient, &CsRepoClient::playlistChanged, this, [this] () {
+    mWLeftPlayList->playListUpgrade();
+    mWLeftPart->setCurrentWidget( mWLeftPlayList );
+    if( mWLeftPart->isHidden() ) {
+      mWLeftPart->show();
+      if( width() < height() )
+        mWCentralPart->hide();
+      }
+    });
 
   mWCentralPart->addWidget( new CsVisualAbstractList() );
 

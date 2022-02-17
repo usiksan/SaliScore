@@ -137,10 +137,12 @@ void CsPlayList::load()
   {
   QFile file( fileName() );
   if( file.exists() ) {
+    qDebug() << "playList exist loading...";
     if( file.open( QIODevice::ReadOnly ) )
       fromByteArray( file.readAll() );
     }
   else {
+    qDebug() << "playList not found" << fileName();
     //Create default play list
     mVersion = 1;
     partAppend( QObject::tr("My songs") );

@@ -14,7 +14,7 @@ CsVisualRegularList::CsVisualRegularList(const QList<int> &cellWidth, QWidget *p
 int CsVisualRegularList::itemHeight(int index) const
   {
   Q_UNUSED(index)
-  return 36;
+  return 48;
   }
 
 

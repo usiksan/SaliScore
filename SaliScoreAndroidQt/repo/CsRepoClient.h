@@ -9,6 +9,14 @@
 #include <QTimer>
 #include <QJsonArray>
 
+struct CsFindSongItem
+  {
+    QString mCompositionId;
+    QString mSinger;
+    QString mTitle;
+    QString mAuthor;
+  };
+
 class CsRepoClient : public QObject
   {
     Q_OBJECT
@@ -22,7 +30,8 @@ class CsRepoClient : public QObject
       cpqSyncSong,     //!< Get version of composition in repository
       cpqDownloadSong, //!< Download composition from repository
       cpqUploadSong,   //!< Upload composition to repository
-      cpqDeleteSong    //!< Delete song from repository
+      cpqDeleteSong,   //!< Delete song from repository
+      cpqFindSong      //!< Get finding list from repository
     };
 
     QNetworkAccessManager *mNetworkManager;  //!< Network manager through witch we connect to global repository
@@ -31,7 +40,10 @@ class CsRepoClient : public QObject
     CsRepoQueryType        mQueryType;       //!< Type of remote operation
     QStringList            mSyncList;        //!< List of composition ids which need to be sync
     QString                mNeedSong;        //!< Song need to be loaded
+    QString                mFindQuery;       //!< Do finding
   public:
+    QList<CsFindSongItem>  mFindSongList;    //!< Songs which match to pattern
+
     explicit CsRepoClient( CsPlayList &playList, QObject *parent = nullptr);
 
     bool    isRegistered() const;
@@ -51,6 +63,8 @@ class CsRepoClient : public QObject
     void songChanged( const QString compositionid );
 
     void songLoaded( CsComposition composition );
+
+    void findSongComplete();
 
   public slots:
     //!
@@ -77,6 +91,7 @@ class CsRepoClient : public QObject
     //!
     void doSyncPlayList();
 
+    void doFindSong( const QString &strToFind );
   private:
 
 
@@ -91,6 +106,8 @@ class CsRepoClient : public QObject
     void doUploadSong( const QString compositionid );
 
     void doDeletionSong();
+
+    void doFindSong();
 
     //!
     //! \brief cmRegister Reply received on register query
@@ -111,6 +128,8 @@ class CsRepoClient : public QObject
     void    cmUploadSong( const QJsonObject &reply );
 
     void    cmDeleteSong( const QJsonObject &reply );
+
+    void    cmFindSong( const QJsonObject &reply );
   };
 
 
