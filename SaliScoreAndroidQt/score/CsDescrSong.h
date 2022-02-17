@@ -30,6 +30,7 @@ class CsDescrSong
     bool    mIsPublic;       //!< When true, then author make it available for public, otherway its private for author
   public:
     CsDescrSong();
+    virtual ~CsDescrSong() {}
 
     QString songId() const { return mAuthor + QChar('_') + QString::number(mAuthorSongId,16); }
 
@@ -47,9 +48,6 @@ class CsDescrSong
 
     bool    isPublic() const { return mIsPublic; }
     void    isPublicSet( bool pub ) { mIsPublic = pub; }
-
-    int     versionFromFile() const;
-
 
     virtual void clear();
 

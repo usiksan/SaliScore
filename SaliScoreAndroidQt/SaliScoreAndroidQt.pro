@@ -43,6 +43,7 @@ SOURCES += \
     score/CsTrainInterval.cpp \
     synth/CsSynthMeandr.cpp \
     visual/CsAndroidWinMain.cpp \
+    visual/CsDlgRegistration.cpp \
     visual/CsVisualAbstractList.cpp \
     visual/CsVisualAbstractListView.cpp \
     visual/CsVisualPartList.cpp \
@@ -84,6 +85,7 @@ HEADERS += \
     score/CsTrainInterval.h \
     synth/CsSynthMeandr.h \
     visual/CsAndroidWinMain.h \
+    visual/CsDlgRegistration.h \
     visual/CsVisualAbstractList.h \
     visual/CsVisualAbstractListView.h \
     visual/CsVisualPartList.h \

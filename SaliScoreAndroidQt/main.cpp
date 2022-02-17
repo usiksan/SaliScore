@@ -2,6 +2,8 @@
 #include "audioOut/CsSoundBufferIODevice.h"
 #include "synth/CsSynthMeandr.h"
 #include "score/CsPlayList.h"
+#include "repo/CsRepoClient.h"
+#include "visual/CsDlgRegistration.h"
 
 #include <QApplication>
 #include <QSettings>
@@ -52,13 +54,13 @@ int main(int argc, char *argv[])
   playList.load();
 
   //Repo client
-//  repoClient = new CsRepoClient( playList );
+  repoClient = new CsRepoClient( playList );
 
-//  if( !repoClient->isRegistered() ) {
-//    CsDlgRegistration dlg(nullptr);
-//    if( !dlg.exec() )
-//      return 0;
-//    }
+  if( !repoClient->isRegistered() ) {
+    CsDlgRegistration dlg(nullptr);
+    if( !dlg.exec() )
+      return 0;
+    }
 
   //=============================================================================
   //        Audio output setup
