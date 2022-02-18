@@ -32,6 +32,8 @@ class CsDescrSong
     CsDescrSong();
     virtual ~CsDescrSong() {}
 
+    bool    isValid() const { return !mAuthor.isEmpty(); }
+
     QString songId() const { return mAuthor + QChar('_') + QString::number(mAuthorSongId,16); }
 
     QString author() const { return mAuthor; }

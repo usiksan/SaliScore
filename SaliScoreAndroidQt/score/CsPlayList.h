@@ -46,14 +46,18 @@ class CsPlayList
 
     QString               partCompositionId( int partIndex, int compositionIndex ) const { return mPartList.at(partIndex).compositionId(compositionIndex); }
 
+    QString               partCompositionName( int partIndex, int compositionIndex ) const { return mCompositionsMap.value(partCompositionId(partIndex,compositionIndex)).name(); }
+
     bool                  partCompositionAppend( int partIndex, const QString &id );
 
-    bool                  partCompositionRemove( int partIndex, const QString &id );
+    void                  partCompositionRemove(int partIndex, int compositionIndex );
 
 
     //====================================================================================
     //           Composition map
     CsCompositionSettings composition( const QString &id ) const { return mCompositionsMap.value(id); }
+
+    //QString               compositionName( const QString &id ) const { return mCompositionsMap.value(id).name(); }
 
     void                  compositionSet( const CsComposition &comp );
 

@@ -44,6 +44,9 @@ class CsVisualAbstractList : public QAbstractScrollArea
 
     virtual void footerClicked( int x, int y ) { Q_UNUSED(x) Q_UNUSED(y) }
 
+  protected:
+    void updateVerticalScrollBar( int fullHeight );
+
   public slots:
     //!
     //! \brief updateContent Call update function on viewport

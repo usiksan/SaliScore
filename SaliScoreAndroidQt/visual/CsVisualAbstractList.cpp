@@ -72,13 +72,7 @@ void CsVisualAbstractList::paintContent(QPainter &painter)
 
   //Correct full list height when needed
   posY += mStartY - headerHeight();
-  if( mFullHeight != posY ) {
-    mFullHeight = posY;
-
-    verticalScrollBar()->setRange( 0, mFullHeight );
-    verticalScrollBar()->setSingleStep( size().height() / 100 );
-    verticalScrollBar()->setPageStep( size().height() * 9 / 10 );
-    }
+  updateVerticalScrollBar( posY );
   }
 
 
@@ -89,6 +83,19 @@ int CsVisualAbstractList::itemPaint(int index, int y, QPainter &painter)
   painter.setPen( Qt::black );
   painter.drawText( 10, y, QString("Item %1").arg(index) );
   return itemHeight(index);
+  }
+
+
+
+void CsVisualAbstractList::updateVerticalScrollBar(int fullHeight)
+  {
+  if( mFullHeight != fullHeight ) {
+    mFullHeight = fullHeight;
+
+    verticalScrollBar()->setRange( 0, mFullHeight );
+    verticalScrollBar()->setSingleStep( size().height() / 100 );
+    verticalScrollBar()->setPageStep( size().height() * 9 / 10 );
+    }
   }
 
 

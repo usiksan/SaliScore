@@ -2,6 +2,7 @@
 #include "CsAndroidWinMain.h"
 #include "CsVisualPlayList.h"
 #include "CsVisualPartList.h"
+#include "CsVisualScoreTrain.h"
 #include "repo/CsRepoClient.h"
 
 #include <QDebug>
@@ -21,7 +22,8 @@ CsAndroidWinMain::CsAndroidWinMain(CsPlayList &playList, QWidget *parent) :
   QMainWindow(parent),
   mPlayList(playList)
   {
-
+  //==========================================
+  //      Top layer of layout
   //At left side - play list
   mWLeftPart = new QStackedWidget();
 
@@ -35,18 +37,30 @@ CsAndroidWinMain::CsAndroidWinMain(CsPlayList &playList, QWidget *parent) :
   setCentralWidget( mWSplitter );
 
 
+  //==========================================
+  //      Second layer of layout
+  // 1. Left part
+  // 1.1. Play list
   mWLeftPlayList = new CsVisualPlayList( mPlayList );
   mWLeftPart->addWidget( mWLeftPlayList );
 
+  // 1.2. Part list
   mWLeftPartList = new CsVisualPartList( mPlayList );
   mWLeftPart->addWidget( mWLeftPartList );
 
+  // We begin from play list
   mWLeftPart->setCurrentWidget( mWLeftPlayList );
+
+  // Bring up part list when it selected in play list
   connect( mWLeftPlayList, &CsVisualPlayList::selectPart, this, [this] ( int partIndex ) {
     mWLeftPart->setCurrentWidget( mWLeftPartList );
     mWLeftPartList->setPart( partIndex );
     });
+
+  // Bring up play list when "back" pressed in part list
   connect( mWLeftPartList, &CsVisualPartList::clickBack, this, [this] () { mWLeftPart->setCurrentWidget( mWLeftPlayList ); } );
+
+  // When repoClient update play list we bring up play list
   connect( repoClient, &CsRepoClient::playlistChanged, this, [this] () {
     mWLeftPlayList->playListUpgrade();
     mWLeftPart->setCurrentWidget( mWLeftPlayList );
@@ -57,6 +71,21 @@ CsAndroidWinMain::CsAndroidWinMain(CsPlayList &playList, QWidget *parent) :
       }
     });
 
+  // When in part list composition selected we load it to current composition
+  connect( mWLeftPartList, &CsVisualPartList::compositionClicked, this, [this] (const QString &compositionId) {
+    if( mComposition.isDirty() ) {
+      mPlayList.compositionSet( mComposition );
+      //mComposition.fileSave();
+      }
+    mComposition.fileLoad( compositionId );
+    mComposition.settingsRead( mPlayList.composition(compositionId) );
+    mWCentralScoreTrain->co
+    });
+
+
+  // 2. Central part
+  // 2.1. Score view and train
+  mWCentralScoreTrain = CsVisualScoreTrain( mCom)
   mWCentralPart->addWidget( new CsVisualAbstractList() );
 
   QToolBar *tlBar = addToolBar( QString("ToolBar") );

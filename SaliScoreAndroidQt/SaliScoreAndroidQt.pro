@@ -43,12 +43,21 @@ SOURCES += \
     score/CsTrainInterval.cpp \
     synth/CsSynthMeandr.cpp \
     visual/CsAndroidWinMain.cpp \
+    visual/CsCellCursor.cpp \
     visual/CsDlgRegistration.cpp \
+    visual/CsPainter.cpp \
+    visual/CsPainterSettings.cpp \
+    visual/CsPainterTrain.cpp \
     visual/CsVisualAbstractList.cpp \
     visual/CsVisualAbstractListView.cpp \
     visual/CsVisualPartList.cpp \
     visual/CsVisualPlayList.cpp \
-    visual/CsVisualRegularList.cpp
+    visual/CsVisualRegularList.cpp \
+    visual/CsVisualScore.cpp \
+    visual/CsVisualScoreTrain.cpp \
+    visual/CsWinScoreMode.cpp \
+    visual/CsWinScoreView.cpp \
+    visual/CsWinTrain.cpp
 
 HEADERS += \
     SdLib/SdTime2x.h \
@@ -85,12 +94,21 @@ HEADERS += \
     score/CsTrainInterval.h \
     synth/CsSynthMeandr.h \
     visual/CsAndroidWinMain.h \
+    visual/CsCellCursor.h \
     visual/CsDlgRegistration.h \
+    visual/CsPainter.h \
+    visual/CsPainterSettings.h \
+    visual/CsPainterTrain.h \
     visual/CsVisualAbstractList.h \
     visual/CsVisualAbstractListView.h \
     visual/CsVisualPartList.h \
     visual/CsVisualPlayList.h \
-    visual/CsVisualRegularList.h
+    visual/CsVisualRegularList.h \
+    visual/CsVisualScore.h \
+    visual/CsVisualScoreTrain.h \
+    visual/CsWinScoreMode.h \
+    visual/CsWinScoreView.h \
+    visual/CsWinTrain.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

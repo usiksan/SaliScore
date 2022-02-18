@@ -361,13 +361,15 @@ void CsComposition::jsonRead(CsJsonReader &js)
 void CsComposition::settingsRead(const CsCompositionSettings &settings)
   {
   //Setup settings
-  mHeader = settings;
+  if( settings.isValid() ) {
+    mHeader = settings;
 
-  //Setup visibility lists
-  defListUpdate( mRemarkList, settings.remarkList() );
-  defListUpdate( mChordList,  settings.chordList() );
-  defListUpdate( mNoteList,   settings.noteList() );
-  defListUpdate( mTranslationList, settings.translationList() );
+    //Setup visibility lists
+    defListUpdate( mRemarkList, settings.remarkList() );
+    defListUpdate( mChordList,  settings.chordList() );
+    defListUpdate( mNoteList,   settings.noteList() );
+    defListUpdate( mTranslationList, settings.translationList() );
+    }
   }
 
 

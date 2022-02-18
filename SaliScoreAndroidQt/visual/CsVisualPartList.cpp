@@ -2,6 +2,7 @@
 
 #include <QIcon>
 #include <QPainter>
+#include <QMessageBox>
 
 CsVisualPartList::CsVisualPartList(CsPlayList &playList, QWidget *parent) :
   CsVisualRegularList( {36,0,36}, parent ),
@@ -48,6 +49,21 @@ void CsVisualPartList::cellPaint(int x, int y, int w, int h, int column, int row
 
 void CsVisualPartList::cellClicked(int column, int row)
   {
+  if( row < itemCount() ) {
+    if( column == 0 ) {
+      //Tool icon
+      }
+    else if( column == 1 ) {
+      //Song title
+      emit compositionClicked( mPlayList.partCompositionId( mPartIndex, row ) );
+      }
+    else {
+      if( QMessageBox::question( this, tr("Warning!"), tr("Are you sure to delete song \'%1\' from list").arg(mPlayList.partCompositionName( mPartIndex, row ))) == QMessageBox::Yes ) {
+        mPlayList.partCompositionRemove( mPartIndex, row );
+        updateContent();
+        }
+      }
+    }
   }
 
 

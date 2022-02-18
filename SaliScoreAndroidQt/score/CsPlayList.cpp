@@ -66,14 +66,11 @@ bool CsPlayList::partCompositionAppend(int partIndex, const QString &id)
 
 
 
-bool CsPlayList::partCompositionRemove(int partIndex, const QString &id)
+void CsPlayList::partCompositionRemove( int partIndex, int compositionIndex )
   {
-  if( mPartList[partIndex].compositionRemove(id) ) {
-    garbageCollection();
-    mDirty = true;
-    return true;
-    }
-  return false;
+  mPartList[partIndex].compositionRemove(compositionIndex);
+  garbageCollection();
+  mDirty = true;
   }
 
 

@@ -14,6 +14,9 @@ class CsVisualPartList : public CsVisualRegularList
   public:
     CsVisualPartList( CsPlayList &playList, QWidget *parent = nullptr );
 
+  signals:
+    void compositionClicked( const QString &compositionId );
+
   public slots:
     void setPart( int partIndex );
 
