@@ -8,6 +8,7 @@
     записи и чтения
   History
     05.02.2022 v1 Begin version support
+    05.03.2022 v2 Append QPoint support
 */
 #ifndef SVJSONIO_H
 #define SVJSONIO_H
@@ -17,8 +18,9 @@
 #include <QJsonDocument>
 #include <QColor>
 #include <QMap>
+#include <QPoint>
 
-#define SV_JSON_VERSION 1
+#define SV_JSON_VERSION 2
 
 //!
 //! \brief The SvJsonWriter class Unificate json io class, through which json written
@@ -91,6 +93,19 @@ class SvJsonWriter
     //!
     void jsonString( const char *key, const QString &s ) { mObjectRef.insert( QString(key), s ); }
     void jsonString( const char *key, const QString &s, QString ) { mObjectRef.insert( QString(key), s ); }
+
+
+    //!
+    //! \brief jsonPoint Transfer point value
+    //! \param key       Key for value
+    //! \param p         Point to transfer
+    //!
+    void jsonPoint( const char *key, QPoint p ) {
+      SvJsonWriter js;
+      js.jsonInt("x", p.rx() );
+      js.jsonInt("y", p.ry() );
+      mObjectRef.insert( QString(key), js.object() );
+      }
 
 
     //!
@@ -323,6 +338,18 @@ class SvJsonReader
     //!
     void jsonString( const char *key, QString &s ) { s = mObject.value( QString(key) ).toString(); }
     void jsonString( const char *key, QString &s, QString def ) { s = mObject.value( QString(key) ).toString( def ); }
+
+
+    //!
+    //! \brief jsonPoint Transfer point value
+    //! \param key       Key for value
+    //! \param p         Point to transfer
+    //!
+    void jsonPoint( const char *key, QPoint &p ) {
+      SvJsonReader js( mObject.value( QString(key) ).toObject() );
+      js.jsonInt("x", p.rx() );
+      js.jsonInt("y", p.ry() );
+      }
 
 
     //!
