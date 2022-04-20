@@ -14,7 +14,7 @@ Description
 #ifndef CSPAINTER_H
 #define CSPAINTER_H
 
-#include "CsConfig.h"
+#include "config.h"
 #include "CsPainterSettings.h"
 #include "CsCellCursor.h"
 #include "score/CsRemark.h"
@@ -24,7 +24,6 @@ Description
 #include "score/CsLine.h"
 #include "score/CsComposition.h"
 #include "score/CsReference.h"
-#include "play/CsPlay.h"
 
 #include <QPainter>
 #include <QStringList>
@@ -50,8 +49,8 @@ struct CsTextHeight {
 class CsPainter
   {
   protected:
-    QPainter         *mPainter;
-    const CsPlay     &mPlayer;
+    QPainter               *mPainter;
+    const CsCursorPosition *mPlayer;
 
     //Composition settings
     QStringList       mVisibleRemark;    //!< Visible parts of remark for each line of score
@@ -100,7 +99,7 @@ class CsPainter
     QRect             mCellCursorRect;         //!< Current cell rectangle
     QLine             mPlayerLine;             //!< Current play position
   public:
-    CsPainter( QPainter *painter, const QString &keyViewSettings, const CsComposition &comp, const CsPlay &player, int offsetX, QSize size, CsCellCursor *cellCursor = nullptr );
+    CsPainter( QPainter *painter, const QString &keyViewSettings, const CsComposition &comp, const CsCursorPosition *player, int offsetX, QSize size, CsCellCursor *cellCursor = nullptr );
 
     QPainter        *painter() { return mPainter; }
 
@@ -173,9 +172,11 @@ class CsPainter
 
     CsTextHeight fontHeight( int fontSize ) const;
 
-    bool         isPlayerOnCurrentLine() const { return mPlayer.isShow() && mPlayer.lineIndex() == mLineIndex; }
+    bool         isPlayerOnCurrentLine() const { return mPlayer != nullptr && mPlayer->lineIndex() == mLineIndex; }
 
-    bool         isHighlight( int position, int duration ) const;
+    bool         isPlayerHighlight( int position, int duration ) const;
+
+    bool         isPlayerHighlight( const CsPosition &p ) const { return isPlayerHighlight( p.position(), p.duration() ); }
 
 
     void         drawCellProperty(int x, int y, const QString &value, int height, int propertyId );

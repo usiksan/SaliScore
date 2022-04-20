@@ -8,17 +8,19 @@
 
 class CsPosition
   {
-    int mPosition; //!< Position in time scale, tick
-    int mDuration; //!< Duration of this position, ticks
+    int mLinePosition; //!< Position in time scale from begin of line, tick
+    int mDuration;     //!< Duration of this position, ticks
   public:
     CsPosition( int pos, int duration );
     virtual ~CsPosition() {}
 
-    int          position() const { return mPosition; }
-    void         positionSet( int pos ) { mPosition = pos; }
+    int          position() const { return mLinePosition; }
+    void         positionSet( int pos ) { mLinePosition = pos; }
 
     int          duration() const { return mDuration; }
     void         durationSet( int d ) { mDuration = d; }
+
+    //bool         isHit( int tick ) const { return mLinePosition <= tick && tick <= (mLinePosition + mDuration); }
 
     virtual void jsonWrite( CsJsonWriter &js ) const;
 

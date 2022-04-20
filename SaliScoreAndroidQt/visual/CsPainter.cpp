@@ -6,7 +6,7 @@
 #include <QVector>
 #include <QFontMetrics>
 
-CsPainter::CsPainter(QPainter *painter, const QString &keyViewSettings, const CsComposition &comp, const CsPlay &player , int offsetX, QSize size, CsCellCursor *cellCursor) :
+CsPainter::CsPainter(QPainter *painter, const QString &keyViewSettings, const CsComposition &comp, const CsCursorPosition *player , int offsetX, QSize size, CsCellCursor *cellCursor) :
   mPainter(painter),
   mPlayer(player),
   mVisibleRemark(comp.remarkVisible()),
@@ -445,7 +445,7 @@ void CsPainter::buildDisposition(QVector<CsLyricDisposition> &disposition, const
         prevX -= disposition[k].mWidth;
         disposition[k].mPosX = prevX;
         //Change highlighting previous symbols to previous quarter
-        disposition[k].mHighlight = isHighlight( pos - duraQuarter, duraQuarter );
+        disposition[k].mHighlight = isPlayerHighlight( pos - duraQuarter, duraQuarter );
         }
       }
     else {
@@ -454,7 +454,7 @@ void CsPainter::buildDisposition(QVector<CsLyricDisposition> &disposition, const
       }
     disposition[i].mPosX = curX;
     curX += disposition[i].mWidth;
-    disposition[i].mHighlight = isHighlight( pos, mTickPerTakt - (pos % mTickPerTakt) );
+    disposition[i].mHighlight = isPlayerHighlight( pos, mTickPerTakt - (pos % mTickPerTakt) );
     }
 
   //Remove symbols overlapping
@@ -613,7 +613,7 @@ void CsPainter::drawPlayPosition( int markHeight )
   if( !isPlayerOnCurrentLine() || markHeight <= 0 )
     return;
 
-  int posx = visualX( mLeftGap, mPlayer.lineTickIndex() );
+  int posx = visualX( mLeftGap, mPlayer->linePosition() );
 
   //Set current play position
   mPlayerLine = QLine( posx, mCurY, posx, mCurY + markHeight );
@@ -650,7 +650,7 @@ void CsPainter::drawChordImpl( const QString &part, const CsChordLine &chordLine
   //Paint each chord
   for( auto const &chord : chordList ) {
     int visx = visualX( mLeftGap, chord.position() );
-    mPainter->setPen( isHighlight( chord.position(), chord.duration() ) ? mSettings.mColorChordHighlight : mSettings.mColorChord );
+    mPainter->setPen( isPlayerHighlight( chord ) ? mSettings.mColorChordHighlight : mSettings.mColorChord );
     if( isNotEditChord( part, chord.position(), visx, mCurY ) )
       mPainter->drawText( visx, mCurY, chord.chordText() );
     }
@@ -701,7 +701,7 @@ void CsPainter::drawNoteImpl( int clef, int taktCount, const QString &part, cons
   //Draw notes
   auto &noteList = noteLine.noteListGet();
   for( auto const &note : qAsConst(noteList) ) {
-    mPainter->setPen( mPlayer.isHit( note.position(), note.duration() ) ? mSettings.mColorNoteHighlight : mSettings.mColorNote );
+    mPainter->setPen( isPlayerHighlight( note ) ? mSettings.mColorNoteHighlight : mSettings.mColorNote );
     int visX = visualX( mLeftGap, note.position() );
     if( isNotEditNote( part, note.position(), visX, scoreY, noteStart ) )
       drawNoteSingle( visX, scoreY, noteStart, note.white(), note.duration(), note.isDies() );
@@ -771,9 +771,9 @@ CsTextHeight CsPainter::fontHeight(int fontSize) const
 
 
 
-bool CsPainter::isHighlight(int position, int duration) const
+bool CsPainter::isPlayerHighlight(int position, int duration) const
   {
-  return isPlayerOnCurrentLine() && mPlayer.isHit( position, duration );
+  return isPlayerOnCurrentLine() && mPlayer->isHit( position, duration );
   }
 
 

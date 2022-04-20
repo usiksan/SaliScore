@@ -20,16 +20,16 @@ Description
 class CsCursorPosition
   {
   protected:
-    int     mPosition;  //!< Position of cursor in tick
-    int     mLineIndex; //!< Line index of cursor
+    int     mLinePosition;  //!< Position of cursor in tick from begin of line
+    int     mLineIndex;     //!< Line index of cursor
   public:
     CsCursorPosition();
 
     //!
-    //! \brief position Returns position of cursor in tick
-    //! \return         Position of cursor in tick
+    //! \brief linePosition Returns position of cursor in tick from begin of line
+    //! \return             Position of cursor in tick from begin of line
     //!
-    int      position() const { return mPosition; }
+    int      linePosition() const { return mLinePosition; }
 
     //!
     //! \brief lineIndex Returns line index of cursor
@@ -37,7 +37,20 @@ class CsCursorPosition
     //!
     int      lineIndex() const { return mLineIndex; }
 
-    void     set( int line, int pos ) { mLineIndex = line; mPosition = pos; }
+    //!
+    //! \brief set          Set new cursor position
+    //! \param lineIndex    New line index of cursor
+    //! \param linePosition New line position of cursor
+    //!
+    void     set( int lineIndex, int linePosition ) { mLineIndex = lineIndex; mLinePosition = linePosition; }
+
+
+    //!
+    //! \brief isHit    Returns true if current play position is hit into given interval
+    //! \param position Start position of interval
+    //! \param duration Duration of interval
+    //! \return         true if current play position is hit into given interval
+    bool     isHit( int position, int duration ) const { return position <= mLinePosition && mLinePosition < (position + duration); }
 
     //!
     //! \brief jsonWrite Writes content into json writer object

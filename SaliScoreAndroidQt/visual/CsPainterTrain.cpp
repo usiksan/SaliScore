@@ -24,13 +24,13 @@ void CsPainterTrain::drawLineBackground(int lineHeight)
         mPainter->setBrush( Qt::lightGray );
         mPainter->setPen( Qt::lightGray );
         int x = mSettings.mLeftMenuSize - mOffsetX;
-        mPainter->drawRect( x, mCurY, mLeftGap - x + (mFragment.mStart.position() * mSettings.mPixelPerTakt >> 8), lineHeight );
+        mPainter->drawRect( x, mCurY, mLeftGap - x + (mFragment.mStart.linePosition() * mSettings.mPixelPerTakt >> 8), lineHeight );
         }
       if( mLineIndex == mFragment.mStop.lineIndex() ) {
         //Fragment finished at current line
         mPainter->setBrush( Qt::lightGray );
         mPainter->setPen( Qt::lightGray );
-        mPainter->drawRect( visualX(mLeftGap,mFragment.mStop.position()), mCurY, (2048 - mFragment.mStop.position()) * mSettings.mPixelPerTakt >> 8, lineHeight );
+        mPainter->drawRect( visualX(mLeftGap,mFragment.mStop.linePosition()), mCurY, (2048 - mFragment.mStop.linePosition()) * mSettings.mPixelPerTakt >> 8, lineHeight );
         }
       }
     }

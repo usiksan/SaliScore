@@ -51,7 +51,7 @@ bool CsCursor::isMatch(int theClass, int lineIndex, const QString &partName) con
 //!
 bool CsCursor::isMatch(int theClass, int position, int lineIndex, const QString &partName) const
   {
-  return theClass == mClass && position == mPosition && lineIndex == mLineIndex && partName == mPartName;
+  return theClass == mClass && position == mLinePosition && lineIndex == mLineIndex && partName == mPartName;
   }
 
 
@@ -66,5 +66,5 @@ bool CsCursor::isMatch(int theClass, int position, int lineIndex, const QString 
 //!
 bool CsCursor::isMatch(int theClass, int position, int lineIndex) const
   {
-  return theClass == mClass && position == mPosition && lineIndex == mLineIndex;
+  return theClass == mClass && position == mLinePosition && lineIndex == mLineIndex;
   }

@@ -14,7 +14,7 @@ Description
 #include "CsCursorPosition.h"
 
 CsCursorPosition::CsCursorPosition() :
-  mPosition(0),       //!< Position of cursor in tick
+  mLinePosition(0),       //!< Position of cursor in tick
   mLineIndex(-1)      //!< Line index of cursor
   {
 
@@ -29,7 +29,7 @@ CsCursorPosition::CsCursorPosition() :
 //!
 void CsCursorPosition::jsonWrite(CsJsonWriter &js) const
   {
-  js.jsonInt( "Pos", mPosition );
+  js.jsonInt( "Pos", mLinePosition );
   js.jsonInt( "Line", mLineIndex );
   }
 
@@ -42,6 +42,6 @@ void CsCursorPosition::jsonWrite(CsJsonWriter &js) const
 //!
 void CsCursorPosition::jsonRead(CsJsonReader &js)
   {
-  js.jsonInt( "Pos", mPosition );
+  js.jsonInt( "Pos", mLinePosition );
   js.jsonInt( "Line", mLineIndex );
   }

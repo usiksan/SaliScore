@@ -7,7 +7,7 @@ CsCellCursor::CsCellCursor(CsComposition &comp) :
   mComposition(comp)
   {
   mClass = cccTitle;
-  mPosition = 0;
+  mLinePosition = 0;
   mLineIndex = -1;
   }
 
@@ -15,7 +15,7 @@ CsCellCursor::CsCellCursor(CsComposition &comp) :
 void CsCellCursor::moveTop()
   {
   mClass = cccTitle;
-  mPosition = 0;
+  mLinePosition = 0;
   mLineIndex = -1;
   }
 
@@ -69,7 +69,7 @@ void CsCellCursor::move(CsCellCursorOperation oper, bool doSelect, int n)
         break;
 
       case ccoStartLine :
-        mPosition = 0;
+        mLinePosition = 0;
         break;
 
       case ccoLeft :
@@ -78,13 +78,13 @@ void CsCellCursor::move(CsCellCursorOperation oper, bool doSelect, int n)
           case cccTranslation :
             break;
           case cccChord :
-            setPosition( mPosition - mComposition.stepChord(), mComposition.stepChord() );
+            setPosition( mLinePosition - mComposition.stepChord(), mComposition.stepChord() );
             break;
           case cccNote :
-            setPosition( mPosition - mComposition.stepNote(), mComposition.stepNote() );
+            setPosition( mLinePosition - mComposition.stepNote(), mComposition.stepNote() );
             break;
           case cccLyric :
-            setPosition( mPosition - mComposition.stepLyric(), mComposition.stepLyric() );
+            setPosition( mLinePosition - mComposition.stepLyric(), mComposition.stepLyric() );
             break;
           default:
             mClass = qBound<int>( cccTitle, mClass - 1, cccRemark );
@@ -99,13 +99,13 @@ void CsCellCursor::move(CsCellCursorOperation oper, bool doSelect, int n)
           case cccTranslation :
             break;
           case cccChord :
-            setPosition( mPosition + mComposition.stepChord(), mComposition.stepChord() );
+            setPosition( mLinePosition + mComposition.stepChord(), mComposition.stepChord() );
             break;
           case cccNote :
-            setPosition( mPosition + mComposition.stepNote(), mComposition.stepNote() );
+            setPosition( mLinePosition + mComposition.stepNote(), mComposition.stepNote() );
             break;
           case cccLyric :
-            setPosition( mPosition + mComposition.stepLyric(), mComposition.stepLyric() );
+            setPosition( mLinePosition + mComposition.stepLyric(), mComposition.stepLyric() );
             break;
           default:
             mClass = qBound<int>( cccTitle, mClass + 1, cccRemark );
@@ -131,7 +131,7 @@ void CsCellCursor::move(CsCellCursorOperation oper, bool doSelect, int n)
 void CsCellCursor::jump(int aclass, int aposition, int aline, const QString &apart)
   {
   mClass     = aclass;
-  mPosition  = aposition;
+  mLinePosition  = aposition;
   mLineIndex = aline;
   mPartName  = apart;
   }
@@ -141,7 +141,7 @@ void CsCellCursor::jump(int aclass, int aposition, int aline, const QString &apa
 
 void CsCellCursor::setPosition(int pos, int step)
   {
-  mPosition = qBound( 0, (pos / step) * step, mComposition.lineTickCount(mLineIndex) - step );
+  mLinePosition = qBound( 0, (pos / step) * step, mComposition.lineTickCount(mLineIndex) - step );
   }
 
 
@@ -288,6 +288,6 @@ void CsCellCursor::moveDown()
 void CsCellCursor::normPosition(int step)
   {
   //Bound position
-  mPosition = qBound( 0, (mPosition / step) * step, mComposition.lineTickCount(mLineIndex) - step );
+  mLinePosition = qBound( 0, (mLinePosition / step) * step, mComposition.lineTickCount(mLineIndex) - step );
   }
 

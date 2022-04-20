@@ -4,7 +4,7 @@
 
 
 CsPosition::CsPosition(int pos, int duration) :
-  mPosition(pos),
+  mLinePosition(pos),
   mDuration(duration)
   {
 
@@ -15,7 +15,7 @@ CsPosition::CsPosition(int pos, int duration) :
 void CsPosition::jsonWrite(CsJsonWriter &js) const
   {
   js.jsonInt( "Duration", mDuration );
-  js.jsonInt( "Position", mPosition );
+  js.jsonInt( "Position", mLinePosition );
   }
 
 
@@ -24,5 +24,5 @@ void CsPosition::jsonWrite(CsJsonWriter &js) const
 void CsPosition::jsonRead(CsJsonReader &js)
   {
   js.jsonInt( "Duration", mDuration );
-  js.jsonInt( "Position", mPosition );
+  js.jsonInt( "Position", mLinePosition );
   }
