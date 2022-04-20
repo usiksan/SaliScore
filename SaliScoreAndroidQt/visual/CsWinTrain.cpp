@@ -1,6 +1,5 @@
 #include "CsWinTrain.h"
 #include "CsWinScoreMode.h"
-#include "CsWinMain.h"
 #include "CsPainterTrain.h"
 
 #include <QPaintEvent>
@@ -9,7 +8,7 @@
 #include <QScrollBar>
 #include <QWheelEvent>
 
-CsWinTrain::CsWinTrain(CsComposition &comp, CsPlay &play, QWidget *parent) :
+CsWinTrain::CsWinTrain(CsComposition &comp, CsCursorPosition *play, QWidget *parent) :
   CsWinScoreView( comp, play, parent ),
   mFragment(0)
   {
@@ -74,10 +73,11 @@ void CsWinTrain::cmFragment2()
 
 void CsWinTrain::cmFragmentStart()
   {
-  if( mFragment ) {
-    mComposition.fragmentStartSet( mFragment - 1, mPlayer.lineIndex(), mPlayer.lineTickIndex() );
-    update();
-    }
+  //TODO player
+//  if( mFragment ) {
+//    mComposition.fragmentStartSet( mFragment - 1, mPlayer.lineIndex(), mPlayer.lineTickIndex() );
+//    update();
+//    }
   }
 
 
@@ -86,10 +86,11 @@ void CsWinTrain::cmFragmentStart()
 
 void CsWinTrain::cmFragmentStop()
   {
-  if( mFragment ) {
-    mComposition.fragmentStopSet( mFragment - 1, mPlayer.lineIndex(), mPlayer.lineTickIndex() );
-    update();
-    }
+  //TODO player
+//  if( mFragment ) {
+//    mComposition.fragmentStopSet( mFragment - 1, mPlayer.lineIndex(), mPlayer.lineTickIndex() );
+//    update();
+//    }
   }
 
 
@@ -109,10 +110,11 @@ void CsWinTrain::activate()
 
 void CsWinTrain::playStart()
   {
-  if( !mPlayer.isShow() ) {
-    //Begin from start of fragment
-    mPlayer.setTrainFragment( mFragment );
-    }
+  //TODO player
+//  if( !mPlayer.isShow() ) {
+//    //Begin from start of fragment
+//    mPlayer.setTrainFragment( mFragment );
+//    }
   }
 
 
@@ -154,18 +156,20 @@ void CsWinTrain::upMousePressEvent(QMouseEvent *event)
       switch( ref.type() ) {
         case cccChord :
         case cccNote :
-          CsWinMain::actionPlayStop->trigger();
-          mPlayer.jump( ref.line(), ref.index() );
-          mPlayer.show(true);
+          //TODO player
+//          CsWinMain::actionPlayStop->trigger();
+//          mPlayer.jump( ref.line(), ref.index() );
+//          mPlayer.show(true);
           break;
 
         case cccRemark :
         case cccLyric :
         case cccTranslation :
         case cccLyricSymbol :
-          CsWinMain::actionPlayStop->trigger();
-          mPlayer.jump( ref.line(), 0 );
-          mPlayer.show(true);
+          //TODO player
+//          CsWinMain::actionPlayStop->trigger();
+//          mPlayer.jump( ref.line(), 0 );
+//          mPlayer.show(true);
           break;
 
         }
@@ -204,10 +208,11 @@ void CsWinTrain::compositionChanged()
 
 void CsWinTrain::updateActions() const
   {
-  mPlayer.setTrainFragment( mFragment );
-  CsWinMain::actionFragment0->setChecked( mFragment == 0 );
-  CsWinMain::actionFragment1->setChecked( mFragment == 1 );
-  CsWinMain::actionFragment2->setChecked( mFragment == 2 );
-  CsWinMain::actionFragmentStart->setDisabled( mFragment == 0 );
-  CsWinMain::actionFragmentStop->setDisabled( mFragment == 0 );
+  //TODO player
+//  mPlayer.setTrainFragment( mFragment );
+//  CsWinMain::actionFragment0->setChecked( mFragment == 0 );
+//  CsWinMain::actionFragment1->setChecked( mFragment == 1 );
+//  CsWinMain::actionFragment2->setChecked( mFragment == 2 );
+//  CsWinMain::actionFragmentStart->setDisabled( mFragment == 0 );
+//  CsWinMain::actionFragmentStop->setDisabled( mFragment == 0 );
   }

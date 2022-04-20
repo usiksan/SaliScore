@@ -5,6 +5,7 @@
 //#include <QJsonDocument>
 #include <QVector>
 #include <QFontMetrics>
+#include <QtSvg/QSvgRenderer>
 
 CsPainter::CsPainter(QPainter *painter, const QString &keyViewSettings, const CsComposition &comp, const CsCursorPosition *player , int offsetX, QSize size, CsCellCursor *cellCursor) :
   mPainter(painter),
@@ -408,6 +409,9 @@ QRect CsPainter::drawNoteSingle(int x, int scoreY, int noteStart, int noteWhite,
     if( noteDies )
       fullNote = unicode4(9839);
     fullNote.append( noteSign + QStringLiteral(" ") + fraction );
+    static QSvgRenderer eight( QStringLiteral(":/pic/Music-eighthnote.svg") );
+    eight.setAspectRatioMode( Qt::KeepAspectRatio );
+    eight.render( mPainter, QRectF( QPoint(x,yPos), QSize(25,60) ) );
     mPainter->drawText( x, yPos, fullNote );
     over = mPainter->boundingRect( x,yPos, 0,0, Qt::AlignLeft | Qt::AlignTop, fullNote );
     over.moveTop( yPos - over.height() );

@@ -1,7 +1,7 @@
 #ifndef CSWINTRAIN_H
 #define CSWINTRAIN_H
 
-#include "CsConfig.h"
+#include "config.h"
 #include "CsWinScoreView.h"
 #include "score/CsReference.h"
 
@@ -14,7 +14,7 @@ class CsWinTrain : public CsWinScoreView
     CsReferenceList mReferenceList; //!< List of areas on screen with appropriate reference to position in score
     int             mFragment;      //!< Active fragment
   public:
-    explicit CsWinTrain( CsComposition &comp, CsPlay &play, QWidget *parent = nullptr);
+    explicit CsWinTrain( CsComposition &comp, CsCursorPosition *play, QWidget *parent = nullptr);
 
     virtual void paint() override;
 

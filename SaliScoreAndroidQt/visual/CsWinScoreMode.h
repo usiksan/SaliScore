@@ -1,9 +1,8 @@
 #ifndef CSWINSCOREMODE_H
 #define CSWINSCOREMODE_H
 
-#include "CsConfig.h"
+#include "config.h"
 #include "score/CsComposition.h"
-#include "play/CsPlay.h"
 #include "CsWinScoreView.h"
 
 #include <QWidget>

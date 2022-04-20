@@ -79,14 +79,14 @@ CsAndroidWinMain::CsAndroidWinMain(CsPlayList &playList, QWidget *parent) :
       }
     mComposition.fileLoad( compositionId );
     mComposition.settingsRead( mPlayList.composition(compositionId) );
-    mWCentralScoreTrain->co
+    mWCentralScoreTrain->compositionChanged();
     });
 
 
   // 2. Central part
   // 2.1. Score view and train
-  mWCentralScoreTrain = CsVisualScoreTrain( mCom)
-  mWCentralPart->addWidget( new CsVisualAbstractList() );
+  mWCentralScoreTrain = new CsVisualScoreTrain( mComposition );
+  mWCentralPart->addWidget( mWCentralScoreTrain );
 
   QToolBar *tlBar = addToolBar( QString("ToolBar") );
   tlBar->setIconSize( QSize(32,32) );

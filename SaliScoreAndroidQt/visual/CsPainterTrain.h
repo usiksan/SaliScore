@@ -8,7 +8,7 @@ class CsPainterTrain : public CsPainter
     CsTrainInterval mFragment;
     bool            mShowFragment;
   public:
-    CsPainterTrain( QPainter *painter, const QString &keyViewSettings, const CsComposition &comp, const CsPlay &player, int offsetX, QSize size, int fragmentIndex );
+    CsPainterTrain( QPainter *painter, const QString &keyViewSettings, const CsComposition &comp, const CsCursorPosition *player, int offsetX, QSize size, int fragmentIndex );
 
 
     // CsPainter interface

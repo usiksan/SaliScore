@@ -1,6 +1,6 @@
 #include "CsPainterTrain.h"
 
-CsPainterTrain::CsPainterTrain(QPainter *painter, const QString &keyViewSettings, const CsComposition &comp, const CsPlay &player, int offsetX, QSize size, int fragmentIndex) :
+CsPainterTrain::CsPainterTrain(QPainter *painter, const QString &keyViewSettings, const CsComposition &comp, const CsCursorPosition *player, int offsetX, QSize size, int fragmentIndex) :
   CsPainter( painter, keyViewSettings, comp, player, offsetX, size, nullptr ),
   mShowFragment( fragmentIndex > 0 )
   {

@@ -1,4 +1,4 @@
-QT       += core gui network multimedia
+QT       += core gui network multimedia svg
 
 android {
   QT       += androidextras

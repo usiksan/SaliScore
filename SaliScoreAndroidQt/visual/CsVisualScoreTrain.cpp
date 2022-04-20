@@ -10,7 +10,7 @@ CsVisualScoreTrain::CsVisualScoreTrain(CsComposition &comp, QWidget *parent) :
 
 void CsVisualScoreTrain::paintContent(QPainter &painter)
   {
-  CsPainterTrain cp( &painter, QStringLiteral(KEY_TRAIN_SETTINGS), mComposition, mPlayer, mStartX, size(), mFragment );
+  CsPainterTrain cp( &painter, QStringLiteral(KEY_TRAIN_SETTINGS), mComposition, nullptr, mStartX, size(), mFragment );
 
   paintScore( cp );
 

@@ -7,7 +7,7 @@
 #include <QScrollBar>
 #include <QDebug>
 
-CsWinScoreView::CsWinScoreView(CsComposition &comp, CsPlay &play, QWidget *parent) :
+CsWinScoreView::CsWinScoreView(CsComposition &comp, CsCursorPosition *play, QWidget *parent) :
   QWidget(parent),
   mComposition(comp),
   mPlayer(play),
@@ -22,8 +22,11 @@ CsWinScoreView::CsWinScoreView(CsComposition &comp, CsPlay &play, QWidget *paren
 
 void CsWinScoreView::compositionChanged()
   {
-  mPlayer.reset();
-  mPlayer.show(false);
+  if( mPlayer != nullptr ) {
+    //TODO reset player
+//    mPlayer.reset();
+//    mPlayer.show(false);
+    }
   }
 
 
@@ -31,7 +34,8 @@ void CsWinScoreView::compositionChanged()
 
 void CsWinScoreView::activate()
   {
-  mPlayer.reset();
+  //TODO reset player
+  //mPlayer.reset();
   setFocus();
   update();
   }
@@ -77,7 +81,7 @@ void CsWinScoreView::paintScore(CsPainter &cp)
     }
 
   //Roll by player
-  if( mPlayer.isRun() ) {
+  if( mPlayer != nullptr ) {
     //Vertical autoscroll
     QLine ln( cp.playerLine() );
     int top = qMin(ln.y1(),ln.y2());
