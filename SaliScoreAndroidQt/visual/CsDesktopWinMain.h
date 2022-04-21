@@ -1,19 +1,24 @@
-#ifndef CSANDROIDWINMAIN_H
-#define CSANDROIDWINMAIN_H
+#ifndef CSDESKTOPWINMAIN_H
+#define CSDESKTOPWINMAIN_H
 
 #include "score/CsComposition.h"
 
 #include <QMainWindow>
 #include <QStackedWidget>
 #include <QSplitter>
+#include <QTabWidget>
+#include <QStringList>
+#include <QClipboard>
+#include <QAction>
+#include <QTimer>
+#include <QLineEdit>
 
 class CsPlayList;
 class CsVisualPlayList;
 class CsVisualPartList;
 class CsVisualScoreTrain;
 
-
-class CsAndroidWinMain : public QMainWindow
+class CsDesktopWinMain : public QMainWindow
   {
     Q_OBJECT
 
@@ -28,17 +33,12 @@ class CsAndroidWinMain : public QMainWindow
 
     CsPlayList         &mPlayList;           //!< Main play list
     CsComposition       mComposition;        //!< Current composition
-  public:
-    CsAndroidWinMain( CsPlayList &playList, QWidget *parent = nullptr);
-    ~CsAndroidWinMain();
 
-  public slots:
-//    void cmPlayStart();
-//    void cmPlayStop();
-//    void cmPlayMetronomToggle();
-//    void cmFragment0();
-//    void cmFragment1();
-//    void cmFragment2();
-//    void cmFragment
+  public:
+    explicit CsDesktopWinMain(  CsPlayList &playList, QWidget *parent = nullptr);
+
+  signals:
+
   };
-#endif // CSANDROIDWINMAIN_H
+
+#endif // CSDESKTOPWINMAIN_H

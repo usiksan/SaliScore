@@ -8,7 +8,7 @@ CsVisualScoreTrain::CsVisualScoreTrain(CsComposition &comp, QWidget *parent) :
   }
 
 
-void CsVisualScoreTrain::paintContent(QPainter &painter)
+void CsVisualScoreTrain::contentPaint(QPainter &painter)
   {
   CsPainterTrain cp( &painter, QStringLiteral(KEY_TRAIN_SETTINGS), mComposition, nullptr, mStartX, size(), mFragment );
 

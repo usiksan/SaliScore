@@ -32,11 +32,11 @@ void CsVisualPartList::cellPaint(int x, int y, int w, int h, int column, int row
       //Song title
       QString id = mPlayList.partCompositionId( mPartIndex, row );
       //Song header
-      CsCompositionSettings settings = mPlayList.composition( id );
+      CsCompositionInfo info = mPlayList.composition( id );
       //At top display composition name
-      painter.drawText( x, y, w, h, Qt::AlignLeft | Qt::AlignVCenter, settings.name() );
+      painter.drawText( x, y, w, h, Qt::AlignLeft | Qt::AlignVCenter, info.name() );
       //At bottom display singer and author
-      painter.drawText( x + 20, y + h, w - 20, h, Qt::AlignLeft | Qt::AlignVCenter, QStringLiteral("%1 [%2]").arg( settings.singer(), settings.author() ) );
+      painter.drawText( x + 20, y + h, w - 20, h, Qt::AlignLeft | Qt::AlignVCenter, QStringLiteral("%1 [%2]").arg( info.singer(), info.author() ) );
       }
     else {
       //Delete icon

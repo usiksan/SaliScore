@@ -39,7 +39,7 @@ class CsCellCursor : public CsCursor
 
     void jump( int aclass, int aposition, int aline ) { jump( aclass, aposition, aline, QString{} ); }
 
-    void jump( int aclass ) { jump( aclass, 0, -1 ); }
+    void jump( int aclass, const QString &apart ) { jump( aclass, 0, -1, apart ); }
 
   private:
     void setPosition( int pos, int step );

@@ -70,7 +70,7 @@ int CsPainter::drawTitleAndProperties(int y, const CsComposition &comp)
   QMap<QString,QString> attrTitles;
   //Build default titles
   attrTitles.insert( CS_ATTR_SINGER, QObject::tr("Singer:") );
-  attrTitles.insert( CS_ATTR_COMPOSER, QObject::tr("Composer") );
+  attrTitles.insert( CS_ATTR_COMPOSER, QObject::tr("Composer:") );
   attrTitles.insert( CS_ATTR_LYRICIST, QObject::tr("Lyricist:") );
   attrTitles.insert( CS_ATTR_AUTHOR, QObject::tr("Author:") );
 
@@ -110,7 +110,7 @@ int CsPainter::drawTitleAndProperties(int y, const CsComposition &comp)
   mCurY = storedY;
 
   //At right side properties
-  attrList = QStringList( { CS_ATTR_SINGER, CS_ATTR_COMPOSER, CS_ATTR_LYRICIST, CS_ATTR_AUTHOR } );
+  attrList = QStringList( { CS_ATTR_VOICE, CS_ATTR_VOICE_DUAL, CS_ATTR_VOICE_LEFT, CS_ATTR_STYLE, CS_ATTR_TEMPO } );
   w = 0;
   for( auto &attrId : qAsConst(attrList) ) {
     r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, attrTitles.value(attrId) );

@@ -14,5 +14,5 @@ void CsVisualAbstractListView::paintEvent(QPaintEvent *event)
   {
   Q_UNUSED(event)
   QPainter painter(this);
-  mVisualList->paintContent(painter);
+  mVisualList->contentPaint(painter);
   }

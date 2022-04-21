@@ -19,7 +19,9 @@ class CsVisualAbstractList : public QAbstractScrollArea
   public:
     CsVisualAbstractList( QWidget *parent = nullptr );
 
-    virtual void paintContent( QPainter &painter );
+    virtual void contentPaint( QPainter &painter );
+
+    virtual void contentClicked( int x, int y );
 
 
     virtual int  itemHeight( int index ) const { Q_UNUSED(index) return 25; }

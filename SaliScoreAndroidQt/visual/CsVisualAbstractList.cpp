@@ -30,7 +30,7 @@ CsVisualAbstractList::CsVisualAbstractList(QWidget *parent) :
 
 
 
-void CsVisualAbstractList::paintContent(QPainter &painter)
+void CsVisualAbstractList::contentPaint(QPainter &painter)
   {
   painter.fillRect( QRect( QPoint(), viewport()->size() ), QColor(Qt::white) );
 
@@ -78,6 +78,30 @@ void CsVisualAbstractList::paintContent(QPainter &painter)
 
 
 
+void CsVisualAbstractList::contentClicked(int x, int y)
+  {
+  if( y < headerHeight() ) {
+    //Pressed in header area
+    headerClicked( x, y );
+    }
+  else if( y > mFooterBoundY ) {
+    //Pressed in footer area
+    footerClicked( x, y - mFooterBoundY );
+    }
+  else {
+    //Pressed if item list area
+    //Find item index
+    for( int i = 0; i < mItemBounds.count(); i++ )
+      if( mItemBounds.at(i) > y ) {
+        itemClicked( x, i + mStartIndex );
+        break;
+        }
+    }
+  }
+
+
+
+
 int CsVisualAbstractList::itemPaint(int index, int y, QPainter &painter)
   {
   painter.setPen( Qt::black );
@@ -113,7 +137,7 @@ void CsVisualAbstractList::paintEvent(QPaintEvent *event)
   {
   event->accept();
   QPainter painter(viewport());
-  paintContent( painter );
+  contentPaint( painter );
   }
 
 
@@ -132,24 +156,7 @@ void CsVisualAbstractList::mouseReleaseEvent(QMouseEvent *event)
   if( qAbs( event->y() - mMousePressY ) < 10 ) {
     //This is click
     mStartY = mMouseStartY;
-
-    if( event->y() < headerHeight() ) {
-      //Pressed in header area
-      headerClicked( event->x(), event->y() );
-      }
-    else if( event->y() > mFooterBoundY ) {
-      //Pressed in footer area
-      footerClicked( event->x(), event->y() - mFooterBoundY );
-      }
-    else {
-      //Pressed if item list area
-      //Find item index
-      for( int i = 0; i < mItemBounds.count(); i++ )
-        if( mItemBounds.at(i) > event->y() ) {
-          itemClicked( event->x(), i + mStartIndex );
-          break;
-          }
-      }
+    contentClicked( event->x(), event->y() );
     }
   }
 
@@ -177,6 +184,6 @@ void CsVisualAbstractList::wheelEvent(QWheelEvent *event)
 
 void CsVisualAbstractList::keyPressEvent(QKeyEvent *event)
   {
-
+  Q_UNUSED(event)
   }
 

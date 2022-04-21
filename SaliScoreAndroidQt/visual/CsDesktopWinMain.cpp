@@ -1,5 +1,6 @@
+
 #include "config.h"
-#include "CsAndroidWinMain.h"
+#include "CsDesktopWinMain.h"
 #include "CsVisualPlayList.h"
 #include "CsVisualPartList.h"
 #include "CsVisualScoreTrain.h"
@@ -12,15 +13,10 @@
 #include <QToolButton>
 #include <QHeaderView>
 #include <QSettings>
-#ifdef Q_OS_ANDROID
-#include <QtAndroidExtras>
-#include <QtAndroid>
-#endif
 
-
-CsAndroidWinMain::CsAndroidWinMain(CsPlayList &playList, QWidget *parent) :
-  QMainWindow(parent),
-  mPlayList(playList)
+CsDesktopWinMain::CsDesktopWinMain(CsPlayList &playList, QWidget *parent) :
+  QMainWindow{parent},
+  mPlayList{playList}
   {
   //==========================================
   //      Top layer of layout
@@ -107,26 +103,5 @@ CsAndroidWinMain::CsAndroidWinMain(CsPlayList &playList, QWidget *parent) :
 
   //Restore splitter positions
   QSettings s;
-//  if( s.contains(QString(KEY_MAIN_SPLITTER)) )
-//    mWSplitter->restoreState( s.value(QString(KEY_MAIN_SPLITTER)).toByteArray() );
 
-#if 0
-  QString str("1");
-#ifdef Q_OS_ANDROID
-  if(QAndroidJniObject::isClassAvailable("CsMidiAndroid")) {
-    QAndroidJniObject someJavaObject = QAndroidJniObject("CsMidiAndroid","(Landroid/content/Context;)V", QtAndroid::androidContext().object() );
-    str = someJavaObject.callObjectMethod<jstring>("sayHello").toString();
-    }
-  else {
-    str = QStringLiteral("SOME JAVA CLASS UNAVAIABLE!");
-    }
-#endif
-
-  setCentralWidget( new QLabel( str )  );
-#endif
   }
-
-CsAndroidWinMain::~CsAndroidWinMain()
-  {
-  }
-

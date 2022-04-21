@@ -28,6 +28,48 @@ CsCellCursor::CsCellCursor(CsComposition &comp) :
     mMoveAttrLeft.insert( CS_ATTR_TEMPO, CS_ATTR_TEMPO );
 
 
+    mMoveAttrRight.insert( CS_ATTR_NAME, CS_ATTR_NAME );
+
+    mMoveAttrRight.insert( CS_ATTR_SINGER, CS_ATTR_VOICE );
+    mMoveAttrRight.insert( CS_ATTR_COMPOSER, CS_ATTR_VOICE_DUAL );
+    mMoveAttrRight.insert( CS_ATTR_LYRICIST, CS_ATTR_VOICE_LEFT );
+    mMoveAttrRight.insert( CS_ATTR_AUTHOR, CS_ATTR_STYLE );
+
+    mMoveAttrRight.insert( CS_ATTR_VOICE, CS_ATTR_VOICE );
+    mMoveAttrRight.insert( CS_ATTR_VOICE_DUAL, CS_ATTR_VOICE_DUAL );
+    mMoveAttrRight.insert( CS_ATTR_VOICE_LEFT, CS_ATTR_VOICE_LEFT );
+    mMoveAttrRight.insert( CS_ATTR_STYLE, CS_ATTR_STYLE );
+    mMoveAttrRight.insert( CS_ATTR_TEMPO, CS_ATTR_TEMPO );
+
+
+    mMoveAttrTop.insert( CS_ATTR_NAME, CS_ATTR_NAME );
+
+    mMoveAttrTop.insert( CS_ATTR_SINGER, CS_ATTR_NAME );
+    mMoveAttrTop.insert( CS_ATTR_COMPOSER, CS_ATTR_SINGER );
+    mMoveAttrTop.insert( CS_ATTR_LYRICIST, CS_ATTR_COMPOSER );
+    mMoveAttrTop.insert( CS_ATTR_AUTHOR, CS_ATTR_LYRICIST );
+
+    mMoveAttrTop.insert( CS_ATTR_VOICE, CS_ATTR_NAME );
+    mMoveAttrTop.insert( CS_ATTR_VOICE_DUAL, CS_ATTR_VOICE );
+    mMoveAttrTop.insert( CS_ATTR_VOICE_LEFT, CS_ATTR_VOICE_DUAL );
+    mMoveAttrTop.insert( CS_ATTR_STYLE, CS_ATTR_VOICE_LEFT );
+    mMoveAttrTop.insert( CS_ATTR_TEMPO, CS_ATTR_STYLE );
+
+
+    mMoveAttrBot.insert( CS_ATTR_NAME, CS_ATTR_SINGER );
+
+    mMoveAttrBot.insert( CS_ATTR_SINGER, CS_ATTR_COMPOSER );
+    mMoveAttrBot.insert( CS_ATTR_COMPOSER, CS_ATTR_LYRICIST );
+    mMoveAttrBot.insert( CS_ATTR_LYRICIST, CS_ATTR_AUTHOR );
+    //mMoveAttrBot.insert( CS_ATTR_AUTHOR, CS_ATTR_AUTHOR );
+
+    mMoveAttrBot.insert( CS_ATTR_VOICE, CS_ATTR_VOICE_DUAL );
+    mMoveAttrBot.insert( CS_ATTR_VOICE_DUAL, CS_ATTR_VOICE_LEFT );
+    mMoveAttrBot.insert( CS_ATTR_VOICE_LEFT, CS_ATTR_STYLE );
+    mMoveAttrBot.insert( CS_ATTR_STYLE, CS_ATTR_TEMPO );
+    //mMoveAttrBot.insert( CS_ATTR_TEMPO, CS_ATTR_STYLE );
+
+
 
     }
   }
@@ -87,7 +129,7 @@ void CsCellCursor::move(CsCellCursorOperation oper, bool doSelect, int n)
         break;
 
       case ccoStart :
-        mClass = cccTitle;
+        moveTop();
         break;
 
       case ccoStartLine :
@@ -96,6 +138,7 @@ void CsCellCursor::move(CsCellCursorOperation oper, bool doSelect, int n)
 
       case ccoLeft :
         switch( mClass ) {
+          default:
           case cccRemark :
           case cccTranslation :
             break;
@@ -108,15 +151,15 @@ void CsCellCursor::move(CsCellCursorOperation oper, bool doSelect, int n)
           case cccLyric :
             setPosition( mLinePosition - mComposition.stepLyric(), mComposition.stepLyric() );
             break;
-          default:
-            mClass = qBound<int>( cccTitle, mClass - 1, cccRemark );
+          case cccAttribute :
+            mPartName = mMoveAttrLeft.value( mPartName, CS_ATTR_NAME );
             break;
           }
-
         break;
 
       case ccoRight :
         switch( mClass ) {
+          default:
           case cccRemark :
           case cccTranslation :
             break;
@@ -129,8 +172,8 @@ void CsCellCursor::move(CsCellCursorOperation oper, bool doSelect, int n)
           case cccLyric :
             setPosition( mLinePosition + mComposition.stepLyric(), mComposition.stepLyric() );
             break;
-          default:
-            mClass = qBound<int>( cccTitle, mClass + 1, cccRemark );
+          case cccAttribute :
+            mPartName = mMoveAttrRight.value( mPartName, CS_ATTR_NAME );
             break;
           }
 
@@ -267,11 +310,13 @@ void CsCellCursor::moveUp()
       //Test previous part
       movePrevPart();
     while( mLineIndex >= 0 && mPartName.isEmpty() && mClass != cccLyric );
-    if( mLineIndex < 0 )
-      mClass = cccAuthor;
+    if( mLineIndex < 0 ) {
+      mClass = cccAttribute;
+      mPartName = CS_ATTR_TEMPO;
+      }
     }
-  else
-    mClass = qBound<int>( cccTitle, mClass - 2, cccRemark );
+  else if( mClass == cccAttribute )
+    mPartName = mMoveAttrTop.value( mPartName, CS_ATTR_NAME );
   }
 
 
@@ -289,19 +334,17 @@ void CsCellCursor::moveDown()
       moveUp();
       }
     }
-  else {
-    mClass = qBound<int>( cccTitle, mClass + 2, cccRemark );
-    if( mClass == cccRemark ) {
-      if( mComposition.lineCount() == 0 )
-        //No lines
-        mClass = cccAuthor;
-      else {
+  else if( mClass == cccAttribute ) {
+    if( mPartName == CS_ATTR_AUTHOR || mPartName == CS_ATTR_TEMPO ) {
+      if( mComposition.lineCount() != 0 ) {
         mLineIndex = 0;
         mClass = mComposition.line(mLineIndex).isRemark() ? cccRemark : cccChord;
         mPartName.clear();
         moveDown();
         }
       }
+    else
+      mPartName = mMoveAttrBot.value( mPartName, CS_ATTR_NAME );
     }
   }
 

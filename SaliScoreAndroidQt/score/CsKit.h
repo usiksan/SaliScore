@@ -12,7 +12,7 @@ class CsKit
   protected:
     QMap<QString,Item> mKitMap;
   public:
-    CsKit();
+    CsKit() {}
 
     bool       isEmpty() const { return mKitMap.isEmpty(); }
 

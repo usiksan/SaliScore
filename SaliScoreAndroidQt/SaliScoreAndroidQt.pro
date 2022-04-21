@@ -2,6 +2,18 @@ QT       += core gui network multimedia svg
 
 android {
   QT       += androidextras
+
+SOURCES += \
+    visual/CsAndroidWinMain.cpp
+
+  }
+
+!android {
+
+SOURCES += \
+    visual/CsDesktopWinMain.cpp
+
+
   }
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -34,10 +46,18 @@ SOURCES += \
     score/CsSynthSettings.cpp \
     score/CsTrainInterval.cpp \
     synth/CsSynthMeandr.cpp \
-    visual/CsAndroidWinMain.cpp \
     visual/CsCellCursor.cpp \
+    visual/CsCursorEdit.cpp \
+    visual/CsCursorEditChord.cpp \
+    visual/CsCursorEditLyric.cpp \
+    visual/CsCursorEditNote.cpp \
+    visual/CsCursorEditProperty.cpp \
+    visual/CsCursorEditRemark.cpp \
+    visual/CsCursorEditString.cpp \
+    visual/CsCursorEditTranslation.cpp \
     visual/CsDlgRegistration.cpp \
     visual/CsPainter.cpp \
+    visual/CsPainterEditor.cpp \
     visual/CsPainterSettings.cpp \
     visual/CsPainterTrain.cpp \
     visual/CsVisualAbstractList.cpp \
@@ -46,10 +66,8 @@ SOURCES += \
     visual/CsVisualPlayList.cpp \
     visual/CsVisualRegularList.cpp \
     visual/CsVisualScore.cpp \
-    visual/CsVisualScoreTrain.cpp \
-    visual/CsWinScoreMode.cpp \
-    visual/CsWinScoreView.cpp \
-    visual/CsWinTrain.cpp
+    visual/CsVisualScoreEdit.cpp \
+    visual/CsVisualScoreTrain.cpp
 
 HEADERS += \
     SdLib/SdTime2x.h \
@@ -81,8 +99,18 @@ HEADERS += \
     synth/CsSynthMeandr.h \
     visual/CsAndroidWinMain.h \
     visual/CsCellCursor.h \
+    visual/CsCursorEdit.h \
+    visual/CsCursorEditChord.h \
+    visual/CsCursorEditLyric.h \
+    visual/CsCursorEditNote.h \
+    visual/CsCursorEditProperty.h \
+    visual/CsCursorEditRemark.h \
+    visual/CsCursorEditString.h \
+    visual/CsCursorEditTranslation.h \
+    visual/CsDesktopWinMain.h \
     visual/CsDlgRegistration.h \
     visual/CsPainter.h \
+    visual/CsPainterEditor.h \
     visual/CsPainterSettings.h \
     visual/CsPainterTrain.h \
     visual/CsVisualAbstractList.h \
@@ -91,10 +119,8 @@ HEADERS += \
     visual/CsVisualPlayList.h \
     visual/CsVisualRegularList.h \
     visual/CsVisualScore.h \
-    visual/CsVisualScoreTrain.h \
-    visual/CsWinScoreMode.h \
-    visual/CsWinScoreView.h \
-    visual/CsWinTrain.h
+    visual/CsVisualScoreEdit.h \
+    visual/CsVisualScoreTrain.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

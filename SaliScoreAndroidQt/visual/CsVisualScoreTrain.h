@@ -15,7 +15,7 @@ class CsVisualScoreTrain : public CsVisualScore
 
     // CsVisualAbstractList interface
   public:
-    virtual void paintContent(QPainter &painter) override;
+    virtual void contentPaint(QPainter &painter) override;
   };
 
 #endif // CSVISUALSCORETRAIN_H

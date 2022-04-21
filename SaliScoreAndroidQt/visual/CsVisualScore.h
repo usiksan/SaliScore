@@ -13,7 +13,7 @@ class CsVisualScore : public CsVisualAbstractList
   protected:
     int             mStartX;      //!< Offset of horizontal begin view port in score (in pixels)
     bool            mAutoScroll;  //!< Automatic scroll content on cursor position changed
-    CsComposition  &mComposition; //!< Current viewed composition
+    CsComposition  &mComposition;  //!< Current viewed composition
   public:
     CsVisualScore( CsComposition &comp, QWidget *parent = nullptr );
 
