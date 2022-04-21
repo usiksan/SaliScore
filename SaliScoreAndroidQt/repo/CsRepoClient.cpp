@@ -343,20 +343,20 @@ void CsRepoClient::doUploadSong(const QString compositionid)
     QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
     //Exclude potencial empty strings
-    QString singer = comp.singer();
+    QString singer = comp.attributeGet( CS_ATTR_SINGER );
     if( singer.isEmpty() ) singer = tr("Not assigned");
 
-    QString title = comp.title();
+    QString title = comp.attributeGet( CS_ATTR_NAME );
     if( title.isEmpty() ) title = tr("Not defined");
 
     sdHttpMultiPartAppendField( multiPart, REPO_FIELD_AUTHOR, author.toUtf8() );
     sdHttpMultiPartAppendField( multiPart, REPO_FIELD_PASSWORD, password.toUtf8() );
     sdHttpMultiPartAppendField( multiPart, REPO_FIELD_COMPOSITIONID, compositionid.toUtf8() );
 
-    sdHttpMultiPartAppendField( multiPart, REPO_FIELD_VERSION,       comp.version() );
+    sdHttpMultiPartAppendField( multiPart, REPO_FIELD_VERSION,       comp.version().toInt() );
     sdHttpMultiPartAppendField( multiPart, REPO_FIELD_SINGER,        singer.toUtf8() );
     sdHttpMultiPartAppendField( multiPart, REPO_FIELD_TITLE,         title.toUtf8() );
-    sdHttpMultiPartAppendField( multiPart, REPO_FIELD_ISPUBLIC,      comp.header().isPublic() );
+    sdHttpMultiPartAppendField( multiPart, REPO_FIELD_ISPUBLIC,      comp.isPublic() );
     sdHttpMultiPartAppendField( multiPart, REPO_FIELD_MELODYPRESENT, comp.isMelodyPresent() );
     sdHttpMultiPartAppendField( multiPart, REPO_FIELD_SONG,          comp.toByteArray() );
 
@@ -610,18 +610,18 @@ void CsRepoClient::cmDownloadSong(const QJsonObject &reply)
     //Retrive object list from reply
     qDebug() << "Composition downloaded" << reply.value( REPO_FIELD_COMPOSITIONID ).toString();
     CsComposition comp;
-    comp.fromByteArray( reply.value( REPO_FIELD_SONG ).toString().toUtf8() );
+    comp.fromByteArray( reply.value( REPO_FIELD_SONG ).toString().toUtf8(), false );
     if( comp.fileSave() ) {
       //Write completed
-      emit songChanged( comp.header().songId() );
+      emit songChanged( comp.songId() );
 
-      if( comp.header().songId() == mNeedSong ) {
+      if( comp.songId() == mNeedSong ) {
         mNeedSong.clear();
         emit songLoaded( comp );
         }
 
       //Remove received song from sync list
-      mSyncList.removeAll( comp.header().songId() );
+      mSyncList.removeAll( comp.songId() );
       }
 
     //Continue sync song

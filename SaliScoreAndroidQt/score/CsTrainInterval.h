@@ -16,6 +16,8 @@ Description
 
 #include "CsCursorPosition.h"
 
+#include <QList>
+
 struct CsTrainInterval
   {
     CsCursorPosition mStart; //!< Start position of interval
@@ -36,5 +38,9 @@ struct CsTrainInterval
     void     jsonRead( CsJsonReader &js );
 
   };
+
+
+using CsTrainList = QList<CsTrainInterval>;
+
 
 #endif // CSTRAININTERVAL_H

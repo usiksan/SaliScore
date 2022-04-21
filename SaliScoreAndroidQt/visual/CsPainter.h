@@ -17,9 +17,6 @@ Description
 #include "config.h"
 #include "CsPainterSettings.h"
 #include "CsCellCursor.h"
-#include "score/CsRemark.h"
-#include "score/CsChordLine.h"
-#include "score/CsNoteLine.h"
 #include "score/CsLyricSymbol.h"
 #include "score/CsLine.h"
 #include "score/CsComposition.h"
@@ -57,7 +54,7 @@ class CsPainter
     QStringList       mVisibleChord;     //!< Visible parts of chord for each line of score
     QStringList       mVisibleNote;      //!< Visible parts of notes for each line of score
     QStringList       mVisibleTranslate; //!< Visible parts of lyric translations for each line of score
-    CsClefMap         mClefMap;          //!< Clef classification for each visibile note line
+    QMap<QString,int> mClefMap;
     QString           mNumerator;
     QString           mDenominator;
 
@@ -125,7 +122,7 @@ class CsPainter
 
     virtual void     drawLineBackground( int lineHeight ) { Q_UNUSED(lineHeight) }
   protected:
-    virtual bool isNotEditProperty( int propertyId, int x, int y );
+    virtual bool isNotEditProperty(const QString &propertyId, int x, int y );
 
     virtual bool isNotEditRemark( const QString &part, int x, int y );
 
@@ -144,15 +141,15 @@ class CsPainter
     int    visualX( int x, int pos );
 
   private:
-    void         drawRemark( const QMap<QString,QString> &remarkMap );
+    void         drawRemarkLine( const CsLine &line );
 
-    void         drawChord(int taktCount, const QMap<QString, CsChordLine> &chordMap );
+    void         drawChord(int taktCount, const CsLine &line );
 
-    void         drawNote( int taktCount, const QMap<QString,CsNoteLine> &noteMap );
+    void         drawNote( int taktCount, const CsLine &line );
 
     void         drawLyric(const CsLyricLine &lyricLine );
 
-    void         drawTranslation( const QMap<QString,QString> &translationMap );
+    void         drawTranslation( const CsLine &line );
 
     void         drawPlayPosition(int markHeight);
 
@@ -160,13 +157,13 @@ class CsPainter
 
     void         drawRemarkImpl( int x, int y, const QString &rem );
 
-    void         drawChordImpl(const QString &part, const CsChordLine &chordLine );
+    void         drawChordImpl(const QString &part, const QList<CsChord> &chordList );
 
-    void         drawNoteImpl(int clef, int taktCount, const QString &part, const CsNoteLine &noteLine );
+    void         drawNoteImpl(int clef, int taktCount, const QString &part, const QList<CsNote> &noteList );
 
     void         drawTranslationImpl( int x, int y, const QString &tran );
 
-    void         drawPropertyImpl(int xorigin, int xtab, const QString &title, const QString &value, int propertyId );
+    void         drawPropertyImpl(int xorigin, int xtab, const QString &title, const QString &value, const QString &propertyId );
 
     void         drawTaktLines( int taktCount, int y0, int y1 );
 
@@ -179,7 +176,7 @@ class CsPainter
     bool         isPlayerHighlight( const CsPosition &p ) const { return isPlayerHighlight( p.position(), p.duration() ); }
 
 
-    void         drawCellProperty(int x, int y, const QString &value, int height, int propertyId );
+    void         drawCellProperty(int x, int y, const QString &value, int height, const QString &propertyId );
 
     int          drawCellText( int x, int y, const QString &value, int height, bool isCurrent );
 

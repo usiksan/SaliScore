@@ -79,7 +79,7 @@ void CsPlayList::partCompositionRemove( int partIndex, int compositionIndex )
 
 void CsPlayList::compositionSet( const CsComposition &comp )
   {
-  mCompositionsMap.insert( comp.songId(), CsCompositionSettings(comp) );
+  mCompositionsMap.insert( comp.songId(), CsCompositionInfo(comp) );
   mDirty = true;
   }
 
@@ -91,8 +91,8 @@ void CsPlayList::compositionSet( const CsComposition &comp )
 void CsPlayList::jsonWrite( CsJsonWriter &js ) const
   {
   js.jsonInt( "aversion", mVersion );
-  js.jsonList<CsPlayPart>( "partList", mPartList );
-  js.jsonMap<CsCompositionSettings>( "compositionMap", mCompositionsMap );
+  js.jsonList( "partList", mPartList );
+  js.jsonMap( "compositionMap", mCompositionsMap );
   }
 
 
@@ -102,8 +102,8 @@ void CsPlayList::jsonRead(CsJsonReader &js)
   {
   mDirty = false;
   js.jsonInt( "aversion", mVersion );
-  js.jsonList<CsPlayPart>( "partList", mPartList );
-  js.jsonMap<CsCompositionSettings>( "compositionMap", mCompositionsMap );
+  js.jsonList( "partList", mPartList );
+  js.jsonMap( "compositionMap", mCompositionsMap );
   }
 
 
@@ -112,6 +112,8 @@ void CsPlayList::jsonRead(CsJsonReader &js)
 QByteArray CsPlayList::toByteArray() const
   {
   SvJsonWriter js;
+  CsJsonAttr attr;
+  attr.jsonWrite( js );
   jsonWrite( js );
   return QJsonDocument( js.object() ).toJson(QJsonDocument::Compact);
   }
@@ -121,10 +123,12 @@ QByteArray CsPlayList::toByteArray() const
 
 void CsPlayList::fromByteArray(const QByteArray &ar)
   {
-  int version = 0;
-  QJsonObject obj = QJsonDocument::fromJson( ar ).object();
-  SvJsonReaderExtInt js( obj, &version );
-  jsonRead( js );
+  CsJsonAttr attr;
+  QJsonObject obj = svJsonObjectFromByteArray( ar );
+  CsJsonReader js( obj, &attr );
+  attr.jsonRead( js );
+  if( attr.isPlayList() )
+    jsonRead( js );
   }
 
 
@@ -146,8 +150,8 @@ void CsPlayList::load()
     partAppend( QObject::tr("Examples") );
 
     CsComposition comp;
-    comp.singerSet("Цой");
-    comp.titleSet("Кукушка");
+    comp.attributeSet( CS_ATTR_SINGER, "Цой" );
+    comp.attributeSet( CS_ATTR_NAME, "Кукушка" );
     compositionSet( comp );
     comp.fileSave();
     partCompositionAppend( 0, comp.songId() );

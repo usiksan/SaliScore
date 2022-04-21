@@ -11,12 +11,14 @@
 struct CsDefinition
   {
     QString mName;
+    QString mInstrument;
     QString mDescription;
+    int     mClef;
     bool    mVisible;
 
-    CsDefinition( const QString nm = QString{}, const QString descr = QString{} );
+    CsDefinition( const QString nm = QString{}, const QString descr = QString{}, const QString inst = QString{}, int mClef = noteC );
 
-    bool visibleToggle() { return mVisible = !mVisible; }
+    bool visibleToggle() { mVisible = !mVisible; return mVisible; }
 
     void jsonWrite( CsJsonWriter &js ) const;
 

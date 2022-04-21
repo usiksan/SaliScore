@@ -49,12 +49,15 @@
 
 //SaliScore database version
 //Must be compatible with previous versions
+#define CS_PLAY_LIST_VERSION_1       1
 #define CS_BASE_VERSION_1            1
 
 //Current SaliScore database version
+#define CS_PLAY_LIST_VERSION         CS_PLAY_LIST_VERSION_1
 #define CS_BASE_VERSION              CS_BASE_VERSION_1
 #define CS_BASE_VERSION_KEY          "BaseVersion"
 
+#define CS_PLAY_LIST_TYPE            "SaliLAB SaliScore play list file"
 #define CS_BASE_TYPE                 "SaliLAB SaliScore file"
 #define CS_BASE_TYPE_KEY             "BaseType"
 

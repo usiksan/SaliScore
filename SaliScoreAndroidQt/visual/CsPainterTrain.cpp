@@ -5,7 +5,7 @@ CsPainterTrain::CsPainterTrain(QPainter *painter, const QString &keyViewSettings
   mShowFragment( fragmentIndex > 0 )
   {
   if( mShowFragment )
-    mFragment = comp.fragment( fragmentIndex - 1 );
+    mFragment = comp.trainGet( fragmentIndex - 1 );
   }
 
 

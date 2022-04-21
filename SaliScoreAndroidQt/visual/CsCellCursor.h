@@ -53,6 +53,11 @@ class CsCellCursor : public CsCursor
     void moveDown();
 
     void normPosition( int step );
+
+    static QMap<QString,QString> mMoveAttrLeft;
+    static QMap<QString,QString> mMoveAttrRight;
+    static QMap<QString,QString> mMoveAttrTop;
+    static QMap<QString,QString> mMoveAttrBot;
   };
 
 #endif // CSCELLCURSOR_H

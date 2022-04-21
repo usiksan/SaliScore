@@ -14,7 +14,6 @@ CsPainter::CsPainter(QPainter *painter, const QString &keyViewSettings, const Cs
   mVisibleChord(comp.chordVisible()),
   mVisibleNote(comp.noteVisible()),
   mVisibleTranslate(comp.translationVisible()),
-  mClefMap(comp.noteClefMap()),
   mLineStartOffset(comp.lineStartOffset()),
   mCellCursor(cellCursor),
   mOffsetX(offsetX),
@@ -49,6 +48,10 @@ CsPainter::CsPainter(QPainter *painter, const QString &keyViewSettings, const Cs
   mStepPixChord = visualX( 0, mStepChord = comp.stepChord() );
   mStepPixNote  = visualX( 0, mStepNote = comp.stepNote() );
   mStepPixLyric = visualX( 0, mStepLyric = comp.stepLyric() );
+
+  //Fill clef map
+  for( auto &part : qAsConst(mVisibleNote) )
+    mClefMap.insert( part, comp.noteClefGet(part) );
   }
 
 
@@ -64,73 +67,59 @@ void CsPainter::fillBackground()
 
 int CsPainter::drawTitleAndProperties(int y, const CsComposition &comp)
   {
+  QMap<QString,QString> attrTitles;
+  //Build default titles
+  attrTitles.insert( CS_ATTR_SINGER, QObject::tr("Singer:") );
+  attrTitles.insert( CS_ATTR_COMPOSER, QObject::tr("Composer") );
+  attrTitles.insert( CS_ATTR_LYRICIST, QObject::tr("Lyricist:") );
+  attrTitles.insert( CS_ATTR_AUTHOR, QObject::tr("Author:") );
+
+  attrTitles.insert( CS_ATTR_VOICE, QObject::tr("Voice:") );
+  attrTitles.insert( CS_ATTR_VOICE_DUAL, QObject::tr("Voice dual:") );
+  attrTitles.insert( CS_ATTR_VOICE_LEFT, QObject::tr("Voice left:") );
+  attrTitles.insert( CS_ATTR_STYLE, QObject::tr("Style:") );
+  attrTitles.insert( CS_ATTR_TEMPO, QObject::tr("Tempo:") );
+
   //Draw title and properties
   mCurY = y;
 
   //Draw title on horizontal center
   mPainter->setFont( QFont(mSettings.mFontName, mSettings.mTitleFontSize) );
-  QRect r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, comp.title() );
+  QString title = comp.attributeGet(CS_ATTR_NAME);
+  QRect r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, title );
   int x = (mSize.width() - r.width()) / 2;
-  drawCellProperty( x - mOffsetX, y + mTitleHeight.mOffset, comp.title(), mTitleHeight.mHeight, cccTitle );
-  if( isNotEditProperty( cccTitle, x - mOffsetX, y + mTitleHeight.mHeight )  )
-    mPainter->drawText( x - mOffsetX, y + mTitleHeight.mHeight, comp.title() );
+  drawCellProperty( x - mOffsetX, y + mTitleHeight.mOffset, title, mTitleHeight.mHeight, CS_ATTR_NAME );
+  if( isNotEditProperty( CS_ATTR_NAME, x - mOffsetX, y + mTitleHeight.mHeight )  )
+    mPainter->drawText( x - mOffsetX, y + mTitleHeight.mHeight, title );
   mCurY += mTitleHeight.mHeight + mSettings.mTextGap;
 
   //At left side properties
   mPainter->setFont( QFont(mSettings.mFontName, mSettings.mPropertiesFontSize) );
-  QString singer = QObject::tr("Singer:");
-  QString composer = QObject::tr("Composer");
-  QString lyricist = QObject::tr("Lyricist:");
-  QString author = QObject::tr("Author:");
-  r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, singer );
-  int w = r.width();
-
-  r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, composer );
-  w = qMax( r.width(), w );
-
-  r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, lyricist );
-  w = qMax( r.width(), w );
-
-  r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, author );
-  w = qMax( r.width(), w );
+  QStringList attrList( { CS_ATTR_SINGER, CS_ATTR_COMPOSER, CS_ATTR_LYRICIST, CS_ATTR_AUTHOR } );
+  int w = 0;
+  for( auto &attrId : qAsConst(attrList) ) {
+    r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, attrTitles.value(attrId) );
+    w = qMax( r.width(), w );
+    }
   w += 5;
   int storedY = mCurY;
-  drawPropertyImpl( mClefPos, w, singer, comp.singer(), cccSinger );
-  drawPropertyImpl( mClefPos, w, composer, comp.composer(), cccComposer );
-  drawPropertyImpl( mClefPos, w, lyricist, comp.lyricist(), cccLyricist );
-  drawPropertyImpl( mClefPos, w, author, comp.author(), cccAuthor );
+  for( auto &attrId : qAsConst(attrList) )
+    drawPropertyImpl( mClefPos, w, attrTitles.value(attrId), comp.attributeGet(attrId), attrId );
 
   //Restore Y to draw right side of properties
   mCurY = storedY;
 
   //At right side properties
-  QString voice = QObject::tr("Voice:");
-  QString voiceDual = QObject::tr("Voice dual:");
-  QString voiceLeft = QObject::tr("Voice left:");
-  QString style = QObject::tr("Style:");
-  QString tempo = QObject::tr("Tempo:");
-
-  r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, voice );
-  w = r.width();
-
-  r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, voiceDual );
-  w = qMax( r.width(), w );
-
-  r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, voiceLeft );
-  w = qMax( r.width(), w );
-
-  r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, style );
-  w = qMax( r.width(), w );
-
-  r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, composer );
-  w = qMax( r.width(), w );
+  attrList = QStringList( { CS_ATTR_SINGER, CS_ATTR_COMPOSER, CS_ATTR_LYRICIST, CS_ATTR_AUTHOR } );
+  w = 0;
+  for( auto &attrId : qAsConst(attrList) ) {
+    r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, attrTitles.value(attrId) );
+    w = qMax( r.width(), w );
+    }
 
   int rightX = mSize.width() - w * 2;
-  drawPropertyImpl( rightX, w, voice, comp.voice(), cccVoice );
-  drawPropertyImpl( rightX, w, voiceDual, comp.voiceDual(), cccVoiceDual );
-  drawPropertyImpl( rightX, w, voiceLeft, comp.voiceLeft(), cccVoiceLeft );
-  drawPropertyImpl( rightX, w, style, comp.style(), cccStyle );
-  drawPropertyImpl( rightX, w, tempo, comp.tempo(), cccTempo );
+  for( auto &attrId : qAsConst(attrList) )
+    drawPropertyImpl( rightX, w, attrTitles.value(attrId), comp.attributeGet(attrId), attrId );
 
   return mCurY;
   }
@@ -177,16 +166,16 @@ int CsPainter::drawLine(int y, int lineIndex, const CsLine &line, bool fullDrawi
   mReferenceList.append( CsReference( -mOffsetX, y, mSettings.mLeftMenuSize, fullLineHeight, cccLineSelect, mLineIndex, QString{}, 0 ) );
 
   if( line.isRemark() )
-    drawRemark( line.remarkConst().remarkMapConst() );
+    drawRemarkLine( line );
   else {
     //Draw cursor position
     drawPlayPosition( playMarkPositionHeight );
     //Draw line content
-    drawChord( line.taktCount(), line.chordKitConst().chordMapConst() );
-    drawNote( line.taktCount(), line.noteKitConst().noteMapConst() );
+    drawChord( line.taktCount(), line );
+    drawNote( line.taktCount(), line );
     drawCellLyric( mCurY, line.taktCount() * mTickPerTakt );
-    drawLyric( line.lyricLineConst() );
-    drawTranslation( line.translationConst() );
+    drawLyric( line.lyricGet() );
+    drawTranslation( line );
     mCurY += mSettings.mLineGap;
     }
 
@@ -219,7 +208,7 @@ int CsPainter::lineSongHeight() const
 
 
 
-bool CsPainter::isNotEditProperty(int propertyId, int x, int y)
+bool CsPainter::isNotEditProperty( const QString &propertyId, int x, int y)
   {
   Q_UNUSED(propertyId)
   Q_UNUSED(x)
@@ -485,7 +474,7 @@ int CsPainter::visualX(int x, int pos)
 
 
 
-void CsPainter::drawRemark(const QMap<QString, QString> &remarkMap)
+void CsPainter::drawRemarkLine(const CsLine &line)
   {
   if( mVisibleRemark.count() > 0 ) {
     mPainter->setFont( QFont(mSettings.mFontName, mSettings.mRemarkFontSize) );
@@ -495,7 +484,7 @@ void CsPainter::drawRemark(const QMap<QString, QString> &remarkMap)
   //For each remark translations which visible we perform drawing
   for( const auto &lang : qAsConst(mVisibleRemark) ) {
     if( mCellCursor != nullptr ) {
-      int width = drawCellText( mLeftGap, mCurY + mRemarkTextHeight.mOffset, remarkMap.value(lang), mRemarkTextHeight.mHeight,
+      int width = drawCellText( mLeftGap, mCurY + mRemarkTextHeight.mOffset, line.remarkGet(lang), mRemarkTextHeight.mHeight,
                     mCellCursor->isMatch( cccRemark, mLineIndex, lang ) );
       mReferenceList.append( CsReference( mLeftGap, mCurY + mRemarkTextHeight.mOffset, width, mRemarkTextHeight.mHeight,
                                           cccRemark, mLineIndex, lang, 0 ) );
@@ -503,7 +492,7 @@ void CsPainter::drawRemark(const QMap<QString, QString> &remarkMap)
 
     mCurY += mRemarkTextHeight.mHeight;
     if( isNotEditRemark( lang, mLeftGap, mCurY ) )
-      drawRemarkImpl( mLeftGap, mCurY, remarkMap.value(lang) );
+      drawRemarkImpl( mLeftGap, mCurY, line.remarkGet(lang) );
     mCurY += mSettings.mTextGap;
     }
   }
@@ -511,7 +500,7 @@ void CsPainter::drawRemark(const QMap<QString, QString> &remarkMap)
 
 
 
-void CsPainter::drawChord( int taktCount, const QMap<QString, CsChordLine> &chordMap)
+void CsPainter::drawChord(int taktCount, const CsLine &line)
   {
   if( mVisibleChord.count() > 0 )
     mPainter->setFont( QFont(mSettings.mFontName, mSettings.mChordFontSize) );
@@ -521,7 +510,7 @@ void CsPainter::drawChord( int taktCount, const QMap<QString, CsChordLine> &chor
     drawTaktLines( taktCount, mCurY - mChordTextHeight.mOffset, mCurY + mChordTextHeight.mHeight );
     drawCellChord( mCurY, taktCount * mTickPerTakt, chordKey );
     mCurY += mChordTextHeight.mHeight;
-    drawChordImpl( chordKey, chordMap.value(chordKey) );
+    drawChordImpl( chordKey, line.chordListGet(chordKey) );
     mCurY += mSettings.mTextGap;
     }
   }
@@ -529,12 +518,12 @@ void CsPainter::drawChord( int taktCount, const QMap<QString, CsChordLine> &chor
 
 
 
-void CsPainter::drawNote(int taktCount, const QMap<QString, CsNoteLine> &noteMap)
+void CsPainter::drawNote(int taktCount, const CsLine &line)
   {
   //For each note line which visible we perform drawing
   for( const auto &noteKey : qAsConst(mVisibleNote) ) {
     drawCellNote( mCurY, taktCount * mTickPerTakt, noteKey );
-    drawNoteImpl( mClefMap.value(noteKey), taktCount, noteKey, noteMap.value(noteKey) );
+    drawNoteImpl( mClefMap.value(noteKey), taktCount, noteKey, line.noteListGet(noteKey) );
     mCurY += 9 * mSettings.mScoreLineDistance;
     }
   }
@@ -588,7 +577,7 @@ void CsPainter::drawLyric(const CsLyricLine &lyricLine)
 
 
 
-void CsPainter::drawTranslation(const QMap<QString, QString> &translationMap)
+void CsPainter::drawTranslation(const CsLine &line)
   {
   if( mVisibleTranslate.count() > 0 ) {
     mPainter->setFont( QFont(mSettings.mFontName, mSettings.mTranslationFontSize) );
@@ -598,14 +587,14 @@ void CsPainter::drawTranslation(const QMap<QString, QString> &translationMap)
   //For each translations which visible we perform drawing
   for( const auto &lang : qAsConst(mVisibleTranslate) ) {
     if( mCellCursor != nullptr ) {
-      int width = drawCellText( mLeftGap, mCurY + mTranslationTextHeight.mOffset, translationMap.value(lang), mTranslationTextHeight.mHeight,
+      int width = drawCellText( mLeftGap, mCurY + mTranslationTextHeight.mOffset, line.translationGet(lang), mTranslationTextHeight.mHeight,
                     mCellCursor->isMatch( cccTranslation, mLineIndex, lang ) );
       mReferenceList.append( CsReference( mLeftGap, mCurY + mTranslationTextHeight.mOffset, width, mTranslationTextHeight.mHeight,
                                           cccTranslation, mLineIndex, lang, 0 ) );
       }
 
     mCurY += mTranslationTextHeight.mHeight;
-    drawTranslationImpl( mLeftGap, mCurY, translationMap.value(lang) );
+    drawTranslationImpl( mLeftGap, mCurY, line.translationGet(lang) );
     mCurY += mSettings.mTextGap;
     }
   }
@@ -648,9 +637,8 @@ void CsPainter::drawRemarkImpl(int x, int y, const QString &rem)
 
 
 
-void CsPainter::drawChordImpl( const QString &part, const CsChordLine &chordLine )
+void CsPainter::drawChordImpl(const QString &part, const QList<CsChord> &chordList )
   {
-  auto &chordList = chordLine.chordListConst();
   //Paint each chord
   for( auto const &chord : chordList ) {
     int visx = visualX( mLeftGap, chord.position() );
@@ -667,7 +655,7 @@ void CsPainter::drawChordImpl( const QString &part, const CsChordLine &chordLine
 
 
 
-void CsPainter::drawNoteImpl( int clef, int taktCount, const QString &part, const CsNoteLine &noteLine)
+void CsPainter::drawNoteImpl(int clef, int taktCount, const QString &part, const QList<CsNote> &noteList)
   {
   int scoreY = mCurY + mSettings.mScoreLineDistance * 2;
 
@@ -703,7 +691,6 @@ void CsPainter::drawNoteImpl( int clef, int taktCount, const QString &part, cons
     }
 
   //Draw notes
-  auto &noteList = noteLine.noteListGet();
   for( auto const &note : qAsConst(noteList) ) {
     mPainter->setPen( isPlayerHighlight( note ) ? mSettings.mColorNoteHighlight : mSettings.mColorNote );
     int visX = visualX( mLeftGap, note.position() );
@@ -732,7 +719,7 @@ void CsPainter::drawTranslationImpl(int x, int y, const QString &tran)
 
 
 
-void CsPainter::drawPropertyImpl(int xorigin, int xtab, const QString &title, const QString &value, int propertyId)
+void CsPainter::drawPropertyImpl(int xorigin, int xtab, const QString &title, const QString &value, const QString &propertyId )
   {
   mCurY += mPropertiesHeight.mHeight;
   mPainter->drawText( xorigin, mCurY, title );
@@ -789,14 +776,14 @@ bool CsPainter::isPlayerHighlight(int position, int duration) const
 
 
 
-void CsPainter::drawCellProperty(int x, int y, const QString &value, int height, int propertyId)
+void CsPainter::drawCellProperty(int x, int y, const QString &value, int height, const QString &propertyId )
   {
   if( mCellCursor == nullptr )
     return;
 
-  int width = drawCellText( x, y, value, height, mCellCursor->cellClass() == propertyId );
+  int width = drawCellText( x, y, value, height, mCellCursor->cellClass() == cccAttribute && mCellCursor->partName() == propertyId );
 
-  mReferenceList.append( CsReference( x, y, width, height, propertyId ) );
+  mReferenceList.append( CsReference( x, y, width, height, cccAttribute, 0, propertyId, 0 ) );
   }
 
 

@@ -78,7 +78,7 @@ CsAndroidWinMain::CsAndroidWinMain(CsPlayList &playList, QWidget *parent) :
       //mComposition.fileSave();
       }
     mComposition.fileLoad( compositionId );
-    mComposition.settingsRead( mPlayList.composition(compositionId) );
+    //mComposition.settingsRead( mPlayList.composition(compositionId) );
     mWCentralScoreTrain->compositionChanged();
     });
 

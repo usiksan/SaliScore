@@ -9,21 +9,7 @@
 enum CsClass {
   cccInvalid,
 
-  cccTitle,
-
-  cccVoice,
-  cccSinger,
-
-  cccVoiceDual,
-  cccComposer,
-
-  cccVoiceLeft,
-  cccLyricist,
-
-  cccStyle,
-  cccAuthor,
-
-  cccTempo,
+  cccAttribute,
 
   cccRemark,
   cccChord,
@@ -35,15 +21,9 @@ enum CsClass {
 
   cccLineSelect,
 
-  cccChordLine,
-  cccChordPlacehold,
   cccClef,
   cccNumerator,
-  cccDenomenator,
-  cccNoteLine,
-  cccNotePlacehold,
-  cccLyricLine,
-  cccLyricPlacehold
+  cccDenomenator
 
   };
 

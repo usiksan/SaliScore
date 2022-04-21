@@ -2,19 +2,41 @@
 #include "score/CsComposition.h"
 
 
+QMap<QString,QString> CsCellCursor::mMoveAttrLeft;
+QMap<QString,QString> CsCellCursor::mMoveAttrRight;
+QMap<QString,QString> CsCellCursor::mMoveAttrTop;
+QMap<QString,QString> CsCellCursor::mMoveAttrBot;
 
 CsCellCursor::CsCellCursor(CsComposition &comp) :
   mComposition(comp)
   {
-  mClass = cccTitle;
-  mLinePosition = 0;
-  mLineIndex = -1;
+  moveTop();
+
+  if( mMoveAttrLeft.isEmpty() ) {
+    //Build moving map for attributes
+    mMoveAttrLeft.insert( CS_ATTR_NAME, CS_ATTR_NAME );
+
+    mMoveAttrLeft.insert( CS_ATTR_SINGER, CS_ATTR_SINGER );
+    mMoveAttrLeft.insert( CS_ATTR_COMPOSER, CS_ATTR_COMPOSER );
+    mMoveAttrLeft.insert( CS_ATTR_LYRICIST, CS_ATTR_LYRICIST );
+    mMoveAttrLeft.insert( CS_ATTR_AUTHOR, CS_ATTR_AUTHOR );
+
+    mMoveAttrLeft.insert( CS_ATTR_VOICE, CS_ATTR_SINGER );
+    mMoveAttrLeft.insert( CS_ATTR_VOICE_DUAL, CS_ATTR_COMPOSER );
+    mMoveAttrLeft.insert( CS_ATTR_VOICE_LEFT, CS_ATTR_LYRICIST );
+    mMoveAttrLeft.insert( CS_ATTR_STYLE, CS_ATTR_AUTHOR );
+    mMoveAttrLeft.insert( CS_ATTR_TEMPO, CS_ATTR_TEMPO );
+
+
+
+    }
   }
 
 
 void CsCellCursor::moveTop()
   {
-  mClass = cccTitle;
+  mClass = cccAttribute;
+  mPartName = CS_ATTR_NAME;
   mLinePosition = 0;
   mLineIndex = -1;
   }

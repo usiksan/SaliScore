@@ -22,21 +22,24 @@ Description
 #define CSLINE_H
 
 #include "config.h"
-#include "CsRemark.h"
-#include "CsChordKit.h"
-#include "CsNoteKit.h"
+#include "CsChord.h"
+#include "CsNote.h"
 #include "CsLyricSymbol.h"
+#include "CsKit.h"
 
 #include <QList>
 
+
+using CsChordKit  = CsKitOfList<CsChord>;
+using CsNoteKit   = CsKitOfList<CsNote>;
+
 class CsLine
   {
-    CsRemark              mRemark;      //!< Any remark text
+    CsKitOfString         mRemark;      //!< Any remark text
     CsChordKit            mChordKit;    //!< Chord for different parts (variants)
     CsNoteKit             mNoteKit;     //!< Notes for different parts (variants)
     CsLyricLine           mLyricLine;   //!< Lyric line
-    QMap<QString,QString> mTranslation; //!< Translations of lyric on other languages
-    int                   mTickPerTakt; //!< Tick per takt
+    CsKitOfString         mTranslate;   //!< Lyric translations
     int                   mTaktCount;   //!< Takt count per line
   public:
     CsLine();
@@ -45,44 +48,39 @@ class CsLine
 
     //========================================================
     //    Information
-    auto &remarkConst() const { return mRemark; }
-    auto &chordKitConst() const { return mChordKit; }
-    auto &noteKitConst() const { return mNoteKit; }
-    auto &lyricLineConst() const { return mLyricLine; }
-    auto &translationConst() const { return mTranslation; }
-
-    bool  isRemark() const { return !mRemark.isEmpty(); }
+    bool    isRemark() const { return !mRemark.isEmpty(); }
 
     //========================================================
     //    Remark part
-    QString remarkGet( const QString &lang ) const { return mRemark.remarkGet(lang); }
+    QString remarkGet( const QString &lang ) const { return mRemark.get(lang); }
 
-    void    remarkSet( const QString &lang, const QString &rem ) { mRemark.remarkSet(lang,rem); }
+    void    remarkSet( const QString &lang, const QString &rem ) { mRemark.set(lang,rem); }
 
-    void    remarkRename( const QString &prevLang, const QString &newLang ) { mRemark.remarkRename( prevLang, newLang ); }
+    void    remarkRename( const QString &prevLang, const QString &newLang ) { mRemark.rename( prevLang, newLang ); }
 
-    void    remarkRemove( const QString &lang ) { mRemark.remarkRemove( lang ); }
-
-    //========================================================
-    //    Chord part
-    auto    chordListGet( const QString &part ) const { return mChordKit.chordListGet(part); }
-
-    void    chordListSet( const QString &part, const CsChordList &line ) { mChordKit.chordListSet( part, line ); }
-
-    void    chordRename( const QString &prevPart, const QString &newPart ) { mChordKit.chordRename( prevPart, newPart ); }
-
-    void    chordRemove( const QString &part ) { mChordKit.chordRemove( part ); }
+    void    remarkRemove( const QString &lang ) { mRemark.remove( lang ); }
 
 
     //========================================================
     //    Chord part
-    auto    noteListGet( const QString &part ) const { return mNoteKit.noteListGet( part ); }
+    auto    chordListGet( const QString &part ) const { return mChordKit.get(part); }
 
-    void    noteListSet( const QString &part, const CsNoteList &list ) { mNoteKit.noteListSet( part, list ); }
+    void    chordListSet( const QString &part, const CsChordList &line ) { mChordKit.set( part, line ); }
 
-    void    noteRename( const QString &prevPart, const QString &newPart ) { mNoteKit.noteRename( prevPart, newPart ); }
+    void    chordRename( const QString &prevPart, const QString &newPart ) { mChordKit.rename( prevPart, newPart ); }
 
-    void    noteRemove( const QString &part ) { mNoteKit.noteRemove( part ); }
+    void    chordRemove( const QString &part ) { mChordKit.remove( part ); }
+
+
+    //========================================================
+    //    Note part
+    auto    noteListGet( const QString &part ) const { return mNoteKit.get( part ); }
+
+    void    noteListSet( const QString &part, const CsNoteList &list ) { mNoteKit.set( part, list ); }
+
+    void    noteRename( const QString &prevPart, const QString &newPart ) { mNoteKit.rename( prevPart, newPart ); }
+
+    void    noteRemove( const QString &part ) { mNoteKit.remove( part ); }
 
 
     //========================================================
@@ -93,22 +91,18 @@ class CsLine
 
 
     //========================================================
-    //    Translation part
-    QString translationGet( const QString &lang ) const { return mTranslation.value( lang ); }
+    //    Translate part
+    QString translationGet( const QString &lang ) const { return mTranslate.get(lang); }
 
-    void    translationSet( const QString &lang, const QString &tran ) { mTranslation.insert( lang, tran ); }
+    void    translationSet( const QString &lang, const QString &rem ) { mTranslate.set(lang,rem); }
 
-    void    translationRename( const QString &prevLang, const QString &newLang );
+    void    translationRename( const QString &prevLang, const QString &newLang ) { mTranslate.rename( prevLang, newLang ); }
 
-    void    translationRemove( const QString &lang ) { mTranslation.remove( lang ); }
+    void    translationRemove( const QString &lang ) { mTranslate.remove( lang ); }
+
 
     //========================================================
     //   Tick and Takt
-
-    int     tickPerTakt() const { return mTickPerTakt; }
-
-    void    tickPerTaktSet( int tpt ) { mTickPerTakt = tpt; }
-
     int     taktCount() const { return mTaktCount; }
 
     void    taktCountSet( int tc ) { mTaktCount = tc; }
@@ -119,10 +113,6 @@ class CsLine
 
     void    jsonRead( CsJsonReader &js );
 
-  private:
-    QString lyricToString() const;
-
-    void    stringToLyric( const QString line );
   };
 
 using CsLinePtr = CsLine*;

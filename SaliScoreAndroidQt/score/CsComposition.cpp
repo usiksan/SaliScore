@@ -1,7 +1,5 @@
 #include "CsComposition.h"
-#include "CsCompositionSettings.h"
-
-#include "../SvJson/SvJsonIO.h"
+#include "SdLib/SdTime2x.h"
 
 #include <QSettings>
 #include <QJsonDocument>
@@ -11,24 +9,10 @@ CsSongLocalRepo CsComposition::mSongRepo;
 
 CsComposition::CsComposition()
   {
-  mLineStartOffset = 0;
-  mTickPerPart = 4;
-  mPartPerTakt = 4;
-  mStepChord = 64;
-  mStepNote  = 16;
-  mStepLyric = 16;
-  mDirty = mStateDirty = false;
+  clear();
   }
 
 
-
-
-void CsComposition::makeCopy()
-  {
-  QSettings s;
-  mHeader.authorSet( s.value( QStringLiteral(KEY_AUTHOR) ).toString() );
-  dirtySet();
-  }
 
 
 
@@ -153,8 +137,7 @@ void CsComposition::noteAppend(const QString &part, const QString &descr, int cl
   int index = noteIndex(part);
   if( index < 0 ) {
     //No note with this part, append
-    mNoteList.append( CsDefinition( part, descr ) );
-    mClefMap.insert( part, clef );
+    mNoteList.append( CsDefinition( part, descr, QString{}, clef ) );
     //Empty note list
     CsNoteList noteList;
     //Run over all lines and append note to non remark line
@@ -166,7 +149,7 @@ void CsComposition::noteAppend(const QString &part, const QString &descr, int cl
   else {
     //Chord already exist, so change description only
     mNoteList[index].mDescription = descr;
-    mClefMap.insert( part, clef );
+    mNoteList[index].mClef        = clef;
     }
   }
 
@@ -307,6 +290,7 @@ int CsComposition::lineInsert(int index, bool rem)
 
 void CsComposition::lineRemove(int index)
   {
+  dirtySet();
   mLineList.removeAt( index );
   }
 
@@ -318,10 +302,7 @@ void CsComposition::lineRemove(int index)
 
 void CsComposition::jsonWrite(CsJsonWriter &js) const
   {
-  mHeader.jsonWrite( js );
-  js.jsonString( "Composer", mComposer );
-  js.jsonString( "CompLyricist", mLyricist );
-  js.jsonList<CsLine>( "LineList", mLineList );
+  js.jsonValue( "Attr", mAttributes );
   js.jsonInt( "LineStartOffset", mLineStartOffset );
   js.jsonInt( "TickPerPart", mTickPerPart );
   js.jsonInt( "PartPerTakt", mPartPerTakt );
@@ -331,17 +312,16 @@ void CsComposition::jsonWrite(CsJsonWriter &js) const
   js.jsonList<CsDefinition>( "NoteDefList", mNoteList );
   js.jsonList<CsDefinition>( "TranslateList", mTranslationList );
 
-  js.jsonMapInt( "ClefMap", mClefMap );
+  js.jsonList<CsLine>( "LineList", mLineList );
+
+  js.jsonList( "TrainList", mTrainList );
   }
 
 
 
 void CsComposition::jsonRead(CsJsonReader &js)
   {
-  mHeader.jsonRead( js );
-  js.jsonString( "Composer", mComposer );
-  js.jsonString( "CompLyricist", mLyricist );
-  js.jsonList<CsLine>( "LineList", mLineList );
+  js.jsonValue( "Attr", mAttributes );
   js.jsonInt( "LineStartOffset", mLineStartOffset );
   js.jsonInt( "TickPerPart", mTickPerPart );
   js.jsonInt( "PartPerTakt", mPartPerTakt );
@@ -351,36 +331,43 @@ void CsComposition::jsonRead(CsJsonReader &js)
   js.jsonList<CsDefinition>( "NoteDefList", mNoteList );
   js.jsonList<CsDefinition>( "TranslateList", mTranslationList );
 
-  js.jsonMapInt( "ClefMap", mClefMap );
+  js.jsonList<CsLine>( "LineList", mLineList );
 
-  mStateDirty = mDirty = false;
-  }
+  if( js.property()->mStatus )
+    js.jsonList( "TrainList", mTrainList );
+  else
+    mTrainList.clear();
 
-
-
-void CsComposition::settingsRead(const CsCompositionSettings &settings)
-  {
-  //Setup settings
-  if( settings.isValid() ) {
-    mHeader = settings;
-
-    //Setup visibility lists
-    defListUpdate( mRemarkList, settings.remarkList() );
-    defListUpdate( mChordList,  settings.chordList() );
-    defListUpdate( mNoteList,   settings.noteList() );
-    defListUpdate( mTranslationList, settings.translationList() );
-    }
+  mDirty = false;
   }
 
 
 
 void CsComposition::clear()
   {
-  mHeader.clear();
-  mComposer.clear();
-  mLyricist.clear();
+  QSettings s;
+  QString notDefined = QObject::tr("not defined");
+  //Setup default attributes
+  QString auth = s.value( QStringLiteral(KEY_AUTHOR) ).toString();
+  mAttributes.set( CS_ATTR_AUTHOR,     auth );
+  mAttributes.set( CS_ATTR_SINGER,     notDefined );
+  mAttributes.set( CS_ATTR_COMPOSER,   notDefined );
+  mAttributes.set( CS_ATTR_LYRICIST,   notDefined );
+  mAttributes.set( CS_ATTR_NAME,       notDefined );
+  int id = SdTime2x::current();
+  mAttributes.set( CS_ATTR_SONG_ID,    auth + QChar('_') + QString::number(id,16) );
+  mAttributes.set( CS_ATTR_VERSION,    QString::number(id) );
+  mAttributes.set( CS_ATTR_STATUS,     CS_STATUS_PRIVATE );
+  mAttributes.set( CS_ATTR_VOICE,      QStringLiteral("0") );
+  mAttributes.set( CS_ATTR_VOICE_DUAL, QStringLiteral("-") );
+  mAttributes.set( CS_ATTR_VOICE_LEFT, QStringLiteral("-") );
+  mAttributes.set( CS_ATTR_STYLE,      QStringLiteral("0") );
+  mAttributes.set( CS_ATTR_TEMPO,      QStringLiteral("120") );
 
   mLineStartOffset = 0;
+
+  mTickPerPart = 4;
+  mPartPerTakt = 4;
 
   mStepChord = 64;
   mStepNote  = 16;
@@ -390,11 +377,10 @@ void CsComposition::clear()
   mChordList.clear();
   mNoteList.clear();
   mTranslationList.clear();
-  mClefMap.clear();
 
   mLineList.clear();
 
-  mDirty = mStateDirty = false;
+  mDirty = false;
   }
 
 
@@ -403,14 +389,14 @@ QByteArray CsComposition::toByteArray() const
   {
   //Create writer and use it to write composition contents to json object
   CsJsonWriter js{};
-  jsonWrite( js );
 
   //Append file type and version
-  js.jsonString( CS_BASE_TYPE_KEY, QStringLiteral(CS_BASE_TYPE) );
-  js.jsonInt( CS_BASE_VERSION_KEY, CS_BASE_VERSION );
+  CsJsonAttr attr(false);
+  attr.jsonWrite( js );
+  jsonWrite( js );
 
-  //Write contents to file
-  return QJsonDocument(js.object()).toJson();
+  //Convert json to bytearray
+  return svJsonObjectToByteArray( js.object() );
   }
 
 
@@ -418,31 +404,50 @@ QByteArray CsComposition::toByteArray() const
 
 
 
-bool CsComposition::fromByteArray(const QByteArray &ar)
+bool CsComposition::fromByteArray(const QByteArray &ar, bool stat)
   {
-  QJsonObject obj = QJsonDocument::fromJson( ar ).object();
+  CsJsonAttr attr(stat);
+
+  QJsonObject obj( svJsonObjectFromByteArray(ar) );
+
+  CsJsonReader js( obj, &attr );
 
   //Check object type and scan version
-  if( obj.value( QStringLiteral(CS_BASE_TYPE_KEY) ).toString() == QStringLiteral(CS_BASE_TYPE) ) {
-    int version = obj.value( QStringLiteral(CS_BASE_VERSION_KEY) ).toInt();
-    CsJsonReader js( obj, &version );
+  attr.jsonRead( js );
+  if( attr.isComposition() ) {
     jsonRead( js );
     return true;
     }
+
   return false;
   }
 
 
 
 
-bool CsComposition::fileSave() const
+bool CsComposition::fileSave()
   {
-  QFile file( mSongRepo.repoSongPath( mHeader.songId() )  );
+  if( mDirty ) {
+    //Composition is changed, so update version and author
+    QSettings s;
+    //Setup default attributes
+    QString auth = s.value( QStringLiteral(KEY_AUTHOR) ).toString();
+    int id = SdTime2x::current();
+    if( mAttributes.get( CS_ATTR_AUTHOR ) != auth ) {
+      //Update author and composition id
+      mAttributes.set( CS_ATTR_AUTHOR,     auth );
+      mAttributes.set( CS_ATTR_SONG_ID,    auth + QChar('_') + QString::number(id,16) );
+      }
+    mAttributes.set( CS_ATTR_VERSION,    QString::number(id) );
+    }
+
+  QFile file( mSongRepo.repoSongPath( songId() )  );
   if( file.open(QIODevice::WriteOnly) ) {
     //Write contents to file
     file.write( toByteArray() );
+    mDirty = false;
     //Store to local repository
-    mSongRepo.songStore( mHeader.songId(), mHeader.version() );
+    mSongRepo.songStore( songId(), version().toInt() );
     return true;
     }
   return false;
@@ -455,7 +460,7 @@ bool CsComposition::fileLoad(const QString &songId)
   {
   QFile file( mSongRepo.repoSongPath(songId) );
   if( file.open( QIODevice::ReadOnly ) )
-    return fromByteArray( file.readAll() );
+    return fromByteArray( file.readAll(), true );
   return false;
   }
 
@@ -523,19 +528,4 @@ int CsComposition::defListIndex(const CsDefList &list, const QString &key)
 
 
 
-
-void CsComposition::defListUpdate(CsDefList &list, const QStringList &visibleList)
-  {
-  //Make all parts invisible
-  for( int i = 0; i < list.count(); i++ )
-    list[i].mVisible = false;
-
-  //For each item from visibleList we find item in list and change it to visible
-  for( const auto &key : visibleList ) {
-    //Find index for key
-    int index = defListIndex( list, key );
-    if( index >= 0 )
-      list[index].mVisible = true;
-    }
-  }
 

@@ -14,30 +14,22 @@ CONFIG += c++17
 
 SOURCES += \
     SdLib/SdTime2x.cpp \
-    SvJson/SvJsonIO.cpp \
     audioOut/CsSoundBufferIODevice.cpp \
     main.cpp \
     repo/CsRepoClient.cpp \
     score/CsChord.cpp \
-    score/CsChordKit.cpp \
-    score/CsChordLine.cpp \
     score/CsComposition.cpp \
-    score/CsCompositionHeader.cpp \
-    score/CsCompositionSettings.cpp \
+    score/CsCompositionInfo.cpp \
     score/CsCursor.cpp \
     score/CsCursorPosition.cpp \
     score/CsDefinition.cpp \
-    score/CsDescrSong.cpp \
     score/CsLine.cpp \
     score/CsLyricSymbol.cpp \
     score/CsNote.cpp \
-    score/CsNoteKit.cpp \
-    score/CsNoteLine.cpp \
     score/CsPlayList.cpp \
     score/CsPlayPart.cpp \
     score/CsPosition.cpp \
     score/CsReference.cpp \
-    score/CsRemark.cpp \
     score/CsSongLocalRepo.cpp \
     score/CsSynthSettings.cpp \
     score/CsTrainInterval.cpp \
@@ -68,27 +60,21 @@ HEADERS += \
     config.h \
     repo/CsRepoClient.h \
     score/CsChord.h \
-    score/CsChordKit.h \
-    score/CsChordLine.h \
     score/CsComposition.h \
-    score/CsCompositionHeader.h \
-    score/CsCompositionSettings.h \
+    score/CsCompositionInfo.h \
     score/CsCursor.h \
     score/CsCursorPosition.h \
     score/CsDefinition.h \
-    score/CsDescrSong.h \
     score/CsJsonIO.h \
+    score/CsKit.h \
     score/CsLine.h \
     score/CsLyricSymbol.h \
     score/CsNote.h \
     score/CsNoteChord.h \
-    score/CsNoteKit.h \
-    score/CsNoteLine.h \
     score/CsPlayList.h \
     score/CsPlayPart.h \
     score/CsPosition.h \
     score/CsReference.h \
-    score/CsRemark.h \
     score/CsSongLocalRepo.h \
     score/CsSynthSettings.h \
     score/CsTrainInterval.h \

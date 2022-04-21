@@ -2,13 +2,13 @@
 #define CSPLAYLIST_H
 
 #include "CsPlayPart.h"
-#include "CsCompositionSettings.h"
+#include "CsCompositionInfo.h"
 
 #include <QMap>
 #include <QTreeWidgetItem>
 #include <functional>
 
-using CsCompositionMap = QMap<QString,CsCompositionSettings>;
+using CsCompositionMap = QMap<QString,CsCompositionInfo>;
 
 class CsPlayList
   {
@@ -55,9 +55,7 @@ class CsPlayList
 
     //====================================================================================
     //           Composition map
-    CsCompositionSettings composition( const QString &id ) const { return mCompositionsMap.value(id); }
-
-    //QString               compositionName( const QString &id ) const { return mCompositionsMap.value(id).name(); }
+    CsCompositionInfo     composition( const QString &id ) const { return mCompositionsMap.value(id); }
 
     void                  compositionSet( const CsComposition &comp );
 

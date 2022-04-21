@@ -3,39 +3,30 @@
 #include "../SvJson/SvJsonIO.h"
 
 CsLine::CsLine() :
-  mTickPerTakt(duraHole),
   mTaktCount(4)
   {
-
   }
+
+
 
 CsLine::CsLine( const QString &lang, const QString &rem) :
-  mRemark( lang, rem ),
   mTaktCount(0)
   {
-
+  mRemark.set( lang, rem );
   }
 
-void CsLine::translationRename(const QString &prevLang, const QString &newLang)
-  {
-  mTranslation.insert( newLang, mTranslation.value(prevLang) );
-  mTranslation.remove( prevLang );
-  }
 
 
 
 void CsLine::jsonWrite(CsJsonWriter &js) const
   {
-  js.jsonObject<CsRemark>( "Remark", mRemark );
-  js.jsonObject<CsChordKit>( "ChordKit", mChordKit );
-  js.jsonObject<CsNoteKit>( "NoteKit", mNoteKit );
-  js.jsonMapString( "Translation", mTranslation );
-  js.jsonInt( "tickPerTakt", mTickPerTakt );
-  js.jsonInt( "taktCount", mTaktCount );
+  js.jsonValue( "RemarkKit", mRemark );
+  js.jsonValue( "ChordKit", mChordKit );
+  js.jsonValue( "NoteKit", mNoteKit );
+  js.jsonInt( "TaktCount", mTaktCount );
 
   //Write packet lyric
-  QString lyricString = lyricToString();
-  js.jsonString( "LyricLine", lyricString );
+  js.jsonString( "LyricLine", lyricLineToString( mLyricLine ) );
   }
 
 
@@ -44,33 +35,16 @@ void CsLine::jsonWrite(CsJsonWriter &js) const
 
 void CsLine::jsonRead(CsJsonReader &js)
   {
-  js.jsonObject<CsRemark>( "Remark", mRemark );
-  js.jsonObject<CsChordKit>( "ChordKit", mChordKit );
-  js.jsonObject<CsNoteKit>( "NoteKit", mNoteKit );
-  js.jsonMapString( "Translation", mTranslation );
-  js.jsonInt( "tickPerTakt", mTickPerTakt );
-  js.jsonInt( "taktCount", mTaktCount );
+  js.jsonValue( "RemarkKit", mRemark );
+  js.jsonValue( "ChordKit", mChordKit );
+  js.jsonValue( "NoteKit", mNoteKit );
+  js.jsonInt( "TaktCount", mTaktCount );
 
   //Read packet lyric
   QString lyricString;
   js.jsonString( "LyricLine", lyricString );
-  stringToLyric( lyricString );
-
-  if( mTickPerTakt == 0 ) mTickPerTakt = duraHole;
+  mLyricLine = lyricLineFromString( lyricString );
   }
 
 
 
-
-
-QString CsLine::lyricToString() const
-  {
-  return lyricLineToString( mLyricLine );
-  }
-
-
-
-void CsLine::stringToLyric(const QString line)
-  {
-  mLyricLine = lyricLineFromString( line );
-  }
