@@ -353,6 +353,14 @@ void CsCellCursor::moveDown()
 void CsCellCursor::normPosition(int step)
   {
   //Bound position
-  mLinePosition = qBound( 0, (mLinePosition / step) * step, mComposition.lineTickCount(mLineIndex) - step );
+  if( isLineIndexOk() )
+    mLinePosition = qBound( 0, (mLinePosition / step) * step, mComposition.lineTickCount(mLineIndex) - step );
+  }
+
+
+
+bool CsCellCursor::isLineIndexOk() const
+  {
+  return 0 <= mLineIndex && mLineIndex < mComposition.lineCount();
   }
 

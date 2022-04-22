@@ -13,7 +13,7 @@
 #ifndef CSSOUNDSAMPLE_H
 #define CSSOUNDSAMPLE_H
 
-#include "config.h"
+#include "CsConfig.h"
 
 struct CsSoundSample {
     int mLeft;  //!< Left channel

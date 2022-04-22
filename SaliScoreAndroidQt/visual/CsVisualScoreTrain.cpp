@@ -2,7 +2,8 @@
 #include "CsPainterTrain.h"
 
 CsVisualScoreTrain::CsVisualScoreTrain(CsComposition &comp, QWidget *parent) :
-  CsVisualScore( comp, parent )
+  CsVisualScore( comp, parent ),
+  mFragment(0)
   {
 
   }

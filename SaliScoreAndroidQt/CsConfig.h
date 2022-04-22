@@ -19,8 +19,8 @@
     17.02.2022 v0.2   Append remote repository support
                v0.3   Append finding in repository
 */
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef CSCONFIG_H
+#define CSCONFIG_H
 
 #define CS_AUTHOR                    "Alexander Sibilev"
 #define CS_ORGANIZATION_NAME         "SaliLAB"
@@ -86,4 +86,4 @@
 #define KEY_REMOTE_SYNC              "RemoteSync"
 #define KEY_LOCAL_SYNC               "LocalSync"
 
-#endif // CONFIG_H
+#endif // CSCONFIG_H

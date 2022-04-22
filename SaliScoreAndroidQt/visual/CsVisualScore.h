@@ -21,6 +21,8 @@ class CsVisualScore : public CsVisualAbstractList
 
     virtual void compositionChanged();
 
+    virtual void activate();
+
   };
 
 #endif // CSVISUALSCORE_H

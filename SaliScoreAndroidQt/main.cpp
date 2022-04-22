@@ -1,4 +1,4 @@
-#include "config.h"
+#include "CsConfig.h"
 #include "audioOut/CsSoundBufferIODevice.h"
 #include "synth/CsSynthMeandr.h"
 #include "score/CsPlayList.h"
@@ -8,12 +8,14 @@
 #include <QApplication>
 #include <QSettings>
 #include <QTranslator>
+#include <QThread>
 #include <QDebug>
 
 
 #ifdef Q_OS_ANDROID
 #include "visual/CsAndroidWinMain.h"
 #else
+#include "visual/CsDesktopWinMain.h"
 #endif
 
 int main(int argc, char *argv[])
@@ -59,11 +61,11 @@ int main(int argc, char *argv[])
   //Remote repo client
   repoClient = new CsRepoClient( playList );
 
-  if( !repoClient->isRegistered() ) {
-    CsDlgRegistration dlg(nullptr);
-    if( !dlg.exec() )
-      return 0;
-    }
+//  if( !repoClient->isRegistered() ) {
+//    CsDlgRegistration dlg(nullptr);
+//    if( !dlg.exec() )
+//      return 0;
+//    }
 
   //=============================================================================
   //        Audio output setup
@@ -81,10 +83,10 @@ int main(int argc, char *argv[])
   //=============================================================================
   //        MIDI keyboard setup
   //Start midi keyboard
-  QThread *midiThread = new QThread();
-  CsMidiSequencer *midiSequencer = new CsMidiSequencer( midiThread );
+//  QThread *midiThread = new QThread();
+//  CsMidiSequencer *midiSequencer = new CsMidiSequencer( midiThread );
 
-  CsWinMain w( playList, midiSequencer );
+  CsDesktopWinMain w( playList );
 #endif
 
 
@@ -93,11 +95,11 @@ int main(int argc, char *argv[])
   int res = a.exec();
 
 #ifndef Q_OS_ANDROID
-  midiThread->start();
-  int res = a.exec();
+//  midiThread->start();
+//  int res = a.exec();
 
-  midiThread->quit();
-  midiThread->wait();
+//  midiThread->quit();
+//  midiThread->wait();
 
   playList.save();
 #endif

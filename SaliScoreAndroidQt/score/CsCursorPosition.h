@@ -14,7 +14,7 @@ Description
 #ifndef CSCURSORPOSITION_H
 #define CSCURSORPOSITION_H
 
-#include "config.h"
+#include "CsConfig.h"
 #include "CsJsonIO.h"
 
 class CsCursorPosition

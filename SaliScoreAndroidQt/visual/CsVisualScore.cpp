@@ -71,4 +71,9 @@ void CsVisualScore::compositionChanged()
   mStartIndex = 0;   //!< Index of first visible item
   }
 
+void CsVisualScore::activate()
+  {
+  update();
+  }
+
 

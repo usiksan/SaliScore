@@ -21,7 +21,7 @@ Description
 #ifndef CSLINE_H
 #define CSLINE_H
 
-#include "config.h"
+#include "CsConfig.h"
 #include "CsChord.h"
 #include "CsNote.h"
 #include "CsLyricSymbol.h"

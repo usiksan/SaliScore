@@ -1,4 +1,4 @@
-#include "config.h"
+#include "CsConfig.h"
 #include "CsAndroidWinMain.h"
 #include "CsVisualPlayList.h"
 #include "CsVisualPartList.h"
@@ -88,6 +88,7 @@ CsAndroidWinMain::CsAndroidWinMain(CsPlayList &playList, QWidget *parent) :
   mWCentralScoreTrain = new CsVisualScoreTrain( mComposition );
   mWCentralPart->addWidget( mWCentralScoreTrain );
 
+  //Android tool bar
   QToolBar *tlBar = addToolBar( QString("ToolBar") );
   tlBar->setIconSize( QSize(32,32) );
   tlBar->setFloatable(false);

@@ -14,7 +14,7 @@ Description
 #ifndef CSPAINTER_H
 #define CSPAINTER_H
 
-#include "config.h"
+#include "CsConfig.h"
 #include "CsPainterSettings.h"
 #include "CsCellCursor.h"
 #include "score/CsLyricSymbol.h"

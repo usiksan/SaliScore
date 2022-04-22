@@ -1,7 +1,7 @@
 #ifndef CSPAINTERSETTINGS_H
 #define CSPAINTERSETTINGS_H
 
-#include "config.h"
+#include "CsConfig.h"
 
 #include <QString>
 #include <QColor>

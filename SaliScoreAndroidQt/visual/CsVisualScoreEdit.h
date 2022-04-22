@@ -21,6 +21,20 @@ class CsVisualScoreEdit : public CsVisualScore
   public:
     CsVisualScoreEdit( CsComposition &comp, QWidget *parent = nullptr );
 
+
+  signals:
+    void actionEditPaste( bool enable );
+    void actionEditSelectionPresent( bool enable );
+
+  public slots:
+    //Menu Edit
+    void cmEditUndo();
+    void cmEditRedo();
+    void cmEditCut();
+    void cmEditCopy();
+    void cmEditPaste();
+    void cmEditDelete();
+
     // CsVisualAbstractList interface
   public:
     virtual void contentPaint(QPainter &painter) override;
@@ -30,12 +44,6 @@ class CsVisualScoreEdit : public CsVisualScore
   protected:
     virtual void keyPressEvent(QKeyEvent *event) override;
     virtual void keyReleaseEvent(QKeyEvent *event) override;
-
-  signals:
-    void actionEditPaste( bool enable );
-    void actionEditCopy( bool enable );
-    void actionEditCut( bool enable );
-    void actionEditDelete( bool enable );
 
   private:
     //!

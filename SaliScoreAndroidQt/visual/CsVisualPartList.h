@@ -1,7 +1,7 @@
 #ifndef CSVISUALPARTLIST_H
 #define CSVISUALPARTLIST_H
 
-#include "config.h"
+#include "CsConfig.h"
 #include "score/CsPlayList.h"
 #include "CsVisualRegularList.h"
 

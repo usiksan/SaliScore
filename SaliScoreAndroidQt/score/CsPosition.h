@@ -1,7 +1,7 @@
 #ifndef CSPOSITION_H
 #define CSPOSITION_H
 
-#include "config.h"
+#include "CsConfig.h"
 #include "CsJsonIO.h"
 
 #include <QList>

@@ -17,7 +17,7 @@
 #ifndef CSSOUNDBUFFERIODEVICE_H
 #define CSSOUNDBUFFERIODEVICE_H
 
-#include "config.h"
+#include "CsConfig.h"
 #include "CsSoundSource.h"
 
 #include <QIODevice>

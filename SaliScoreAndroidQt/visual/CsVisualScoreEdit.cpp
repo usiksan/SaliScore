@@ -21,6 +21,95 @@ CsVisualScoreEdit::CsVisualScoreEdit(CsComposition &comp, QWidget *parent) :
 
   }
 
+void CsVisualScoreEdit::cmEditUndo()
+  {
+
+  }
+
+void CsVisualScoreEdit::cmEditRedo()
+  {
+
+  }
+
+void CsVisualScoreEdit::cmEditCut()
+  {
+  editCopy();
+  cmEditDelete();
+  }
+
+
+
+void CsVisualScoreEdit::cmEditCopy()
+  {
+  editCopy();
+
+  //Remove selection
+  unselectAll();
+  }
+
+
+
+void CsVisualScoreEdit::cmEditPaste()
+  {
+
+  int insertLine = mCellCursor.lineIndex() >= 0 ? mCellCursor.lineIndex() : 0;
+
+  const auto remarkList = mComposition.remarkDefList();
+  const auto chordList  = mComposition.chordDefList();
+  const auto noteList   = mComposition.noteDefList();
+  const auto translationList = mComposition.translationDefList();
+
+  //Insert lines from local clipboard to current position
+  for( int i = 0; i < mLineClipboard.count(); i++ ) {
+    //Insert empty line
+    mComposition.lineInsert( insertLine, mLineClipboard.at(i).isRemark() );
+
+    //Fill inserted line with information
+    //Simple inserting not good idea because beatween copy and paste user can
+    // change part listing
+
+    if( mLineClipboard.at(i).isRemark() ) {
+      //For remark update all parts
+      for( auto const &def : qAsConst(remarkList) )
+        mComposition.remarkSet( insertLine, def.mName, mLineClipboard.at(i).remarkGet(def.mName) );
+      }
+    else {
+      //Update chord parts
+      for( auto const &def : qAsConst(chordList) )
+        mComposition.chordListSet( insertLine, def.mName, mLineClipboard.at(i).chordListGet(def.mName) );
+
+      //Update note parts
+      for( auto const &def : qAsConst(noteList) )
+        mComposition.noteListSet( insertLine, def.mName, mLineClipboard.at(i).noteListGet(def.mName) );
+
+      //Update lyric
+      mComposition.lyricSet( insertLine, mLineClipboard.at(i).lyricGet() );
+
+      //Update translation parts
+      for( auto const &def : qAsConst(translationList) )
+        mComposition.translationSet( insertLine, def.mName, mLineClipboard.at(i).translationGet(def.mName) );
+      }
+
+    //Move to next insert position
+    insertLine++;
+    }
+  update();
+  }
+
+
+
+
+void CsVisualScoreEdit::cmEditDelete()
+  {
+  //Delete all selected lines
+  //Because when line deleted all downer lines are shifted up then we must
+  //delete lines from end
+  for( int line = mComposition.lineCount() - 1; line >= 0; line-- )
+    if( mSelectedLines.contains(line) )
+      mComposition.lineRemove( line );
+  unselectAll();
+  }
+
 
 void CsVisualScoreEdit::contentPaint(QPainter &painter)
   {
@@ -74,10 +163,7 @@ void CsVisualScoreEdit::contentClicked(int x, int y)
             mSelectedLines.remove( ref.line() );
           else
             mSelectedLines.insert( ref.line() );
-          //TODO enable edition command
-//          CsWinMain::actionEditCopy->setEnabled( mSelectedLines.count() != 0 );
-//          CsWinMain::actionEditCut->setEnabled( mSelectedLines.count() != 0 );
-//          CsWinMain::actionEditDelete->setEnabled( mSelectedLines.count() != 0 );
+          emit actionEditSelectionPresent( mSelectedLines.count() != 0 );
           break;
         }
       update();
@@ -163,7 +249,7 @@ void CsVisualScoreEdit::keyPressEvent(QKeyEvent *event)
 
       case Qt::Key_Insert :
         //Insert new line
-        mComposition.lineInsert( qBound( 0, mCellCursor.lineIndex(), mComposition.lineCount() ), false );
+        mComposition.lineInsert( qBound( 0, mCellCursor.lineIndex(), mComposition.lineCount() ), mShift );
         break;
 
       case Qt::Key_Delete :
@@ -193,9 +279,7 @@ void CsVisualScoreEdit::keyPressEvent(QKeyEvent *event)
           mEditor = CsCursorEdit::build( mCellCursor, mComposition );
 
       default:
-        if( ch.isPrint() && mCellCursor.isMatchClass( {cccRemark, cccLyric, cccTranslation, cccTitle,   cccVoice,
-                                                       cccSinger, cccVoiceDual, cccComposer, cccVoiceLeft,
-                                                       cccLyricist, cccStyle, cccAuthor, cccTempo } )  )
+        if( ch.isPrint() && mCellCursor.isMatchClass( {cccRemark, cccLyric, cccTranslation, cccAttribute } )  )
             mEditor = CsCursorEdit::build( mCellCursor, mComposition );
         if( mEditor != nullptr )
           mEditor->keyPress( key, ch, mEditor );
@@ -254,6 +338,289 @@ void CsVisualScoreEdit::editCopy()
       mLineClipboard.append( mComposition.line(line) );
 
   emit actionEditPaste( mLineClipboard.count() != 0 );
+  }
+
+
+
+
+
+template <typename Line>
+bool moveLeft( Line &line, int position, int step )
+  {
+  //Find item at nearest right of cursor
+  int index;
+  for( index = 0; index < line.count(); index++ )
+    if( position <= line.at(index).position() )
+      break;
+
+  if( index >= line.count() )
+    //Nothing found
+    return false;
+
+  //Found item at nearest right of cursor
+  int leftPosition = -1;
+  if( index )
+    leftPosition = line.at(index - 1).position();
+  //Calculate new position
+  int newPosition = line.at(index).position() - step;
+  //Align position by step
+  newPosition = newPosition / step * step;
+
+  if( leftPosition < newPosition ) {
+    //Change item position
+    line[index].positionSet( newPosition );
+    return true;
+    }
+  return false;
+  }
+
+
+
+
+template <typename Line>
+bool moveRight( Line &line, int position, int step )
+  {
+  //Find item at nearest right of cursor
+  int index;
+  for( index = 0; index < line.count(); index++ )
+    if( position <= line.at(index).position() )
+      break;
+
+  if( index >= line.count() )
+    //Nothing found
+    return false;
+
+  //Found item at nearest right of cursor
+  int rightPosition = 512 * 8;
+  if( index + 1 < line.count() )
+    rightPosition = line.at(index + 1).position();
+
+  //Calculate new position
+  int newPosition = line.at(index).position() + step;
+  //Align position by step
+  newPosition = newPosition / step * step;
+
+  if( newPosition < rightPosition ) {
+    //Change item position
+    line[index].positionSet( newPosition );
+    return true;
+    }
+  return false;
+  }
+
+
+
+
+template <typename Line>
+bool moveLeftAll( Line &line, int position, int step )
+  {
+  //Find item at nearest right of cursor
+  int index;
+  for( index = 0; index < line.count(); index++ )
+    if( position <= line.at(index).position() )
+      break;
+
+  if( index >= line.count() )
+    //Nothing found
+    return false;
+
+  //Found item at nearest right of cursor
+  int leftPosition = -1;
+  if( index )
+    leftPosition = line.at(index - 1).position();
+  //Calculate new position
+  int newPosition = line.at(index).position() - step;
+  //Align position by step
+  newPosition = newPosition / step * step;
+
+  int delta = newPosition - line.at(index).position();
+
+  if( leftPosition < newPosition ) {
+    //Change positions of all item on right of index
+    while( index < line.count() ) {
+      line[index].positionSet( line.at(index).position() + delta );
+      index++;
+      }
+    return true;
+    }
+  return false;
+  }
+
+
+
+
+
+template <typename Line>
+bool moveRightAll( Line &line, int position, int step )
+  {
+  //Find item at nearest right of cursor
+  int index;
+  for( index = 0; index < line.count(); index++ )
+    if( position <= line.at(index).position() )
+      break;
+
+  if( index >= line.count() )
+    //Nothing found
+    return false;
+
+  //Found item at nearest right of cursor
+  int rightPosition = line.at(index).position() + 512 * 8 - line.at( line.count() - 1 ).position();
+
+  //Calculate new position
+  int newPosition = line.at(index).position() + step;
+  //Align position by step
+  newPosition = newPosition / step * step;
+  int delta = newPosition - line.at(index).position();
+
+  if( newPosition < rightPosition ) {
+    //Change positions of all item on right of index
+    while( index < line.count() ) {
+      line[index].positionSet( line.at(index).position() + delta );
+      index++;
+      }
+    return true;
+    }
+  return false;
+  }
+
+
+
+
+
+
+
+//!
+//! \brief keyLeft Handle key left pressing
+//!
+void CsVisualScoreEdit::keyLeft()
+  {
+  if( mControl ) {
+    //We move chord, note or lyric to left
+    if( mCellCursor.cellClass() == cccChord ) {
+      //Get chord line pointed by cursor
+      auto chordLine = mComposition.chordListGet( mCellCursor.lineIndex(), mCellCursor.partName() );
+      if( (mShift ? moveLeftAll( chordLine, mCellCursor.linePosition(), mComposition.stepChord() ) :
+          moveLeft( chordLine, mCellCursor.linePosition(), mComposition.stepChord() ))  )
+        //Update chord line into composition
+        mComposition.chordListSet( mCellCursor.lineIndex(), mCellCursor.partName(), chordLine );
+      }
+    else if( mCellCursor.cellClass() == cccNote ) {
+      //Get note line pointed by cursor
+      auto noteLine = mComposition.noteListGet( mCellCursor.lineIndex(), mCellCursor.partName() );
+      if( (mShift ? moveLeftAll( noteLine, mCellCursor.linePosition(), mComposition.stepNote() ) :
+           moveLeft( noteLine, mCellCursor.linePosition(), mComposition.stepNote() ))  )
+        //Update note line into composition
+        mComposition.noteListSet( mCellCursor.lineIndex(), mCellCursor.partName(), noteLine );
+      }
+    }
+
+  //Simple cursor moving
+  mCellCursor.move( ccoLeft );
+  }
+
+
+
+
+//!
+//! \brief keyRight Handle key right pressing
+//!
+void CsVisualScoreEdit::keyRight()
+  {
+  if( mControl ) {
+    //We move chord, note or lyric to right
+    if( mCellCursor.cellClass() == cccChord ) {
+      //Get chord line pointed by cursor
+      auto chordLine = mComposition.chordListGet( mCellCursor.lineIndex(), mCellCursor.partName() );
+      if( (mShift ? moveRightAll( chordLine, mCellCursor.linePosition(), mComposition.stepChord() ) :
+           moveRight( chordLine, mCellCursor.linePosition(), mComposition.stepChord() ))  )
+        //Update chord line into composition
+        mComposition.chordListSet( mCellCursor.lineIndex(), mCellCursor.partName(), chordLine );
+      }
+    else if( mCellCursor.cellClass() == cccNote ) {
+      //Get note line pointed by cursor
+      auto noteLine = mComposition.noteListGet( mCellCursor.lineIndex(), mCellCursor.partName() );
+      if( (mShift ? moveRightAll( noteLine, mCellCursor.linePosition(), mComposition.stepNote() ) :
+           moveRight( noteLine, mCellCursor.linePosition(), mComposition.stepNote() ))  )
+        //Update note line into composition
+        mComposition.noteListSet( mCellCursor.lineIndex(), mCellCursor.partName(), noteLine );
+      }
+    }
+
+  //Simple cursor moving
+  mCellCursor.move( ccoRight );
+  }
+
+
+
+
+//!
+//! \brief keyEnd Handle key End pressing
+//!
+void CsVisualScoreEdit::keyEnd()
+  {
+  if( mControl ) {
+    if( (mCellCursor.cellClass() == cccChord) || (mCellCursor.cellClass() == cccNote) || (mCellCursor.cellClass() == cccLyric) ) {
+      int takt = mCellCursor.linePosition();
+      if( takt & 0xff ) takt = (takt + 255) >> 8;
+      else takt >>= 8;
+      mComposition.lineTaktCountSet( mCellCursor.lineIndex(), takt );
+      }
+    }
+  }
+
+
+
+
+//!
+//! \brief keyTakt Append or remove takt from end of line
+//! \param plus    if true then takt appended in other hand - removed
+//!
+void CsVisualScoreEdit::keyTakt(bool plus)
+  {
+  if( (mCellCursor.cellClass() == cccChord) || (mCellCursor.cellClass() == cccNote) || (mCellCursor.cellClass() == cccLyric) ) {
+    int takt = mComposition.lineTaktCount( mCellCursor.lineIndex() );
+    takt = qBound( 1, takt + (plus ? 1 : -1), 32 );
+    mComposition.lineTaktCountSet( mCellCursor.lineIndex(), takt );
+    }
+  }
+
+
+
+
+//!
+//! \brief keyDelete Handle key Delete pressing
+//!
+void CsVisualScoreEdit::keyDelete()
+  {
+  if( mSelectedLines.count() )
+    cmEditDelete();
+  else if( mControl ) {
+    if( (mCellCursor.cellClass() == cccChord) || (mCellCursor.cellClass() == cccNote) || (mCellCursor.cellClass() == cccLyric) ||
+        (mCellCursor.cellClass() == cccRemark) ) {
+      mComposition.lineRemove( mCellCursor.lineIndex() );
+      mCellCursor.updatePosition();
+      }
+    }
+  else {
+    if( mCellCursor.cellClass() == cccChord || mCellCursor.cellClass() == cccNote ) {
+      mEditor = CsCursorEdit::build( mCellCursor, mComposition );
+      mEditor->keyPress( Qt::Key_Delete, QChar{}, mEditor );
+      }
+    }
+  }
+
+
+
+
+
+//!
+//! \brief unselectAll Remove all selections
+//!
+void CsVisualScoreEdit::unselectAll()
+  {
+  mSelectedLines.clear();
+  emit actionEditSelectionPresent( false );
+  update();
   }
 
 

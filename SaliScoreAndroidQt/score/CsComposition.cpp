@@ -455,6 +455,16 @@ bool CsComposition::fileSave()
 
 
 
+bool CsComposition::fileCopySave()
+  {
+  //Make composition author to other than current
+  mAttributes.set( CS_ATTR_AUTHOR, QStringLiteral("..") );
+  //When save process author will be assigned and new composition id
+  return fileSave();
+  }
+
+
+
 
 bool CsComposition::fileLoad(const QString &songId)
   {

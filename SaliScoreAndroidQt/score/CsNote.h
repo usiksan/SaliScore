@@ -1,7 +1,7 @@
 #ifndef CSNOTE_H
 #define CSNOTE_H
 
-#include "config.h"
+#include "CsConfig.h"
 #include "CsPosition.h"
 #include "CsNoteChord.h"
 

@@ -1,7 +1,7 @@
 #ifndef CSREPOCLIENT_H
 #define CSREPOCLIENT_H
 
-#include "config.h"
+#include "CsConfig.h"
 #include "score/CsPlayList.h"
 
 #include <QObject>

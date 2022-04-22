@@ -13,7 +13,7 @@
 #ifndef CSSOUNDSOURCE_H
 #define CSSOUNDSOURCE_H
 
-#include "config.h"
+#include "CsConfig.h"
 #include "CsSoundSample.h"
 
 class CsSoundSource

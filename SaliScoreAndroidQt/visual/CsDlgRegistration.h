@@ -14,7 +14,7 @@ Description
 #ifndef CSDLGREGISTRATION_H
 #define CSDLGREGISTRATION_H
 
-#include "config.h"
+#include "CsConfig.h"
 
 #include <QDialog>
 #include <QLineEdit>

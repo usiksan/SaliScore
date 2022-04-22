@@ -1,18 +1,29 @@
 
-#include "config.h"
+#include "CsConfig.h"
 #include "CsDesktopWinMain.h"
 #include "CsVisualPlayList.h"
 #include "CsVisualPartList.h"
 #include "CsVisualScoreTrain.h"
+#include "CsVisualScoreEdit.h"
+#include "CsVisualScoreKaraoke.h"
 #include "repo/CsRepoClient.h"
+#include "import/saliScore/CsImportSaliScore.h"
+#include "import/text/CsImportText.h"
 
 #include <QDebug>
-#include <QLabel>
+#include <QGuiApplication>
 #include <QVBoxLayout>
 #include <QToolBar>
 #include <QToolButton>
-#include <QHeaderView>
 #include <QSettings>
+#include <QMenu>
+#include <QCloseEvent>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QDesktopServices>
+#include <QClipboard>
+#include <QMenuBar>
+
 
 CsDesktopWinMain::CsDesktopWinMain(CsPlayList &playList, QWidget *parent) :
   QMainWindow{parent},
@@ -69,13 +80,11 @@ CsDesktopWinMain::CsDesktopWinMain(CsPlayList &playList, QWidget *parent) :
 
   // When in part list composition selected we load it to current composition
   connect( mWLeftPartList, &CsVisualPartList::compositionClicked, this, [this] (const QString &compositionId) {
-    if( mComposition.isDirty() ) {
-      mPlayList.compositionSet( mComposition );
+    if( canCloseEditor() ) {
+      mComposition.fileLoad( compositionId );
+      compositionChanged();
       //mComposition.fileSave();
       }
-    mComposition.fileLoad( compositionId );
-    //mComposition.settingsRead( mPlayList.composition(compositionId) );
-    mWCentralScoreTrain->compositionChanged();
     });
 
 
@@ -84,24 +93,523 @@ CsDesktopWinMain::CsDesktopWinMain(CsPlayList &playList, QWidget *parent) :
   mWCentralScoreTrain = new CsVisualScoreTrain( mComposition );
   mWCentralPart->addWidget( mWCentralScoreTrain );
 
-  QToolBar *tlBar = addToolBar( QString("ToolBar") );
-  tlBar->setIconSize( QSize(32,32) );
-  tlBar->setFloatable(false);
-  tlBar->setMovable(false);
-  tlBar->addAction( QIcon(QString(":/pic/androidMenu.png")), tr("Menu"), this, [this] () {
-    //Toggle left part view
-    if( mWLeftPart->isHidden() ) {
-      mWLeftPart->show();
-      if( width() < height() )
-        mWCentralPart->hide();
-      }
-    else {
-      mWLeftPart->hide();
-      mWCentralPart->show();
-      }
-    });
+  // 2.2. Score edit
+  mWCentralScoreEdit = new CsVisualScoreEdit( mComposition );
+  mWCentralPart->addWidget( mWCentralScoreEdit );
+
+  // 2.3 Score karaoke
+  mWCentralScoreKaraoke = new CsVisualScoreKaraoke( mComposition );
+  mWCentralPart->addWidget( mWCentralScoreKaraoke );
+
 
   //Restore splitter positions
   QSettings s;
+  if( s.contains(QString(KEY_MAIN_SPLITTER)) )
+    mWSplitter->restoreState( s.value(QString(KEY_MAIN_SPLITTER)).toByteArray() );
+
+  if( s.contains(QStringLiteral(KEY_WMAIN_MAX)) ) {
+    if( !s.value(QStringLiteral(KEY_WMAIN_MAX)).toBool() )
+      //Restore main window size
+      resize( s.value(QStringLiteral(KEY_WMAIN_SIZE)).toSize() );
+    }
+
+
+  // Desktop menu and toolbar
+  menuFile = new QMenu( tr("File") );
+
+  actionFileNew      = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileNew.png")), tr("New file"), this, &CsDesktopWinMain::cmFileNew );
+  actionFileImport   = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileOpen.png")), tr("Open file ..."), this, &CsDesktopWinMain::cmFileImport );
+  actionFileLoad     = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileCloud.png")), tr("Load from public cloud..."), this, &CsDesktopWinMain::cmFileLoad );
+  menuFile->addSeparator();
+  actionFileSave     = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileSave.png")), tr("Save score"), this, &CsDesktopWinMain::cmFileSave );
+  actionFileCopy     = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileSaveAs.png")), tr("Make copy score"), this, &CsDesktopWinMain::cmFileCopy );
+  actionFilePublic   = menuFile->addAction( QIcon(QStringLiteral(":/pic/filePublic.png")), tr("Public to cloud"), this, &CsDesktopWinMain::cmFilePublic );
+  actionFileExport   = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileExport.png")), tr("Export..."), this,  &CsDesktopWinMain::cmFileExport );
+  menuFile->addSeparator();
+  actionFilePrint    = menuFile->addAction( QIcon(QStringLiteral(":/pic/filePrint.png")), tr("Print..."), this, &CsDesktopWinMain::cmFilePrint );
+  menuFile->addSeparator();
+  actionFileExit     = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileExit.png")), tr("Exit programm"), this, &CsDesktopWinMain::close );
+
+  menuEditDisabled = new QMenu( tr("Edit") );
+  actionEditPasteImport = menuEditDisabled->addAction( QIcon(QStringLiteral(":/pic/viewEditor.png")), tr("Import from clipboard"), this, &CsDesktopWinMain::cmEditPasteImport );
+
+  menuEdit = new QMenu( tr("Edit") );
+  menuEdit->addAction( QIcon(QStringLiteral(":/pic/viewEditor.png")), tr("Import from clipboard"), this, &CsDesktopWinMain::cmEditPasteImport );
+  menuEdit->addSeparator();
+  actionEditUndo = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editUndo.png")), tr("Undo last edit operation"), mWCentralScoreEdit, &CsVisualScoreEdit::cmEditUndo );
+  actionEditRedo = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editRedo.png")), tr("Redo last undoed operation"), mWCentralScoreEdit, &CsVisualScoreEdit::cmEditRedo );
+  menuEdit->addSeparator();
+  actionEditCopy = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editCopy.png")), tr("Copy selection to clipboard"), mWCentralScoreEdit, &CsVisualScoreEdit::cmEditCopy );
+  actionEditCut  = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editCut.png")), tr("Cut selection to clipboard"), mWCentralScoreEdit, &CsVisualScoreEdit::cmEditCut );
+  actionEditPaste = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editPaste.png")), tr("Paste from clipboard"), mWCentralScoreEdit, &CsVisualScoreEdit::cmEditPaste );
+  actionEditDelete = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editDelete.png")), tr("Delete slection"), mWCentralScoreEdit, &CsVisualScoreEdit::cmEditDelete );
+  menuEdit->addSeparator();
+  actionEditSettings = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editSettings.png")), tr("Edit score settings"), this, &CsDesktopWinMain::cmEditSettings );
+
+  menuView = new QMenu( tr("View") );
+  actionViewEditor  = menuView->addAction( QIcon(QStringLiteral(":/pic/viewEditor.png")), tr("Editor mode"), this, &CsDesktopWinMain::cmViewEditor );
+  actionViewTrain   = menuView->addAction( QIcon(QStringLiteral(":/pic/viewTrain.png")), tr("Train mode"), this, &CsDesktopWinMain::cmViewTrain );
+  actionViewKaraoke = menuView->addAction( QIcon(QStringLiteral(":/pic/viewKaraoke.png")), tr("Karaoke mode"), this, &CsDesktopWinMain::cmViewKaraoke );
+  actionViewEditor->setCheckable(true);
+  actionViewTrain->setCheckable(true);
+  actionViewKaraoke->setCheckable(true);
+  menuView->addSeparator();
+  actionViewRemark      = menuView->addAction( QIcon(QStringLiteral(":/pic/viewRemark.png")), tr("Remark manage..."), this, &CsDesktopWinMain::cmViewRemark );
+  actionViewChord       = menuView->addAction( QIcon(QStringLiteral(":/pic/viewChord.png")), tr("Chord manage..."), this, &CsDesktopWinMain::cmViewChord );
+  actionViewNote        = menuView->addAction( QIcon(QStringLiteral(":/pic/viewNote.png")), tr("Note manage..."), this, &CsDesktopWinMain::cmViewNote );
+  actionViewTranslation = menuView->addAction( QIcon(QStringLiteral(":/pic/viewTranslation.png")), tr("Translation manage..."), this, &CsDesktopWinMain::cmViewTranslation );
+
+  QActionGroup *group = new QActionGroup(menuView);
+  group->addAction( actionViewEditor );
+  group->addAction( actionViewTrain );
+  group->addAction( actionViewKaraoke );
+
+  menuPlay = new QMenu( tr("Play") );
+  actionPlayStart = menuPlay->addAction( QIcon(QStringLiteral(":/pic/playStart.png")), tr("Start"), this, &CsDesktopWinMain::cmPlayStart );
+  actionPlayPause = menuPlay->addAction( QIcon(QStringLiteral(":/pic/playPause.png")), tr("Pause") /*, this, [this] () {  mPlayer.pause(); } */ );
+  actionPlayStop  = menuPlay->addAction( QIcon(QStringLiteral(":/pic/playStop.png")), tr("Stop"), this, &CsDesktopWinMain::cmPlayStop );
+
+  menuTrain = new QMenu( tr("Train") );
+  actionFragmentTrain = menuTrain->addAction( QIcon(QStringLiteral(":/pic/playTrain.png")), tr("Fragment train") /*, mWinTrain, &CsWinTrain::cmFragmentTrain */ );
+  actionFragment0     = menuTrain->addAction( QIcon(QStringLiteral(":/pic/fragment0.png")), tr("All composition") /*, mWinTrain, &CsWinTrain::cmFragment0 */ );
+  actionFragment1     = menuTrain->addAction( QIcon(QStringLiteral(":/pic/fragment1.png")), tr("Fragment 1") /*, mWinTrain, &CsWinTrain::cmFragment1 */ );
+  actionFragment2     = menuTrain->addAction( QIcon(QStringLiteral(":/pic/fragment2.png")), tr("Fragment 2") /*, mWinTrain, &CsWinTrain::cmFragment2 */ );
+  actionFragmentStart = menuTrain->addAction( QIcon(QStringLiteral(":/pic/fragmentStart.png")), tr("Fix fragment start") /*, mWinTrain, &CsWinTrain::cmFragmentStart */ );
+  actionFragmentStop  = menuTrain->addAction( QIcon(QStringLiteral(":/pic/fragmentStop.png")), tr("Fix fragment stop") /*, mWinTrain, &CsWinTrain::cmFragmentStop */ );
+  actionFragmentTrain->setCheckable(true);
+  actionFragment0->setCheckable(true);
+  actionFragment1->setCheckable(true);
+  actionFragment2->setCheckable(true);
+
+  menuScore = new QMenu( tr("Score") );
+
+  menuTools = new QMenu( tr("Tools") );
+
+  menuHelp = new QMenu( tr("Help") );
+  actionHelpContents     = menuHelp->addAction( QIcon(QString(":/pic/helpContent.png")), tr("Contents"), this, &CsDesktopWinMain::cmHelpContent );
+  actionHelpAbout        = menuHelp->addAction( QIcon(QString(":/pic/helpAbout.png")), tr("About"), this, &CsDesktopWinMain::cmHelpAbout );
+  actionHelpWeb          = menuHelp->addAction( QIcon(QString(":/pic/helpWebsite.png")), tr("WEB home page"), this, &CsDesktopWinMain::cmHelpWeb );
+  actionHelpRegistration = menuHelp->addAction( QIcon(QString(":/pic/helpRegistration.png")), tr("Registration"), this, &CsDesktopWinMain::cmHelpRegistration );
+  actionHelpHome         = new QAction( QIcon(QString(":/pic/helpHome.png")), QObject::tr("Home help page") );
+//  frame->connect( cmHelpHome, &QAction::triggered, frame, &SdWMain::cmHelpContents );
+  actionHelpBackward     = new QAction( QIcon(QString(":/pic/helpPrevious.png")), QObject::tr("Backward help page") );
+//  frame->connect( cmHelpBackward, &QAction::triggered, frame, &SdWMain::cmHelpBackward );
+  actionHelpForward      = new QAction( QIcon(QString(":/pic/helpNext.png")), QObject::tr("Forward help page") );
+//  frame->connect( cmHelpForward, &QAction::triggered, frame, &SdWMain::cmHelpForward );
+
+
+  QMenuBar *bar = menuBar();
+  bar->addMenu( menuFile );
+  actionMenuEditDisabled = bar->addMenu( menuEditDisabled );
+  actionMenuEdit = bar->addMenu( menuEdit );
+  bar->addMenu( menuView );
+  bar->addMenu( menuPlay );
+  actionMenuTrain = bar->addMenu( menuTrain );
+  bar->addMenu( menuScore );
+  bar->addMenu( menuTools );
+  bar->addMenu( menuHelp );
+
+  barMain = new QToolBar( tr("Files") );
+  barMain->addAction( actionFileNew );
+  barMain->addAction( actionFileCopy );
+  barMain->addAction( actionFileSave );
+  addToolBar( barMain );
+
+  barEditor   = new QToolBar( tr("Editor") );
+  barEditor->addAction( actionViewEditor );
+  barEditor->addAction( actionViewTrain );
+  barEditor->addAction( actionViewKaraoke );
+  barEditor->addSeparator();
+  barEditor->addAction( actionEditPaste );
+  barEditor->addAction( actionEditCopy );
+  barEditor->addAction( actionEditCut );
+  barEditor->addSeparator();
+  barEditor->addAction( actionEditUndo );
+  barEditor->addAction( actionEditRedo );
+  barEditor->addSeparator();
+  barEditor->addAction( actionPlayStart );
+  barEditor->addAction( actionPlayPause );
+  barEditor->addAction( actionPlayStop );
+  addToolBar( barEditor );
+
+  barTrain    = new QToolBar( tr("Train") );
+  barTrain->addAction( actionViewEditor );
+  barTrain->addAction( actionViewTrain );
+  barTrain->addAction( actionViewKaraoke );
+  barTrain->addSeparator();
+  barTrain->addAction( actionPlayStart );
+  barTrain->addAction( actionPlayPause );
+  barTrain->addAction( actionPlayStop );
+  barTrain->addSeparator();
+  barTrain->addAction( actionFragmentTrain );
+  barTrain->addAction( actionFragment0 );
+  barTrain->addAction( actionFragment1 );
+  barTrain->addAction( actionFragment2 );
+  barTrain->addAction( actionFragmentStart );
+  barTrain->addAction( actionFragmentStop );
+  addToolBar( barTrain );
+
+  barKaraoke  = new QToolBar( tr("Karaoke") );
+  barKaraoke->addAction( actionViewEditor );
+  barKaraoke->addAction( actionViewTrain );
+  barKaraoke->addAction( actionViewKaraoke );
+  barKaraoke->addSeparator();
+  barKaraoke->addAction( actionPlayStart );
+  barKaraoke->addAction( actionPlayPause );
+  barKaraoke->addAction( actionPlayStop );
+  addToolBar( barKaraoke );
+
+  barPlayList = new QToolBar( tr("PlayList") );
+
+  cmViewEditor();
+
+  //Create imports
+  mImportManager.registerImport( new CsImportSaliScore() );
+  mImportManager.registerImport( new CsImportText() );
 
   }
+
+
+
+
+void CsDesktopWinMain::cmFileNew()
+  {
+  if( canCloseEditor() ) {
+    mComposition.clear();
+    mComposition.remarkAppend( tr("Default"), tr("Default remark") );
+    mComposition.chordAppend( tr("Main"), tr("Main chord part") );
+    mComposition.noteAppend( tr("Solo"), tr("Solo part") );
+    mComposition.lineAppend( true );
+    mComposition.remarkSet( 0, tr("Default"), tr("Create own composition here") );
+    mComposition.lineAppend( false );
+
+    compositionChanged();
+    }
+  }
+
+
+
+
+void CsDesktopWinMain::cmFileImport()
+  {
+  if( canCloseEditor() ) {
+    QString fname = QFileDialog::getOpenFileName( this, tr("Select file to open"), QString{}, mImportManager.formats() );
+    bool ok = false;
+    CsComposition composition = mImportManager.readFile( fname, ok );
+    if( ok ) {
+      mComposition = composition;
+      compositionChanged();
+      }
+    }
+  }
+
+
+
+
+void CsDesktopWinMain::cmFileLoad()
+  {
+
+  }
+
+
+
+void CsDesktopWinMain::cmFileSave()
+  {
+  mComposition.fileSave();
+  mPlayList.compositionSet( mComposition );
+  visualCurrentUpdate();
+  }
+
+
+
+
+void CsDesktopWinMain::cmFileCopy()
+  {
+  mComposition.fileCopySave();
+  mPlayList.compositionSet( mComposition );
+  visualCurrentUpdate();
+  }
+
+void CsDesktopWinMain::cmFilePublic()
+  {
+
+  }
+
+void CsDesktopWinMain::cmFileExport()
+  {
+
+  }
+
+void CsDesktopWinMain::cmFilePrint()
+  {
+
+  }
+
+void CsDesktopWinMain::cmEditPasteImport()
+  {
+  if( canCloseEditor() ) {
+    QClipboard *clip = QGuiApplication::clipboard();
+    if( !clip->text().isEmpty() ) {
+      bool ok = false;
+      CsComposition composition = mImportManager.read( clip->text().toUtf8(), ok );
+      if( ok ) {
+        mComposition = composition;
+        compositionChanged();
+        }
+      }
+    }
+  }
+
+
+
+
+void CsDesktopWinMain::cmEditSettings()
+  {
+  //TODO score settings dialog
+//  CsDlgScoreSettings dlg( mComposition, this );
+//  if( dlg.exec() )
+  //    mWinEditor->update();
+  }
+
+
+
+
+void CsDesktopWinMain::cmViewEditor()
+  {
+  visualActiveSet( mWCentralScoreEdit, actionViewEditor, barEditor, menuEdit, nullptr );
+  }
+
+void CsDesktopWinMain::cmViewTrain()
+  {
+  visualActiveSet( mWCentralScoreTrain, actionViewTrain, barTrain, menuEditDisabled, menuTrain );
+  }
+
+void CsDesktopWinMain::cmViewKaraoke()
+  {
+  visualActiveSet( mWCentralScoreKaraoke, actionViewKaraoke, barKaraoke, nullptr, nullptr );
+  }
+
+void CsDesktopWinMain::cmViewRemark()
+  {
+
+  }
+
+void CsDesktopWinMain::cmViewChord()
+  {
+
+  }
+
+void CsDesktopWinMain::cmViewNote()
+  {
+
+  }
+
+void CsDesktopWinMain::cmViewTranslation()
+  {
+
+  }
+
+void CsDesktopWinMain::cmPlayStart()
+  {
+
+  }
+
+void CsDesktopWinMain::cmPlayStop()
+  {
+
+  }
+
+void CsDesktopWinMain::cmHelpContent()
+  {
+
+  }
+
+void CsDesktopWinMain::cmHelpAbout()
+  {
+
+  }
+
+void CsDesktopWinMain::cmHelpWeb()
+  {
+
+  }
+
+void CsDesktopWinMain::cmHelpRegistration()
+  {
+
+  }
+
+
+
+void CsDesktopWinMain::compositionChanged()
+  {
+  mWCentralScoreEdit->compositionChanged();
+  mWCentralScoreKaraoke->compositionChanged();
+  mWCentralScoreTrain->compositionChanged();
+  }
+
+
+
+//!
+//! \brief canCloseEditor Check, can be closed editor
+//! \return               true - editor can be closed
+//!
+bool CsDesktopWinMain::canCloseEditor()
+  {
+  if( mComposition.isDirty() ) {
+    //Contents is changed
+    auto res = QMessageBox::question( this, tr("Warning!"), tr("Composition is changed. Do You want to save changes?"), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel );
+    if( res == QMessageBox::Yes ) {
+      cmFileSave();
+      return true;
+      }
+    if( res == QMessageBox::No )
+      return true;
+    return false;
+    }
+  return true;
+  }
+
+
+
+
+CsVisualScore *CsDesktopWinMain::visualActive()
+  {
+  CsVisualScore *vs = dynamic_cast<CsVisualScore*>( mWCentralPart->currentWidget() );
+  Q_ASSERT_X( vs != nullptr, "invalid active score", "CsDesktopWinMain::visualActive" );
+  return vs;
+  }
+
+
+
+void CsDesktopWinMain::visualCurrentUpdate()
+  {
+  visualActive()->update();
+  }
+
+
+
+//!
+//! \brief visualActivate Change visual mode
+//! \param visualScore    New activated visual score mode (edit, train or karaoke)
+//! \param visualAction   Visal action (tool button and menu) which respond visual score mode
+//! \param activeBar      Tool bar respond visual score mode
+//! \param activeMenu0    First menu respond visual score mode
+//! \param activeMenu1    Second menu respond visual score mode
+//!
+void CsDesktopWinMain::visualActiveSet(CsVisualScore *visualScore, QAction *visualAction, QToolBar *activeBar, QMenu *activeMenu0, QMenu *activeMenu1)
+  {
+  //Visual score widget
+  mWCentralPart->setCurrentWidget( visualScore );
+  //Tool button
+  actionViewEditor->setChecked( actionViewEditor == visualAction );
+  actionViewTrain->setChecked( actionViewTrain == visualAction );
+  actionViewKaraoke->setChecked( actionViewKaraoke == visualAction );
+  //Menu bar
+  if( barEditor == activeBar ) barEditor->show();
+  else barEditor->hide();
+  if( barTrain == activeBar ) barTrain->show();
+  else barTrain->hide();
+  if( barKaraoke == activeBar ) barKaraoke->show();
+  else barKaraoke->hide();
+  //Menu
+  menuEditDisabled->setVisible( menuEditDisabled == activeMenu0 || menuEditDisabled == activeMenu1 );
+  menuEdit->setVisible( menuEdit == activeMenu0 || menuEdit == activeMenu1 );
+  menuTrain->setVisible( menuTrain == activeMenu0 || menuTrain == activeMenu1 );
+  visualActive()->activate();
+  }
+
+
+
+
+
+
+
+//=============================================================================================================================
+//                                     Commands
+QMenu *CsDesktopWinMain::menuFile;
+QMenu *CsDesktopWinMain::menuEditDisabled;
+QMenu *CsDesktopWinMain::menuEdit;
+QMenu *CsDesktopWinMain::menuView;
+QMenu *CsDesktopWinMain::menuPlay;
+QMenu *CsDesktopWinMain::menuTrain;
+QMenu *CsDesktopWinMain::menuScore;
+QMenu *CsDesktopWinMain::menuTools;
+QMenu *CsDesktopWinMain::menuHelp;
+
+QActionPtr  CsDesktopWinMain::actionMenuEditDisabled;
+QActionPtr  CsDesktopWinMain::actionMenuEdit;
+QActionPtr  CsDesktopWinMain::actionMenuTrain;
+
+//Tool bars for editor command
+QToolBar   *CsDesktopWinMain::barMain;
+QToolBar   *CsDesktopWinMain::barEditor;
+QToolBar   *CsDesktopWinMain::barTrain;
+QToolBar   *CsDesktopWinMain::barKaraoke;
+QToolBar   *CsDesktopWinMain::barPlayList;
+
+
+QActionPtr  CsDesktopWinMain::actionFileNew;
+QActionPtr  CsDesktopWinMain::actionFileImport;
+QActionPtr  CsDesktopWinMain::actionFileCopy;
+QActionPtr  CsDesktopWinMain::actionFileLoad;
+QActionPtr  CsDesktopWinMain::actionFileSave;
+QActionPtr  CsDesktopWinMain::actionFilePublic;
+QActionPtr  CsDesktopWinMain::actionFileExport;
+QActionPtr  CsDesktopWinMain::actionFilePrint;
+QActionPtr  CsDesktopWinMain::actionFileExit;
+
+
+QActionPtr  CsDesktopWinMain::actionEditUndo;
+QActionPtr  CsDesktopWinMain::actionEditRedo;
+QActionPtr  CsDesktopWinMain::actionEditCut;
+QActionPtr  CsDesktopWinMain::actionEditCopy;
+QActionPtr  CsDesktopWinMain::actionEditPaste;
+QActionPtr  CsDesktopWinMain::actionEditPasteImport;
+QActionPtr  CsDesktopWinMain::actionEditDelete;
+QActionPtr  CsDesktopWinMain::actionEditSelectAll;
+QActionPtr  CsDesktopWinMain::actionEditUnSelect;
+QActionPtr  CsDesktopWinMain::actionEditSettings;
+
+QActionPtr  CsDesktopWinMain::actionViewEditor;
+QActionPtr  CsDesktopWinMain::actionViewTrain;
+QActionPtr  CsDesktopWinMain::actionViewKaraoke;
+QActionPtr  CsDesktopWinMain::actionViewRemark;
+QActionPtr  CsDesktopWinMain::actionViewChord;
+QActionPtr  CsDesktopWinMain::actionViewNote;
+QActionPtr  CsDesktopWinMain::actionViewTranslation;
+
+QActionPtr  CsDesktopWinMain::actionPlayStart;
+QActionPtr  CsDesktopWinMain::actionPlayPause;
+QActionPtr  CsDesktopWinMain::actionPlayStop;
+
+QActionPtr  CsDesktopWinMain::actionFragmentTrain;
+QActionPtr  CsDesktopWinMain::actionFragment0;
+QActionPtr  CsDesktopWinMain::actionFragment1;
+QActionPtr  CsDesktopWinMain::actionFragment2;
+QActionPtr  CsDesktopWinMain::actionFragmentStart;
+QActionPtr  CsDesktopWinMain::actionFragmentStop;
+
+QActionPtr  CsDesktopWinMain::actionScoreRemark;
+QActionPtr  CsDesktopWinMain::actionScoreRemarkManage;
+QActionPtr  CsDesktopWinMain::actionScoreChordManage;
+QActionPtr  CsDesktopWinMain::actionScoreNoteManage;
+
+
+QActionPtr  CsDesktopWinMain::actionPlMinus;
+QActionPtr  CsDesktopWinMain::actionPlPlus;
+QActionPtr  CsDesktopWinMain::actionPlLoad;
+QActionPtr  CsDesktopWinMain::actionPlPlayList;
+
+QActionPtr  CsDesktopWinMain::actionToolsOption;
+
+QActionPtr  CsDesktopWinMain::actionHelpContents;
+QActionPtr  CsDesktopWinMain::actionHelpAbout;
+QActionPtr  CsDesktopWinMain::actionHelpWeb;
+QActionPtr  CsDesktopWinMain::actionHelpRegistration;
+QActionPtr  CsDesktopWinMain::actionHelpHome;
+QActionPtr  CsDesktopWinMain::actionHelpBackward;
+QActionPtr  CsDesktopWinMain::actionHelpForward;
+
+QActionPtr  CsDesktopWinMain::actionGuiderCapture;
+QActionPtr  CsDesktopWinMain::actionGuiderPause;

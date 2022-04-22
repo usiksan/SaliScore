@@ -2,19 +2,8 @@ QT       += core gui network multimedia svg
 
 android {
   QT       += androidextras
-
-SOURCES += \
-    visual/CsAndroidWinMain.cpp
-
   }
 
-!android {
-
-SOURCES += \
-    visual/CsDesktopWinMain.cpp
-
-
-  }
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -25,6 +14,12 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    import/CsImport.cpp \
+    import/CsImportManager.cpp \
+    import/saliScore/CsImportSaliScore.cpp \
+    import/text/CsImportText.cpp \
+    visual/CsAndroidWinMain.cpp \
+    visual/CsDesktopWinMain.cpp \
     SdLib/SdTime2x.cpp \
     audioOut/CsSoundBufferIODevice.cpp \
     main.cpp \
@@ -67,15 +62,20 @@ SOURCES += \
     visual/CsVisualRegularList.cpp \
     visual/CsVisualScore.cpp \
     visual/CsVisualScoreEdit.cpp \
+    visual/CsVisualScoreKaraoke.cpp \
     visual/CsVisualScoreTrain.cpp
 
 HEADERS += \
+    CsConfig.h \
     SdLib/SdTime2x.h \
     SvJson/SvJsonIO.h \
     audioOut/CsSoundBufferIODevice.h \
     audioOut/CsSoundSample.h \
     audioOut/CsSoundSource.h \
-    config.h \
+    import/CsImport.h \
+    import/CsImportManager.h \
+    import/saliScore/CsImportSaliScore.h \
+    import/text/CsImportText.h \
     repo/CsRepoClient.h \
     score/CsChord.h \
     score/CsComposition.h \
@@ -120,6 +120,7 @@ HEADERS += \
     visual/CsVisualRegularList.h \
     visual/CsVisualScore.h \
     visual/CsVisualScoreEdit.h \
+    visual/CsVisualScoreKaraoke.h \
     visual/CsVisualScoreTrain.h
 
 # Default rules for deployment.

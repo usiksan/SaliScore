@@ -1,4 +1,4 @@
-#include "config.h"
+#include "CsConfig.h"
 #include "CsSongLocalRepo.h"
 #include "SvJson/SvJsonIO.h"
 

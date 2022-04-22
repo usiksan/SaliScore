@@ -1,7 +1,7 @@
 #ifndef CSDEFINITION_H
 #define CSDEFINITION_H
 
-#include "config.h"
+#include "CsConfig.h"
 #include "CsJsonIO.h"
 #include "CsNoteChord.h"
 

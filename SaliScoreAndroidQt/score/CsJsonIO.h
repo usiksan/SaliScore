@@ -1,7 +1,7 @@
 #ifndef CSJSONIO_H
 #define CSJSONIO_H
 
-#include "config.h"
+#include "CsConfig.h"
 #include "../SvJson/SvJsonIO.h"
 
 using CsJsonWriter = SvJsonWriter;

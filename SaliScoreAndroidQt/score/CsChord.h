@@ -14,7 +14,7 @@ Description
 #ifndef CSCHORD_H
 #define CSCHORD_H
 
-#include "config.h"
+#include "CsConfig.h"
 #include "CsPosition.h"
 #include "CsNoteChord.h"
 

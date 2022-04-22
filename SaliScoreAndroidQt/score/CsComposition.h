@@ -14,7 +14,7 @@ Description
 #ifndef CSCOMPOSITION_H
 #define CSCOMPOSITION_H
 
-#include "config.h"
+#include "CsConfig.h"
 #include "CsLine.h"
 #include "CsDefinition.h"
 #include "CsTrainInterval.h"
@@ -70,6 +70,7 @@ class CsComposition
 
     bool        isDirty() const { return mDirty; }
 
+
     //=================================================================
     //         Attributes part
     QString     attributeGet( const QString &key ) const { return mAttributes.get( key ); }
@@ -82,6 +83,8 @@ class CsComposition
     bool        isPublic() const { return attributeGet(CS_ATTR_STATUS) == CS_STATUS_PUBLIC; }
 
     int         isMelodyPresent() const { return mNoteList.count(); }
+
+
 
     //=================================================================
     //         Remark part
@@ -281,6 +284,8 @@ class CsComposition
     bool        fromByteArray(const QByteArray &ar , bool stat);
 
     bool        fileSave();
+
+    bool        fileCopySave();
 
     bool        fileLoad( const QString &songId );
 

@@ -54,6 +54,8 @@ class CsCellCursor : public CsCursor
 
     void normPosition( int step );
 
+    bool isLineIndexOk() const;
+
     static QMap<QString,QString> mMoveAttrLeft;
     static QMap<QString,QString> mMoveAttrRight;
     static QMap<QString,QString> mMoveAttrTop;
