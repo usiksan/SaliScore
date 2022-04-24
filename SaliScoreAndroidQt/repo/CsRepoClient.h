@@ -36,7 +36,6 @@ class CsRepoClient : public QObject
 
     QNetworkAccessManager *mNetworkManager;  //!< Network manager through witch we connect to global repository
     QTimer                 mTimer;           //!< Timer for periodic sync with global repository
-    CsPlayList            &mPlayList;        //!< Users play list
     CsRepoQueryType        mQueryType;       //!< Type of remote operation
     QStringList            mSyncList;        //!< List of composition ids which need to be sync
     QString                mNeedSong;        //!< Song need to be loaded
@@ -44,7 +43,7 @@ class CsRepoClient : public QObject
   public:
     QList<CsFindSongItem>  mFindSongList;    //!< Songs which match to pattern
 
-    explicit CsRepoClient( CsPlayList &playList, QObject *parent = nullptr);
+    explicit CsRepoClient( QObject *parent = nullptr);
 
     bool    isRegistered() const;
 
@@ -62,7 +61,7 @@ class CsRepoClient : public QObject
 
     void songChanged( const QString compositionid );
 
-    void songLoaded( CsComposition composition );
+    //void songLoaded( CsComposition composition );
 
     void findSongComplete();
 

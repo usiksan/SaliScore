@@ -41,11 +41,11 @@ CsAndroidWinMain::CsAndroidWinMain(CsPlayList &playList, QWidget *parent) :
   //      Second layer of layout
   // 1. Left part
   // 1.1. Play list
-  mWLeftPlayList = new CsVisualPlayList( mPlayList );
+  mWLeftPlayList = new CsVisualPlayList();
   mWLeftPart->addWidget( mWLeftPlayList );
 
   // 1.2. Part list
-  mWLeftPartList = new CsVisualPartList( mPlayList );
+  mWLeftPartList = new CsVisualPartList();
   mWLeftPart->addWidget( mWLeftPartList );
 
   // We begin from play list

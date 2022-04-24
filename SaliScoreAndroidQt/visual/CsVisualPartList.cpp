@@ -4,10 +4,9 @@
 #include <QPainter>
 #include <QMessageBox>
 
-CsVisualPartList::CsVisualPartList(CsPlayList &playList, QWidget *parent) :
+CsVisualPartList::CsVisualPartList(QWidget *parent) :
   CsVisualRegularList( {36,0,36}, parent ),
-  mPlayList(playList),
-  mPartIndex(-1)
+  mPartIndex(0)
   {
 
   }
@@ -15,7 +14,7 @@ CsVisualPartList::CsVisualPartList(CsPlayList &playList, QWidget *parent) :
 void CsVisualPartList::setPart(int partIndex)
   {
   mPartIndex = partIndex;
-  mTitle = mPlayList.partTitle(mPartIndex);
+  mTitle = CsPlayList::pl()->partTitle(mPartIndex);
   //qDebug() << "setPart" << partIndex << itemCount();
   updateContent();
   }
@@ -30,9 +29,9 @@ void CsVisualPartList::cellPaint(int x, int y, int w, int h, int column, int row
     else if( column == 1 ) {
       h = 20;
       //Song title
-      QString id = mPlayList.partCompositionId( mPartIndex, row );
+      QString id = CsPlayList::pl()->partCompositionId( mPartIndex, row );
       //Song header
-      CsCompositionInfo info = mPlayList.composition( id );
+      CsCompositionInfo info = CsPlayList::pl()->composition( id );
       //At top display composition name
       painter.drawText( x, y, w, h, Qt::AlignLeft | Qt::AlignVCenter, info.name() );
       //At bottom display singer and author
@@ -55,11 +54,11 @@ void CsVisualPartList::cellClicked(int column, int row)
       }
     else if( column == 1 ) {
       //Song title
-      emit compositionClicked( mPlayList.partCompositionId( mPartIndex, row ) );
+      emit compositionClicked( CsPlayList::pl()->partCompositionId( mPartIndex, row ) );
       }
     else {
-      if( QMessageBox::question( this, tr("Warning!"), tr("Are you sure to delete song \'%1\' from list").arg(mPlayList.partCompositionName( mPartIndex, row ))) == QMessageBox::Yes ) {
-        mPlayList.partCompositionRemove( mPartIndex, row );
+      if( QMessageBox::question( this, tr("Warning!"), tr("Are you sure to delete song \'%1\' from list").arg(CsPlayList::pl()->partCompositionName( mPartIndex, row ))) == QMessageBox::Yes ) {
+        CsPlayList::pl()->partCompositionRemove( mPartIndex, row );
         updateContent();
         }
       }
@@ -69,5 +68,5 @@ void CsVisualPartList::cellClicked(int column, int row)
 
 int CsVisualPartList::itemCount() const
   {
-  return mPartIndex < 0 || mPartIndex >= mPlayList.partCount() ? 0 : mPlayList.partCompositionCount( mPartIndex );
+  return mPartIndex < 0 || mPartIndex >= CsPlayList::pl()->partCount() ? 0 : CsPlayList::pl()->partCompositionCount( mPartIndex );
   }

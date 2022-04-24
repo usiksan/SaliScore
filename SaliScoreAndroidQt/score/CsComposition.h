@@ -289,11 +289,6 @@ class CsComposition
 
     bool        fileLoad( const QString &songId );
 
-    //=================================================================
-    //         Composition local repository
-    static CsSongLocalRepo mSongRepo;
-
-
   private:
     static QStringList     visibleList( const CsDefList &src );
 

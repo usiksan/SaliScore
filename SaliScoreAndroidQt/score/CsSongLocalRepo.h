@@ -14,6 +14,8 @@
 #ifndef CSSONGLOCALREPO_H
 #define CSSONGLOCALREPO_H
 
+#include "CsCompositionInfo.h"
+
 #include <QString>
 #include <QStringList>
 #include <QMap>
@@ -21,28 +23,33 @@
 
 class CsSongLocalRepo
   {
-    QMap<QString,int> mSongList; //!< List of song of local repo
-  public:
+    QStringList      mCompositionsList; //!< Full list of all known compositions
+    CsCompositionMap mSongMap;          //!< Map of song of local repo
+
     CsSongLocalRepo();
+  public:
+    static CsSongLocalRepo *repo();
 
     //!
     //! \brief repoInit Init local repository
     //!
     void        repoInit();
 
+    int         songCount() const { return mCompositionsList.count(); }
+
     //!
     //! \brief songList Returns full file list as list of compositionId
     //! \return         List of compositionId
     //!
-    QStringList songList() const;
+    QStringList songList() const { return mCompositionsList; }
 
     //!
     //! \brief songStore     Signal to local repo that composition is stored. We update repository with
     //!                      compositionId and version of composition
     //! \param compositionId Ident of composition
-    //! \param version       Version of composition
+    //! \param comp          Composition
     //!
-    void        songStore( const QString &compositionId, int version );
+    void        songStore(const QString &compositionId, const CsComposition &comp );
 
     //!
     //! \brief songRemove    Remove composition from storage. We delete file with composition
@@ -81,7 +88,7 @@ class CsSongLocalRepo
     //!
     //! \brief repoSave Perform saving of repository to local storage
     //!
-    void        repoSave() const;
+    void        repoSave();
   };
 
 #endif // CSSONGLOCALREPO_H

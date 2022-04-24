@@ -1,4 +1,6 @@
 #include "CsPlayList.h"
+#include "CsComposition.h"
+#include "CsSongLocalRepo.h"
 #include "SdLib/SdTime2x.h"
 
 #include <QFile>
@@ -10,6 +12,12 @@ CsPlayList::CsPlayList()
 
   }
 
+CsPlayList *CsPlayList::pl()
+  {
+  static CsPlayList playList;
+  return &playList;
+  }
+
 void CsPlayList::dirtyReset()
   {
   mDirty = false;
@@ -18,9 +26,18 @@ void CsPlayList::dirtyReset()
 
 
 
+QString CsPlayList::partTitle(int i) const
+  {
+  if( i == 0 ) return QObject::tr("All compositions");
+  return mPartList.at(i-1).title();
+  }
+
+
+
 void CsPlayList::partTitleSet(int i, const QString &tit)
   {
-  mPartList[i].titleSet( tit );
+  if( i == 0 ) return;
+  mPartList[i - 1].titleSet( tit );
   mDirty = true;
   }
 
@@ -45,7 +62,8 @@ bool CsPlayList::partAppend(const QString &partName)
 
 void CsPlayList::partDelete(int i)
   {
-  mPartList.removeAt(i);
+  if( i == 0 ) return;
+  mPartList.removeAt(i - 1 );
   garbageCollection();
   mDirty = true;
   }
@@ -55,9 +73,28 @@ void CsPlayList::partDelete(int i)
 
 
 
+
+
+int CsPlayList::partCompositionCount(int partIndex) const
+  {
+  return partIndex == 0 ? CsSongLocalRepo::repo()->songCount() : mPartList.at(partIndex-1).compositionCount();
+  }
+
+
+
+QString CsPlayList::partCompositionId(int partIndex, int compositionIndex) const
+  {
+  return partIndex == 0 ? CsSongLocalRepo::repo()->songList().at(compositionIndex) : mPartList.at(partIndex - 1).compositionId(compositionIndex);
+  }
+
+
+
+
+
 bool CsPlayList::partCompositionAppend(int partIndex, const QString &id)
   {
-  if( mPartList[partIndex].compositionAppend( id ) ) {
+  if( partIndex == 0 ) return false;
+  if( mPartList[partIndex - 1].compositionAppend( id ) ) {
     mDirty = true;
     return true;
     }
@@ -68,7 +105,8 @@ bool CsPlayList::partCompositionAppend(int partIndex, const QString &id)
 
 void CsPlayList::partCompositionRemove( int partIndex, int compositionIndex )
   {
-  mPartList[partIndex].compositionRemove(compositionIndex);
+  if( partIndex == 0 ) return;
+  mPartList[partIndex - 1].compositionRemove(compositionIndex);
   garbageCollection();
   mDirty = true;
   }
@@ -82,6 +120,7 @@ void CsPlayList::compositionSet( const CsComposition &comp )
   mCompositionsMap.insert( comp.songId(), CsCompositionInfo(comp) );
   mDirty = true;
   }
+
 
 
 
@@ -121,14 +160,17 @@ QByteArray CsPlayList::toByteArray() const
 
 
 
-void CsPlayList::fromByteArray(const QByteArray &ar)
+bool CsPlayList::fromByteArray(const QByteArray &ar)
   {
   CsJsonAttr attr;
-  QJsonObject obj = svJsonObjectFromByteArray( ar );
+  QJsonObject obj( svJsonObjectFromByteArray( ar ) );
   CsJsonReader js( obj, &attr );
   attr.jsonRead( js );
-  if( attr.isPlayList() )
+  if( attr.isPlayList() ) {
     jsonRead( js );
+    return true;
+    }
+  return false;
   }
 
 
@@ -139,24 +181,16 @@ void CsPlayList::load()
   QFile file( fileName() );
   if( file.exists() ) {
     qDebug() << "playList exist loading...";
-    if( file.open( QIODevice::ReadOnly ) )
-      fromByteArray( file.readAll() );
+    if( file.open( QIODevice::ReadOnly ) ) {
+      if( fromByteArray( file.readAll() ) )
+        return;
+      }
     }
-  else {
-    qDebug() << "playList not found" << fileName();
-    //Create default play list
-    mVersion = 1;
-    partAppend( QObject::tr("My songs") );
-    partAppend( QObject::tr("Examples") );
-
-    CsComposition comp;
-    comp.attributeSet( CS_ATTR_SINGER, "Цой" );
-    comp.attributeSet( CS_ATTR_NAME, "Кукушка" );
-    compositionSet( comp );
-    comp.fileSave();
-    partCompositionAppend( 0, comp.songId() );
-    partCompositionAppend( 1, comp.songId() );
-    }
+  qDebug() << "playList not found or invalid" << fileName();
+  //Create default play list
+  mVersion = 1;
+  partAppend( QObject::tr("My songs") );
+  partAppend( QObject::tr("Examples") );
   }
 
 
@@ -198,5 +232,9 @@ void CsPlayList::garbageCollection()
 
 QString CsPlayList::fileName()
   {
-  return CsComposition::mSongRepo.repoHomeDir( QString{} ) + QStringLiteral("playList.dat");
+  return CsSongLocalRepo::repo()->repoHomeDir( QString{} ) + QStringLiteral("playList.dat");
   }
+
+
+
+

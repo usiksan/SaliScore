@@ -1,7 +1,11 @@
 #ifndef CSCOMPOSITIONINFO_H
 #define CSCOMPOSITIONINFO_H
 
-#include "CsComposition.h"
+#include "CsJsonIO.h"
+
+#include <QString>
+
+class CsComposition;
 
 class CsCompositionInfo
   {
@@ -12,13 +16,7 @@ class CsCompositionInfo
   public:
     CsCompositionInfo();
 
-    CsCompositionInfo( const CsComposition &comp ) :
-      mName(comp.attributeGet( CS_ATTR_NAME )),
-      mAuthor(comp.attributeGet( CS_ATTR_AUTHOR )),
-      mSinger(comp.attributeGet( CS_ATTR_SINGER )),
-      mVersion(comp.attributeGet( CS_ATTR_VERSION ))
-      {
-      }
+    CsCompositionInfo( const CsComposition &comp );
 
     QString name() const { return mName; }
 
@@ -28,21 +26,12 @@ class CsCompositionInfo
 
     QString version() const { return mVersion; }
 
-    void jsonWrite( CsJsonWriter &js ) const
-      {
-      js.jsonString( "Name", mName );
-      js.jsonString( "Author", mAuthor );
-      js.jsonString( "Singer", mSinger );
-      js.jsonString( "Version", mVersion );
-      }
+    void jsonWrite( SvJsonWriter &js ) const;
 
-    void jsonRead( CsJsonReader &js )
-      {
-      js.jsonString( "Name", mName );
-      js.jsonString( "Author", mAuthor );
-      js.jsonString( "Singer", mSinger );
-      js.jsonString( "Version", mVersion );
-      }
+    void jsonRead( SvJsonReader &js );
   };
+
+using CsCompositionMap = QMap<QString,CsCompositionInfo>;
+
 
 #endif // CSCOMPOSITIONINFO_H

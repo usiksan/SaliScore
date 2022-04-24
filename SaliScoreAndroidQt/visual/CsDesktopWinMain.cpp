@@ -25,9 +25,8 @@
 #include <QMenuBar>
 
 
-CsDesktopWinMain::CsDesktopWinMain(CsPlayList &playList, QWidget *parent) :
-  QMainWindow{parent},
-  mPlayList{playList}
+CsDesktopWinMain::CsDesktopWinMain(QWidget *parent) :
+  QMainWindow{parent}
   {
   //==========================================
   //      Top layer of layout
@@ -48,11 +47,11 @@ CsDesktopWinMain::CsDesktopWinMain(CsPlayList &playList, QWidget *parent) :
   //      Second layer of layout
   // 1. Left part
   // 1.1. Play list
-  mWLeftPlayList = new CsVisualPlayList( mPlayList );
+  mWLeftPlayList = new CsVisualPlayList();
   mWLeftPart->addWidget( mWLeftPlayList );
 
   // 1.2. Part list
-  mWLeftPartList = new CsVisualPartList( mPlayList );
+  mWLeftPartList = new CsVisualPartList();
   mWLeftPart->addWidget( mWLeftPartList );
 
   // We begin from play list
@@ -82,6 +81,7 @@ CsDesktopWinMain::CsDesktopWinMain(CsPlayList &playList, QWidget *parent) :
   connect( mWLeftPartList, &CsVisualPartList::compositionClicked, this, [this] (const QString &compositionId) {
     if( canCloseEditor() ) {
       mComposition.fileLoad( compositionId );
+      qDebug() << "Composition loaded" << mComposition.attributeGet(CS_ATTR_NAME);
       compositionChanged();
       //mComposition.fileSave();
       }
@@ -316,7 +316,13 @@ void CsDesktopWinMain::cmFileLoad()
 void CsDesktopWinMain::cmFileSave()
   {
   mComposition.fileSave();
-  mPlayList.compositionSet( mComposition );
+  CsPlayList::pl()->compositionSet( mComposition );
+  if( mWLeftPart->currentWidget() == mWLeftPartList ) {
+    CsPlayList::pl()->partCompositionAppend( mWLeftPartList->partIndex(), mComposition.songId() );
+    mWLeftPartList->update();
+    }
+  else
+    CsPlayList::pl()->partCompositionAppend( 0, mComposition.songId() );
   visualCurrentUpdate();
   }
 
@@ -326,7 +332,7 @@ void CsDesktopWinMain::cmFileSave()
 void CsDesktopWinMain::cmFileCopy()
   {
   mComposition.fileCopySave();
-  mPlayList.compositionSet( mComposition );
+  CsPlayList::pl()->compositionSet( mComposition );
   visualCurrentUpdate();
   }
 
@@ -513,9 +519,9 @@ void CsDesktopWinMain::visualActiveSet(CsVisualScore *visualScore, QAction *visu
   if( barKaraoke == activeBar ) barKaraoke->show();
   else barKaraoke->hide();
   //Menu
-  menuEditDisabled->setVisible( menuEditDisabled == activeMenu0 || menuEditDisabled == activeMenu1 );
-  menuEdit->setVisible( menuEdit == activeMenu0 || menuEdit == activeMenu1 );
-  menuTrain->setVisible( menuTrain == activeMenu0 || menuTrain == activeMenu1 );
+  actionMenuEditDisabled->setVisible( menuEditDisabled == activeMenu0 || menuEditDisabled == activeMenu1 );
+  actionMenuEdit->setVisible( menuEdit == activeMenu0 || menuEdit == activeMenu1 );
+  actionMenuTrain->setVisible( menuTrain == activeMenu0 || menuTrain == activeMenu1 );
   visualActive()->activate();
   }
 

@@ -1,4 +1,5 @@
 #include "CsRepoClient.h"
+#include "score/CsComposition.h"
 
 #include <QThread>
 #include <QNetworkRequest>
@@ -59,9 +60,8 @@ static void sdHttpMultiPartAppendField( QHttpMultiPart *multiPart, const QString
 
 
 
-CsRepoClient::CsRepoClient(CsPlayList &playList, QObject *parent) :
+CsRepoClient::CsRepoClient(QObject *parent) :
   QObject(parent),
-  mPlayList(playList),
   mQueryType(cpqIdle)
   {
 
@@ -193,8 +193,8 @@ void CsRepoClient::doRegister(const QString repo, const QString authorName, cons
   sdHttpMultiPartAppendField( multiPart, REPO_FIELD_AUTHOR, authorName.toUtf8() );
   sdHttpMultiPartAppendField( multiPart, REPO_FIELD_PASSWORD, password.toUtf8() );
   sdHttpMultiPartAppendField( multiPart, REPO_FIELD_EMAIL, mail.toUtf8() );
-  sdHttpMultiPartAppendField( multiPart, REPO_FIELD_LISTTIME, mPlayList.version() );
-  sdHttpMultiPartAppendField( multiPart, REPO_FIELD_PLAYLIST, mPlayList.toByteArray() );
+  sdHttpMultiPartAppendField( multiPart, REPO_FIELD_LISTTIME, CsPlayList::pl()->version() );
+  sdHttpMultiPartAppendField( multiPart, REPO_FIELD_PLAYLIST, CsPlayList::pl()->toByteArray() );
 
   emit registerStatus( false, tr("Register start...") );
   mQueryType = cpqRegister;
@@ -277,8 +277,8 @@ void CsRepoClient::doUploadPlayList()
 
   sdHttpMultiPartAppendField( multiPart, REPO_FIELD_AUTHOR, author.toUtf8() );
   sdHttpMultiPartAppendField( multiPart, REPO_FIELD_PASSWORD, password.toUtf8() );
-  sdHttpMultiPartAppendField( multiPart, REPO_FIELD_LISTTIME, mPlayList.version() );
-  sdHttpMultiPartAppendField( multiPart, REPO_FIELD_PLAYLIST, mPlayList.toByteArray() );
+  sdHttpMultiPartAppendField( multiPart, REPO_FIELD_LISTTIME, CsPlayList::pl()->version() );
+  sdHttpMultiPartAppendField( multiPart, REPO_FIELD_PLAYLIST, CsPlayList::pl()->toByteArray() );
 
   mQueryType = cpqUploadList;
   QNetworkReply *reply = mNetworkManager->post( QNetworkRequest(QUrl( QStringLiteral("http://") + hostRepo + QStringLiteral("uploadlist.php"))), multiPart );
@@ -372,8 +372,8 @@ void CsRepoClient::doUploadSong(const QString compositionid)
 
 void CsRepoClient::doDeletionSong()
   {
-  QStringList activeSongs = mPlayList.compositionList();
-  QStringList songFiles = CsComposition::mSongRepo.songList();
+  QStringList activeSongs = CsPlayList::pl()->compositionList();
+  QStringList songFiles = CsSongLocalRepo::repo()->songList();
   QSet<QString> activeSet( activeSongs.begin(), activeSongs.end() );
   for( const auto &id : qAsConst(songFiles) )
     if( !activeSet.contains(id) ) {
@@ -497,14 +497,14 @@ void CsRepoClient::cmSyncList(const QJsonObject &reply)
   if( reply.value( REPO_FIELD_RESULT ).toInt() == 0 ) {
     qDebug() << "time of playlist received";
     int listtime = reply.value( REPO_FIELD_LISTTIME ).toString().toInt();
-    if( mPlayList.version() < listtime )
+    if( CsPlayList::pl()->version() < listtime )
       //Need update current playlist from repo
       doDownloadPlayList();
-    else if( mPlayList.version() > listtime )
+    else if( CsPlayList::pl()->version() > listtime )
       //Need update playlist into repo with current
       doUploadPlayList();
     else {
-      mSyncList = mPlayList.compositionList();
+      mSyncList = CsPlayList::pl()->compositionList();
       doSyncSong();
       }
     }
@@ -529,11 +529,11 @@ void CsRepoClient::cmDownloadPlayList(const QJsonObject &reply)
     QString playlist = reply.value( REPO_FIELD_PLAYLIST ).toString();
     qDebug() << "Play list downloaded";
     if( !playlist.isEmpty() ) {
-      mPlayList.fromByteArray( playlist.toUtf8() );
-      mPlayList.save();
+      CsPlayList::pl()->fromByteArray( playlist.toUtf8() );
+      CsPlayList::pl()->save();
       emit playlistChanged();
       }
-    mSyncList = mPlayList.compositionList();
+    mSyncList = CsPlayList::pl()->compositionList();
     doSyncSong();
     }
   else {
@@ -554,7 +554,7 @@ void CsRepoClient::cmUploadPlayList(const QJsonObject &reply)
   // 4 - имя уже есть в базе и пароль не совпал
   if( reply.value( REPO_FIELD_RESULT ).toInt() == 0 ) {
     qDebug() << "Play list uploaded";
-    mSyncList = mPlayList.compositionList();
+    mSyncList = CsPlayList::pl()->compositionList();
     doSyncSong();
     }
   else {
@@ -577,7 +577,7 @@ void CsRepoClient::cmSyncSong(const QJsonObject &reply)
     qDebug() << "Composition version received";
     QString compositionid = reply.value( REPO_FIELD_COMPOSITIONID ).toString();
     int version = reply.value( REPO_FIELD_VERSION ).toString().toInt();
-    int fileVersion = CsComposition::mSongRepo.songVersion( compositionid );
+    int fileVersion =CsSongLocalRepo::repo()->songVersion( compositionid );
     if( version > fileVersion )
       //In repository is newest version, so download it
       doDownloadSong( compositionid );
@@ -617,7 +617,7 @@ void CsRepoClient::cmDownloadSong(const QJsonObject &reply)
 
       if( comp.songId() == mNeedSong ) {
         mNeedSong.clear();
-        emit songLoaded( comp );
+        //emit songLoaded( comp );
         }
 
       //Remove received song from sync list
@@ -673,7 +673,7 @@ void CsRepoClient::cmDeleteSong(const QJsonObject &reply)
     QString compositionid = reply.value( REPO_FIELD_COMPOSITIONID ).toString();
 
     //Remove deleted song from local repo
-    CsComposition::mSongRepo.songRemove( compositionid );
+    CsSongLocalRepo::repo()->songRemove( compositionid );
 
     //Continue deleting songs
     doDeletionSong();

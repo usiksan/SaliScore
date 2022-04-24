@@ -9,10 +9,11 @@ class CsVisualPartList : public CsVisualRegularList
   {
     Q_OBJECT
 
-    CsPlayList &mPlayList;  //!< Play list which displayed with this widget
     int         mPartIndex; //!< Part index
   public:
-    CsVisualPartList( CsPlayList &playList, QWidget *parent = nullptr );
+    CsVisualPartList( QWidget *parent = nullptr );
+
+    int partIndex() const { return mPartIndex; }
 
   signals:
     void compositionClicked( const QString &compositionId );

@@ -5,8 +5,6 @@
 #include <QJsonDocument>
 #include <QFile>
 
-CsSongLocalRepo CsComposition::mSongRepo;
-
 CsComposition::CsComposition()
   {
   clear();
@@ -441,13 +439,13 @@ bool CsComposition::fileSave()
     mAttributes.set( CS_ATTR_VERSION,    QString::number(id) );
     }
 
-  QFile file( mSongRepo.repoSongPath( songId() )  );
+  QFile file( CsSongLocalRepo::repo()->repoSongPath( songId() )  );
   if( file.open(QIODevice::WriteOnly) ) {
     //Write contents to file
     file.write( toByteArray() );
     mDirty = false;
     //Store to local repository
-    mSongRepo.songStore( songId(), version().toInt() );
+    CsSongLocalRepo::repo()->songStore( songId(), *this );
     return true;
     }
   return false;
@@ -468,7 +466,7 @@ bool CsComposition::fileCopySave()
 
 bool CsComposition::fileLoad(const QString &songId)
   {
-  QFile file( mSongRepo.repoSongPath(songId) );
+  QFile file( CsSongLocalRepo::repo()->repoSongPath(songId) );
   if( file.open( QIODevice::ReadOnly ) )
     return fromByteArray( file.readAll(), true );
   return false;

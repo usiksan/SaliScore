@@ -69,6 +69,7 @@ void CsVisualScore::compositionChanged()
   {
   mStartY = 0;       //!< Coordinate Y of list viewport begin
   mStartIndex = 0;   //!< Index of first visible item
+  update();
   }
 
 void CsVisualScore::activate()

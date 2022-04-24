@@ -8,18 +8,19 @@
 #include <QTreeWidgetItem>
 #include <functional>
 
-using CsCompositionMap = QMap<QString,CsCompositionInfo>;
 
 class CsPlayList
   {
-    int              mVersion;         //!< Version (time of last changes)
-    CsPlayPartList   mPartList;        //!< Part list
+    int              mVersion;          //!< Version (time of last changes)
+    CsPlayPartList   mPartList;         //!< Part list
 
-    CsCompositionMap mCompositionsMap; //!< Map of composition Id and accosiated composition settings
+    CsCompositionMap mCompositionsMap;  //!< Map of composition Id and accosiated composition settings
 
-    bool             mDirty;           //!< When true list need to be saved
-  public:
+    bool             mDirty;            //!< When true list need to be saved
+
     CsPlayList();
+  public:
+    static CsPlayList    *pl();
 
     bool                  dirty() const { return mDirty; }
 
@@ -29,9 +30,9 @@ class CsPlayList
 
     //====================================================================================
     //           Part list level
-    int                   partCount() const { return mPartList.count(); }
+    int                   partCount() const { return mPartList.count() + 1; }
 
-    QString               partTitle( int i ) const { return mPartList.at(i).title(); }
+    QString               partTitle( int i ) const;
 
     void                  partTitleSet( int i, const QString &tit );
 
@@ -42,11 +43,13 @@ class CsPlayList
 
     //====================================================================================
     //           Single part level
-    int                   partCompositionCount( int i ) const { return mPartList.at(i).compositionCount(); }
+    int                   partCompositionCount(int partIndex ) const;
 
-    QString               partCompositionId( int partIndex, int compositionIndex ) const { return mPartList.at(partIndex).compositionId(compositionIndex); }
+    QString               partCompositionId( int partIndex, int compositionIndex ) const;
 
     QString               partCompositionName( int partIndex, int compositionIndex ) const { return mCompositionsMap.value(partCompositionId(partIndex,compositionIndex)).name(); }
+
+    CsCompositionInfo     partCompositionInfo( int partIndex, int compositionIndex ) const { return mCompositionsMap.value(partCompositionId(partIndex,compositionIndex)); }
 
     bool                  partCompositionAppend( int partIndex, const QString &id );
 
@@ -59,9 +62,27 @@ class CsPlayList
 
     void                  compositionSet( const CsComposition &comp );
 
+    //!
+    //! \brief compositionVersion Return file version of composition
+    //! \param id                 Ident of composition which version need to be returned
+    //! \return                   File version of composition
+    //!
+    int                   compositionVersion( const QString &id ) const { return mCompositionsMap.value(id).version().toInt(); }
+
     bool                  contains( const QString &id ) const { return mCompositionsMap.contains( id ); }
 
+    //!
+    //! \brief compositionList Returns full file list as list of compositionId
+    //! \return                List of compositionId
+    //!
     QStringList           compositionList() const { return mCompositionsMap.keys(); }
+
+    //!
+    //! \brief compositionPath Full path to composition
+    //! \param songId          Ident of composition
+    //! \return                Full path to composition on local storage
+    //!
+    QString               compositionPath( const QString &id ) const;
 
 
 
@@ -72,7 +93,7 @@ class CsPlayList
 
     QByteArray            toByteArray() const;
 
-    void                  fromByteArray( const QByteArray &ar );
+    bool                  fromByteArray( const QByteArray &ar );
 
 
     void                  load();
@@ -83,6 +104,7 @@ class CsPlayList
     void                  garbageCollection();
 
     static QString        fileName();
+
   };
 
 #endif // CSPLAYLIST_H

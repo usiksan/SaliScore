@@ -52,14 +52,13 @@ int main(int argc, char *argv[])
 
 
   //Main play list
-  CsPlayList playList;
-  playList.load();
+  CsPlayList::pl()->load();
 
   //Local repo
-  CsComposition::mSongRepo.repoInit();
+  CsSongLocalRepo::repo()->repoInit();
 
   //Remote repo client
-  repoClient = new CsRepoClient( playList );
+  repoClient = new CsRepoClient();
 
 //  if( !repoClient->isRegistered() ) {
 //    CsDlgRegistration dlg(nullptr);
@@ -77,7 +76,7 @@ int main(int argc, char *argv[])
 
 
 #ifdef Q_OS_ANDROID
-  CsAndroidWinMain w( playList );
+  CsAndroidWinMain w();
 #else
 
   //=============================================================================
@@ -86,7 +85,7 @@ int main(int argc, char *argv[])
 //  QThread *midiThread = new QThread();
 //  CsMidiSequencer *midiSequencer = new CsMidiSequencer( midiThread );
 
-  CsDesktopWinMain w( playList );
+  CsDesktopWinMain w;
 #endif
 
 
@@ -101,7 +100,7 @@ int main(int argc, char *argv[])
 //  midiThread->quit();
 //  midiThread->wait();
 
-  playList.save();
+  CsPlayList::pl()->save();
 #endif
 
   return res;

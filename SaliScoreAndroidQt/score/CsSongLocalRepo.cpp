@@ -1,5 +1,6 @@
 #include "CsConfig.h"
 #include "CsSongLocalRepo.h"
+#include "CsComposition.h"
 #include "SvJson/SvJsonIO.h"
 
 #include <QDir>
@@ -14,6 +15,14 @@ CsSongLocalRepo::CsSongLocalRepo()
 
 
 
+CsSongLocalRepo *CsSongLocalRepo::repo()
+  {
+  static CsSongLocalRepo localRepo;
+  return &localRepo;
+  }
+
+
+
 
 
 
@@ -24,24 +33,12 @@ void CsSongLocalRepo::repoInit()
   {
   QFile file( repoPath() );
   if( file.open(QIODevice::ReadOnly) ) {
-    QByteArray ar = file.readAll();
-    QJsonObject obj = QJsonDocument::fromJson( ar ).object();
-
-    SvJsonReader js(obj);
-    js.jsonMapInt( "repo", mSongList );
+    QJsonObject obj( svJsonObjectFromByteArray(file.readAll()) );
+    SvJsonReader js( obj );
+    js.jsonMap( "repo", mSongMap );
+    mCompositionsList = mSongMap.keys();
+    qDebug() << "repo" << mCompositionsList;
     }
-  }
-
-
-
-
-//!
-//! \brief songList Returns full file list as list of compositionId
-//! \return         List of compositionId
-//!
-QStringList CsSongLocalRepo::songList() const
-  {
-  return mSongList.keys();
   }
 
 
@@ -52,16 +49,17 @@ QStringList CsSongLocalRepo::songList() const
 //! \brief songStore     Signal to local repo that composition is stored. We update repository with
 //!                      compositionId and version of composition
 //! \param compositionId Ident of composition
-//! \param version       Version of composition
+//! \param comp          Composition
 //!
-void CsSongLocalRepo::songStore(const QString &compositionId, int version)
+void CsSongLocalRepo::songStore(const QString &compositionId, const CsComposition &comp )
   {
   //Test if no changes assigned then nothing done
-  if( mSongList.contains(compositionId) && mSongList.value(compositionId) == version )
+  if( mSongMap.contains(compositionId) && mSongMap.value(compositionId).version() == comp.version() )
     return;
 
   //Store new values
-  mSongList.insert( compositionId, version );
+  CsCompositionInfo info( comp );
+  mSongMap.insert( compositionId, info );
 
   //Save changes to file
   repoSave();
@@ -80,7 +78,7 @@ void CsSongLocalRepo::songRemove(const QString &compositionId)
   QFile::remove( repoSongPath(compositionId) );
 
   //Remove song from repo
-  mSongList.remove( compositionId );
+  mSongMap.remove( compositionId );
 
   //Save changes to file
   repoSave();
@@ -97,7 +95,7 @@ void CsSongLocalRepo::songRemove(const QString &compositionId)
 //!
 int CsSongLocalRepo::songVersion(const QString &compositionId) const
   {
-  return mSongList.value( compositionId, 1 );
+  return mSongMap.value( compositionId ).version().toInt();
   }
 
 
@@ -154,7 +152,7 @@ QString CsSongLocalRepo::repoPath() const
 //!
 //! \brief repoSave Perform saving of repository to local storage
 //!
-void CsSongLocalRepo::repoSave() const
+void CsSongLocalRepo::repoSave()
   {
   //Create file and try to open it to write
   QFile file( repoPath() );
@@ -162,8 +160,9 @@ void CsSongLocalRepo::repoSave() const
     //File opened successfull
     //We create writer and write repository to file
     SvJsonWriter js;
-    js.jsonMapInt( "repo", mSongList );
+    js.jsonMap( "repo", mSongMap );
 
-    file.write( QJsonDocument(js.object()).toJson() );
+    mCompositionsList = mSongMap.keys();
+    file.write( svJsonObjectToByteArray( js.object() ) );
     }
   }

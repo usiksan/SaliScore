@@ -1,6 +1,8 @@
 #ifndef CSDESKTOPWINMAIN_H
 #define CSDESKTOPWINMAIN_H
 
+
+#include "CsVisualWinMain.h"
 #include "score/CsComposition.h"
 
 #include "import/CsImportManager.h"
@@ -25,7 +27,7 @@ class CsVisualScoreKaraoke;
 
 using QActionPtr = QAction*;
 
-class CsDesktopWinMain : public QMainWindow
+class CsDesktopWinMain : public CsVisualWinMain
   {
     Q_OBJECT
 
@@ -41,11 +43,9 @@ class CsDesktopWinMain : public QMainWindow
 
     CsImportManager       mImportManager;        //!< Import files manager. Contains converters from other formats
 
-    CsPlayList           &mPlayList;             //!< Main play list
-    CsComposition         mComposition;          //!< Current composition
 
   public:
-    explicit CsDesktopWinMain(  CsPlayList &playList, QWidget *parent = nullptr);
+    explicit CsDesktopWinMain( QWidget *parent = nullptr);
 
   signals:
 

@@ -9,16 +9,15 @@ class CsVisualPlayList : public CsVisualAbstractList
   {
     Q_OBJECT
 
-    CsPlayList &mPlayList; //!< Play list which displayed with this widget
     int         mDelIconX; //!< X position of delete icon
   public:
-    CsVisualPlayList( CsPlayList &playList, QWidget *parent = nullptr );
+    CsVisualPlayList( QWidget *parent = nullptr );
 
     virtual int  itemHeight( int index ) const override;
 
     virtual int  itemPaint( int index, int y, QPainter &painter ) override;
 
-    virtual int  itemCount() const override { return mPlayList.partCount() + 8; }
+    virtual int  itemCount() const override;
 
     virtual void itemClicked( int x, int itemIndex ) override;
 
