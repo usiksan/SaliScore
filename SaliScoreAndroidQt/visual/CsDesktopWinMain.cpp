@@ -81,24 +81,22 @@ CsDesktopWinMain::CsDesktopWinMain(QWidget *parent) :
   connect( mWLeftPartList, &CsVisualPartList::compositionClicked, this, [this] (const QString &compositionId) {
     if( canCloseEditor() ) {
       mComposition.fileLoad( compositionId );
-      qDebug() << "Composition loaded" << mComposition.attributeGet(CS_ATTR_NAME);
       compositionChanged();
-      //mComposition.fileSave();
       }
     });
 
 
   // 2. Central part
   // 2.1. Score view and train
-  mWCentralScoreTrain = new CsVisualScoreTrain( mComposition );
+  mWCentralScoreTrain = new CsVisualScoreTrain( mComposition, this );
   mWCentralPart->addWidget( mWCentralScoreTrain );
 
   // 2.2. Score edit
-  mWCentralScoreEdit = new CsVisualScoreEdit( mComposition );
+  mWCentralScoreEdit = new CsVisualScoreEdit( mComposition, this );
   mWCentralPart->addWidget( mWCentralScoreEdit );
 
   // 2.3 Score karaoke
-  mWCentralScoreKaraoke = new CsVisualScoreKaraoke( mComposition );
+  mWCentralScoreKaraoke = new CsVisualScoreKaraoke( mComposition, this );
   mWCentralPart->addWidget( mWCentralScoreKaraoke );
 
 
@@ -165,7 +163,7 @@ CsDesktopWinMain::CsDesktopWinMain(QWidget *parent) :
   group->addAction( actionViewKaraoke );
 
   menuPlay = new QMenu( tr("Play") );
-  actionPlayStart = menuPlay->addAction( QIcon(QStringLiteral(":/pic/playStart.png")), tr("Start"), this, &CsDesktopWinMain::cmPlayStart );
+  actionPlayStart = menuPlay->addAction( QIcon(QStringLiteral(":/pic/playStart.png")), tr("Start"), this, &CsDesktopWinMain::cmPlayRun );
   actionPlayPause = menuPlay->addAction( QIcon(QStringLiteral(":/pic/playPause.png")), tr("Pause") /*, this, [this] () {  mPlayer.pause(); } */ );
   actionPlayStop  = menuPlay->addAction( QIcon(QStringLiteral(":/pic/playStop.png")), tr("Stop"), this, &CsDesktopWinMain::cmPlayStop );
 
@@ -267,6 +265,13 @@ CsDesktopWinMain::CsDesktopWinMain(QWidget *parent) :
   mImportManager.registerImport( new CsImportSaliScore() );
   mImportManager.registerImport( new CsImportText() );
 
+  }
+
+
+
+void CsDesktopWinMain::playUpdate()
+  {
+  visualCurrentUpdate();
   }
 
 
@@ -415,15 +420,6 @@ void CsDesktopWinMain::cmViewTranslation()
 
   }
 
-void CsDesktopWinMain::cmPlayStart()
-  {
-
-  }
-
-void CsDesktopWinMain::cmPlayStop()
-  {
-
-  }
 
 void CsDesktopWinMain::cmHelpContent()
   {

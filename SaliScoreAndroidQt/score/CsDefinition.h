@@ -22,7 +22,7 @@ struct CsDefinition
 
     bool visibleToggle() { mVisible = !mVisible; return mVisible; }
 
-    int  channel() const;
+    int  channel() const { return 0; }
 
     void jsonWrite( CsJsonWriter &js ) const;
 

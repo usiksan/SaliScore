@@ -24,6 +24,7 @@ class CsCursorPosition
     int     mLineIndex;     //!< Line index of cursor
   public:
     CsCursorPosition();
+    CsCursorPosition( int position, int index ) : mLinePosition(position), mLineIndex(index) {}
 
     //!
     //! \brief linePosition Returns position of cursor in tick from begin of line
@@ -51,6 +52,8 @@ class CsCursorPosition
     //! \param duration Duration of interval
     //! \return         true if current play position is hit into given interval
     bool     isHit( int position, int duration ) const { return position <= mLinePosition && mLinePosition < (position + duration); }
+
+    bool     isLess( int lineIndex, int linePosition ) const { return mLineIndex < lineIndex || (mLineIndex == lineIndex && mLinePosition < linePosition); }
 
     //!
     //! \brief jsonWrite Writes content into json writer object

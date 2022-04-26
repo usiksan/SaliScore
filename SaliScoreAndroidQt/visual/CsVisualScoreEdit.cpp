@@ -1,4 +1,5 @@
 #include "CsVisualScoreEdit.h"
+#include "CsVisualWinMain.h"
 #include "CsPainterEditor.h"
 
 #include <QPaintEvent>
@@ -11,8 +12,8 @@
 #include <QDebug>
 
 
-CsVisualScoreEdit::CsVisualScoreEdit(CsComposition &comp, QWidget *parent) :
-  CsVisualScore( comp, parent ),
+CsVisualScoreEdit::CsVisualScoreEdit(CsComposition &comp, CsVisualWinMain *player, QWidget *parent) :
+  CsVisualScore( comp, player, parent ),
   mCellCursor( comp ),
   mEditor(nullptr),
   mShift(false),
@@ -113,7 +114,8 @@ void CsVisualScoreEdit::cmEditDelete()
 
 void CsVisualScoreEdit::contentPaint(QPainter &painter)
   {
-  CsPainterEditor cp( &painter, QStringLiteral(KEY_EDITOR_SETTINGS), mComposition, nullptr, mStartX, size(), &mCellCursor, mEditor, mSelectedLines );
+  CsCursorPosition play( mPlayer->playLinePosition(), mPlayer->playLineIndex() );
+  CsPainterEditor cp( &painter, QStringLiteral(KEY_EDITOR_SETTINGS), mComposition, mPlayer->playIsRun() ? &play : nullptr, mStartX, size(), &mCellCursor, mEditor, mSelectedLines );
 
   paintScore( cp );
 

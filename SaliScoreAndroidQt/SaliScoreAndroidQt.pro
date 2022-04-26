@@ -22,6 +22,7 @@ SOURCES += \
     import/text/CsImportText.cpp \
     player/CsPlayer.cpp \
     player/CsPlayerEvent.cpp \
+    score/CsChordToNote.cpp \
     visual/CsAndroidWinMain.cpp \
     visual/CsDesktopWinMain.cpp \
     audioOut/CsSoundBufferIODevice.cpp \
@@ -85,6 +86,7 @@ HEADERS += \
     player/CsPlayerEvent.h \
     repo/CsRepoClient.h \
     score/CsChord.h \
+    score/CsChordToNote.h \
     score/CsComposition.h \
     score/CsCompositionInfo.h \
     score/CsCursor.h \
@@ -157,4 +159,5 @@ ANDROID_FEATURES += android.software.midi
 
 RESOURCES += \
   SaliScore.qrc
+
 

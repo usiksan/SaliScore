@@ -7,7 +7,7 @@ class CsVisualScoreKaraoke : public CsVisualScore
   {
     Q_OBJECT
   public:
-    CsVisualScoreKaraoke( CsComposition &comp, QWidget *parent = nullptr );
+    CsVisualScoreKaraoke( CsComposition &comp, CsVisualWinMain *player, QWidget *parent = nullptr );
 
     // CsVisualAbstractList interface
   public:

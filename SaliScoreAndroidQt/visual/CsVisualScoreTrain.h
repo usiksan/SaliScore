@@ -11,7 +11,7 @@ class CsVisualScoreTrain : public CsVisualScore
     CsReferenceList mReferenceList; //!< List of areas on screen with appropriate reference to position in score
     int             mFragment;      //!< Active fragment
   public:
-    CsVisualScoreTrain( CsComposition &comp, QWidget *parent = nullptr );
+    CsVisualScoreTrain( CsComposition &comp, CsVisualWinMain *player, QWidget *parent = nullptr );
 
     // CsVisualAbstractList interface
   public:

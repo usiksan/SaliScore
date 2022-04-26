@@ -40,6 +40,8 @@
 #define CS_SAMPLES_PER_SECOND        44100
 #define CS_SAMPLES_PER_20MS          (CS_SAMPLES_PER_SECOND * 20 / 1000)
 
+#define TICK_PERIOD_MS               20
+#define TICK_PERIOD_US               (TICK_PERIOD_MS * 1000)
 
 
 //Project naming definition

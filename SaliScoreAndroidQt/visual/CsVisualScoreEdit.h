@@ -19,7 +19,7 @@ class CsVisualScoreEdit : public CsVisualScore
 
     CsLineList      mLineClipboard; //!< Local clipboard for selected lines
   public:
-    CsVisualScoreEdit( CsComposition &comp, QWidget *parent = nullptr );
+    CsVisualScoreEdit( CsComposition &comp, CsVisualWinMain *player, QWidget *parent = nullptr );
 
 
   signals:

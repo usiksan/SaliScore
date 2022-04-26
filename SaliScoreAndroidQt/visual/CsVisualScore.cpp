@@ -1,10 +1,11 @@
 #include "CsVisualScore.h"
 
-CsVisualScore::CsVisualScore(CsComposition &comp, QWidget *parent) :
+CsVisualScore::CsVisualScore(CsComposition &comp, CsVisualWinMain *player, QWidget *parent) :
   SvVisualAbstractList(parent),
   mStartX(0),
   mAutoScroll(true),
-  mComposition(comp)
+  mComposition(comp),
+  mPlayer(player)
   {
 
   }

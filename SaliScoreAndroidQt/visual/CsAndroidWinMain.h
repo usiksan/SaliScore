@@ -1,7 +1,7 @@
 #ifndef CSANDROIDWINMAIN_H
 #define CSANDROIDWINMAIN_H
 
-#include "score/CsComposition.h"
+#include "CsVisualWinMain.h"
 
 #include <QMainWindow>
 #include <QStackedWidget>
@@ -13,7 +13,7 @@ class CsVisualPartList;
 class CsVisualScoreTrain;
 
 
-class CsAndroidWinMain : public QMainWindow
+class CsAndroidWinMain : public CsVisualWinMain
   {
     Q_OBJECT
 
@@ -24,12 +24,8 @@ class CsAndroidWinMain : public QMainWindow
 
     QStackedWidget     *mWCentralPart;       //!< Central part with editor, trainer and karaoke
     CsVisualScoreTrain *mWCentralScoreTrain; //!< Visual score view and train
-
-
-    CsPlayList         &mPlayList;           //!< Main play list
-    CsComposition       mComposition;        //!< Current composition
   public:
-    CsAndroidWinMain( CsPlayList &playList, QWidget *parent = nullptr);
+    CsAndroidWinMain(QWidget *parent = nullptr);
     ~CsAndroidWinMain();
 
   public slots:

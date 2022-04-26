@@ -47,6 +47,7 @@ class CsDesktopWinMain : public CsVisualWinMain
   public:
     explicit CsDesktopWinMain( QWidget *parent = nullptr);
 
+    virtual void playUpdate() override;
   signals:
 
   private slots:
@@ -71,9 +72,6 @@ class CsDesktopWinMain : public CsVisualWinMain
     void cmViewChord();
     void cmViewNote();
     void cmViewTranslation();
-
-    void cmPlayStart();
-    void cmPlayStop();
 
     void cmHelpContent();
     void cmHelpAbout();

@@ -18,9 +18,8 @@
 #endif
 
 
-CsAndroidWinMain::CsAndroidWinMain(CsPlayList &playList, QWidget *parent) :
-  QMainWindow(parent),
-  mPlayList(playList)
+CsAndroidWinMain::CsAndroidWinMain(QWidget *parent) :
+  CsVisualWinMain(parent)
   {
   //==========================================
   //      Top layer of layout
@@ -74,7 +73,7 @@ CsAndroidWinMain::CsAndroidWinMain(CsPlayList &playList, QWidget *parent) :
   // When in part list composition selected we load it to current composition
   connect( mWLeftPartList, &CsVisualPartList::compositionClicked, this, [this] (const QString &compositionId) {
     if( mComposition.isDirty() ) {
-      mPlayList.compositionSet( mComposition );
+      //mPlayList.compositionSet( mComposition );
       //mComposition.fileSave();
       }
     mComposition.fileLoad( compositionId );
@@ -85,7 +84,7 @@ CsAndroidWinMain::CsAndroidWinMain(CsPlayList &playList, QWidget *parent) :
 
   // 2. Central part
   // 2.1. Score view and train
-  mWCentralScoreTrain = new CsVisualScoreTrain( mComposition );
+  mWCentralScoreTrain = new CsVisualScoreTrain( mComposition, this );
   mWCentralPart->addWidget( mWCentralScoreTrain );
 
   //Android tool bar

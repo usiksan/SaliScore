@@ -15,7 +15,9 @@ Description
 
 CsTrainInterval::CsTrainInterval()
   {
-
+  //By default we define maximum interval
+  mStart.set( 0, 0 );
+  mStop.set( 1000000, 1000000 );
   }
 
 

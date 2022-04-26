@@ -1,8 +1,9 @@
 #include "CsVisualScoreTrain.h"
+#include "CsVisualWinMain.h"
 #include "CsPainterTrain.h"
 
-CsVisualScoreTrain::CsVisualScoreTrain(CsComposition &comp, QWidget *parent) :
-  CsVisualScore( comp, parent ),
+CsVisualScoreTrain::CsVisualScoreTrain(CsComposition &comp, CsVisualWinMain *player, QWidget *parent) :
+  CsVisualScore( comp, player, parent ),
   mFragment(0)
   {
 
@@ -11,7 +12,8 @@ CsVisualScoreTrain::CsVisualScoreTrain(CsComposition &comp, QWidget *parent) :
 
 void CsVisualScoreTrain::contentPaint(QPainter &painter)
   {
-  CsPainterTrain cp( &painter, QStringLiteral(KEY_TRAIN_SETTINGS), mComposition, nullptr, mStartX, size(), mFragment );
+  CsCursorPosition play( mPlayer->playLinePosition(), mPlayer->playLineIndex() );
+  CsPainterTrain cp( &painter, QStringLiteral(KEY_TRAIN_SETTINGS), mComposition, mPlayer->playIsRun() ? &play : nullptr, mStartX, size(), mFragment );
 
   paintScore( cp );
 

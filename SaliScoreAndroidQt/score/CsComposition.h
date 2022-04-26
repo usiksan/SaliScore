@@ -257,7 +257,7 @@ class CsComposition
 
     //=================================================================
     //         Train fragments
-    auto        trainGet( int index ) const { return mTrainList.at(index); }
+    auto        trainGet( int index ) const { return index < 0 ? CsTrainInterval{} : mTrainList.at(index); }
 
     void        trainSet( int index, const CsTrainInterval &t ) { mTrainList[index] = t; dirtySet(); }
 

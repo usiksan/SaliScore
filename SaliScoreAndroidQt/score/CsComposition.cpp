@@ -371,7 +371,7 @@ void CsComposition::clear()
 
   mLineStartOffset = 0;
 
-  mTickPerPart = 4;
+  mTickPerPart = 64;
   mPartPerTakt = 4;
 
   mStepChord = 64;
