@@ -11,7 +11,7 @@ CsVisualWinMain::CsVisualWinMain(QWidget *parent) :
   ,mLineTickCount(0)
   ,mIsRun(false)         //!< If true then player in run state
   ,mIsPaused(false)      //!< If true then player paused
-  ,mIsTeaching(false)    //!< true if teaching process actived
+  ,mIsTraining(false)    //!< true if teaching process actived
   {
   //Timer for periodic tick generation
   connect( &mTimer, &QTimer::timeout, this, &CsVisualWinMain::periodic );
@@ -37,27 +37,64 @@ void CsVisualWinMain::setTempo(int tempo)
 void CsVisualWinMain::cmPlayRun()
   {
   mIsPaused = false;
-  mIsTeaching = false;
+  mIsTraining = false;
   mIsRun = true;
-  emit setRun( mIsRun );
+  emit playSetRun( mIsRun );
   prepareRun();
   }
 
 
 
-void CsVisualWinMain::cmPlayTeach()
+void CsVisualWinMain::cmPlayTrain()
   {
   mIsPaused = false;
-  mIsTeaching = true;
+  mIsTraining = true;
   mIsRun = true;
-  emit setRun( mIsRun );
+  emit playSetRun( mIsRun );
   prepareRun();
   }
+
+
+
+
+void CsVisualWinMain::cmPlayPause()
+  {
+  mIsPaused = !mIsPaused;
+  emit playSetPause(mIsPaused);
+  }
+
+
+
 
 void CsVisualWinMain::cmPlayStop()
   {
   mIsRun = false;
-  emit setRun( mIsRun );
+  emit playSetRun( mIsRun );
+  mIsPaused = false;
+  emit playSetPause(mIsPaused);
+  }
+
+
+
+void CsVisualWinMain::midiNoteOn(int pitch)
+  {
+  int keyEvent = csKeyEvent( 0, pitch );
+  if( mKeyEventFromPlayer.contains(keyEvent) ) {
+    //Player is waiting for this note
+    mKeyEventFromPlayer.remove(keyEvent);
+    }
+  else {
+    mKeyEventFromKeyboard.insert(keyEvent);
+    }
+  }
+
+
+
+void CsVisualWinMain::midiNoteOff(int pitch)
+  {
+  int keyEvent = csKeyEvent( 0, pitch );
+  if( mKeyEventFromKeyboard.contains(keyEvent) )
+    mKeyEventFromKeyboard.remove(keyEvent);
   }
 
 
@@ -91,7 +128,7 @@ void CsVisualWinMain::tick(int tickOffset)
 
     //Process all waiting notes
     bool fail = false;
-    if( mIsTeaching ) {
+    if( mIsTraining ) {
       for( int i = mWaitingList.count() - 1; i >= 0; i-- )
         if( mWaitingList[i].tick( tickOffset ) ) {
           //Time for press note ended
@@ -120,11 +157,13 @@ void CsVisualWinMain::tick(int tickOffset)
       //Check if we reach end of fragment
       if( mComposition.trainGet( mTrainIndex ).mStop.isLess( mLineIndex, mLinePosition ) ) {
         mIsRun = false;
-        emit setRun( mIsRun );
+        emit playSetRun( mIsRun );
         }
       }
     }
   }
+
+
 
 void CsVisualWinMain::extractLine(int lastPosition)
   {
@@ -148,7 +187,7 @@ void CsVisualWinMain::extractLine(int lastPosition)
 
 void CsVisualWinMain::extractChords(const CsLine &line, const CsDefinition &def, int lastPosition)
   {
-  if( def.mSynthes || def.mTeach ) {
+  if( def.mSynthes || def.mTrain ) {
     //Perform extraction
     const auto &list = line.chordListGet( def.mName );
     for( auto &chord : list ) {
@@ -160,7 +199,7 @@ void CsVisualWinMain::extractChords(const CsLine &line, const CsDefinition &def,
           for( int i = 0; i < chordToNote.count(); i++ )
             mEventList.append( CsPlayerEvent( def.channel(), chordToNote.pitch(i), chord.duration() ) );
           }
-        if( def.mTeach ) {
+        if( def.mTrain ) {
           //Append chord to teach
           }
         }
@@ -174,7 +213,7 @@ void CsVisualWinMain::extractChords(const CsLine &line, const CsDefinition &def,
 
 void CsVisualWinMain::extractNote(const CsLine &line, const CsDefinition &def, int lastPosition)
   {
-  if( def.mSynthes || def.mTeach ) {
+  if( def.mSynthes || def.mTrain ) {
     //Perform extraction
     const auto &list = line.noteListGet( def.mName );
     for( auto &note : list ) {
@@ -184,7 +223,7 @@ void CsVisualWinMain::extractNote(const CsLine &line, const CsDefinition &def, i
         if( def.mSynthes ) {
           //Append chord to synthes array
           }
-        if( def.mTeach ) {
+        if( def.mTrain ) {
           //Append chord to teach
           int keyEvent = noteEvent.keyEvent();
           if( mKeyEventFromKeyboard.contains(keyEvent) )
@@ -220,7 +259,7 @@ void CsVisualWinMain::findNextLine()
     }
   //Next line not found, composition is finished
   mIsRun = false;
-  emit setRun( mIsRun );
+  emit playSetRun( mIsRun );
   }
 
 

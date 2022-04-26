@@ -16,7 +16,7 @@ struct CsDefinition
     int     mClef;
     bool    mVisible;
     bool    mSynthes;      //!< Do synthes of this instrument
-    bool    mTeach;        //!< Perform teaching of this instrument part
+    bool    mTrain;        //!< Perform teaching of this instrument part
 
     CsDefinition( const QString nm = QString{}, const QString descr = QString{}, const QString inst = QString{}, int mClef = noteC );
 

@@ -164,8 +164,18 @@ CsDesktopWinMain::CsDesktopWinMain(QWidget *parent) :
 
   menuPlay = new QMenu( tr("Play") );
   actionPlayStart = menuPlay->addAction( QIcon(QStringLiteral(":/pic/playStart.png")), tr("Start"), this, &CsDesktopWinMain::cmPlayRun );
-  actionPlayPause = menuPlay->addAction( QIcon(QStringLiteral(":/pic/playPause.png")), tr("Pause") /*, this, [this] () {  mPlayer.pause(); } */ );
+  actionPlayTrain = menuPlay->addAction( QIcon(QStringLiteral(":/pic/playStart.png")), tr("Start train"), this, &CsDesktopWinMain::cmPlayTrain );
+  actionPlayPause = menuPlay->addAction( QIcon(QStringLiteral(":/pic/playPause.png")), tr("Pause"), this, &CsDesktopWinMain::cmPlayPause );
   actionPlayStop  = menuPlay->addAction( QIcon(QStringLiteral(":/pic/playStop.png")), tr("Stop"), this, &CsDesktopWinMain::cmPlayStop );
+  //actionPlayStart->setCheckable(true);
+  actionPlayPause->setCheckable(true);
+  actionPlayPause->setEnabled(false);
+  actionPlayStop->setEnabled(false);
+  connect( this, &CsDesktopWinMain::playSetRun, actionPlayStart, &QAction::setDisabled );
+  connect( this, &CsDesktopWinMain::playSetRun, actionPlayTrain, &QAction::setDisabled );
+  connect( this, &CsDesktopWinMain::playSetRun, actionPlayPause, &QAction::setEnabled );
+  connect( this, &CsDesktopWinMain::playSetRun, actionPlayStop, &QAction::setEnabled );
+  connect( this, &CsDesktopWinMain::playSetPause, actionPlayPause, &QAction::setChecked );
 
   menuTrain = new QMenu( tr("Train") );
   actionFragmentTrain = menuTrain->addAction( QIcon(QStringLiteral(":/pic/playTrain.png")), tr("Fragment train") /*, mWinTrain, &CsWinTrain::cmFragmentTrain */ );
@@ -226,6 +236,7 @@ CsDesktopWinMain::CsDesktopWinMain(QWidget *parent) :
   barEditor->addAction( actionEditRedo );
   barEditor->addSeparator();
   barEditor->addAction( actionPlayStart );
+  barEditor->addAction( actionPlayTrain );
   barEditor->addAction( actionPlayPause );
   barEditor->addAction( actionPlayStop );
   addToolBar( barEditor );
@@ -236,6 +247,7 @@ CsDesktopWinMain::CsDesktopWinMain(QWidget *parent) :
   barTrain->addAction( actionViewKaraoke );
   barTrain->addSeparator();
   barTrain->addAction( actionPlayStart );
+  barTrain->addAction( actionPlayTrain );
   barTrain->addAction( actionPlayPause );
   barTrain->addAction( actionPlayStop );
   barTrain->addSeparator();
@@ -458,6 +470,7 @@ void CsDesktopWinMain::compositionChanged()
 //!
 bool CsDesktopWinMain::canCloseEditor()
   {
+  cmPlayStop();
   if( mComposition.isDirty() ) {
     //Contents is changed
     auto res = QMessageBox::question( this, tr("Warning!"), tr("Composition is changed. Do You want to save changes?"), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel );
@@ -582,6 +595,7 @@ QActionPtr  CsDesktopWinMain::actionViewNote;
 QActionPtr  CsDesktopWinMain::actionViewTranslation;
 
 QActionPtr  CsDesktopWinMain::actionPlayStart;
+QActionPtr  CsDesktopWinMain::actionPlayTrain;
 QActionPtr  CsDesktopWinMain::actionPlayPause;
 QActionPtr  CsDesktopWinMain::actionPlayStop;
 

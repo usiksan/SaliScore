@@ -20,8 +20,6 @@ SOURCES += \
     import/CsImportManager.cpp \
     import/saliScore/CsImportSaliScore.cpp \
     import/text/CsImportText.cpp \
-    player/CsPlayer.cpp \
-    player/CsPlayerEvent.cpp \
     score/CsChordToNote.cpp \
     visual/CsAndroidWinMain.cpp \
     visual/CsDesktopWinMain.cpp \
@@ -82,8 +80,6 @@ HEADERS += \
     import/CsImportManager.h \
     import/saliScore/CsImportSaliScore.h \
     import/text/CsImportText.h \
-    player/CsPlayer.h \
-    player/CsPlayerEvent.h \
     repo/CsRepoClient.h \
     score/CsChord.h \
     score/CsChordToNote.h \

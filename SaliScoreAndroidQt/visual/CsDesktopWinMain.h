@@ -156,6 +156,7 @@ class CsDesktopWinMain : public CsVisualWinMain
     static QActionPtr  actionViewTranslation;
 
     static QActionPtr  actionPlayStart;
+    static QActionPtr  actionPlayTrain;
     static QActionPtr  actionPlayPause;
     static QActionPtr  actionPlayStop;
 

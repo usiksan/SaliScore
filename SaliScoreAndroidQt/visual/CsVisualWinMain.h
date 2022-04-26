@@ -86,7 +86,7 @@ class CsVisualWinMain : public QMainWindow
     int               mLineTickCount;
     bool              mIsRun;         //!< If true then player in run state
     bool              mIsPaused;      //!< If true then player paused
-    bool              mIsTeaching;    //!< true if teaching process actived
+    bool              mIsTraining;    //!< true if teaching process actived
 
     CsPlayerEventList mEventList;
     CsPlayerEventList mWaitingList;
@@ -113,13 +113,17 @@ class CsVisualWinMain : public QMainWindow
   signals:
     void noteOn( int channel, int pitch );
     void noteOff( int channel, int pitch );
-    void setRun( bool run );
+    void playSetRun( bool run );
+    void playSetPause( bool pause );
 
   public slots:
     void cmPlayRun();
-    void cmPlayTeach();
-    //void cmPlayPause();
+    void cmPlayTrain();
+    void cmPlayPause();
     void cmPlayStop();
+
+    void midiNoteOn( int pitch );
+    void midiNoteOff( int pitch );
 
   private slots:
 
