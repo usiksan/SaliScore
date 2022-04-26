@@ -3,9 +3,9 @@
 
 #include "CsConfig.h"
 #include "score/CsPlayList.h"
-#include "CsVisualRegularList.h"
+#include "SvLib/SvVisualRegularList.h"
 
-class CsVisualPartList : public CsVisualRegularList
+class CsVisualPartList : public SvVisualRegularList
   {
     Q_OBJECT
 

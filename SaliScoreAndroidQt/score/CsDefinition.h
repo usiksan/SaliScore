@@ -22,6 +22,8 @@ struct CsDefinition
 
     bool visibleToggle() { mVisible = !mVisible; return mVisible; }
 
+    int  channel() const;
+
     void jsonWrite( CsJsonWriter &js ) const;
 
     void jsonRead( CsJsonReader &js );

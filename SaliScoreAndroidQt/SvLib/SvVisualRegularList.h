@@ -1,9 +1,9 @@
-#ifndef CSVISUALREGULARLIST_H
-#define CSVISUALREGULARLIST_H
+#ifndef SVVISUALREGULARLIST_H
+#define SVVISUALREGULARLIST_H
 
-#include "CsVisualAbstractList.h"
+#include "SvVisualAbstractList.h"
 
-class CsVisualRegularList : public CsVisualAbstractList
+class SvVisualRegularList : public SvVisualAbstractList
   {
     Q_OBJECT
 
@@ -12,7 +12,7 @@ class CsVisualRegularList : public CsVisualAbstractList
     QList<int> mCellBoundX; //!< Cell bound X position
     QString    mTitle;      //!< Title of list
   public:
-    CsVisualRegularList( const QList<int> &cellWidth, QWidget *parent = nullptr );
+    SvVisualRegularList( const QList<int> &cellWidth, QWidget *parent = nullptr );
 
     virtual void cellPaint( int x, int y, int w, int h, int column, int row, QPainter &painter ) = 0;
 
@@ -31,4 +31,4 @@ class CsVisualRegularList : public CsVisualAbstractList
     virtual void headerClicked(int x, int y) override;
   };
 
-#endif // CSVISUALREGULARLIST_H
+#endif // SVVISUALREGULARLIST_H

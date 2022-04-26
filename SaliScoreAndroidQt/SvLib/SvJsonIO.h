@@ -1,16 +1,18 @@
 /*
-  Проект     "Повышение наглядности ввода-вывода json"
-  Автор
-    Сибилев А.С.
-  Описание
-    Здесь два класса: писатель и читатель. Сигнатуры вызова функций чтения и записи в
-    обоих классах полностью идентичны, поэтому вызовы могут быть скопированы и в функцию
-    записи и чтения
+  Project "Improving the visibility of json io"
+  Author
+    Alexander Sibilev
+  Description
+    There are two classes here: writer and reader. Signatures of calling read and write functions in
+    both classes are completely identical, so calls can be copied to both the write and read functions.
+  www
+    www.salilab.com
   History
     05.02.2022 v1 Begin version support
     05.03.2022 v2 Append QPoint support
     06.04.2022 v3 Append value of any class support which must be have jsonWrite and jsonRead members
     21.04.2022 v4 Append map of list of any class support
+    26.04.2022 v5 Full English remark
 */
 #ifndef SVJSONIO_H
 #define SVJSONIO_H
@@ -22,7 +24,7 @@
 #include <QMap>
 #include <QPoint>
 
-#define SV_JSON_VERSION 4
+#define SV_JSON_VERSION 5
 
 //!
 //! \brief The SvJsonWriter class Unificate json io class, through which json written
@@ -56,8 +58,10 @@ class SvJsonWriter
     //! \param key      Key for value
     //! \param b        Bool value
     //!
-    void jsonBool( const char *key, bool b ) { mObjectRef.insert( QString(key), b ); }
-    void jsonBool( const char *key, bool b, bool ) { mObjectRef.insert( QString(key), b ); }
+    void jsonBool( const QString &key, bool b ) { mObjectRef.insert( key, b ); }
+    void jsonBool( const QString &key, bool b, bool ) { mObjectRef.insert( key, b ); }
+//    void jsonBool( const char *key, bool b ) { mObjectRef.insert( QString(key), b ); }
+//    void jsonBool( const char *key, bool b, bool ) { mObjectRef.insert( QString(key), b ); }
 
 
     //!
@@ -65,6 +69,8 @@ class SvJsonWriter
     //! \param key     Key for value
     //! \param v       Int value
     //!
+    void jsonInt( const QString &key, int v ) { mObjectRef.insert( key, v ); }
+    void jsonInt( const QString &key, int v, int ) { mObjectRef.insert( key, v ); }
     void jsonInt( const char *key, int v ) { mObjectRef.insert( QString(key), v ); }
     void jsonInt( const char *key, int v, int ) { mObjectRef.insert( QString(key), v ); }
 
@@ -317,20 +323,6 @@ class SvJsonWriter
       {
       val.jsonWrite( key, *this );
       }
-
-
-//    template<typename SvClass>
-//    //!
-//    //! \brief jsonValuePure Template transfer any value as json value
-//    //!
-//    //! \param key
-//    //! \param val
-//    //!
-//    void jsonValuePure( const char *key, const SvClass &val )
-//      {
-//      val.jsonWrite( QString(key), mObjectRef );
-//      }
-
 
   };
 

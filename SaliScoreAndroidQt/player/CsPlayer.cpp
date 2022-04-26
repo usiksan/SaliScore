@@ -7,7 +7,7 @@ CsPlayer::CsPlayer(QObject *parent)
   {
 
   }
-
+/*
 void CsPlayer::tickNext(int tickAddon)
   {
   const CsLine &line = mComposition.line( mLineIndex );
@@ -31,3 +31,4 @@ void CsPlayer::extractChords(const CsLine &line, const CsDefinition &def, int la
       }
     }
   }
+*/

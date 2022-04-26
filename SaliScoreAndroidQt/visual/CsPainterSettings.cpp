@@ -1,6 +1,6 @@
 #include "CsPainterSettings.h"
 
-#include "../SvJson/SvJsonIO.h"
+#include "SvLib/SvJsonIO.h"
 #include <QJsonDocument>
 #include <QSettings>
 
@@ -51,7 +51,6 @@ void CsPainterSettings::setDefault()
 void CsPainterSettings::write(QString key)
   {
   SvJsonWriter js;
-
   js.jsonString( "fontName", mFontName );
   js.jsonColor( "colorBackground", mColorBackground );
   js.jsonColor( "colorRemark", mColorRemark );

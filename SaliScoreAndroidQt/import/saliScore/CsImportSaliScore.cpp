@@ -12,7 +12,7 @@ Description
   CsImportSaliScore reads SaliScore file format
 */
 #include "CsImportSaliScore.h"
-#include "../../SvJson/SvJsonIO.h"
+#include "SvLib/SvJsonIO.h"
 
 #include <QObject>
 #include <QJsonDocument>

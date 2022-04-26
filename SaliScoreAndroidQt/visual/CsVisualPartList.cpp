@@ -5,7 +5,7 @@
 #include <QMessageBox>
 
 CsVisualPartList::CsVisualPartList(QWidget *parent) :
-  CsVisualRegularList( {36,0,36}, parent ),
+  SvVisualRegularList( {36,0,36}, parent ),
   mPartIndex(0)
   {
 

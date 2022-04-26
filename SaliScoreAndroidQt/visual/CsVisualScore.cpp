@@ -1,7 +1,7 @@
 #include "CsVisualScore.h"
 
 CsVisualScore::CsVisualScore(CsComposition &comp, QWidget *parent) :
-  CsVisualAbstractList(parent),
+  SvVisualAbstractList(parent),
   mStartX(0),
   mAutoScroll(true),
   mComposition(comp)

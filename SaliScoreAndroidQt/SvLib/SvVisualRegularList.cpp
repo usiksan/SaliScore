@@ -1,17 +1,17 @@
-#include "CsVisualRegularList.h"
+#include "SvVisualRegularList.h"
 
 #include <QIcon>
 #include <QPainter>
 
-CsVisualRegularList::CsVisualRegularList(const QList<int> &cellWidth, QWidget *parent) :
-  CsVisualAbstractList(parent),
+SvVisualRegularList::SvVisualRegularList(const QList<int> &cellWidth, QWidget *parent) :
+  SvVisualAbstractList(parent),
   mCellWidth(cellWidth)
   {
 
   }
 
 
-int CsVisualRegularList::itemHeight(int index) const
+int SvVisualRegularList::itemHeight(int index) const
   {
   Q_UNUSED(index)
   return 48;
@@ -20,7 +20,7 @@ int CsVisualRegularList::itemHeight(int index) const
 
 
 
-int CsVisualRegularList::itemPaint(int index, int y, QPainter &painter)
+int SvVisualRegularList::itemPaint(int index, int y, QPainter &painter)
   {
   int w = viewport()->size().width();
   int strechIndex = -1;
@@ -51,7 +51,7 @@ int CsVisualRegularList::itemPaint(int index, int y, QPainter &painter)
   }
 
 
-void CsVisualRegularList::itemClicked(int x, int itemIndex)
+void SvVisualRegularList::itemClicked(int x, int itemIndex)
   {
   for( int i = 0; i < mCellBoundX.count(); i++ )
     if( x < mCellBoundX.at(i) ) {
@@ -62,14 +62,14 @@ void CsVisualRegularList::itemClicked(int x, int itemIndex)
 
 
 
-int CsVisualRegularList::headerHeight() const
+int SvVisualRegularList::headerHeight() const
   {
   return 50;
   }
 
 
 
-void CsVisualRegularList::headerPaint(QPainter &painter)
+void SvVisualRegularList::headerPaint(QPainter &painter)
   {
   //Fill header
   int w = viewport()->size().width();
@@ -84,7 +84,7 @@ void CsVisualRegularList::headerPaint(QPainter &painter)
 
 
 
-void CsVisualRegularList::headerClicked(int x, int y)
+void SvVisualRegularList::headerClicked(int x, int y)
   {
   Q_UNUSED(y)
   if( x < 50 )

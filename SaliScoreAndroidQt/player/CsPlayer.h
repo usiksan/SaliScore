@@ -16,7 +16,7 @@ class CsPlayer : public QObject
   {
     Q_OBJECT
 
-    CsComposition &mComposition;
+    //CsComposition &mComposition;
     int           mFragmentIndex; //!< Current train fragment index
     int           mLineIndex;     //!< Current train line index
     int           mLinePosition;  //!< Current position in line
@@ -33,12 +33,12 @@ class CsPlayer : public QObject
   signals:
 
   public slots:
-    void playStart();
-    void playPause();
-    void playStop();
+//    void playStart();
+//    void playPause();
+//    void playStop();
 
   private slots:
-    void tickNext( int tickAddon );
+//    void tickNext( int tickAddon );
 
   private:
     void extractChords( const CsLine &line, const CsDefinition &def, int lastPosition );

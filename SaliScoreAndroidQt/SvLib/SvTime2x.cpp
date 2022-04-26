@@ -13,13 +13,13 @@ Description
 
   All time in seconds 32-bit from begin of year 2018.
 */
-#include "SdTime2x.h"
+#include "SvTime2x.h"
 #include <QDebug>
 
 
 
 //Преобразовать в эпоху
-qint32 SdTime2x::current()
+qint32 SvTime2x::current()
   {
   return fromEpoch( QDateTime::currentSecsSinceEpoch() );
   }
@@ -27,7 +27,7 @@ qint32 SdTime2x::current()
 
 
 //Convert to epoch [Преобразовать в эпоху]
-qint64 SdTime2x::toEpoch(qint32 tm)
+qint64 SvTime2x::toEpoch(qint32 tm)
   {
   return SD_TIME_2X_START + static_cast<qint64>(tm);
   }
@@ -36,7 +36,7 @@ qint64 SdTime2x::toEpoch(qint32 tm)
 
 
 //Convert from epoch [Преобразовать из эпохи]
-qint32 SdTime2x::fromEpoch(qint64 tm)
+qint32 SvTime2x::fromEpoch(qint64 tm)
   {
   //При отсутствии времени возвращаем ноль обозначающий тоже отсутствие времени
   if( tm == 0 )
@@ -48,7 +48,7 @@ qint32 SdTime2x::fromEpoch(qint64 tm)
 
 
 //Get real utc date [Получить реальную дату]
-QDateTime SdTime2x::toUtc(qint32 tm)
+QDateTime SvTime2x::toUtc(qint32 tm)
   {
   if( tm <= 0 )
     return QDateTime();
@@ -59,7 +59,7 @@ QDateTime SdTime2x::toUtc(qint32 tm)
 
 
 //Get real local date [Получить реальную локальную дату]
-QDateTime SdTime2x::toLocal(qint32 tm)
+QDateTime SvTime2x::toLocal(qint32 tm)
   {
   if( tm <= 0 )
     return QDateTime();
@@ -70,7 +70,7 @@ QDateTime SdTime2x::toLocal(qint32 tm)
 
 
 //Convert from QDataTime [Преобразовать из момента]
-qint32 SdTime2x::fromDateTime(const QDateTime tm)
+qint32 SvTime2x::fromDateTime(const QDateTime tm)
   {
   return fromEpoch( tm.toSecsSinceEpoch() );
   }
@@ -79,7 +79,7 @@ qint32 SdTime2x::fromDateTime(const QDateTime tm)
 
 
 //Convert to string representation of time
-QString SdTime2x::toLocalString(qint32 tm)
+QString SvTime2x::toLocalString(qint32 tm)
   {
   return toLocal(tm).toString( QString("HH:mm dd-MM-yy") );
   }

@@ -13,15 +13,15 @@ Description
 
   All time in seconds 32-bit from begin of year 2018.
 */
-#ifndef SDTIME2X_H
-#define SDTIME2X_H
+#ifndef SVTIME2X_H
+#define SVTIME2X_H
 
 #include <QDateTime>
 
 //Start time is begin of year 2018 in seconds from epoch
 #define SD_TIME_2X_START 1514764800l
 
-class SdTime2x
+class SvTime2x
   {
   public:
     //Current moment [Текущий глобальный момент]
@@ -49,4 +49,4 @@ class SdTime2x
     static QString   toLocalString( qint32 tm );
   };
 
-#endif // SDTIME2X_H
+#endif // SVTIME2X_H

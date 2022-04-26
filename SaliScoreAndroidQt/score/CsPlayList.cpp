@@ -1,7 +1,7 @@
 #include "CsPlayList.h"
 #include "CsComposition.h"
 #include "CsSongLocalRepo.h"
-#include "SdLib/SdTime2x.h"
+#include "SvLib/SvTime2x.h"
 
 #include <QFile>
 #include <QJsonDocument>
@@ -12,16 +12,19 @@ CsPlayList::CsPlayList()
 
   }
 
+
 CsPlayList *CsPlayList::pl()
   {
   static CsPlayList playList;
   return &playList;
   }
 
+
+
 void CsPlayList::dirtyReset()
   {
   mDirty = false;
-  mVersion = SdTime2x::current();
+  mVersion = SvTime2x::current();
   }
 
 
@@ -38,7 +41,7 @@ void CsPlayList::partTitleSet(int i, const QString &tit)
   {
   if( i == 0 ) return;
   mPartList[i - 1].titleSet( tit );
-  mDirty = true;
+  signalDirty();
   }
 
 
@@ -53,7 +56,7 @@ bool CsPlayList::partAppend(const QString &partName)
   CsPlayPart part;
   part.titleSet( partName );
   mPartList.append( part );
-  mDirty = true;
+  signalDirty();
   return true;
   }
 
@@ -65,7 +68,7 @@ void CsPlayList::partDelete(int i)
   if( i == 0 ) return;
   mPartList.removeAt(i - 1 );
   garbageCollection();
-  mDirty = true;
+  signalDirty();
   }
 
 
@@ -95,7 +98,7 @@ bool CsPlayList::partCompositionAppend(int partIndex, const QString &id)
   {
   if( partIndex == 0 ) return false;
   if( mPartList[partIndex - 1].compositionAppend( id ) ) {
-    mDirty = true;
+    signalDirty();
     return true;
     }
   return false;
@@ -108,7 +111,7 @@ void CsPlayList::partCompositionRemove( int partIndex, int compositionIndex )
   if( partIndex == 0 ) return;
   mPartList[partIndex - 1].compositionRemove(compositionIndex);
   garbageCollection();
-  mDirty = true;
+  signalDirty();
   }
 
 
@@ -118,7 +121,7 @@ void CsPlayList::partCompositionRemove( int partIndex, int compositionIndex )
 void CsPlayList::compositionSet( const CsComposition &comp )
   {
   mCompositionsMap.insert( comp.songId(), CsCompositionInfo(comp) );
-  mDirty = true;
+  signalDirty();
   }
 
 
@@ -143,6 +146,7 @@ void CsPlayList::jsonRead(CsJsonReader &js)
   js.jsonInt( "aversion", mVersion );
   js.jsonList( "partList", mPartList );
   js.jsonMap( "compositionMap", mCompositionsMap );
+  mChanged.emitSignal();
   }
 
 
@@ -207,6 +211,15 @@ void CsPlayList::save()
 
 
 
+void CsPlayList::signalDirty()
+  {
+  mDirty = true;
+  mChanged.emitSignal();
+  }
+
+
+
+
 void CsPlayList::garbageCollection()
   {
   QStringList deletionList( compositionList() );
@@ -224,7 +237,7 @@ void CsPlayList::garbageCollection()
     //For each id from deletion list we delete associated composition
     for( const auto &id : qAsConst(deletionList) )
       mCompositionsMap.remove( id );
-    mDirty = true;
+    signalDirty();
     }
   }
 

@@ -1,19 +1,19 @@
-#include "CsVisualAbstractList.h"
-#include "CsVisualAbstractListView.h"
+#include "SvVisualAbstractList.h"
+#include "SvVisualAbstractListView.h"
 
 #include <QPainter>
 #include <QPaintEvent>
 #include <QMouseEvent>
 #include <QScrollBar>
 
-CsVisualAbstractList::CsVisualAbstractList(QWidget *parent) :
+SvVisualAbstractList::SvVisualAbstractList(QWidget *parent) :
   QAbstractScrollArea(parent),
   mStartY(0),
   mStartIndex(0),
   mFullHeight(0),
   mMousePress(false)
   {
-  setViewport( new CsVisualAbstractListView( this, this ) );
+  setViewport( new SvVisualAbstractListView( this, this ) );
   setMouseTracking(true);
 
   //Setup scrollbars
@@ -30,7 +30,7 @@ CsVisualAbstractList::CsVisualAbstractList(QWidget *parent) :
 
 
 
-void CsVisualAbstractList::contentPaint(QPainter &painter)
+void SvVisualAbstractList::contentPaint(QPainter &painter)
   {
   painter.fillRect( QRect( QPoint(), viewport()->size() ), QColor(Qt::white) );
 
@@ -78,7 +78,7 @@ void CsVisualAbstractList::contentPaint(QPainter &painter)
 
 
 
-void CsVisualAbstractList::contentClicked(int x, int y)
+void SvVisualAbstractList::contentClicked(int x, int y)
   {
   if( y < headerHeight() ) {
     //Pressed in header area
@@ -102,7 +102,7 @@ void CsVisualAbstractList::contentClicked(int x, int y)
 
 
 
-int CsVisualAbstractList::itemPaint(int index, int y, QPainter &painter)
+int SvVisualAbstractList::itemPaint(int index, int y, QPainter &painter)
   {
   painter.setPen( Qt::black );
   painter.drawText( 10, y, QString("Item %1").arg(index) );
@@ -111,7 +111,7 @@ int CsVisualAbstractList::itemPaint(int index, int y, QPainter &painter)
 
 
 
-void CsVisualAbstractList::updateVerticalScrollBar(int fullHeight)
+void SvVisualAbstractList::updateVerticalScrollBar(int fullHeight)
   {
   if( mFullHeight != fullHeight ) {
     mFullHeight = fullHeight;
@@ -127,13 +127,13 @@ void CsVisualAbstractList::updateVerticalScrollBar(int fullHeight)
 //!
 //! \brief updateContent Call update function on viewport
 //!
-void CsVisualAbstractList::updateContent()
+void SvVisualAbstractList::updateContent()
   {
   viewport()->update();
   }
 
 
-void CsVisualAbstractList::paintEvent(QPaintEvent *event)
+void SvVisualAbstractList::paintEvent(QPaintEvent *event)
   {
   event->accept();
   QPainter painter(viewport());
@@ -141,7 +141,7 @@ void CsVisualAbstractList::paintEvent(QPaintEvent *event)
   }
 
 
-void CsVisualAbstractList::mousePressEvent(QMouseEvent *event)
+void SvVisualAbstractList::mousePressEvent(QMouseEvent *event)
   {
   mMousePress = true;
   mMousePressY = event->y();
@@ -150,7 +150,7 @@ void CsVisualAbstractList::mousePressEvent(QMouseEvent *event)
 
 
 
-void CsVisualAbstractList::mouseReleaseEvent(QMouseEvent *event)
+void SvVisualAbstractList::mouseReleaseEvent(QMouseEvent *event)
   {
   mMousePress = false;
   if( qAbs( event->y() - mMousePressY ) < 10 ) {
@@ -161,7 +161,7 @@ void CsVisualAbstractList::mouseReleaseEvent(QMouseEvent *event)
   }
 
 
-void CsVisualAbstractList::mouseMoveEvent(QMouseEvent *event)
+void SvVisualAbstractList::mouseMoveEvent(QMouseEvent *event)
   {
   if( mMousePress ) {
     mStartY = qBound( 0, mMouseStartY - event->y() + mMousePressY, mFullHeight );
@@ -172,7 +172,7 @@ void CsVisualAbstractList::mouseMoveEvent(QMouseEvent *event)
 
 
 
-void CsVisualAbstractList::wheelEvent(QWheelEvent *event)
+void SvVisualAbstractList::wheelEvent(QWheelEvent *event)
   {
   int delta = event->angleDelta().y() / 12;
   mStartY = qBound( 0, mStartY - delta, mFullHeight );
@@ -182,7 +182,7 @@ void CsVisualAbstractList::wheelEvent(QWheelEvent *event)
 
 
 
-void CsVisualAbstractList::keyPressEvent(QKeyEvent *event)
+void SvVisualAbstractList::keyPressEvent(QKeyEvent *event)
   {
   Q_UNUSED(event)
   }

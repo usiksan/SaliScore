@@ -14,7 +14,8 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    SvJson/SvSignal.cpp \
+    SvLib/SvTime2x.cpp \
+    SvLib/SvSignal.cpp \
     import/CsImport.cpp \
     import/CsImportManager.cpp \
     import/saliScore/CsImportSaliScore.cpp \
@@ -23,7 +24,6 @@ SOURCES += \
     player/CsPlayerEvent.cpp \
     visual/CsAndroidWinMain.cpp \
     visual/CsDesktopWinMain.cpp \
-    SdLib/SdTime2x.cpp \
     audioOut/CsSoundBufferIODevice.cpp \
     main.cpp \
     repo/CsRepoClient.cpp \
@@ -58,22 +58,22 @@ SOURCES += \
     visual/CsPainterEditor.cpp \
     visual/CsPainterSettings.cpp \
     visual/CsPainterTrain.cpp \
-    visual/CsVisualAbstractList.cpp \
-    visual/CsVisualAbstractListView.cpp \
     visual/CsVisualPartList.cpp \
     visual/CsVisualPlayList.cpp \
-    visual/CsVisualRegularList.cpp \
     visual/CsVisualScore.cpp \
     visual/CsVisualScoreEdit.cpp \
     visual/CsVisualScoreKaraoke.cpp \
     visual/CsVisualScoreTrain.cpp \
-    visual/CsVisualWinMain.cpp
+    visual/CsVisualWinMain.cpp \
+    SvLib/SvVisualAbstractList.cpp \
+    SvLib/SvVisualAbstractListView.cpp \
+    SvLib/SvVisualRegularList.cpp
 
 HEADERS += \
     CsConfig.h \
-    SdLib/SdTime2x.h \
-    SvJson/SvJsonIO.h \
-    SvJson/SvSignal.h \
+    SvLib/SvTime2x.h \
+    SvLib/SvJsonIO.h \
+    SvLib/SvSignal.h \
     audioOut/CsSoundBufferIODevice.h \
     audioOut/CsSoundSample.h \
     audioOut/CsSoundSource.h \
@@ -120,16 +120,16 @@ HEADERS += \
     visual/CsPainterEditor.h \
     visual/CsPainterSettings.h \
     visual/CsPainterTrain.h \
-    visual/CsVisualAbstractList.h \
-    visual/CsVisualAbstractListView.h \
     visual/CsVisualPartList.h \
     visual/CsVisualPlayList.h \
-    visual/CsVisualRegularList.h \
     visual/CsVisualScore.h \
     visual/CsVisualScoreEdit.h \
     visual/CsVisualScoreKaraoke.h \
     visual/CsVisualScoreTrain.h \
-    visual/CsVisualWinMain.h
+    visual/CsVisualWinMain.h \
+    SvLib/SvVisualAbstractList.h \
+    SvLib/SvVisualAbstractListView.h \
+    SvLib/SvVisualRegularList.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -157,3 +157,4 @@ ANDROID_FEATURES += android.software.midi
 
 RESOURCES += \
   SaliScore.qrc
+

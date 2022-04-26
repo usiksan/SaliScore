@@ -20,6 +20,8 @@ class CsPosition
     int          duration() const { return mDuration; }
     void         durationSet( int d ) { mDuration = d; }
 
+    bool         isBeginInside( int tickStart, int tickStop ) const { return tickStart <= mLinePosition && mLinePosition < tickStop; }
+
     //bool         isHit( int tick ) const { return mLinePosition <= tick && tick <= (mLinePosition + mDuration); }
 
     virtual void jsonWrite( CsJsonWriter &js ) const;

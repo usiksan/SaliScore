@@ -11,9 +11,10 @@
 #endif
 
 CsVisualPlayList::CsVisualPlayList(QWidget *parent) :
-  CsVisualAbstractList( parent )
+  SvVisualAbstractList( parent )
   {
-
+  //Connect with play list
+  CsPlayList::pl()->mChanged.connect( mPlayListChanged, [this] () { update(); } );
   }
 
 int CsVisualPlayList::itemHeight(int index) const

@@ -1,12 +1,12 @@
 #ifndef CSVISUALSCORE_H
 #define CSVISUALSCORE_H
 
-#include "CsVisualAbstractList.h"
+#include "SvLib/SvVisualAbstractList.h"
 #include "CsPainter.h"
 
 class CsComposition;
 
-class CsVisualScore : public CsVisualAbstractList
+class CsVisualScore : public SvVisualAbstractList
   {
     Q_OBJECT
 

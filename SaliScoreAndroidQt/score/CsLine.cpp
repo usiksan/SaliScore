@@ -1,6 +1,5 @@
 #include "CsLine.h"
 #include "CsNoteChord.h"
-#include "../SvJson/SvJsonIO.h"
 
 CsLine::CsLine() :
   mTaktCount(4)

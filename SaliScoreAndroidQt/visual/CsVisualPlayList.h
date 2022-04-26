@@ -3,13 +3,15 @@
 
 #include "CsConfig.h"
 #include "score/CsPlayList.h"
-#include "CsVisualAbstractList.h"
+#include "SvLib/SvVisualAbstractList.h"
+#include "SvLib/SvSignal.h"
 
-class CsVisualPlayList : public CsVisualAbstractList
+class CsVisualPlayList : public SvVisualAbstractList
   {
     Q_OBJECT
 
     int         mDelIconX; //!< X position of delete icon
+    SvBinding   mPlayListChanged;
   public:
     CsVisualPlayList( QWidget *parent = nullptr );
 

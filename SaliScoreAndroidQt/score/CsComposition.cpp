@@ -1,5 +1,5 @@
 #include "CsComposition.h"
-#include "SdLib/SdTime2x.h"
+#include "SvLib/SvTime2x.h"
 
 #include <QSettings>
 #include <QJsonDocument>
@@ -300,6 +300,13 @@ void CsComposition::lineRemove(int index)
 
 void CsComposition::jsonWrite(CsJsonWriter &js) const
   {
+  bool b = true;
+    js.jsonBool( QStringLiteral("b1"), b );
+    js.jsonBool( QStringLiteral("b2"), b, false );
+    js.jsonBool( "b3", b );
+    js.jsonBool( "b4", b, false );
+
+
   js.jsonValue( "Attr", mAttributes );
   js.jsonInt( "LineStartOffset", mLineStartOffset );
   js.jsonInt( "TickPerPart", mTickPerPart );
@@ -352,7 +359,7 @@ void CsComposition::clear()
   mAttributes.set( CS_ATTR_COMPOSER,   notDefined );
   mAttributes.set( CS_ATTR_LYRICIST,   notDefined );
   mAttributes.set( CS_ATTR_NAME,       notDefined );
-  int id = SdTime2x::current();
+  int id = SvTime2x::current();
   mAttributes.set( CS_ATTR_SONG_ID,    auth + QChar('_') + QString::number(id,16) );
   mAttributes.set( CS_ATTR_VERSION,    QString::number(id) );
   mAttributes.set( CS_ATTR_STATUS,     CS_STATUS_PRIVATE );
@@ -430,7 +437,7 @@ bool CsComposition::fileSave()
     QSettings s;
     //Setup default attributes
     QString auth = s.value( QStringLiteral(KEY_AUTHOR) ).toString();
-    int id = SdTime2x::current();
+    int id = SvTime2x::current();
     if( mAttributes.get( CS_ATTR_AUTHOR ) != auth ) {
       //Update author and composition id
       mAttributes.set( CS_ATTR_AUTHOR,     auth );

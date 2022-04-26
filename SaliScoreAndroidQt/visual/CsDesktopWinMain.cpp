@@ -26,7 +26,7 @@
 
 
 CsDesktopWinMain::CsDesktopWinMain(QWidget *parent) :
-  QMainWindow{parent}
+  CsVisualWinMain{parent}
   {
   //==========================================
   //      Top layer of layout

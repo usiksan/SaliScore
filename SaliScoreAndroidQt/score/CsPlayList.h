@@ -3,6 +3,7 @@
 
 #include "CsPlayPart.h"
 #include "CsCompositionInfo.h"
+#include "SvLib/SvSignal.h"
 
 #include <QMap>
 #include <QTreeWidgetItem>
@@ -100,7 +101,10 @@ class CsPlayList
 
     void                  save();
 
+    SvSignal<void()>      mChanged;
   private:
+    void                  signalDirty();
+
     void                  garbageCollection();
 
     static QString        fileName();

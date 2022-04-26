@@ -1,10 +1,10 @@
-#ifndef CSVISUALABSTRACTLIST_H
-#define CSVISUALABSTRACTLIST_H
+#ifndef SVVISUALABSTRACTLIST_H
+#define SVVISUALABSTRACTLIST_H
 
 #include <QAbstractScrollArea>
 #include <QList>
 
-class CsVisualAbstractList : public QAbstractScrollArea
+class SvVisualAbstractList : public QAbstractScrollArea
   {
     Q_OBJECT
   protected:
@@ -17,7 +17,7 @@ class CsVisualAbstractList : public QAbstractScrollArea
     int        mMouseStartY;  //!< Start Y display position at moment of mouse pressed
     bool       mMousePress;   //!< True if mouse pressed
   public:
-    CsVisualAbstractList( QWidget *parent = nullptr );
+    SvVisualAbstractList( QWidget *parent = nullptr );
 
     virtual void contentPaint( QPainter &painter );
 
@@ -68,4 +68,4 @@ class CsVisualAbstractList : public QAbstractScrollArea
     virtual void keyPressEvent(QKeyEvent *event) override;
   };
 
-#endif // CSVISUALABSTRACTLIST_H
+#endif // SVVISUALABSTRACTLIST_H

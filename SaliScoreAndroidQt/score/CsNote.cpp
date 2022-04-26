@@ -1,5 +1,4 @@
 #include "CsNote.h"
-#include "../SvJson/SvJsonIO.h"
 
 CsNote::CsNote() :
   CsPosition(0,0)
