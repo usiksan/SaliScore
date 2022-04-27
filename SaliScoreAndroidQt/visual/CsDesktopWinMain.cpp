@@ -10,6 +10,7 @@
 #include "repo/CsRepoClient.h"
 #include "import/saliScore/CsImportSaliScore.h"
 #include "import/text/CsImportText.h"
+#include "midiKeyboard/CsMidiKeyboardLinux.h"
 
 #include <QDebug>
 #include <QGuiApplication>
@@ -120,6 +121,27 @@ CsDesktopWinMain::CsDesktopWinMain(QWidget *parent) :
   mWInstrum->setMaximumHeight( 100 );
   connect( mWInstrumPiano, &CsVisualPiano::midiNote, this, &CsDesktopWinMain::midiNote );
   connect( this, &CsDesktopWinMain::playHighlight, mWInstrumPiano, &CsVisualPiano::playHighlight );
+
+  //Real midi keyboard
+  CsMidiKeyboard *kbd = nullptr;
+#ifdef Q_OS_LINUX
+  kbd = new CsMidiKeyboardLinux();
+#endif
+  QAction *actionMidiKeyboard = new QAction( QIcon(QString(":/pic/helpHome.png")), tr("MIDI Keyboard status") );
+  actionMidiKeyboard->setDisabled(true);
+  if( kbd != nullptr ) {
+    //From keyboard
+    connect( kbd, &CsMidiKeyboard::midiNote, this, &CsDesktopWinMain::midiNote );
+    connect( kbd, &CsMidiKeyboard::midiNote, mWInstrumPiano, &CsVisualPiano::playNote );
+    connect( kbd, &CsMidiKeyboard::midiRun, this, &CsDesktopWinMain::midiRun );
+    connect( kbd, &CsMidiKeyboard::midiVoice, this, &CsDesktopWinMain::midiVoice );
+    connect( kbd, &CsMidiKeyboard::midiLink, actionMidiKeyboard, &QAction::setEnabled );
+    //To keyboard
+    connect( this, &CsDesktopWinMain::playRun, kbd, &CsMidiKeyboard::playRun );
+    connect( this, &CsDesktopWinMain::playVoice, kbd, &CsMidiKeyboard::playVoice );
+
+    kbd->init();
+    }
 
   //Restore splitter positions
   QSettings s;
@@ -238,17 +260,19 @@ CsDesktopWinMain::CsDesktopWinMain(QWidget *parent) :
   bar->addMenu( menuTools );
   bar->addMenu( menuHelp );
 
-  barMain = new QToolBar( tr("Files") );
+  barMain = new QToolBar( tr("Common") );
   barMain->addAction( actionFileNew );
   barMain->addAction( actionFileCopy );
   barMain->addAction( actionFileSave );
+  barMain->addSeparator();
+  barMain->addAction( actionViewEditor );
+  barMain->addAction( actionViewTrain );
+  barMain->addAction( actionViewKaraoke );
+  barMain->addSeparator();
+  barMain->addAction( actionMidiKeyboard );
   addToolBar( barMain );
 
   barEditor   = new QToolBar( tr("Editor") );
-  barEditor->addAction( actionViewEditor );
-  barEditor->addAction( actionViewTrain );
-  barEditor->addAction( actionViewKaraoke );
-  barEditor->addSeparator();
   barEditor->addAction( actionEditPaste );
   barEditor->addAction( actionEditCopy );
   barEditor->addAction( actionEditCut );
@@ -263,10 +287,6 @@ CsDesktopWinMain::CsDesktopWinMain(QWidget *parent) :
   addToolBar( barEditor );
 
   barTrain    = new QToolBar( tr("Train") );
-  barTrain->addAction( actionViewEditor );
-  barTrain->addAction( actionViewTrain );
-  barTrain->addAction( actionViewKaraoke );
-  barTrain->addSeparator();
   barTrain->addAction( actionPlayStart );
   barTrain->addAction( actionPlayTrain );
   barTrain->addAction( actionPlayPause );
@@ -281,10 +301,6 @@ CsDesktopWinMain::CsDesktopWinMain(QWidget *parent) :
   addToolBar( barTrain );
 
   barKaraoke  = new QToolBar( tr("Karaoke") );
-  barKaraoke->addAction( actionViewEditor );
-  barKaraoke->addAction( actionViewTrain );
-  barKaraoke->addAction( actionViewKaraoke );
-  barKaraoke->addSeparator();
   barKaraoke->addAction( actionPlayStart );
   barKaraoke->addAction( actionPlayPause );
   barKaraoke->addAction( actionPlayStop );

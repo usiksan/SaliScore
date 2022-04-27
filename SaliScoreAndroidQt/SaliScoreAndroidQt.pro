@@ -14,6 +14,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    midiKeyboard/CsMidiKeyboard.cpp \
     midiKeyboard/CsMidiKeyboardDesktop.cpp \
     SvLib/SvTime2x.cpp \
     SvLib/SvSignal.cpp \
@@ -21,6 +22,7 @@ SOURCES += \
     import/CsImportManager.cpp \
     import/saliScore/CsImportSaliScore.cpp \
     import/text/CsImportText.cpp \
+    midiKeyboard/CsMidiKeyboardLinux.cpp \
     score/CsChordToNote.cpp \
     visual/CsAndroidWinMain.cpp \
     visual/CsDesktopWinMain.cpp \
@@ -72,6 +74,7 @@ SOURCES += \
 
 HEADERS += \
     CsConfig.h \
+    midiKeyboard/CsMidiKeyboard.h \
     midiKeyboard/CsMidiKeyboardDesktop.h \
     SvLib/SvTime2x.h \
     SvLib/SvJsonIO.h \
@@ -83,6 +86,7 @@ HEADERS += \
     import/CsImportManager.h \
     import/saliScore/CsImportSaliScore.h \
     import/text/CsImportText.h \
+    midiKeyboard/CsMidiKeyboardLinux.h \
     repo/CsRepoClient.h \
     score/CsChord.h \
     score/CsChordToNote.h \
@@ -159,5 +163,6 @@ ANDROID_FEATURES += android.software.midi
 
 RESOURCES += \
   SaliScore.qrc
+
 
 

@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
   //        Audio output setup
   if( CsSoundBufferIODevice::soundBuffer() == nullptr )
     return 0;
-  CsSoundBufferIODevice::soundBuffer()->addSound( new CsSynthMeandr() );
+  //CsSoundBufferIODevice::soundBuffer()->addSound( new CsSynthMeandr() );
 
 
 

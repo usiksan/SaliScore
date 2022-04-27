@@ -99,6 +99,24 @@ void CsVisualWinMain::midiNote(int pitch, int velo)
 
 
 
+void CsVisualWinMain::midiRun(bool run)
+  {
+  if( run ) cmPlayRun();
+  else      cmPlayStop();
+  }
+
+
+
+
+void CsVisualWinMain::midiVoice(int voice)
+  {
+  //Set selected voice to composition voice
+  mComposition.attributeSet( CS_ATTR_VOICE, QStringLiteral("%1.%2").arg(voice >> 8).arg(voice & 0xff) );
+  playUpdate();
+  }
+
+
+
 
 
 void CsVisualWinMain::periodic()

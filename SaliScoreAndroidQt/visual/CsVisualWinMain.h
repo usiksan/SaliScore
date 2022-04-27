@@ -117,6 +117,7 @@ class CsVisualWinMain : public QMainWindow
     void playHighlight( int channel, int pitch, int velo );
     void playRun( bool run );
     void playPause( bool pause );
+    void playVoice( int voice );
 
   public slots:
     void cmPlayRun();
@@ -125,6 +126,8 @@ class CsVisualWinMain : public QMainWindow
     void cmPlayStop();
 
     void midiNote( int pitch, int velo );
+    void midiRun( bool run );
+    void midiVoice( int voice );
 
   private slots:
 
