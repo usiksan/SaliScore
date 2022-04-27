@@ -22,6 +22,7 @@
     27.04.2022 v0.5   Lead to uniformity note transfer beatween different parts of application
                v0.6   Append visual keyboard
                v0.7   Append midi keyboard for linux
+               v0.8   Debug midi keyboard connect-disconnect
 */
 #ifndef CSCONFIG_H
 #define CSCONFIG_H
@@ -33,7 +34,7 @@
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             7
+#define CS_VERSION_MINOR             8
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"

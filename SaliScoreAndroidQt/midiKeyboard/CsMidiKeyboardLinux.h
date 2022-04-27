@@ -55,6 +55,8 @@ class CsMidiKeyboardLinux : public CsMidiKeyboard
     void tickGenerate( int count );
 
     void parseSysEx();
+
+    void midiSend(int count, quint8 *array);
   };
 
 #endif

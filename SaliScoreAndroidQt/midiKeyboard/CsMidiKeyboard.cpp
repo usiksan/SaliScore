@@ -1,5 +1,7 @@
 #include "CsMidiKeyboard.h"
 
+#include <QDebug>
+
 CsMidiKeyboard::CsMidiKeyboard(QObject *parent)
   : QObject{parent}
   , mBank(0)
@@ -29,6 +31,8 @@ void CsMidiKeyboard::midiSignal( quint8 control, quint8 data0, quint8 data1 )
         mBank = (data1 << 8) | (mBank & 0xff);
       else if( data0 == 0x20 )
         mBank = data1 | (mBank & 0xff00);
+      else
+        qDebug() << "midi ctrl" << data0 << "d=" << data1;
       break;
 
     case 0x40 :

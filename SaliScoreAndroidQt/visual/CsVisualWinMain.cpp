@@ -111,7 +111,9 @@ void CsVisualWinMain::midiRun(bool run)
 void CsVisualWinMain::midiVoice(int voice)
   {
   //Set selected voice to composition voice
-  mComposition.attributeSet( CS_ATTR_VOICE, QStringLiteral("%1.%2").arg(voice >> 8).arg(voice & 0xff) );
+  QString at( mComposition.attributeGet(CS_ATTR_VOICE) );
+  QStringList lst = at.split( QChar('/') );
+  mComposition.attributeSet( CS_ATTR_VOICE, QStringLiteral("%1.%2/%3").arg(voice >> 8).arg(voice & 0xff).arg( lst.count() > 1 ? lst.at(1) : at ) );
   playUpdate();
   }
 
@@ -304,6 +306,15 @@ void CsVisualWinMain::prepareRun()
   mLineIndex = ti.mStart.lineIndex() - 1;
   findNextLine();
   if( mIsRun ) {
+    QString at( mComposition.attributeGet(CS_ATTR_VOICE) );
+    QStringList lst = at.split( QChar('/') );
+    if( lst.count() > 1 ) {
+      at = lst.at(0);
+      lst = at.split( QChar('.') );
+      if( lst.count() == 2 )
+        emit playVoice( (lst.at(0).toInt() << 8) | lst.at(1).toInt() );
+      }
+
     setTempo( mComposition.attributeGet(CS_ATTR_TEMPO).toInt() );
     mLinePosition = ti.mStart.linePosition();
     mWaitingList.clear();

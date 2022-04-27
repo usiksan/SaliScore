@@ -15,7 +15,6 @@ CONFIG += c++17
 
 SOURCES += \
     midiKeyboard/CsMidiKeyboard.cpp \
-    midiKeyboard/CsMidiKeyboardDesktop.cpp \
     SvLib/SvTime2x.cpp \
     SvLib/SvSignal.cpp \
     import/CsImport.cpp \
@@ -75,7 +74,6 @@ SOURCES += \
 HEADERS += \
     CsConfig.h \
     midiKeyboard/CsMidiKeyboard.h \
-    midiKeyboard/CsMidiKeyboardDesktop.h \
     SvLib/SvTime2x.h \
     SvLib/SvJsonIO.h \
     SvLib/SvSignal.h \

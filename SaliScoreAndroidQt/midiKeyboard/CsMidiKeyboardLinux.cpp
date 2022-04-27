@@ -49,23 +49,51 @@ void CsMidiKeyboardLinux::setTempo(int tempo)
 
 void CsMidiKeyboardLinux::playRun(bool run)
   {
-
+  quint8 buf[2];
+  buf[0] = run ? 0xfa : 0xfc;
+  midiSend( 1, buf );
   }
+
+
 
 void CsMidiKeyboardLinux::playNote(int note, int velo)
   {
-
+  quint8 buf[3];
+  buf[0] = 0x90;
+  buf[1] = note & 0x7f;
+  buf[2] = velo & 0x7f;
+  midiSend( 3, buf );
   }
+
+
 
 void CsMidiKeyboardLinux::playTempo(int tempo)
   {
-
+  Q_UNUSED(tempo)
   }
+
+
+
 
 void CsMidiKeyboardLinux::playVoice(int voice)
   {
+  quint8 buf[3];
+  buf[0] = 0xb0;
+  buf[1] = 0;
+  buf[2] = (voice >> 16) & 0x7f;
+  midiSend( 3, buf );
 
+  buf[1] = 0x20;
+  buf[2] = (voice >> 8) & 0x7f;
+  midiSend( 3, buf );
+
+  buf[0] = 0xc0;
+  buf[1] = (voice) & 0x7f;
+  midiSend( 2, buf );
   }
+
+
+
 
 void CsMidiKeyboardLinux::periodic()
   {
@@ -78,7 +106,7 @@ void CsMidiKeyboardLinux::periodic()
       r = read( mMidiHandle, buf, 30 );
 
       //This code for detecting disconnect midi keyboard
-      if( r == 0 ) {
+      if( r < 0 ) {
         mQuietCount++;
         if( mQuietCount > 100 ) {
           //Perhaps that midi keyboard was disconnected
@@ -176,11 +204,11 @@ void CsMidiKeyboardLinux::onStart()
     mPeriodic->start();
     }
 
-  mMidiHandle = open( "/dev/snd/midiC1D0", O_RDONLY | O_NONBLOCK );
+  mMidiHandle = open( "/dev/snd/midiC1D0", O_RDWR | O_NONBLOCK );
   if( mMidiHandle >= 0 ) {
     mQuietCount = 0;
     emit midiLink( true );
-    qDebug() << "midi open" << mMidiHandle;
+    //qDebug() << "midi open" << mMidiHandle;
     }
   else {
     //Try connect after one second
@@ -203,10 +231,17 @@ void CsMidiKeyboardLinux::tickGenerate(int count)
 
 void CsMidiKeyboardLinux::parseSysEx()
   {
-  qDebug() << "====SysEx:" << mSysExIndex;
-  for( int i = 0; i < mSysExIndex; i++ )
-    qDebug() << mSysExBuf[i];
-  qDebug() << "----";
+//  qDebug() << "====SysEx:" << mSysExIndex;
+//  for( int i = 0; i < mSysExIndex; i++ )
+//    qDebug() << mSysExBuf[i];
+  //  qDebug() << "----";
+  }
+
+void CsMidiKeyboardLinux::midiSend(int count, quint8 *array)
+  {
+  if( mMidiHandle >= 0 ) {
+    write( mMidiHandle, array, count );
+    }
   }
 
 
