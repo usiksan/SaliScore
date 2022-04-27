@@ -24,6 +24,7 @@ class CsVisualScore;
 class CsVisualScoreTrain;
 class CsVisualScoreEdit;
 class CsVisualScoreKaraoke;
+class CsVisualPiano;
 
 using QActionPtr = QAction*;
 
@@ -41,6 +42,9 @@ class CsDesktopWinMain : public CsVisualWinMain
     CsVisualScoreEdit    *mWCentralScoreEdit;    //!< Visual score edit
     CsVisualScoreKaraoke *mWCentralScoreKaraoke; //!< Visual score karaoke player
 
+    QStackedWidget       *mWInstrum;
+    CsVisualPiano        *mWInstrumPiano;
+
     CsImportManager       mImportManager;        //!< Import files manager. Contains converters from other formats
 
 
@@ -48,6 +52,9 @@ class CsDesktopWinMain : public CsVisualWinMain
     explicit CsDesktopWinMain( QWidget *parent = nullptr);
 
     virtual void playUpdate() override;
+
+    virtual void closeEvent( QCloseEvent *ev ) override;
+
   signals:
 
   private slots:

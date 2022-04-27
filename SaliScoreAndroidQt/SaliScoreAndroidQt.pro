@@ -14,6 +14,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    midiKeyboard/CsMidiKeyboardDesktop.cpp \
     SvLib/SvTime2x.cpp \
     SvLib/SvSignal.cpp \
     import/CsImport.cpp \
@@ -58,6 +59,7 @@ SOURCES += \
     visual/CsPainterSettings.cpp \
     visual/CsPainterTrain.cpp \
     visual/CsVisualPartList.cpp \
+    visual/CsVisualPiano.cpp \
     visual/CsVisualPlayList.cpp \
     visual/CsVisualScore.cpp \
     visual/CsVisualScoreEdit.cpp \
@@ -70,6 +72,7 @@ SOURCES += \
 
 HEADERS += \
     CsConfig.h \
+    midiKeyboard/CsMidiKeyboardDesktop.h \
     SvLib/SvTime2x.h \
     SvLib/SvJsonIO.h \
     SvLib/SvSignal.h \
@@ -119,6 +122,7 @@ HEADERS += \
     visual/CsPainterSettings.h \
     visual/CsPainterTrain.h \
     visual/CsVisualPartList.h \
+    visual/CsVisualPiano.h \
     visual/CsVisualPlayList.h \
     visual/CsVisualScore.h \
     visual/CsVisualScoreEdit.h \

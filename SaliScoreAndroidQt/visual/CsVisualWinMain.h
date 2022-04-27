@@ -42,6 +42,8 @@
 using CsKeyEvent = int;
 
 inline CsKeyEvent csKeyEvent( int channel, int note ) { return (channel << 16) | note; }
+inline int        csKeyEventChannel( CsKeyEvent ev ) { return (ev >> 16) & 0xff; }
+inline int        csKeyEventPitch( CsKeyEvent ev ) { return ev & 0xffff; }
 
 class CsPlayerEvent
   {
@@ -111,10 +113,10 @@ class CsVisualWinMain : public QMainWindow
     virtual void playUpdate() = 0;
 
   signals:
-    void noteOn( int channel, int pitch );
-    void noteOff( int channel, int pitch );
-    void playSetRun( bool run );
-    void playSetPause( bool pause );
+    void playNote( int channel, int pitch, int velo );
+    void playHighlight( int channel, int pitch, int velo );
+    void playRun( bool run );
+    void playPause( bool pause );
 
   public slots:
     void cmPlayRun();
@@ -122,8 +124,7 @@ class CsVisualWinMain : public QMainWindow
     void cmPlayPause();
     void cmPlayStop();
 
-    void midiNoteOn( int pitch );
-    void midiNoteOff( int pitch );
+    void midiNote( int pitch, int velo );
 
   private slots:
 

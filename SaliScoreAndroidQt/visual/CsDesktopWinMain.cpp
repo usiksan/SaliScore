@@ -6,6 +6,7 @@
 #include "CsVisualScoreTrain.h"
 #include "CsVisualScoreEdit.h"
 #include "CsVisualScoreKaraoke.h"
+#include "CsVisualPiano.h"
 #include "repo/CsRepoClient.h"
 #include "import/saliScore/CsImportSaliScore.h"
 #include "import/text/CsImportText.h"
@@ -30,15 +31,29 @@ CsDesktopWinMain::CsDesktopWinMain(QWidget *parent) :
   {
   //==========================================
   //      Top layer of layout
-  //At left side - play list
+  //1. At left side - play list
   mWLeftPart = new QStackedWidget();
 
-  //At central part - wiziwig editors
+  //2. At central part - wiziwig editors with piano
+  QWidget *central = new QWidget();
+  //Central part divided into top and bottom parts
+  //2.1 At top part - stack of wiziwig editors
   mWCentralPart = new QStackedWidget();
 
+  //2.2 At bottom part - stack of instruments
+  mWInstrum     = new QStackedWidget();
+
+  //Fill 2
+  QVBoxLayout *vbox = new QVBoxLayout();
+  vbox->setSpacing(0);
+  vbox->addWidget( mWCentralPart );
+  vbox->addWidget( mWInstrum );
+  central->setLayout( vbox );
+
+  //Fill top
   mWSplitter    = new QSplitter();
   mWSplitter->addWidget( mWLeftPart );
-  mWSplitter->addWidget( mWCentralPart );
+  mWSplitter->addWidget( central );
 
   setCentralWidget( mWSplitter );
 
@@ -86,19 +101,25 @@ CsDesktopWinMain::CsDesktopWinMain(QWidget *parent) :
     });
 
 
-  // 2. Central part
-  // 2.1. Score view and train
+  // 2.1 At top part of Central - stack of wiziwig editors
+  // 2.1.1 Score view and train
   mWCentralScoreTrain = new CsVisualScoreTrain( mComposition, this );
   mWCentralPart->addWidget( mWCentralScoreTrain );
 
-  // 2.2. Score edit
+  // 2.1.2. Score edit
   mWCentralScoreEdit = new CsVisualScoreEdit( mComposition, this );
   mWCentralPart->addWidget( mWCentralScoreEdit );
 
-  // 2.3 Score karaoke
+  // 2.1.3 Score karaoke
   mWCentralScoreKaraoke = new CsVisualScoreKaraoke( mComposition, this );
   mWCentralPart->addWidget( mWCentralScoreKaraoke );
 
+  //2.2 At bottom part of Central - stack of instruments
+  mWInstrumPiano = new CsVisualPiano();
+  mWInstrum->addWidget( mWInstrumPiano );
+  mWInstrum->setMaximumHeight( 100 );
+  connect( mWInstrumPiano, &CsVisualPiano::midiNote, this, &CsDesktopWinMain::midiNote );
+  connect( this, &CsDesktopWinMain::playHighlight, mWInstrumPiano, &CsVisualPiano::playHighlight );
 
   //Restore splitter positions
   QSettings s;
@@ -171,11 +192,11 @@ CsDesktopWinMain::CsDesktopWinMain(QWidget *parent) :
   actionPlayPause->setCheckable(true);
   actionPlayPause->setEnabled(false);
   actionPlayStop->setEnabled(false);
-  connect( this, &CsDesktopWinMain::playSetRun, actionPlayStart, &QAction::setDisabled );
-  connect( this, &CsDesktopWinMain::playSetRun, actionPlayTrain, &QAction::setDisabled );
-  connect( this, &CsDesktopWinMain::playSetRun, actionPlayPause, &QAction::setEnabled );
-  connect( this, &CsDesktopWinMain::playSetRun, actionPlayStop, &QAction::setEnabled );
-  connect( this, &CsDesktopWinMain::playSetPause, actionPlayPause, &QAction::setChecked );
+  connect( this, &CsDesktopWinMain::playRun, actionPlayStart, &QAction::setDisabled );
+  connect( this, &CsDesktopWinMain::playRun, actionPlayTrain, &QAction::setDisabled );
+  connect( this, &CsDesktopWinMain::playRun, actionPlayPause, &QAction::setEnabled );
+  connect( this, &CsDesktopWinMain::playRun, actionPlayStop, &QAction::setEnabled );
+  connect( this, &CsDesktopWinMain::playPause, actionPlayPause, &QAction::setChecked );
 
   menuTrain = new QMenu( tr("Train") );
   actionFragmentTrain = menuTrain->addAction( QIcon(QStringLiteral(":/pic/playTrain.png")), tr("Fragment train") /*, mWinTrain, &CsWinTrain::cmFragmentTrain */ );
@@ -284,6 +305,22 @@ CsDesktopWinMain::CsDesktopWinMain(QWidget *parent) :
 void CsDesktopWinMain::playUpdate()
   {
   visualCurrentUpdate();
+  }
+
+
+
+void CsDesktopWinMain::closeEvent(QCloseEvent *ev)
+  {
+  //If can close editor
+  if( canCloseEditor() ) {
+    //Save settings: main window maximisation and splitter position
+    QSettings s;
+    s.setValue( QStringLiteral(KEY_WMAIN_MAX), isMaximized() );
+    s.setValue( QStringLiteral(KEY_WMAIN_SIZE), size() );
+    s.setValue( QStringLiteral(KEY_MAIN_SPLITTER), mWSplitter->saveState() );
+    ev->accept();
+    }
+  else ev->ignore();
   }
 
 

@@ -18,6 +18,7 @@ enum CsNotes {
   };
 
 
+
 enum CsOctave {
   octaveNoName   = 0,
   octaveSubContr = 12,
@@ -32,6 +33,13 @@ enum CsOctave {
   octaveSixth    = 120
   };
 
+inline CsNotes csNoteInOctave( int note ) { return (CsNotes)(note % 12); }
+
+
+inline bool csKeyNoBlackFromLeft( int note ) { note %= 12; return (note == noteC || note == noteF); }
+inline bool csKeyNoBlackFromRight( int note ) { note %= 12; return (note == noteE || note == noteB); }
+inline bool csKeyIsBlack( int note ) { note %= 12; return note == noteCd || note == noteDd || note == noteFd || note == noteGd || note == noteAd; }
+inline bool csKeyIsWhite( int note ) { return !csKeyIsBlack(note); }
 
 
 enum CsWhiteKey {

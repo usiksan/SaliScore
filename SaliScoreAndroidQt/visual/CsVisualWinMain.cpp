@@ -39,7 +39,7 @@ void CsVisualWinMain::cmPlayRun()
   mIsPaused = false;
   mIsTraining = false;
   mIsRun = true;
-  emit playSetRun( mIsRun );
+  emit playRun( mIsRun );
   prepareRun();
   }
 
@@ -50,7 +50,7 @@ void CsVisualWinMain::cmPlayTrain()
   mIsPaused = false;
   mIsTraining = true;
   mIsRun = true;
-  emit playSetRun( mIsRun );
+  emit playRun( mIsRun );
   prepareRun();
   }
 
@@ -60,7 +60,7 @@ void CsVisualWinMain::cmPlayTrain()
 void CsVisualWinMain::cmPlayPause()
   {
   mIsPaused = !mIsPaused;
-  emit playSetPause(mIsPaused);
+  emit playPause(mIsPaused);
   }
 
 
@@ -69,19 +69,28 @@ void CsVisualWinMain::cmPlayPause()
 void CsVisualWinMain::cmPlayStop()
   {
   mIsRun = false;
-  emit playSetRun( mIsRun );
+  emit playRun( mIsRun );
   mIsPaused = false;
-  emit playSetPause(mIsPaused);
+  emit playPause(mIsPaused);
   }
 
 
 
-void CsVisualWinMain::midiNoteOn(int pitch)
+void CsVisualWinMain::midiNote(int pitch, int velo)
   {
   int keyEvent = csKeyEvent( 0, pitch );
+  if( velo == 0 ) {
+    //Note off, remove it from keyboard event set
+    if( mKeyEventFromKeyboard.contains(keyEvent) )
+      mKeyEventFromKeyboard.remove(keyEvent);
+    }
+  else {
+    //Note on
+    }
   if( mKeyEventFromPlayer.contains(keyEvent) ) {
     //Player is waiting for this note
     mKeyEventFromPlayer.remove(keyEvent);
+    emit playHighlight( csKeyEventChannel(keyEvent), csKeyEventPitch( keyEvent ), 0 );
     }
   else {
     mKeyEventFromKeyboard.insert(keyEvent);
@@ -89,13 +98,6 @@ void CsVisualWinMain::midiNoteOn(int pitch)
   }
 
 
-
-void CsVisualWinMain::midiNoteOff(int pitch)
-  {
-  int keyEvent = csKeyEvent( 0, pitch );
-  if( mKeyEventFromKeyboard.contains(keyEvent) )
-    mKeyEventFromKeyboard.remove(keyEvent);
-  }
 
 
 
@@ -121,23 +123,34 @@ void CsVisualWinMain::tick(int tickOffset)
     for( int i = mEventList.count() - 1; i >= 0; i-- )
       if( mEventList[i].tick( tickOffset ) ) {
         //Stop note playing
-        emit noteOff( mEventList.at(i).channel(), mEventList.at(i).pitch() );
+        emit playNote( mEventList.at(i).channel(), mEventList.at(i).pitch(), 0 );
+        emit playHighlight( mEventList.at(i).channel(), mEventList.at(i).pitch(), 0 );
         //Remove current event from playing list
         mEventList.removeAt(i);
         }
 
     //Process all waiting notes
     bool fail = false;
-    if( mIsTraining ) {
-      for( int i = mWaitingList.count() - 1; i >= 0; i-- )
-        if( mWaitingList[i].tick( tickOffset ) ) {
-          //Time for press note ended
+    for( int i = mWaitingList.count() - 1; i >= 0; i-- )
+      if( mWaitingList[i].tick( tickOffset ) ) {
+        //Time for press note ended
+        if( mIsTraining ) {
+          //When we training
           if( mKeyEventFromPlayer.contains( mWaitingList.at(i).keyEvent() )  )
             //Note still waiting for pressing
             fail = true;
-          else mWaitingList.removeAt(i);
+          else {
+            emit playHighlight( mWaitingList.at(i).channel(), mWaitingList.at(i).pitch(), 0 );
+            mWaitingList.removeAt(i);
+            }
           }
-      }
+        else {
+          //This is simple playback, so we remove event from waiting list
+          mKeyEventFromPlayer.remove( mWaitingList.at(i).keyEvent() );
+          emit playHighlight( mWaitingList.at(i).channel(), mWaitingList.at(i).pitch(), 0 );
+          mWaitingList.removeAt(i);
+          }
+        }
 
     if( !fail && mIsRun && !mIsPaused ) {
       //Extract next notes
@@ -157,7 +170,7 @@ void CsVisualWinMain::tick(int tickOffset)
       //Check if we reach end of fragment
       if( mComposition.trainGet( mTrainIndex ).mStop.isLess( mLineIndex, mLinePosition ) ) {
         mIsRun = false;
-        emit playSetRun( mIsRun );
+        emit playRun( mIsRun );
         }
       }
     }
@@ -224,19 +237,21 @@ void CsVisualWinMain::extractNote(const CsLine &line, const CsDefinition &def, i
           //Append chord to synthes array
           }
         if( def.mTrain ) {
-          //Append chord to teach
+          //Append note to teach
           int keyEvent = noteEvent.keyEvent();
           if( mKeyEventFromKeyboard.contains(keyEvent) )
             mKeyEventFromKeyboard.remove( keyEvent );
           else {
             mWaitingList.append( noteEvent );
             mKeyEventFromPlayer.insert( keyEvent );
+            emit playHighlight( noteEvent.channel(), noteEvent.pitch(), 127 );
             }
           }
         else {
           //Append note to event list
           mEventList.append( noteEvent );
-          emit noteOn( noteEvent.channel(), noteEvent.pitch() );
+          emit playNote( noteEvent.channel(), noteEvent.pitch(), 127 );
+          emit playHighlight( noteEvent.channel(), noteEvent.pitch(), 127 );
           }
         }
       }
@@ -259,7 +274,7 @@ void CsVisualWinMain::findNextLine()
     }
   //Next line not found, composition is finished
   mIsRun = false;
-  emit playSetRun( mIsRun );
+  emit playRun( mIsRun );
   }
 
 
