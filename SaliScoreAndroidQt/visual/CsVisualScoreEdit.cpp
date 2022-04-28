@@ -230,11 +230,17 @@ void CsVisualScoreEdit::keyPressEvent(QKeyEvent *event)
         break;
 
       case Qt::Key_Up :
-        mCellCursor.move( ccoUp );
+        if( mControl )
+          keyToneShift( true );
+        else
+          mCellCursor.move( ccoUp );
         break;
 
       case Qt::Key_Down :
-        mCellCursor.move( ccoDown );
+        if( mControl )
+          keyToneShift( false );
+        else
+          mCellCursor.move( ccoDown );
         break;
 
       case Qt::Key_Left :
@@ -246,7 +252,10 @@ void CsVisualScoreEdit::keyPressEvent(QKeyEvent *event)
         break;
 
       case Qt::Key_Return :
-        mEditor = CsCursorEdit::build( mCellCursor, mComposition );
+        if( mControl || mShift )
+          mComposition.lineInsert( qBound( 0, mCellCursor.lineIndex() + 1, mComposition.lineCount() ), mShift );
+        else
+          mEditor = CsCursorEdit::build( mCellCursor, mComposition );
         break;
 
       case Qt::Key_Insert :
@@ -490,13 +499,12 @@ bool moveRightAll( Line &line, int position, int step )
 
 
 
-
 //!
 //! \brief keyLeft Handle key left pressing
 //!
 void CsVisualScoreEdit::keyLeft()
   {
-  if( mControl ) {
+  if( mControl || mShift ) {
     //We move chord, note or lyric to left
     if( mCellCursor.cellClass() == cccChord ) {
       //Get chord line pointed by cursor
@@ -528,7 +536,7 @@ void CsVisualScoreEdit::keyLeft()
 //!
 void CsVisualScoreEdit::keyRight()
   {
-  if( mControl ) {
+  if( mControl || mShift ) {
     //We move chord, note or lyric to right
     if( mCellCursor.cellClass() == cccChord ) {
       //Get chord line pointed by cursor
@@ -550,6 +558,29 @@ void CsVisualScoreEdit::keyRight()
 
   //Simple cursor moving
   mCellCursor.move( ccoRight );
+  }
+
+
+
+
+void CsVisualScoreEdit::keyToneShift( bool up )
+  {
+  if( mCellCursor.cellClass() == cccNote ) {
+    //Get note line pointed by cursor
+    auto noteLine = mComposition.noteListGet( mCellCursor.lineIndex(), mCellCursor.partName() );
+
+    //Find note behind cursor
+    int noteIndex;
+    for( noteIndex = 0; noteIndex < noteLine.count(); noteIndex++ )
+      if( noteLine.at(noteIndex).position() == mCellCursor.linePosition() )
+        break;
+
+    if( noteIndex < noteLine.count() ) {
+      //Note found, change pitch
+      noteLine[noteIndex].noteShift( up );
+      mComposition.noteListSet( mCellCursor.lineIndex(), mCellCursor.partName(), noteLine );
+      }
+    }
   }
 
 

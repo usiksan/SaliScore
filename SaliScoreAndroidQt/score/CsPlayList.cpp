@@ -67,7 +67,6 @@ void CsPlayList::partDelete(int i)
   {
   if( i == 0 ) return;
   mPartList.removeAt(i - 1 );
-  garbageCollection();
   signalDirty();
   }
 
@@ -108,9 +107,19 @@ bool CsPlayList::partCompositionAppend(int partIndex, const QString &id)
 
 void CsPlayList::partCompositionRemove( int partIndex, int compositionIndex )
   {
-  if( partIndex == 0 ) return;
-  mPartList[partIndex - 1].compositionRemove(compositionIndex);
-  garbageCollection();
+  if( partIndex == 0 ) {
+    //Remove composition from each part list
+    QString id = partCompositionId( partIndex, compositionIndex );
+    for( int i = 0; i < mPartList.count(); i++ )
+      mPartList[i].compositionRemoveById( id );
+    //At now remove from description list
+    mCompositionsMap.remove( id );
+    //And remove file from local repo
+    CsSongLocalRepo::repo()->songRemove( id );
+    }
+  else {
+    mPartList[partIndex - 1].compositionRemove(compositionIndex);
+    }
   signalDirty();
   }
 
@@ -217,29 +226,6 @@ void CsPlayList::signalDirty()
   mChanged.emitSignal();
   }
 
-
-
-
-void CsPlayList::garbageCollection()
-  {
-  QStringList deletionList( compositionList() );
-  QSet<QString> deletionSet( deletionList.begin(), deletionList.end() );
-  //Scan all parts and remove from deletionSet all existing ids
-  for( const auto &part : qAsConst( mPartList )  ) {
-    for( int i = 0; i < part.compositionCount(); i++ )
-      deletionSet.remove( part.compositionId(i) );
-    }
-
-  //At this moment in deletionSet remain ids which must be deleted
-  //Convert set to list
-  deletionList = deletionSet.values();
-  if( deletionList.count() ) {
-    //For each id from deletion list we delete associated composition
-    for( const auto &id : qAsConst(deletionList) )
-      mCompositionsMap.remove( id );
-    signalDirty();
-    }
-  }
 
 
 

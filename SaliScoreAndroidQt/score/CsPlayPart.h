@@ -27,7 +27,7 @@ class CsPlayPart
 
     bool        compositionAppend( const QString &id );
 
-    //bool        compositionRemove( const QString &id ) { return mCompositionIdList.removeAll( id ) != 0; }
+    void        compositionRemoveById( const QString &id ) { mCompositionIdList.removeAll( id ); }
 
     void        compositionRemove( int index ) { mCompositionIdList.removeAt(index); }
 

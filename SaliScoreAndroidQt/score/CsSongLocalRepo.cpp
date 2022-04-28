@@ -113,6 +113,8 @@ QString CsSongLocalRepo::repoHomeDir(const QString &subDir) const
     dirPath.append( subDir );
   QDir dir;
   dir.mkpath( dirPath );
+  if( !dirPath.endsWith( QChar('/') ) )
+    dirPath.append( QChar('/') );
   return dirPath;
   }
 

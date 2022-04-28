@@ -541,8 +541,7 @@ void CsPainter::drawLyric(const CsLyricLine &lyricLine)
   static QVector<CsLyricDisposition> lyricDisposition(1024);
 
   mCurY += mLyricTextHeight.mHeight;
-  if( lyricLine.count() > 0 )
-    mPainter->setFont( QFont( mSettings.mFontName, mSettings.mLyricFontSize ) );
+  mPainter->setFont( QFont( mSettings.mFontName, mSettings.mLyricFontSize ) );
 
   if( isNotEditLyric( lyricDisposition ) ) {
     buildDisposition( lyricDisposition, lyricLine );

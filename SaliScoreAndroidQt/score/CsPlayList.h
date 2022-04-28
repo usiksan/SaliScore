@@ -105,8 +105,6 @@ class CsPlayList
   private:
     void                  signalDirty();
 
-    void                  garbageCollection();
-
     static QString        fileName();
 
   };

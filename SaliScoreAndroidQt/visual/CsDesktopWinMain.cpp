@@ -7,6 +7,7 @@
 #include "CsVisualScoreEdit.h"
 #include "CsVisualScoreKaraoke.h"
 #include "CsVisualPiano.h"
+#include "CsDlgRegistration.h"
 #include "repo/CsRepoClient.h"
 #include "import/saliScore/CsImportSaliScore.h"
 #include "import/text/CsImportText.h"
@@ -503,7 +504,11 @@ void CsDesktopWinMain::cmHelpWeb()
 
 void CsDesktopWinMain::cmHelpRegistration()
   {
-
+  //Prepare and display registration dialog
+  CsDlgRegistration dlg(this);
+  //If after registration user yet not registered then exit application
+  if( dlg.exec() == 0 && !repoClient->isRegistered() )
+    close();
   }
 
 

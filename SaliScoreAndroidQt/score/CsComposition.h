@@ -205,6 +205,12 @@ class CsComposition
     //=================================================================
     //         Lines
 
+    //!
+    //! \brief lineInsert Insert new line into composition
+    //! \param index      Index at wich line will be inserted, if index = -1 then line appended to end of composition
+    //! \param rem        If true then remark line inserted else music line inserted
+    //! \return           index of new inserted line
+    //!
     int         lineInsert( int index, bool rem );
 
     int         lineAppend( bool rem ) { return lineInsert( -1, rem ); }

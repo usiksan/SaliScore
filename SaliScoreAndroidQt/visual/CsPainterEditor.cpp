@@ -62,7 +62,7 @@ bool CsPainterEditor::isNotEditNote(const QString &part, int position, int x, in
   //mPainter->setBrush( Qt::transparent );
   int cx = qMax( over.left(), over.right() );
   int cy = over.top();
-  mPainter->drawLine( cx, cy, cx, cy - over.height() );
+  mPainter->drawLine( cx, cy, cx, cy + over.height() );
 
   return false;
   }

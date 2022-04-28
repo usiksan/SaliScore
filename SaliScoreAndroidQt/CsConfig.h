@@ -51,7 +51,7 @@
 
 //Project naming definition
 #define CS_BASE_EXTENSION            ".saliscore"
-#define CS_DATA_DIRECTORY            "/SaliScore/"
+#define CS_DATA_DIRECTORY            "/SaliLAB/SaliScore/"
 #define CS_DEFAULT_FILE_NAME         "default"
 
 //SaliScore database version

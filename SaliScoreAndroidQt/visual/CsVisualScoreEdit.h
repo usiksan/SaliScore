@@ -61,6 +61,8 @@ class CsVisualScoreEdit : public CsVisualScore
     //!
     void keyRight();
 
+    void keyToneShift(bool up );
+
     //!
     //! \brief keyEnd Handle key End pressing
     //!
