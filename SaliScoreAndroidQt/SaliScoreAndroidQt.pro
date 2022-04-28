@@ -14,6 +14,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    iff/IffReader.cpp \
     midiKeyboard/CsMidiKeyboard.cpp \
     SvLib/SvTime2x.cpp \
     SvLib/SvSignal.cpp \
@@ -23,6 +24,11 @@ SOURCES += \
     import/text/CsImportText.cpp \
     midiKeyboard/CsMidiKeyboardLinux.cpp \
     score/CsChordToNote.cpp \
+    soundFont2/CsSoundFont.cpp \
+    synth/CsSynthSfManager.cpp \
+    synth/CsSynthSfNote.cpp \
+    synth/CsSynthSfTrack.cpp \
+    synth/CsSynthSfVoice.cpp \
     visual/CsAndroidWinMain.cpp \
     visual/CsDesktopWinMain.cpp \
     audioOut/CsSoundBufferIODevice.cpp \
@@ -73,6 +79,7 @@ SOURCES += \
 
 HEADERS += \
     CsConfig.h \
+    iff/IffReader.h \
     midiKeyboard/CsMidiKeyboard.h \
     SvLib/SvTime2x.h \
     SvLib/SvJsonIO.h \
@@ -106,7 +113,12 @@ HEADERS += \
     score/CsSongLocalRepo.h \
     score/CsSynthSettings.h \
     score/CsTrainInterval.h \
+    soundFont2/CsSoundFont.h \
     synth/CsSynthMeandr.h \
+    synth/CsSynthSfManager.h \
+    synth/CsSynthSfNote.h \
+    synth/CsSynthSfTrack.h \
+    synth/CsSynthSfVoice.h \
     visual/CsAndroidWinMain.h \
     visual/CsCellCursor.h \
     visual/CsCursorEdit.h \
@@ -161,6 +173,5 @@ ANDROID_FEATURES += android.software.midi
 
 RESOURCES += \
   SaliScore.qrc
-
 
 

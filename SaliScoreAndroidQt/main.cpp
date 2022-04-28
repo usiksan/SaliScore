@@ -60,11 +60,11 @@ int main(int argc, char *argv[])
   //Remote repo client
   repoClient = new CsRepoClient();
 
-//  if( !repoClient->isRegistered() ) {
-//    CsDlgRegistration dlg(nullptr);
-//    if( !dlg.exec() )
-//      return 0;
-//    }
+  if( !repoClient->isRegistered() ) {
+    CsDlgRegistration dlg(nullptr);
+    if( !dlg.exec() )
+      return 0;
+    }
 
   //=============================================================================
   //        Audio output setup
@@ -78,13 +78,6 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_ANDROID
   CsAndroidWinMain w();
 #else
-
-  //=============================================================================
-  //        MIDI keyboard setup
-  //Start midi keyboard
-//  QThread *midiThread = new QThread();
-//  CsMidiSequencer *midiSequencer = new CsMidiSequencer( midiThread );
-
   CsDesktopWinMain w;
 #endif
 
