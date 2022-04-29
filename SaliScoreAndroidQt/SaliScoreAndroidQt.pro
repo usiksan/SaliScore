@@ -13,6 +13,7 @@ CONFIG += c++17
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+
 SOURCES += \
     iff/IffReader.cpp \
     midiKeyboard/CsMidiKeyboard.cpp \
@@ -25,10 +26,12 @@ SOURCES += \
     midiKeyboard/CsMidiKeyboardLinux.cpp \
     score/CsChordToNote.cpp \
     soundFont2/CsSoundFont.cpp \
+    soundFont2/CsSoundFontMap.cpp \
     synth/CsSynthSfManager.cpp \
     synth/CsSynthSfNote.cpp \
     synth/CsSynthSfTrack.cpp \
     synth/CsSynthSfVoice.cpp \
+    synth/CsSynthSfVoiceInfo.cpp \
     visual/CsAndroidWinMain.cpp \
     visual/CsDesktopWinMain.cpp \
     audioOut/CsSoundBufferIODevice.cpp \
@@ -114,11 +117,14 @@ HEADERS += \
     score/CsSynthSettings.h \
     score/CsTrainInterval.h \
     soundFont2/CsSoundFont.h \
+    soundFont2/CsSoundFontMap.h \
     synth/CsSynthMeandr.h \
     synth/CsSynthSfManager.h \
     synth/CsSynthSfNote.h \
     synth/CsSynthSfTrack.h \
     synth/CsSynthSfVoice.h \
+    synth/CsSynthSfVoiceInfo.h \
+    synth/CsSynthVoiceId.h \
     visual/CsAndroidWinMain.h \
     visual/CsCellCursor.h \
     visual/CsCursorEdit.h \

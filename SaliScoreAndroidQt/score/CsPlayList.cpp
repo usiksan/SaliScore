@@ -7,7 +7,9 @@
 #include <QJsonDocument>
 #include <QTreeWidgetItem>
 
-CsPlayList::CsPlayList()
+CsPlayList::CsPlayList() :
+  mVersion(1),
+  mDirty(false)
   {
 
   }

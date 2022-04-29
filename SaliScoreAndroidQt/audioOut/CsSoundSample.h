@@ -1,5 +1,5 @@
 /*
-  Project "SaliScore Score music edit, view and tutorial programm"
+  Project "SaliScore Score music edit, view and tutorial program"
 
   Author
     Sibilev Alexander S.

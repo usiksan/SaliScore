@@ -170,7 +170,7 @@ CsDesktopWinMain::CsDesktopWinMain(QWidget *parent) :
   menuFile->addSeparator();
   actionFilePrint    = menuFile->addAction( QIcon(QStringLiteral(":/pic/filePrint.png")), tr("Print..."), this, &CsDesktopWinMain::cmFilePrint );
   menuFile->addSeparator();
-  actionFileExit     = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileExit.png")), tr("Exit programm"), this, &CsDesktopWinMain::close );
+  actionFileExit     = menuFile->addAction( QIcon(QStringLiteral(":/pic/fileExit.png")), tr("Exit program"), this, &CsDesktopWinMain::close );
 
   menuEditDisabled = new QMenu( tr("Edit") );
   actionEditPasteImport = menuEditDisabled->addAction( QIcon(QStringLiteral(":/pic/viewEditor.png")), tr("Import from clipboard"), this, &CsDesktopWinMain::cmEditPasteImport );

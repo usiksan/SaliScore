@@ -1,5 +1,5 @@
 /*
-  Project "SaliScore Score music edit, view and tutorial programm"
+  Project "SaliScore Score music edit, view and tutorial program"
 
   Author
     Sibilev Alexander S.
@@ -53,6 +53,9 @@
 #define CS_BASE_EXTENSION            ".saliscore"
 #define CS_DATA_DIRECTORY            "/SaliLAB/SaliScore/"
 #define CS_DEFAULT_FILE_NAME         "default"
+
+#define CS_DIR_SOUND_FONT            "soundFont"
+#define CS_DIR_STYLE                 "style"
 
 //SaliScore database version
 //Must be compatible with previous versions
