@@ -214,7 +214,7 @@ void CsSynthSfTrack::noteOff()
 
 bool CsSynthSfTrack::noteOn(quint8 pressure)
   {
-  if( pressure == 0 ) noteOff(0);
+  if( pressure == 0 ) noteOff();
   else if( mMinVelocity <= pressure && pressure <= mMaxVelocity ) {
 //    qDebug() << "previous phase" << mVolumePhase;
     mVolumeTick = 0;

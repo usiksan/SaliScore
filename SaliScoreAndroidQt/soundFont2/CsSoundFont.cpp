@@ -63,6 +63,14 @@ QString CsSoundFont::presetName(int preset) const
   }
 
 
+int CsSoundFont::presetBank(int preset) const
+  {
+  if( preset >= 0 && preset < mPresets.count() )
+    return mPresets.at(preset).wBank;
+  return 0;
+  }
+
+
 
 bool CsSoundFont::read(const QString fname)
   {
@@ -330,6 +338,8 @@ bool CsSoundFont::readPdta(IffReader &reader)
 
 bool CsSoundFont::readSmpl(IffReader &reader)
   {
+  mSamples.clear();
+  mSamples.reserve( reader.chunkLenght() / 2 );
   while( !reader.isEnd() ) {
     qint16 sample = reader.getInt16le();
     mSamples.append(sample);

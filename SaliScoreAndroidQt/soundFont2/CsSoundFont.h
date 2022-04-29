@@ -189,6 +189,8 @@ class CsSoundFont
     //Preset name by index
     QString     presetName( int preset ) const;
 
+    int         presetBank( int preset ) const;
+
     bool        read( const QString fname );
 
     bool        buildPreset( int preset, std::function<void( quint16 *generator, const SfSample &sam, qint16 *samples )> addTracks );

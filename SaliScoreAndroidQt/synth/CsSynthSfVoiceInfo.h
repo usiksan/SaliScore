@@ -35,15 +35,23 @@ class CsSynthSfVoiceInfo
   {
     CsSynthSfVoicePtr mVoice;        //!< Voice synth
     QString           mFontName;     //!< Font name file for this voice
-    QString           mPresetName;   //!< Preset name in font file
+    int               mPreset;       //!< Preset index in sound font file
     QString           mName;         //!< Visual name of voice
-    QString           mClass;        //!< Tembr class name
+    QString           mTembrClass;   //!< Tembr class name
     int               mMidiBank;     //!< MIDI bank index
-    int               mMidiProgram; //!< MIDI program index
+    int               mMidiProgram;  //!< MIDI program index
   public:
     CsSynthSfVoiceInfo();
+    CsSynthSfVoiceInfo( const QString &fontName, int preset, const QString &name, int bank ) :
+      mFontName(fontName), mPreset(preset), mName(name), mMidiBank(bank), mMidiProgram(preset) {}
 
-    CsSynthSfVoice *voice() { return mVoice.data(); }
+    CsSynthSfVoice *voice() const { return mVoice.data(); }
+
+    bool isValid() const { return !mVoice.isNull(); }
+
+    QString name() const { return mName; }
+
+    QString tembrClass() const { return mTembrClass; }
 
     void jsonWrite( SvJsonWriter &js ) const;
 

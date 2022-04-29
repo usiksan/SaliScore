@@ -315,6 +315,7 @@ CsDesktopWinMain::CsDesktopWinMain(QWidget *parent) :
   mImportManager.registerImport( new CsImportSaliScore() );
   mImportManager.registerImport( new CsImportText() );
 
+  mSynthSfManager = new CsSynthSfManager{};
   }
 
 
@@ -379,7 +380,10 @@ void CsDesktopWinMain::cmFileImport()
 
 void CsDesktopWinMain::cmFileLoad()
   {
-
+  QString fname = QFileDialog::getOpenFileName( this, tr("Select sound font file"), QString{}, QStringLiteral("SF2 files (*.sf2)") );
+  if( !fname.isEmpty() ) {
+    mSynthSfManager->build( this, fname );
+    }
   }
 
 

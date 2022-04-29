@@ -56,6 +56,7 @@
 
 #define CS_DIR_SOUND_FONT            "soundFont"
 #define CS_DIR_STYLE                 "style"
+#define CS_VOICE_LIST                "voiceList.cfg"
 
 //SaliScore database version
 //Must be compatible with previous versions

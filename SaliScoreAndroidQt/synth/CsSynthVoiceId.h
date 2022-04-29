@@ -23,6 +23,13 @@ inline int csVoiceIdBank( int id ) { return id >> 7;}
 //! \return                Program numver for this voice id
 //!
 inline int csVoiceIdProgram( int id ) { return id & 0x7f; }
+
+//!
+//! \brief csVoiceId Pack bank and program numbers into full voice id
+//! \param bank      Bank number
+//! \param program   Program number
+//! \return
+//!
 inline int csVoiceId( int bank, int program ) { return (bank << 7) | (program & 0x7f); }
 
 #endif // CSSYNTHVOICEID_H

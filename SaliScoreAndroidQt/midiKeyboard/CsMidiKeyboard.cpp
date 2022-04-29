@@ -1,4 +1,5 @@
 #include "CsMidiKeyboard.h"
+#include "synth/CsSynthVoiceId.h"
 
 #include <QDebug>
 
@@ -38,7 +39,7 @@ void CsMidiKeyboard::midiSignal( quint8 control, quint8 data0, quint8 data1 )
 
     case 0x40 :
       //Voice changed
-      emit midiVoice( midiId( mBank, data0 ) );
+      emit midiVoice( csVoiceId( mBank, data0 ) );
       break;
     }
   }

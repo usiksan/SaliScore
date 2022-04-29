@@ -6,6 +6,7 @@
 #include "score/CsComposition.h"
 
 #include "import/CsImportManager.h"
+#include "synth/CsSynthSfManager.h"
 
 #include <QMainWindow>
 #include <QStackedWidget>
@@ -46,7 +47,7 @@ class CsDesktopWinMain : public CsVisualWinMain
     CsVisualPiano        *mWInstrumPiano;
 
     CsImportManager       mImportManager;        //!< Import files manager. Contains converters from other formats
-
+    CsSynthSfManager     *mSynthSfManager;
 
   public:
     explicit CsDesktopWinMain( QWidget *parent = nullptr);
