@@ -2,6 +2,7 @@
 #include "CsSynthSfManager.h"
 #include "CsSynthSfVoice.h"
 #include "soundFont2/CsSoundFont.h"
+#include "score/CsSongLocalRepo.h"
 
 #include <QProgressDialog>
 #include <QFileInfo>
@@ -32,7 +33,7 @@ void CsSynthSfManager::build(QWidget *parent, const QString soundFontPath)
   progress.setValue( 10 );
   QList<CsSynthSfVoiceInfo> voiceList;
   for( int i = 0; i < presetCount; i++ ) {
-    voiceList.append( CsSynthSfVoiceInfo( soundFontName, i, soundFont.presetName(i), soundFont.presetBank(i) ) );
+    voiceList.append( CsSynthSfVoiceInfo( soundFontName, i, soundFont.presetName(i), soundFont.presetBank(i), i & 0x7f ) );
     progress.setValue( 10 + i );
     }
 
@@ -46,6 +47,40 @@ void CsSynthSfManager::build(QWidget *parent, const QString soundFontPath)
     }
 
   progress.setValue( 10 + presetCount );
+  }
+
+
+
+
+void CsSynthSfManager::load(QWidget *parent)
+  {
+  QFile file( CsSongLocalRepo::repo()->repoHomeDir( CS_DIR_SOUND_FONT ) + CS_VOICE_LIST );
+  if( file.open( QIODevice::ReadOnly ) ) {
+    QProgressDialog progress( tr("Sound font loading"), tr("Cancel"), 0, 3, parent );
+    progress.setWindowModality( Qt::WindowModal );
+
+    progress.setValue( 1 );
+    auto obj = svJsonObjectFromByteArray(file.readAll());
+    SvJsonReader js( obj );
+    js.jsonList( "voiceList", mInfoList );
+    progress.setValue( 2 );
+
+    for( int i = 0; i < 16; i++ )
+      mChannels[i] = -1;
+
+    //Fill map
+    mVoiceIdMap.clear();
+    mVoiceMap.clear();
+    for( int i = 0; i < mInfoList.count() - 1; i++ ) {
+      mVoiceIdMap.insert( mInfoList.at(i).voiceId(), i );
+      mVoiceMap.insert( mInfoList.at(i).name(), i );
+      }
+
+    if( mInfoList.count() )
+      voiceSelect( 0, mInfoList.at(0).voiceId() );
+
+    progress.setValue( 3 );
+    }
   }
 
 

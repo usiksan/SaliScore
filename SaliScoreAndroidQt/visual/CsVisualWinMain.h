@@ -117,7 +117,7 @@ class CsVisualWinMain : public QMainWindow
     void playHighlight( int channel, int pitch, int velo );
     void playRun( bool run );
     void playPause( bool pause );
-    void playVoice( int voice );
+    void playVoice( int channel, int voice );
 
   public slots:
     void cmPlayRun();

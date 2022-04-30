@@ -1,5 +1,6 @@
 #include "CsVisualWinMain.h"
 #include "score/CsChordToNote.h"
+#include "synth/CsSynthVoiceId.h"
 
 CsVisualWinMain::CsVisualWinMain(QWidget *parent) :
   QMainWindow{parent}
@@ -36,10 +37,7 @@ void CsVisualWinMain::setTempo(int tempo)
 
 void CsVisualWinMain::cmPlayRun()
   {
-  mIsPaused = false;
   mIsTraining = false;
-  mIsRun = true;
-  emit playRun( mIsRun );
   prepareRun();
   }
 
@@ -47,10 +45,7 @@ void CsVisualWinMain::cmPlayRun()
 
 void CsVisualWinMain::cmPlayTrain()
   {
-  mIsPaused = false;
   mIsTraining = true;
-  mIsRun = true;
-  emit playRun( mIsRun );
   prepareRun();
   }
 
@@ -79,6 +74,7 @@ void CsVisualWinMain::cmPlayStop()
 void CsVisualWinMain::midiNote(int pitch, int velo)
   {
   int keyEvent = csKeyEvent( 0, pitch );
+  emit playNote( 0, pitch, velo );
   if( velo == 0 ) {
     //Note off, remove it from keyboard event set
     if( mKeyEventFromKeyboard.contains(keyEvent) )
@@ -253,10 +249,13 @@ void CsVisualWinMain::extractNote(const CsLine &line, const CsDefinition &def, i
       if( note.isBeginInside( mLinePosition, lastPosition ) ) {
         //This chord hit in current interval - append chord to array
         CsPlayerEvent noteEvent( def.channel(), note.pitch(), note.duration() );
-        if( def.mSynthes ) {
-          //Append chord to synthes array
+        if( !def.mTrain || !mIsTraining ) {
+          //Append note to event list
+          mEventList.append( noteEvent );
+          emit playNote( noteEvent.channel(), noteEvent.pitch(), 127 );
+          emit playHighlight( noteEvent.channel(), noteEvent.pitch(), 127 );
           }
-        if( def.mTrain ) {
+        else {
           //Append note to teach
           int keyEvent = noteEvent.keyEvent();
           if( mKeyEventFromKeyboard.contains(keyEvent) )
@@ -266,12 +265,6 @@ void CsVisualWinMain::extractNote(const CsLine &line, const CsDefinition &def, i
             mKeyEventFromPlayer.insert( keyEvent );
             emit playHighlight( noteEvent.channel(), noteEvent.pitch(), 127 );
             }
-          }
-        else {
-          //Append note to event list
-          mEventList.append( noteEvent );
-          emit playNote( noteEvent.channel(), noteEvent.pitch(), 127 );
-          emit playHighlight( noteEvent.channel(), noteEvent.pitch(), 127 );
           }
         }
       }
@@ -302,17 +295,23 @@ void CsVisualWinMain::findNextLine()
 
 void CsVisualWinMain::prepareRun()
   {
+  mIsPaused = false;
+  mIsRun = true;
+  emit playRun( mIsRun );
+
+  //Init start of fragrment
   CsTrainInterval ti = mComposition.trainGet( mTrainIndex );
   mLineIndex = ti.mStart.lineIndex() - 1;
   findNextLine();
   if( mIsRun ) {
+    //Change voice
     QString at( mComposition.attributeGet(CS_ATTR_VOICE) );
     QStringList lst = at.split( QChar('/') );
-    if( lst.count() > 1 ) {
+    if( lst.count() > 0 ) {
       at = lst.at(0);
       lst = at.split( QChar('.') );
       if( lst.count() == 2 )
-        emit playVoice( (lst.at(0).toInt() << 8) | lst.at(1).toInt() );
+        emit playVoice( 0, csVoiceId( lst.at(0).toInt(), lst.at(1).toInt() ) );
       }
 
     setTempo( mComposition.attributeGet(CS_ATTR_TEMPO).toInt() );

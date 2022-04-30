@@ -316,6 +316,9 @@ CsDesktopWinMain::CsDesktopWinMain(QWidget *parent) :
   mImportManager.registerImport( new CsImportText() );
 
   mSynthSfManager = new CsSynthSfManager{};
+  connect( this, &CsDesktopWinMain::playVoice, mSynthSfManager, &CsSynthSfManager::voiceSelect );
+  connect( this, &CsDesktopWinMain::playNote, mSynthSfManager, &CsSynthSfManager::playNote );
+  mSynthSfManager->load( this );
   }
 
 

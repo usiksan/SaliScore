@@ -2,6 +2,7 @@
 #define CSSYNTHSFVOICEINFO_H
 
 #include "SvLib/SvJsonIO.h"
+#include "CsSynthVoiceId.h"
 
 #include <QMap>
 #include <QSharedPointer>
@@ -42,14 +43,16 @@ class CsSynthSfVoiceInfo
     int               mMidiProgram;  //!< MIDI program index
   public:
     CsSynthSfVoiceInfo();
-    CsSynthSfVoiceInfo( const QString &fontName, int preset, const QString &name, int bank ) :
-      mFontName(fontName), mPreset(preset), mName(name), mMidiBank(bank), mMidiProgram(preset) {}
+    CsSynthSfVoiceInfo( const QString &fontName, int preset, const QString &name, int bank, int program ) :
+      mFontName(fontName), mPreset(preset), mName(name), mMidiBank(bank), mMidiProgram(program) {}
 
     CsSynthSfVoice *voice() const { return mVoice.data(); }
 
     bool isValid() const { return !mVoice.isNull(); }
 
     QString name() const { return mName; }
+
+    int     voiceId() const { return csVoiceId( mMidiBank, mMidiProgram ); }
 
     QString tembrClass() const { return mTembrClass; }
 
