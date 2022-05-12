@@ -186,6 +186,12 @@ CsDesktopWinMain::CsDesktopWinMain(QWidget *parent) :
   actionEditPaste = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editPaste.png")), tr("Paste from clipboard"), mWCentralScoreEdit, &CsVisualScoreEdit::cmEditPaste );
   actionEditDelete = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editDelete.png")), tr("Delete slection"), mWCentralScoreEdit, &CsVisualScoreEdit::cmEditDelete );
   menuEdit->addSeparator();
+  menuEdit->addAction( QIcon(QStringLiteral(":/pic/editCopy.png")), tr("Insert remark line"), mWCentralScoreEdit, &CsVisualScoreEdit::cmEditInsertRemark );
+  menuEdit->addAction( QIcon(QStringLiteral(":/pic/editCopy.png")), tr("Insert note line"), mWCentralScoreEdit, &CsVisualScoreEdit::cmEditInsertNoteLine );
+  menuEdit->addAction( QIcon(QStringLiteral(":/pic/editCopy.png")), tr("Append remark line"), mWCentralScoreEdit, &CsVisualScoreEdit::cmEditAppendRemark );
+  menuEdit->addAction( QIcon(QStringLiteral(":/pic/editCopy.png")), tr("Append note line"), mWCentralScoreEdit, &CsVisualScoreEdit::cmEditAppendNoteLine );
+  menuEdit->addAction( QIcon(QStringLiteral(":/pic/editCopy.png")), tr("Delete current line"), mWCentralScoreEdit, &CsVisualScoreEdit::cmEditDeleteLine );
+  menuEdit->addSeparator();
   actionEditSettings = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editSettings.png")), tr("Edit score settings"), this, &CsDesktopWinMain::cmEditSettings );
 
   menuView = new QMenu( tr("View") );

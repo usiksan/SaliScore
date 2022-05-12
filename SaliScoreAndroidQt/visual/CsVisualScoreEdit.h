@@ -34,6 +34,11 @@ class CsVisualScoreEdit : public CsVisualScore
     void cmEditCopy();
     void cmEditPaste();
     void cmEditDelete();
+    void cmEditInsertRemark() { editInsertLine( true ); }
+    void cmEditInsertNoteLine() { editInsertLine( false ); }
+    void cmEditAppendRemark() { editAppendLine( true ); }
+    void cmEditAppendNoteLine() { editAppendLine( false ); }
+    void cmEditDeleteLine();
 
     // CsVisualAbstractList interface
   public:
@@ -46,6 +51,10 @@ class CsVisualScoreEdit : public CsVisualScore
     virtual void keyReleaseEvent(QKeyEvent *event) override;
 
   private:
+    void editInsertLine( bool remark );
+
+    void editAppendLine( bool remark );
+
     //!
     //! \brief editCopy Copies selected lines to local clipboard
     //!

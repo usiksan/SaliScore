@@ -112,6 +112,21 @@ void CsVisualScoreEdit::cmEditDelete()
   }
 
 
+
+
+
+void CsVisualScoreEdit::cmEditDeleteLine()
+  {
+  if( (mCellCursor.cellClass() == cccChord) || (mCellCursor.cellClass() == cccNote) || (mCellCursor.cellClass() == cccLyric) ||
+      (mCellCursor.cellClass() == cccRemark) ) {
+    mComposition.lineRemove( mCellCursor.lineIndex() );
+    mCellCursor.updatePosition();
+    }
+  }
+
+
+
+
 void CsVisualScoreEdit::contentPaint(QPainter &painter)
   {
   CsCursorPosition play( mPlayer->playLinePosition(), mPlayer->playLineIndex() );
@@ -253,14 +268,14 @@ void CsVisualScoreEdit::keyPressEvent(QKeyEvent *event)
 
       case Qt::Key_Return :
         if( mControl || mShift )
-          mComposition.lineInsert( qBound( 0, mCellCursor.lineIndex() + 1, mComposition.lineCount() ), mShift );
+          editAppendLine( mShift );
         else
           mEditor = CsCursorEdit::build( mCellCursor, mComposition );
         break;
 
       case Qt::Key_Insert :
         //Insert new line
-        mComposition.lineInsert( qBound( 0, mCellCursor.lineIndex(), mComposition.lineCount() ), mShift );
+        editInsertLine( mShift );
         break;
 
       case Qt::Key_Delete :
@@ -332,6 +347,17 @@ void CsVisualScoreEdit::keyReleaseEvent(QKeyEvent *event)
     //All events are translated into editor
     mEditor->keyRelease( key, ch );
     }
+  }
+
+void CsVisualScoreEdit::editInsertLine(bool remark)
+  {
+  mComposition.lineInsert( qBound( 0, mCellCursor.lineIndex(), mComposition.lineCount() ), remark );
+  }
+
+void CsVisualScoreEdit::editAppendLine(bool remark)
+  {
+  mComposition.lineInsert( qBound( 0, mCellCursor.lineIndex() + 1, mComposition.lineCount() ), remark );
+  mCellCursor.set( mCellCursor.lineIndex() + 1, mCellCursor.linePosition() );
   }
 
 
@@ -628,11 +654,7 @@ void CsVisualScoreEdit::keyDelete()
   if( mSelectedLines.count() )
     cmEditDelete();
   else if( mControl ) {
-    if( (mCellCursor.cellClass() == cccChord) || (mCellCursor.cellClass() == cccNote) || (mCellCursor.cellClass() == cccLyric) ||
-        (mCellCursor.cellClass() == cccRemark) ) {
-      mComposition.lineRemove( mCellCursor.lineIndex() );
-      mCellCursor.updatePosition();
-      }
+    cmEditDeleteLine();
     }
   else {
     if( mCellCursor.cellClass() == cccChord || mCellCursor.cellClass() == cccNote ) {
