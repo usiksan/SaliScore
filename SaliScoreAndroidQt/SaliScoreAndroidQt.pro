@@ -181,3 +181,4 @@ RESOURCES += \
   SaliScore.qrc
 
 
+

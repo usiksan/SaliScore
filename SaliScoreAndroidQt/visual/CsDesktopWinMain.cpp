@@ -68,7 +68,7 @@ CsDesktopWinMain::CsDesktopWinMain(QWidget *parent) :
   mWLeftPart->addWidget( mWLeftPlayList );
 
   // 1.2. Part list
-  mWLeftPartList = new CsVisualPartList();
+  mWLeftPartList = new CsVisualPartList( mComposition );
   mWLeftPart->addWidget( mWLeftPartList );
 
   // We begin from play list
@@ -525,6 +525,7 @@ void CsDesktopWinMain::compositionChanged()
   mWCentralScoreEdit->compositionChanged();
   mWCentralScoreKaraoke->compositionChanged();
   mWCentralScoreTrain->compositionChanged();
+  mWLeftPartList->update();
   }
 
 

@@ -9,9 +9,10 @@ class CsVisualPartList : public SvVisualRegularList
   {
     Q_OBJECT
 
-    int         mPartIndex; //!< Part index
+    int            mPartIndex;   //!< Part index
+    CsComposition &mComposition; //!< Editing composition. It need to display current composition of part
   public:
-    CsVisualPartList( QWidget *parent = nullptr );
+    CsVisualPartList( CsComposition &composition, QWidget *parent = nullptr );
 
     int partIndex() const { return mPartIndex; }
 
