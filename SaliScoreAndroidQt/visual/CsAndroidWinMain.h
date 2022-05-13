@@ -36,5 +36,9 @@ class CsAndroidWinMain : public CsVisualWinMain
 //    void cmFragment1();
 //    void cmFragment2();
 //    void cmFragment
+
+    // CsVisualWinMain interface
+  public:
+    virtual void playUpdate() override;
   };
 #endif // CSANDROIDWINMAIN_H

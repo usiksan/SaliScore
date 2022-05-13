@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 
 
 #ifdef Q_OS_ANDROID
-  CsAndroidWinMain w();
+  CsAndroidWinMain w;
 #else
   CsDesktopWinMain w;
 #endif

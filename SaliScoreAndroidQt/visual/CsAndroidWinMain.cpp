@@ -130,3 +130,8 @@ CsAndroidWinMain::~CsAndroidWinMain()
   {
   }
 
+
+
+void CsAndroidWinMain::playUpdate()
+    {
+    }
