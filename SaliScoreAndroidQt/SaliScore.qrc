@@ -57,5 +57,11 @@
         <file>pic/objectEditEnable.png</file>
         <file>pic/iconBack.png</file>
         <file>pic/Music-eighthnote.svg</file>
+        <file>pic/Music-halfnote.svg</file>
+        <file>pic/MusicDnEighthnote.svg</file>
+        <file>pic/note128.png</file>
+        <file>pic/Music-hundredtwentyeighthnote.svg</file>
+        <file>pic/Music-quarternote.svg</file>
+        <file>pic/Music-sixteenthnote.svg</file>
     </qresource>
 </RCC>

@@ -6,8 +6,8 @@
    version="1.1"
    inkscape:version="1.1.2 (0a00cf5, 2022-02-04)"
    width="60"
-   height="160"
-   sodipodi:docname="Music-eighthnote.svg"
+   height="100"
+   sodipodi:docname="MusicDnEighthnote.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -26,15 +26,14 @@
      showgrid="false"
      width="60px"
      inkscape:zoom="5.795"
-     inkscape:cx="-31.233822"
+     inkscape:cx="34.339948"
      inkscape:cy="100"
      inkscape:window-width="2560"
      inkscape:window-height="1369"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg2"
-     height="160px" />
+     inkscape:current-layer="svg2" />
   <metadata
      id="metadata8">
     <rdf:RDF>
@@ -50,7 +49,7 @@
      id="defs6" />
   <g
      id="g3782"
-     transform="translate(-223.9611,20.270172)">
+     transform="matrix(1,0,0,-1,-223.90686,139.95843)">
     <path
        sodipodi:nodetypes="ccssscccccc"
        inkscape:connector-curvature="0"

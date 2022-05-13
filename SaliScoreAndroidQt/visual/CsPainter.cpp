@@ -369,6 +369,26 @@ QRect CsPainter::drawNoteSingle(int x, int scoreY, int noteStart, int noteWhite,
       mPainter->drawLine( x, scoreY + 6 * mSettings.mScoreLineDistance, x + 20, scoreY + 6 * mSettings.mScoreLineDistance );
     }
 
+  //Note pictures
+  //Upper direction
+  static QSvgRenderer note128( QStringLiteral(":/pic/Music-hundredtwentyeighthnote.svg") );
+  static QSvgRenderer note16( QStringLiteral(":/pic/Music-sixteenthnote.svg") );
+  static QSvgRenderer note8( QStringLiteral(":/pic/Music-eighthnote.svg") );
+  static QSvgRenderer note4( QStringLiteral(":/pic/Music-quarternote.svg") );
+  static QSvgRenderer note2( QStringLiteral(":/pic/Music-halfnote.svg") );
+  static bool first = true;
+  if( first ) {
+    first = false;
+    note128.setAspectRatioMode( Qt::KeepAspectRatio );
+    note16.setAspectRatioMode( Qt::KeepAspectRatio );
+    note8.setAspectRatioMode( Qt::KeepAspectRatio );
+    note4.setAspectRatioMode( Qt::KeepAspectRatio );
+    note2.setAspectRatioMode( Qt::KeepAspectRatio );
+    }
+
+  int ew = 5 * mSettings.mScoreLineDistance / 2;
+  int eh = ew * 16 / 6;
+
   QRect over;
   if( yOffset < 5 ) {
     //Rotate symbol
@@ -379,16 +399,20 @@ QRect CsPainter::drawNoteSingle(int x, int scoreY, int noteStart, int noteWhite,
     if( noteDies )
       fullNote.append( QStringLiteral(" ") + unicode4(9839) );
 
-    QRect r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, fullNote );
-    //At frist - rotation
-    QTransform m = QTransform::fromScale( 1.0, 1.0 ).rotate( -180 );
+//    noteEightDn.render( mPainter, QRectF( QPoint(x,yPos + 1 - mSettings.mScoreLineDistance), QSize( ew, eh ) ) );
+    mPainter->drawRoundedRect( QRectF( QPoint(x,yPos + 1 - mSettings.mScoreLineDistance), QSize( ew, eh ) ), 1, 1 );
 
-    //At second - origin offset
-    m *= QTransform::fromTranslate( x + r.width(), yPos + 1 - mSettings.mScoreLineDistance );
-    mPainter->setTransform( m );
-    mPainter->drawText( 0, 0, fullNote );
-    over = m.mapRect( r );
-    mPainter->resetTransform();
+
+//    QRect r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, fullNote );
+//    //At frist - rotation
+//    QTransform m = QTransform::fromScale( 1.0, 1.0 ).rotate( -180 );
+
+//    //At second - origin offset
+//    m *= QTransform::fromTranslate( x + r.width(), yPos + 1 - mSettings.mScoreLineDistance );
+//    mPainter->setTransform( m );
+//    mPainter->drawText( 0, 0, fullNote );
+//    over = m.mapRect( r );
+//    mPainter->resetTransform();
     }
   else {
     //Simple text
@@ -398,10 +422,12 @@ QRect CsPainter::drawNoteSingle(int x, int scoreY, int noteStart, int noteWhite,
     if( noteDies )
       fullNote = unicode4(9839);
     fullNote.append( noteSign + QStringLiteral(" ") + fraction );
-    static QSvgRenderer eight( QStringLiteral(":/pic/Music-eighthnote.svg") );
-    eight.setAspectRatioMode( Qt::KeepAspectRatio );
-    eight.render( mPainter, QRectF( QPoint(x,yPos), QSize(25,60) ) );
-    mPainter->drawText( x, yPos, fullNote );
+
+    note128.render( mPainter, QRectF( QPoint(x,yPos-eh), QSize( ew, eh ) ) );
+
+    //mPainter->drawImage( QRectF( QPoint(x,yPos), QSize( ew, eh ) ), QImage(":/pic/note128.png"), QRectF(0,0,30,50) );
+    mPainter->drawRoundedRect( QRectF( QPoint(x,yPos-eh), QSize( ew, eh ) ), 1, 1 );
+    //mPainter->drawText( x, yPos, fullNote );
     over = mPainter->boundingRect( x,yPos, 0,0, Qt::AlignLeft | Qt::AlignTop, fullNote );
     over.moveTop( yPos - over.height() );
     }

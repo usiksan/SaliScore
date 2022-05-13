@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   id="svg2"
+   version="1.1"
+   inkscape:version="1.1.2 (0a00cf5, 2022-02-04)"
+   width="60"
+   height="160"
+   sodipodi:docname="Music-sixteenthnote.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <metadata
+     id="metadata8" />
+  <defs
+     id="defs6" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2560"
+     inkscape:window-height="1369"
+     id="namedview4"
+     showgrid="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:zoom="5.8"
+     inkscape:cx="67.068966"
+     inkscape:cy="90.603448"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2"
+     inkscape:snap-bbox="true"
+     inkscape:bbox-paths="true"
+     inkscape:snap-bbox-edge-midpoints="true"
+     inkscape:pagecheckerboard="0"
+     width="60px" />
+  <g
+     id="g3821"
+     transform="matrix(1.0442149,0,0,1.0196409,-88.525037,9.7839528)">
+    <path
+       id="path2991"
+       d="M 110.9375,51.9375 V 126 c -1.8746,-2.54288 -9.75858,-4.19761 -16.5625,0.15625 -6.803921,4.35387 -10.888514,11.63438 -8.53125,15.9375 2.690747,4.91189 11.635608,7.54103 18.75,2.4375 5.14477,-3.69062 7.6185,-8.43281 8.40625,-9.84375 V 90.03125 c 19.07989,11.65776 29.43114,14.99129 19.8125,41.3125 C 151.18862,103.26621 128.27477,99.576267 113,72.03125 V 69.9375 c 25.86683,13.118249 20.67706,25.391418 23,32.125 C 142.43454,75.101798 119.34006,72.375773 113,53.25 v -1.15625 z"
+       style="opacity:1;fill:#000000;stroke:none" />
+  </g>
+</svg>
