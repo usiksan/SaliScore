@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   id="svg2"
+   version="1.1"
+   inkscape:version="1.1.2 (0a00cf5, 2022-02-04)"
+   width="60"
+   height="160"
+   sodipodi:docname="MusicDnSixteenthnote.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <metadata
+     id="metadata8" />
+  <defs
+     id="defs6" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1025"
+     id="namedview4"
+     showgrid="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:zoom="5.8"
+     inkscape:cx="66.982759"
+     inkscape:cy="49.568966"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2"
+     inkscape:snap-bbox="true"
+     inkscape:bbox-paths="true"
+     inkscape:snap-bbox-edge-midpoints="true"
+     inkscape:pagecheckerboard="0"
+     width="60px" />
+  <g
+     id="g3821"
+     transform="matrix(1.0442149,0,0,-1.0196409,-115.41321,162.06115)">
+    <path
+       id="path2991"
+       d="M 110.9375,51.9375 V 126 c -1.19873,30.85406 6.6045,14.15013 2.0625,8.6875 V 90.03125 c 19.07989,11.65776 29.43114,14.99129 19.8125,41.3125 C 151.18862,103.26621 128.27477,99.576267 113,72.03125 V 69.9375 c 25.86683,13.118249 20.67706,25.391418 23,32.125 C 142.43454,75.101798 119.34006,72.375773 113,53.25 v -1.15625 z"
+       style="opacity:1;fill:#000000;stroke:none"
+       sodipodi:nodetypes="ccccccccccc" />
+  </g>
+  <path
+     d="m 13.767012,28.718434 c 4.24984,-0.52448 8.59329,-2.26927 12.33332,-5.17196 4.24984,-3.10004 7.15238,-7.23866 8.08872,-11.48115 0.2029,-1.35528 0.2029,-3.7283703 -0.104,-4.7668903 -0.93111,-3.62978 -3.83887,-5.89897 -8.18755,-6.83363002 -1.23796,-0.20272 -4.36943,-0.20272 -5.91437,0 -3.93769,0.73212002 -7.98465,2.49766002 -11.4958397,5.07325002 -4.14576,3.10011 -7.05357,7.2386903 -7.98982002,11.4811403 -0.20292,1.35536 -0.20292,3.72838 0.10398,4.86557 0.93633002,3.4065 3.74011002,5.70163 7.88587002,6.63114 1.13399,0.20271 4.0417597,0.30643 5.2797597,0.20271 z"
+     id="path2616"
+     style="fill:#000000" />
+</svg>

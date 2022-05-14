@@ -25,6 +25,7 @@ class CsVisualScoreEdit : public CsVisualScore
   signals:
     void actionEditPaste( bool enable );
     void actionEditSelectionPresent( bool enable );
+    void scoreSettings();
 
   public slots:
     //Menu Edit

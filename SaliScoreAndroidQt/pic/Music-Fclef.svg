@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   id="svg2"
+   version="1.1"
+   inkscape:version="1.1.2 (0a00cf5, 2022-02-04)"
+   width="210"
+   height="250"
+   sodipodi:docname="Music-Fclef.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs6">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : -49.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="1 : -49.5 : 1"
+       inkscape:persp3d-origin="0.5 : -49.666667 : 1"
+       id="perspective10" />
+  </defs>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1025"
+     id="namedview4"
+     showgrid="false"
+     inkscape:snap-grids="true"
+     inkscape:snap-to-guides="true"
+     inkscape:zoom="1"
+     inkscape:cx="38.5"
+     inkscape:cy="191.5"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2"
+     inkscape:pagecheckerboard="0"
+     width="230px">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3602"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
+  <g
+     id="g3614"
+     transform="matrix(3,0,0,3,-185.55756,-155.01971)">
+    <path
+       sodipodi:nodetypes="cssssssssssc"
+       id="path2820"
+       d="m 62.511677,127.84048 c 0,-0.83977 4.041963,-4.29526 8.982141,-7.67885 10.621365,-7.27471 18.291956,-15.2339 22.753427,-23.609504 10.231245,-19.207279 6.990215,-39.234197 -6.645392,-41.063116 -7.541825,-1.01157 -17.090176,4.491435 -17.090176,9.84959 0,1.98778 0.508501,2.147884 6.037438,1.900912 6.764925,-0.302182 11.341654,6.282702 7.680759,11.050886 -5.784567,7.53419 -19.718197,3.205925 -19.718197,-6.12515 0,-8.178104 4.976735,-14.686661 13.736031,-17.963933 18.744999,-7.013402 36.588252,5.915889 35.025872,25.379878 -1.28058,15.953347 -15.170703,30.852697 -42.135847,45.197347 -6.39814,3.40362 -8.626056,4.19445 -8.626056,3.06194 z"
+       style="fill:#000000" />
+    <ellipse
+       transform="matrix(0.8552381,0,0,0.8552381,13.155357,9.9952378)"
+       style="fill:#000000;fill-opacity:1;stroke:none"
+       id="path3598"
+       cx="128.4375"
+       cy="65.625"
+       rx="6.5625"
+       ry="6.875" />
+    <ellipse
+       id="path3600"
+       style="fill:#000000;fill-opacity:1;stroke:none"
+       transform="matrix(0.8552381,0,0,0.8552381,13.542857,29.875)"
+       cx="128.4375"
+       cy="65.625"
+       rx="6.5625"
+       ry="6.875" />
+  </g>
+</svg>

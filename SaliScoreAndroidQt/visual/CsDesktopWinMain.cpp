@@ -8,6 +8,7 @@
 #include "CsVisualScoreKaraoke.h"
 #include "CsVisualPiano.h"
 #include "CsDlgRegistration.h"
+#include "CsDlgScoreSettings.h"
 #include "repo/CsRepoClient.h"
 #include "import/saliScore/CsImportSaliScore.h"
 #include "import/text/CsImportText.h"
@@ -325,6 +326,8 @@ CsDesktopWinMain::CsDesktopWinMain(QWidget *parent) :
   connect( this, &CsDesktopWinMain::playVoice, mSynthSfManager, &CsSynthSfManager::voiceSelect );
   connect( this, &CsDesktopWinMain::playNote, mSynthSfManager, &CsSynthSfManager::playNote );
   mSynthSfManager->load( this );
+
+  connect( mWCentralScoreEdit, &CsVisualScoreEdit::scoreSettings, this, &CsDesktopWinMain::cmEditSettings );
   }
 
 
@@ -455,10 +458,10 @@ void CsDesktopWinMain::cmEditPasteImport()
 
 void CsDesktopWinMain::cmEditSettings()
   {
-  //TODO score settings dialog
-//  CsDlgScoreSettings dlg( mComposition, this );
-//  if( dlg.exec() )
-  //    mWinEditor->update();
+  //score settings dialog
+  CsDlgScoreSettings dlg( mComposition, this );
+  if( dlg.exec() )
+    visualCurrentUpdate();
   }
 
 

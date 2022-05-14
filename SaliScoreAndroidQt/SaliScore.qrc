@@ -59,9 +59,24 @@
         <file>pic/Music-eighthnote.svg</file>
         <file>pic/Music-halfnote.svg</file>
         <file>pic/MusicDnEighthnote.svg</file>
-        <file>pic/note128.png</file>
         <file>pic/Music-hundredtwentyeighthnote.svg</file>
         <file>pic/Music-quarternote.svg</file>
         <file>pic/Music-sixteenthnote.svg</file>
+        <file>pic/Music-Cclef.svg</file>
+        <file>pic/Music-Fclef.svg</file>
+        <file>pic/Music-GClef.svg</file>
+        <file>pic/Music-sixtyfourthnote.svg</file>
+        <file>pic/Music-thirtysecondnote.svg</file>
+        <file>pic/Music-wholenote.svg</file>
+        <file>pic/Music-doublewholenote.svg</file>
+        <file>pic/Music-sharp.svg</file>
+        <file>pic/MusicDnHalfnote.svg</file>
+        <file>pic/MusicDnDoublewholenote.svg</file>
+        <file>pic/MusicDnWholenote.svg</file>
+        <file>pic/MusicDnQuarternote.svg</file>
+        <file>pic/MusicDnSixteenthnote.svg</file>
+        <file>pic/MusicDnThirtysecondnote.svg</file>
+        <file>pic/MusicDnSixtyfourthnote.svg</file>
+        <file>pic/MusicDnHundredtwentyeighthnote.svg</file>
     </qresource>
 </RCC>

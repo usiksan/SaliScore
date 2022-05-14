@@ -64,6 +64,7 @@ SOURCES += \
     visual/CsCursorEditString.cpp \
     visual/CsCursorEditTranslation.cpp \
     visual/CsDlgRegistration.cpp \
+    visual/CsDlgScoreSettings.cpp \
     visual/CsPainter.cpp \
     visual/CsPainterEditor.cpp \
     visual/CsPainterSettings.cpp \
@@ -137,6 +138,7 @@ HEADERS += \
     visual/CsCursorEditTranslation.h \
     visual/CsDesktopWinMain.h \
     visual/CsDlgRegistration.h \
+    visual/CsDlgScoreSettings.h \
     visual/CsPainter.h \
     visual/CsPainterEditor.h \
     visual/CsPainterSettings.h \
@@ -179,6 +181,5 @@ ANDROID_FEATURES += android.software.midi
 
 RESOURCES += \
   SaliScore.qrc
-
 
 

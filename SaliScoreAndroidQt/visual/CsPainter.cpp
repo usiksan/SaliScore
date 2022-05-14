@@ -272,12 +272,6 @@ bool CsPainter::isNotEditTranslation(const QString &part, int x, int y)
 
 
 
-static QString unicode4( uint code )
-  {
-  return QString::fromUcs4( &code, 1 );
-  }
-
-
 static QString noteFraction( int duration, int noteDuration )
   {
   duration -= noteDuration;
@@ -294,59 +288,120 @@ static QString noteFraction( int duration, int noteDuration )
   }
 
 
-static QString noteText( int duration, QString &fraction )
+static QSvgRenderer *noteSvg( bool up, int duration, QString &fraction )
   {
-  //Exact values
-  int code = 0;
-  switch( duration ) {
-    case duraBreve : code = 119132; break;
-    case duraHole : code = 119133; break;
-    case duraHalf : code = 119134; break;
-    case duraQuarter : code = 119135; break;
-    case duraEighth : code = 119136; break;
-    case duraSixteenth : code = 119137; break;
-    case duraThirtySecond : code = 119138; break;
-    case duraSixtyFourth : code = 119139; break;
-    case duraOneHundredTwentyEighth : code = 119140; break;
+  //At now we use svg pictures for display notes because on android font display incorrect
+  //Note pictures
+  //Up notes
+  static QSvgRenderer note128( QStringLiteral(":/pic/Music-hundredtwentyeighthnote.svg") );
+  static QSvgRenderer note64( QStringLiteral(":/pic/Music-sixtyfourthnote.svg") );
+  static QSvgRenderer note32( QStringLiteral(":/pic/Music-thirtysecondnote.svg") );
+  static QSvgRenderer note16( QStringLiteral(":/pic/Music-sixteenthnote.svg") );
+  static QSvgRenderer note8( QStringLiteral(":/pic/Music-eighthnote.svg") );
+  static QSvgRenderer note4( QStringLiteral(":/pic/Music-quarternote.svg") );
+  static QSvgRenderer note2( QStringLiteral(":/pic/Music-halfnote.svg") );
+  static QSvgRenderer note1( QStringLiteral(":/pic/Music-wholenote.svg") );
+  static QSvgRenderer noteX2( QStringLiteral(":/pic/Music-doublewholenote.svg") );
+  //Down notes
+  static QSvgRenderer noteD128( QStringLiteral(":/pic/MusicDnHundredtwentyeighthnote.svg") );
+  static QSvgRenderer noteD64( QStringLiteral(":/pic/MusicDnSixtyfourthnote.svg") );
+  static QSvgRenderer noteD32( QStringLiteral(":/pic/MusicDnThirtysecondnote.svg") );
+  static QSvgRenderer noteD16( QStringLiteral(":/pic/MusicDnSixteenthnote.svg") );
+  static QSvgRenderer noteD8( QStringLiteral(":/pic/MusicDnEighthnote.svg") );
+  static QSvgRenderer noteD4( QStringLiteral(":/pic/MusicDnQuarternote.svg") );
+  static QSvgRenderer noteD2( QStringLiteral(":/pic/MusicDnHalfnote.svg") );
+  static QSvgRenderer noteD1( QStringLiteral(":/pic/MusicDnWholenote.svg") );
+  static QSvgRenderer noteDX2( QStringLiteral(":/pic/MusicDnDoublewholenote.svg") );
+  static bool first = true;
+  if( first ) {
+    //At first time we adjust each svg display mode
+    first = false;
+    note128.setAspectRatioMode( Qt::KeepAspectRatio );
+    note64.setAspectRatioMode( Qt::KeepAspectRatio );
+    note32.setAspectRatioMode( Qt::KeepAspectRatio );
+    note16.setAspectRatioMode( Qt::KeepAspectRatio );
+    note8.setAspectRatioMode( Qt::KeepAspectRatio );
+    note4.setAspectRatioMode( Qt::KeepAspectRatio );
+    note2.setAspectRatioMode( Qt::KeepAspectRatio );
+    note2.setAspectRatioMode( Qt::KeepAspectRatio );
+    note1.setAspectRatioMode( Qt::KeepAspectRatio );
+    noteX2.setAspectRatioMode( Qt::KeepAspectRatio );
+
+    noteD128.setAspectRatioMode( Qt::KeepAspectRatio );
+    noteD64.setAspectRatioMode( Qt::KeepAspectRatio );
+    noteD32.setAspectRatioMode( Qt::KeepAspectRatio );
+    noteD16.setAspectRatioMode( Qt::KeepAspectRatio );
+    noteD8.setAspectRatioMode( Qt::KeepAspectRatio );
+    noteD4.setAspectRatioMode( Qt::KeepAspectRatio );
+    noteD2.setAspectRatioMode( Qt::KeepAspectRatio );
+    noteD2.setAspectRatioMode( Qt::KeepAspectRatio );
+    noteD1.setAspectRatioMode( Qt::KeepAspectRatio );
+    noteDX2.setAspectRatioMode( Qt::KeepAspectRatio );
     }
-  if( code )
-    return unicode4( code );
+
+  if( up ) {
+    switch( duration ) {
+      case duraBreve : return &noteX2;
+      case duraHole : return &note1;
+      case duraHalf : return &note2;
+      case duraQuarter : return &note4;
+      case duraEighth : return &note8;
+      case duraSixteenth : return &note16;
+      case duraThirtySecond : return &note32;
+      case duraSixtyFourth : return &note64;
+      case duraOneHundredTwentyEighth : return &note128;
+      }
+    }
+  else {
+    switch( duration ) {
+      case duraBreve : return &noteDX2;
+      case duraHole : return &noteD1;
+      case duraHalf : return &noteD2;
+      case duraQuarter : return &noteD4;
+      case duraEighth : return &noteD8;
+      case duraSixteenth : return &noteD16;
+      case duraThirtySecond : return &noteD32;
+      case duraSixtyFourth : return &noteD64;
+      case duraOneHundredTwentyEighth : return &noteD128;
+      }
+    }
 
   if( duration > duraBreve ) {
     fraction = noteFraction( duration, duraBreve );
-    return noteText( duraBreve, fraction );
+    return noteSvg( up, duraBreve, fraction );
     }
   if( duration > duraHole ) {
     fraction = noteFraction( duration, duraHole );
-    return noteText( duraHole, fraction );
+    return noteSvg( up, duraHole, fraction );
     }
   if( duration > duraHalf ) {
     fraction = noteFraction( duration, duraHalf );
-    return noteText( duraHalf, fraction );
+    return noteSvg( up, duraHalf, fraction );
     }
   if( duration > duraQuarter ) {
     fraction = noteFraction( duration, duraQuarter );
-    return noteText( duraQuarter, fraction );
+    return noteSvg( up, duraQuarter, fraction );
     }
   if( duration > duraEighth ) {
     fraction = noteFraction( duration, duraEighth );
-    return noteText( duraEighth, fraction );
+    return noteSvg( up, duraEighth, fraction );
     }
   if( duration > duraSixteenth ) {
     fraction = noteFraction( duration, duraSixteenth );
-    return noteText( duraSixteenth, fraction );
+    return noteSvg( up, duraSixteenth, fraction );
     }
   if( duration > duraThirtySecond ) {
     fraction = noteFraction( duration, duraThirtySecond );
-    return noteText( duraThirtySecond, fraction );
+    return noteSvg( up, duraThirtySecond, fraction );
     }
   if( duration > duraSixtyFourth ) {
     fraction = noteFraction( duration, duraSixtyFourth );
-    return noteText( duraSixtyFourth, fraction );
+    return noteSvg( up, duraSixtyFourth, fraction );
     }
   fraction = noteFraction( duration, duraOneHundredTwentyEighth );
-  return noteText( duraOneHundredTwentyEighth, fraction );
+  return noteSvg( up, duraOneHundredTwentyEighth, fraction );
   }
+
 
 
 
@@ -357,79 +412,73 @@ QRect CsPainter::drawNoteSingle(int x, int scoreY, int noteStart, int noteWhite,
   {
   int yOffset = noteStart - noteWhite;
   int yPos = scoreY + yOffset * mSettings.mScoreLineDistance / 2;
-  if( yOffset <= -2 ) {
+  if( yOffset <= -1 ) {
     //Appended line above must be drawn
-    mPainter->drawLine( x, scoreY - mSettings.mScoreLineDistance, x + 20, scoreY - mSettings.mScoreLineDistance );
+    mPainter->drawLine( x - 5, scoreY - mSettings.mScoreLineDistance, x + 15, scoreY - mSettings.mScoreLineDistance );
+    if( yOffset <= -3 ) {
+      //Second appended line above must be drawn
+      mPainter->drawLine( x - 5, scoreY - 2 * mSettings.mScoreLineDistance, x + 15, scoreY - 2 * mSettings.mScoreLineDistance );
+      if( yOffset <= -5 )
+        //Third appended line above must be drawn
+        mPainter->drawLine( x - 5, scoreY - 3 * mSettings.mScoreLineDistance, x + 15, scoreY - 3 * mSettings.mScoreLineDistance );
+      }
     }
   else if( yOffset > 10 ) {
     //Appended line below must be drawn
-    mPainter->drawLine( x, scoreY + 5 * mSettings.mScoreLineDistance, x + 20, scoreY + 5 * mSettings.mScoreLineDistance );
-    if( yOffset > 12 )
+    mPainter->drawLine( x - 5, scoreY + 5 * mSettings.mScoreLineDistance, x + 15, scoreY + 5 * mSettings.mScoreLineDistance );
+    if( yOffset > 12 ) {
       //Second appended line below must be drawn
-      mPainter->drawLine( x, scoreY + 6 * mSettings.mScoreLineDistance, x + 20, scoreY + 6 * mSettings.mScoreLineDistance );
+      mPainter->drawLine( x - 5, scoreY + 6 * mSettings.mScoreLineDistance, x + 15, scoreY + 6 * mSettings.mScoreLineDistance );
+      if( yOffset > 14 )
+        //Third appended line below must be drawn
+        mPainter->drawLine( x - 5, scoreY + 7 * mSettings.mScoreLineDistance, x + 15, scoreY + 7 * mSettings.mScoreLineDistance );
+      }
     }
 
-  //Note pictures
-  //Upper direction
-  static QSvgRenderer note128( QStringLiteral(":/pic/Music-hundredtwentyeighthnote.svg") );
-  static QSvgRenderer note16( QStringLiteral(":/pic/Music-sixteenthnote.svg") );
-  static QSvgRenderer note8( QStringLiteral(":/pic/Music-eighthnote.svg") );
-  static QSvgRenderer note4( QStringLiteral(":/pic/Music-quarternote.svg") );
-  static QSvgRenderer note2( QStringLiteral(":/pic/Music-halfnote.svg") );
-  static bool first = true;
-  if( first ) {
-    first = false;
-    note128.setAspectRatioMode( Qt::KeepAspectRatio );
-    note16.setAspectRatioMode( Qt::KeepAspectRatio );
-    note8.setAspectRatioMode( Qt::KeepAspectRatio );
-    note4.setAspectRatioMode( Qt::KeepAspectRatio );
-    note2.setAspectRatioMode( Qt::KeepAspectRatio );
+
+  //Draw sharp
+  if( noteDies ) {
+    //Sharp picture
+    static QSvgRenderer sharp( QStringLiteral(":/pic/Music-sharp.svg") );
+    static bool first = true;
+    if( first ) {
+      //At first time we adjust each svg display mode
+      first = false;
+      sharp.setAspectRatioMode( Qt::KeepAspectRatio );
+      }
+
+    int sw = 3 * mSettings.mScoreLineDistance * 25 / 70;
+    int sh = sw * 70 / 25;
+    sharp.render( mPainter, QRectF( x - sw, yPos - 2 * mSettings.mScoreLineDistance, sw, sh ) );
     }
 
+  //All of svg pictures are same dimensions
   int ew = 5 * mSettings.mScoreLineDistance / 2;
   int eh = ew * 16 / 6;
 
+  //Simple text
+  QString fraction;
   QRect over;
+  QSvgRenderer *note = noteSvg( yOffset >= 5, noteDuration, fraction );
   if( yOffset < 5 ) {
-    //Rotate symbol
-    //Create text with mirror order
-    QString fraction;
-    QString noteSign = noteText( noteDuration, fraction );
-    QString fullNote = fraction + noteSign;
-    if( noteDies )
-      fullNote.append( QStringLiteral(" ") + unicode4(9839) );
+    over = QRect( QPoint(x,yPos - mSettings.mScoreLineDistance), QSize( ew, eh ) );
+    if( note != nullptr )
+      note->render( mPainter, over );
 
-//    noteEightDn.render( mPainter, QRectF( QPoint(x,yPos + 1 - mSettings.mScoreLineDistance), QSize( ew, eh ) ) );
-    mPainter->drawRoundedRect( QRectF( QPoint(x,yPos + 1 - mSettings.mScoreLineDistance), QSize( ew, eh ) ), 1, 1 );
+    if( !fraction.isEmpty() )
+      mPainter->drawText( QPoint( x + ew, yPos ), fraction );
 
-
-//    QRect r = mPainter->boundingRect( 0,0, 0,0, Qt::AlignLeft | Qt::AlignTop, fullNote );
-//    //At frist - rotation
-//    QTransform m = QTransform::fromScale( 1.0, 1.0 ).rotate( -180 );
-
-//    //At second - origin offset
-//    m *= QTransform::fromTranslate( x + r.width(), yPos + 1 - mSettings.mScoreLineDistance );
-//    mPainter->setTransform( m );
-//    mPainter->drawText( 0, 0, fullNote );
-//    over = m.mapRect( r );
-//    mPainter->resetTransform();
+//    mPainter->drawRoundedRect( QRectF( QPoint(x,yPos + 1 - mSettings.mScoreLineDistance), QSize( ew, eh ) ), 1, 1 );
     }
   else {
-    //Simple text
-    QString fraction;
-    QString noteSign = noteText( noteDuration, fraction );
-    QString fullNote;
-    if( noteDies )
-      fullNote = unicode4(9839);
-    fullNote.append( noteSign + QStringLiteral(" ") + fraction );
+    over = QRect( QPoint(x,yPos-eh), QSize( ew, eh ) );
+    if( note != nullptr )
+      note->render( mPainter, over );
 
-    note128.render( mPainter, QRectF( QPoint(x,yPos-eh), QSize( ew, eh ) ) );
+    if( !fraction.isEmpty() )
+      mPainter->drawText( QPoint( x + ew, yPos ), fraction );
 
-    //mPainter->drawImage( QRectF( QPoint(x,yPos), QSize( ew, eh ) ), QImage(":/pic/note128.png"), QRectF(0,0,30,50) );
-    mPainter->drawRoundedRect( QRectF( QPoint(x,yPos-eh), QSize( ew, eh ) ), 1, 1 );
-    //mPainter->drawText( x, yPos, fullNote );
-    over = mPainter->boundingRect( x,yPos, 0,0, Qt::AlignLeft | Qt::AlignTop, fullNote );
-    over.moveTop( yPos - over.height() );
+//    mPainter->drawRoundedRect( QRectF( QPoint(x,yPos-eh), QSize( ew, eh ) ), 1, 1 );
     }
   return over;
   }
@@ -695,25 +744,57 @@ void CsPainter::drawNoteImpl(int clef, int taktCount, const QString &part, const
   //Numerator and denominator
   mPainter->setFont( QFont( mSettings.mFontName, 2 * mSettings.mScoreLineDistance ) );
   mPainter->drawText( mDenominatorPos, scoreY + 2 * mSettings.mScoreLineDistance, mNumerator );
+  mReferenceList.append( CsReference( mDenominatorPos, scoreY, 2 * mSettings.mScoreLineDistance, 2 * mSettings.mScoreLineDistance, cccDenomenator, mLineIndex, part, 0 ) );
   mPainter->drawText( mDenominatorPos, scoreY + 4 * mSettings.mScoreLineDistance, mDenominator );
+  mReferenceList.append( CsReference( mDenominatorPos, scoreY + 2 * mSettings.mScoreLineDistance, 2 * mSettings.mScoreLineDistance, 2 * mSettings.mScoreLineDistance, cccNumerator, mLineIndex, part, 0 ) );
 
   mPainter->setFont( QFont( mSettings.mFontName, 4 * mSettings.mScoreLineDistance ) );
 
   //Note abowe line 0
   int noteStart = whiteOctaveFirst + whiteC;
+
   //Clef
+  //There are three variants of clef
+  //We use svg pictures for its
+  static QSvgRenderer clefG( QStringLiteral(":/pic/Music-GClef.svg") );
+  static QSvgRenderer clefC( QStringLiteral(":/pic/Music-Cclef.svg") );
+  static QSvgRenderer clefF( QStringLiteral(":/pic/Music-Fclef.svg") );
+  static bool first = true;
+  if( first ) {
+    //For first time we tune picture display
+    first = false;
+    clefG.setAspectRatioMode( Qt::KeepAspectRatio );
+    clefC.setAspectRatioMode( Qt::KeepAspectRatio );
+    clefF.setAspectRatioMode( Qt::KeepAspectRatio );
+    }
+
+  //Clef position. Its different for different clefs
+  int ex = mClefPos;
+  int ey = scoreY;
+  int ew = 10, eh = 10;
   if( clef == noteG ) {
-    mPainter->drawText( mClefPos, scoreY + 4 * mSettings.mScoreLineDistance, unicode4(119070) );
+    ey = scoreY - 1 * mSettings.mScoreLineDistance;
+    ew = 24 * mSettings.mScoreLineDistance / 10;
+    eh = ew * 17 / 6;
+    clefG.render( mPainter, QRectF( QPoint( ex, ey ), QSize( ew, eh ) ) );
     noteStart = whiteOctaveSecond + whiteG;
     }
   else if( clef == noteF ) {
-    mPainter->drawText( mClefPos, scoreY + 4 * mSettings.mScoreLineDistance, unicode4(119074) );
+    ey = scoreY;
+    ew = 3 * mSettings.mScoreLineDistance;
+    eh = ew * 25 / 23;
+    clefF.render( mPainter, QRectF( QPoint( ex, ey ), QSize( ew, eh ) ) );
     noteStart = whiteOctaveSmall + whiteB;
     }
   else if( clef == noteC ) {
-    mPainter->drawText( mClefPos, scoreY + 4 * mSettings.mScoreLineDistance, unicode4(119073) );
+    ey = scoreY;
+    ew = 42 * mSettings.mScoreLineDistance * 2 / 30;
+    eh = ew * 3 / 2;
+    clefC.render( mPainter, QRectF( QPoint( ex, ey ), QSize( ew, eh ) ) );
     noteStart = whiteOctaveFirst + whiteB;
     }
+  mReferenceList.append( CsReference( ex, ey, ew, eh, cccClef, mLineIndex, part, 0 ) );
+
 
   //Draw notes
   for( auto const &note : qAsConst(noteList) ) {

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   id="svg2"
+   version="1.1"
+   inkscape:version="1.1.2 (0a00cf5, 2022-02-04)"
+   width="60"
+   height="160"
+   sodipodi:docname="MusicDnWholenote.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs6">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : -138.63995 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="1 : -138.63995 : 1"
+       inkscape:persp3d-origin="0.5 : -138.80662 : 1"
+       id="perspective10" />
+  </defs>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1025"
+     id="namedview4"
+     showgrid="false"
+     inkscape:zoom="5.894754"
+     inkscape:cx="16.031203"
+     inkscape:cy="45.040047"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2"
+     inkscape:pagecheckerboard="0" />
+  <g
+     id="g2830"
+     transform="matrix(0.9996359,0,0,0.9996359,-215.17749,-77.263165)">
+    <path
+       id="path2818"
+       d="m 225.36285,99.817998 c -5.49692,-1.69186 -9.83405,-6.28944 -9.83405,-10.4246 0,-11.704229 25.13958,-16.335904 35.52156,-6.544434 11.22686,10.588284 -7.09488,22.691526 -25.68751,16.969034 z m 16.76819,-2.9403 c 3.05854,-4.66792 0.13433,-13.916407 -5.16332,-16.330174 -7.77978,-3.544708 -12.54851,2.495846 -9.30827,11.790804 2.2412,6.42911 11.35935,9.289252 14.47159,4.53937 z"
+       style="fill:#000000" />
+  </g>
+</svg>

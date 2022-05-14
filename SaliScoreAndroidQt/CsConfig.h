@@ -23,6 +23,10 @@
                v0.6   Append visual keyboard
                v0.7   Append midi keyboard for linux
                v0.8   Debug midi keyboard connect-disconnect
+    16.05.2022 v0.9   Replace note drawing on svg images drawing
+                      Improved the image of sharp symbol
+                      Append third addon lines up and down of score and improve it
+                      Added an additional set of pictures for notes directed downwards
 */
 #ifndef CSCONFIG_H
 #define CSCONFIG_H
@@ -34,7 +38,7 @@
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             8
+#define CS_VERSION_MINOR             9
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"

@@ -182,6 +182,21 @@ void CsVisualScoreEdit::contentClicked(int x, int y)
             mSelectedLines.insert( ref.line() );
           emit actionEditSelectionPresent( mSelectedLines.count() != 0 );
           break;
+
+        case cccClef : {
+          //Toggle clef at part
+          auto clef = mComposition.noteClefGet( ref.part() );
+          if( clef == noteG ) clef = noteC;
+          else if( clef == noteC ) clef = noteF;
+          else clef = noteG;
+          mComposition.noteClefSet( ref.part(), clef );
+          }
+          break;
+
+        case cccDenomenator :
+        case cccNumerator :
+          emit scoreSettings();
+          break;
         }
       update();
       return;

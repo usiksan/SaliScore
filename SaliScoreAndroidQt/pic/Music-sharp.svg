@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="25"
+   height="70"
+   id="svg2"
+   version="1.1"
+   inkscape:version="1.1.2 (0a00cf5, 2022-02-04)"
+   sodipodi:docname="Music-sharp.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="3.905"
+     inkscape:cx="100"
+     inkscape:cy="100"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer3"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1920"
+     inkscape:window-height="1025"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:pagecheckerboard="0" />
+  <g
+     id="layer3"
+     inkscape:label="note">
+    <g
+       id="g3799"
+       transform="translate(-72.946741,-101.19981)">
+      <path
+         style="fill:#000000;fill-opacity:1"
+         id="path4149"
+         d="m 79.903152,145.91202 v -17.00357 l 7.046381,-1.99531 v 16.91681 z m 13.874322,-4.11353 -4.844386,1.42418 v -16.91681 l 4.844386,-1.38804 v -7.02698 l -4.844386,1.38804 V 101.9942 h -1.983555 v 17.80881 l -7.046381,2.07845 v -16.80753 h -1.870814 v 17.44734 l -4.844386,1.39166 v 7.04144 l 4.844386,-1.38805 v 16.88428 l -4.844386,1.38444 v 7.01252 l 4.844386,-1.38804 v 17.18708 h 1.870814 v -17.80159 l 7.046381,-1.98808 v 16.72079 h 1.983555 v -17.34975 l 4.844386,-1.39166 z"
+         inkscape:connector-curvature="0" />
+    </g>
+  </g>
+</svg>
