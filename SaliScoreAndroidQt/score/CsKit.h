@@ -41,9 +41,9 @@ class CsKitOfString : public CsKit<QString>
   public:
     CsKitOfString() : CsKit<QString>() {}
 
-    void       jsonWrite( const char *key, CsJsonWriter &js ) const { js.jsonMapString( key, mKitMap ); }
+    void       jsonWrite( const QString &key, CsJsonWriter &js ) const { js.jsonMapString( key, mKitMap ); }
 
-    void       jsonRead( const char *key, CsJsonReader &js ) { js.jsonMapString( key, mKitMap ); }
+    void       jsonRead( const QString &key, CsJsonReader &js ) { js.jsonMapString( key, mKitMap ); }
 
   };
 
@@ -55,9 +55,9 @@ class CsKitOfList : public CsKit<QList<Item> >
   public:
     CsKitOfList() : CsKit<QList<Item> >() {}
 
-    void       jsonWrite( const char *key, CsJsonWriter &js ) const { js.jsonMapList( key, this->mKitMap ); }
+    void       jsonWrite( const QString &key, CsJsonWriter &js ) const { js.jsonMapList( key, this->mKitMap ); }
 
-    void       jsonRead( const char *key, CsJsonReader &js ) { js.jsonMapList( key, this->mKitMap ); }
+    void       jsonRead( const QString &key, CsJsonReader &js ) { js.jsonMapList( key, this->mKitMap ); }
   };
 
 
