@@ -78,5 +78,10 @@
         <file>pic/MusicDnThirtysecondnote.svg</file>
         <file>pic/MusicDnSixtyfourthnote.svg</file>
         <file>pic/MusicDnHundredtwentyeighthnote.svg</file>
+        <file>pic/Music-doublewholenote.png</file>
+        <file>pic/noteDurationGrow.png</file>
+        <file>pic/noteDurationLess.png</file>
+        <file>pic/noteToneDn.png</file>
+        <file>pic/noteToneUp.png</file>
     </qresource>
 </RCC>

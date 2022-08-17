@@ -34,6 +34,17 @@ CsCursorEditNote::CsCursorEditNote(int lineIndex, int position, const QString &p
 
 
 
+void CsCursorEditNote::setPitchDuration(int pitch, int duration)
+  {
+  mNote.pitchSet( pitch );
+  mNote.durationSet( duration );
+  }
+
+
+
+
+
+
 void CsCursorEditNote::keyPress(int key, QChar ch, CsCursorEditPtr &ptr)
   {
   if( ch == QChar('#') ) {
@@ -174,6 +185,14 @@ void CsCursorEditNote::keyPress(int key, QChar ch, CsCursorEditPtr &ptr)
         CsCursorEdit::keyPress( key, ch, ptr );
       }
     }
+  }
+
+
+
+
+int CsCursorEditNote::pitch() const
+  {
+  return mNote.pitch();
   }
 
 

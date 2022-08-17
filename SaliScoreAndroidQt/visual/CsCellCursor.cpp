@@ -8,7 +8,8 @@ QMap<QString,QString> CsCellCursor::mMoveAttrTop;
 QMap<QString,QString> CsCellCursor::mMoveAttrBot;
 
 CsCellCursor::CsCellCursor(CsComposition &comp) :
-  mComposition(comp)
+  mComposition(comp),
+  mActiveNote( 0, duraQuarter, noteC )
   {
   moveTop();
 
@@ -199,6 +200,14 @@ void CsCellCursor::jump(int aclass, int aposition, int aline, const QString &apa
   mLinePosition  = aposition;
   mLineIndex = aline;
   mPartName  = apart;
+  }
+
+
+
+void CsCellCursor::setPitchDuration(int pitch, int duration)
+  {
+  mActiveNote.pitchSet( pitch );
+  mActiveNote.durationSet( duration );
   }
 
 

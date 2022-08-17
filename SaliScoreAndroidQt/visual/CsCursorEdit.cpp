@@ -16,6 +16,14 @@ CsCursorEdit::CsCursorEdit(CsComposition &comp) :
 
   }
 
+void CsCursorEdit::setPitchDuration(int pitch, int duration)
+  {
+  Q_UNUSED(pitch)
+  Q_UNUSED(duration)
+  }
+
+
+
 void CsCursorEdit::keyPress(int key, QChar ch, CsCursorEdit::CsCursorEditPtr &ptr)
   {
   Q_UNUSED(ch)

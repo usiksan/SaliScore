@@ -126,6 +126,40 @@ void CsVisualScoreEdit::cmEditDeleteLine()
 
 
 
+void CsVisualScoreEdit::cmNoteShiftUp()
+  {
+  if( mCellCursor.isMatch(cccNote) ) {
+    if( mEditor == nullptr )
+      mCellCursor.noteToneShift(true);
+    }
+  }
+
+void CsVisualScoreEdit::cmNoteShiftDn()
+  {
+  if( mCellCursor.isMatch(cccNote) ) {
+    if( mEditor == nullptr )
+      mCellCursor.noteToneShift(false);
+    }
+  }
+
+void CsVisualScoreEdit::cmNoteDurationLess()
+  {
+  if( mCellCursor.isMatch(cccNote) ) {
+    if( mEditor == nullptr )
+      mCellCursor.noteDurationShift(false);
+    }
+  }
+
+void CsVisualScoreEdit::cmNoteDurationGrow()
+  {
+  if( mCellCursor.isMatch(cccNote) ) {
+    if( mEditor == nullptr )
+      mCellCursor.noteDurationShift(true);
+    }
+  }
+
+
+
 
 void CsVisualScoreEdit::contentPaint(QPainter &painter)
   {
@@ -246,6 +280,11 @@ void CsVisualScoreEdit::keyPressEvent(QKeyEvent *event)
         mEditor->keyPress( key, ch, mEditor );
         break;
       }
+
+    //Update active note with editor value
+    if( mEditor != nullptr && mEditor->isMatch(cccNote) )
+      mCellCursor.setPitchDuration( mEditor->pitch(), mEditor->duration() );
+
     }
 
   else {
@@ -309,6 +348,11 @@ void CsVisualScoreEdit::keyPressEvent(QKeyEvent *event)
         keyEnd();
         break;
 
+      case Qt::Key_Space :
+        if( mCellCursor.isMatch( cccNote ) )
+          insertActiveNote();
+        break;
+
       case Qt::Key_A :
       case Qt::Key_B :
       case Qt::Key_C :
@@ -364,10 +408,45 @@ void CsVisualScoreEdit::keyReleaseEvent(QKeyEvent *event)
     }
   }
 
+
+
+
+void CsVisualScoreEdit::mousePressEvent(QMouseEvent *event)
+  {
+  if( event->button() == Qt::MiddleButton && mCellCursor.isMatch(cccNote) ) {
+    insertActiveNote();
+    return;
+    }
+  CsVisualScore::mousePressEvent( event );
+  }
+
+
+
+
+void CsVisualScoreEdit::wheelEvent(QWheelEvent *event)
+  {
+  if( mCellCursor.isMatch(cccNote) ) {
+    int delta = event->angleDelta().y() / 12;
+    if( mControl ) {
+      mCellCursor.noteToneShift( delta > 0 );
+      return;
+      }
+    if( mShift ) {
+      mCellCursor.noteDurationShift( delta > 0 );
+      return;
+      }
+    }
+  CsVisualScore::wheelEvent( event );
+  }
+
+
+
 void CsVisualScoreEdit::editInsertLine(bool remark)
   {
   mComposition.lineInsert( qBound( 0, mCellCursor.lineIndex(), mComposition.lineCount() ), remark );
   }
+
+
 
 void CsVisualScoreEdit::editAppendLine(bool remark)
   {
@@ -607,6 +686,7 @@ void CsVisualScoreEdit::keyRight()
 void CsVisualScoreEdit::keyToneShift( bool up )
   {
   if( mCellCursor.cellClass() == cccNote ) {
+    mCellCursor.noteToneShift(up);
     //Get note line pointed by cursor
     auto noteLine = mComposition.noteListGet( mCellCursor.lineIndex(), mCellCursor.partName() );
 
@@ -691,6 +771,18 @@ void CsVisualScoreEdit::unselectAll()
   mSelectedLines.clear();
   emit actionEditSelectionPresent( false );
   update();
+  }
+
+
+
+//!
+//! \brief insertActiveNote Inserts active note
+//!
+void CsVisualScoreEdit::insertActiveNote()
+  {
+  mEditor = CsCursorEdit::build( mCellCursor, mComposition );
+  mEditor->setPitchDuration( mCellCursor.note().pitch(), mCellCursor.note().duration() );
+  mEditor->keyPress( Qt::Key_Return, QChar(), mEditor );
   }
 
 

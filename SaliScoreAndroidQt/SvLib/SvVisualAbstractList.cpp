@@ -152,11 +152,13 @@ void SvVisualAbstractList::mousePressEvent(QMouseEvent *event)
 
 void SvVisualAbstractList::mouseReleaseEvent(QMouseEvent *event)
   {
-  mMousePress = false;
-  if( qAbs( event->y() - mMousePressY ) < 10 ) {
-    //This is click
-    mStartY = mMouseStartY;
-    contentClicked( event->x(), event->y() );
+  if( mMousePress ) {
+    mMousePress = false;
+    if( qAbs( event->y() - mMousePressY ) < 10 ) {
+      //This is click
+      mStartY = mMouseStartY;
+      contentClicked( event->x(), event->y() );
+      }
     }
   }
 

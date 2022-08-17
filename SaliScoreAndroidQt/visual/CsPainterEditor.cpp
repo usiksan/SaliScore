@@ -51,11 +51,22 @@ bool CsPainterEditor::isNotEditChord(const QString &part, int position, int x, i
 
 
 
+//!
+//! \brief isNotEditNote Test if this position not edited
+//! \param part          Part of score line
+//! \param position      Time position inside line
+//! \param x             x position of note in pixels
+//! \param scoreY        y position of score line
+//! \param noteStart     base note of score line (clef)
+//! \return              true if this position not edited
+//!
 bool CsPainterEditor::isNotEditNote(const QString &part, int position, int x, int scoreY, int noteStart)
   {
+  //Compare with edit cursor
   if( mCursorEdit == nullptr || !mCursorEdit->isMatch( cccNote, position, mLineIndex, part ) )
     return true;
 
+  //Draw note not from note line but from edit cursor
   QRect over = drawNoteSingle( x, scoreY, noteStart, mCursorEdit->noteWhite(), mCursorEdit->duration(), mCursorEdit->noteDies() );
 
   //Cursor position

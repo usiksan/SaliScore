@@ -239,6 +239,15 @@ bool CsPainter::isNotEditChord(const QString &part, int position, int x, int y)
 
 
 
+//!
+//! \brief isNotEditNote Test if this position not edited
+//! \param part          Part of score line
+//! \param position      Time position inside line
+//! \param x             x position of note in pixels
+//! \param scoreY        y position of score line
+//! \param noteStart     base note of score line (clef)
+//! \return              true if this position not edited
+//!
 bool CsPainter::isNotEditNote(const QString &part, int position, int x, int scoreY, int noteStart)
   {
   Q_UNUSED(part)
@@ -408,7 +417,18 @@ static QSvgRenderer *noteSvg( bool up, int duration, QString &fraction )
 
 
 
-QRect CsPainter::drawNoteSingle(int x, int scoreY, int noteStart, int noteWhite, int noteDuration, bool noteDies)
+//!
+//! \brief drawNoteSingle Draws single note
+//! \param x              x position of note in pixel
+//! \param scoreY         y position of note score line
+//! \param noteStart      note of bottom score line
+//! \param noteWhite      note white key index (black notes display with sharp)
+//! \param noteDuration   note duration
+//! \param noteDies       note dies
+//! \param opasity        opasity of display
+//! \return               rectangle of note
+//!
+QRect CsPainter::drawNoteSingle(int x, int scoreY, int noteStart, int noteWhite, int noteDuration, bool noteDies, bool opacity )
   {
   int yOffset = noteStart - noteWhite;
   int yPos = scoreY + yOffset * mSettings.mScoreLineDistance / 2;
@@ -435,6 +455,8 @@ QRect CsPainter::drawNoteSingle(int x, int scoreY, int noteStart, int noteWhite,
       }
     }
 
+  if( opacity )
+    mPainter->setOpacity( 0.3 );
 
   //Draw sharp
   if( noteDies ) {
@@ -480,6 +502,10 @@ QRect CsPainter::drawNoteSingle(int x, int scoreY, int noteStart, int noteWhite,
 
 //    mPainter->drawRoundedRect( QRectF( QPoint(x,yPos-eh), QSize( ew, eh ) ), 1, 1 );
     }
+
+  if( opacity )
+    mPainter->setOpacity( 1.0 );
+
   return over;
   }
 
@@ -795,6 +821,13 @@ void CsPainter::drawNoteImpl(int clef, int taktCount, const QString &part, const
     }
   mReferenceList.append( CsReference( ex, ey, ew, eh, cccClef, mLineIndex, part, 0 ) );
 
+  //Not match to edit cursor, so we draw current cell note if match
+  if( !disableDrawActiveNote() && mCellCursor != nullptr && mCellCursor->isMatch( cccNote, mLineIndex, part ) ) {
+    //Draw active note in current cell
+    int visX = visualX( mLeftGap, mCellCursor->linePosition() );
+    drawNoteSingle( visX, scoreY, noteStart, mCellCursor->note().white(), mCellCursor->note().duration(), mCellCursor->note().isDies(), true );
+    }
+
 
   //Draw notes
   for( auto const &note : qAsConst(noteList) ) {
@@ -929,9 +962,10 @@ void CsPainter::drawCellNote(int y, int tickCount, const QString &part)
   {
   for( int tick = 0; tick < tickCount; tick += mStepNote ) {
     int x = visualX( mLeftGap, tick );
-    if( mCellCursor != nullptr )
-      drawCell( x, y, mStepPixNote, 9 * mSettings.mScoreLineDistance,
-              mCellCursor->isMatch( cccNote, tick, mLineIndex, part ) );
+    if( mCellCursor != nullptr ) {
+      bool match = mCellCursor->isMatch( cccNote, tick, mLineIndex, part );
+      drawCell( x, y, mStepPixNote, 9 * mSettings.mScoreLineDistance, match );
+      }
     mReferenceList.append( CsReference( x, y, mStepPixNote, 9 * mSettings.mScoreLineDistance, cccNote, mLineIndex, part, tick ) );
     }
   }

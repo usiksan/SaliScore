@@ -27,6 +27,9 @@
                       Improved the image of sharp symbol
                       Append third addon lines up and down of score and improve it
                       Added an additional set of pictures for notes directed downwards
+    17.08.2022 v0.10  Append into editor ActiveNote which displayed with cursor when no edit active
+                      ActiveNote may be changed with keyborad or mouse or menu command
+                      ActiveNote may be inserted quickly with space key or middle button of mouse
 */
 #ifndef CSCONFIG_H
 #define CSCONFIG_H
@@ -38,7 +41,7 @@
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR             9
+#define CS_VERSION_MINOR            10
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"

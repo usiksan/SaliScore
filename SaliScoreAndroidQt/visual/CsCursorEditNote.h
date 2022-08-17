@@ -12,9 +12,12 @@ class CsCursorEditNote : public CsCursorEdit
   public:
     CsCursorEditNote( int lineIndex, int position, const QString &part, CsComposition &comp );
 
+
     // CsCursorEdit interface
   public:
+    virtual void setPitchDuration( int pitch, int duration ) override;
     virtual void keyPress(int key, QChar ch, CsCursorEditPtr &ptr) override;
+    virtual int  pitch() const override;
     virtual int  duration() const override;
     virtual int  noteWhite() const override;
     virtual bool noteDies() const override;

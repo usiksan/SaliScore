@@ -1,0 +1,508 @@
+{
+    "command": [
+        {
+            "center": {
+                "x": 5,
+                "y": 23
+            },
+            "color": "#000000",
+            "id": "FillCircle",
+            "radius": {
+                "x": 10,
+                "y": 23
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "Line",
+            "start": {
+                "x": 9,
+                "y": 21
+            },
+            "stop": {
+                "x": 9,
+                "y": 3
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "Line",
+            "start": {
+                "x": 20,
+                "y": 17
+            },
+            "stop": {
+                "x": 22,
+                "y": 19
+            },
+            "visible": true
+        },
+        {
+            "center": {
+                "x": 20,
+                "y": 21
+            },
+            "color": "#000000",
+            "id": "Arc",
+            "start": {
+                "x": 22,
+                "y": 19
+            },
+            "stop": {
+                "x": 18,
+                "y": 24
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "Line",
+            "start": {
+                "x": 18,
+                "y": 24
+            },
+            "stop": {
+                "x": 16,
+                "y": 22
+            },
+            "visible": true
+        },
+        {
+            "center": {
+                "x": 18,
+                "y": 19
+            },
+            "color": "#000000",
+            "id": "Arc",
+            "start": {
+                "x": 16,
+                "y": 22
+            },
+            "stop": {
+                "x": 20,
+                "y": 17
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "Fill",
+            "source": {
+                "x": 19,
+                "y": 20
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "doCopy": false,
+            "doOverride": false,
+            "id": "AreaMirror",
+            "mirrorLine0": {
+                "x": 14,
+                "y": 16
+            },
+            "mirrorLine1": {
+                "x": 22,
+                "y": 16
+            },
+            "select0": {
+                "x": 15,
+                "y": 16
+            },
+            "select1": {
+                "x": 22,
+                "y": 25
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "doCopy": false,
+            "doOverride": false,
+            "id": "AreaMove",
+            "select0": {
+                "x": 15,
+                "y": 8
+            },
+            "select1": {
+                "x": 22,
+                "y": 16
+            },
+            "target": {
+                "x": 27,
+                "y": 27
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "first": {
+                "x": 1,
+                "y": 19
+            },
+            "id": "ClearRect",
+            "second": {
+                "x": 8,
+                "y": 28
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "doCopy": false,
+            "doOverride": false,
+            "id": "AreaMove",
+            "select0": {
+                "x": 20,
+                "y": 19
+            },
+            "select1": {
+                "x": 27,
+                "y": 27
+            },
+            "target": {
+                "x": 9,
+                "y": 28
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "Point",
+            "point": {
+                "x": 3,
+                "y": 24
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "Point",
+            "point": {
+                "x": 3,
+                "y": 26
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "Point",
+            "point": {
+                "x": 3,
+                "y": 25
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "Point",
+            "point": {
+                "x": 4,
+                "y": 27
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "Point",
+            "point": {
+                "x": 6,
+                "y": 27
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "Point",
+            "point": {
+                "x": 5,
+                "y": 27
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "Point",
+            "point": {
+                "x": 8,
+                "y": 22
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "Point",
+            "point": {
+                "x": 6,
+                "y": 20
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "Point",
+            "point": {
+                "x": 7,
+                "y": 20
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "doCopy": true,
+            "doOverride": false,
+            "id": "AreaMove",
+            "select0": {
+                "x": 2,
+                "y": 3
+            },
+            "select1": {
+                "x": 9,
+                "y": 28
+            },
+            "target": {
+                "x": 27,
+                "y": 19
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "Line",
+            "start": {
+                "x": 15,
+                "y": 5
+            },
+            "stop": {
+                "x": 12,
+                "y": 9
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "Line",
+            "start": {
+                "x": 15,
+                "y": 5
+            },
+            "stop": {
+                "x": 18,
+                "y": 9
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "Line",
+            "start": {
+                "x": 12,
+                "y": 9
+            },
+            "stop": {
+                "x": 18,
+                "y": 9
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "Line",
+            "start": {
+                "x": 15,
+                "y": 9
+            },
+            "stop": {
+                "x": 15,
+                "y": 15
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "doCopy": false,
+            "doOverride": false,
+            "id": "AreaMove",
+            "select0": {
+                "x": 20,
+                "y": 0
+            },
+            "select1": {
+                "x": 27,
+                "y": 19
+            },
+            "target": {
+                "x": 29,
+                "y": 28
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "Line",
+            "start": {
+                "x": 29,
+                "y": 3
+            },
+            "stop": {
+                "x": 29,
+                "y": 10
+            },
+            "visible": true
+        },
+        {
+            "angle": {
+                "x": 17,
+                "y": 13
+            },
+            "center": {
+                "x": 15,
+                "y": 13
+            },
+            "color": "#000000",
+            "doCopy": false,
+            "doOverride": false,
+            "id": "AreaRotate",
+            "select0": {
+                "x": 12,
+                "y": 5
+            },
+            "select1": {
+                "x": 18,
+                "y": 15
+            },
+            "visible": true
+        },
+        {
+            "center": {
+                "x": 26,
+                "y": 24
+            },
+            "color": "#000000",
+            "id": "ClearCircle",
+            "radius": {
+                "x": 24,
+                "y": 25
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "ClearPoint",
+            "point": {
+                "x": 26,
+                "y": 21
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "ClearPoint",
+            "point": {
+                "x": 27,
+                "y": 21
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "ClearPoint",
+            "point": {
+                "x": 23,
+                "y": 24
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "ClearPoint",
+            "point": {
+                "x": 23,
+                "y": 25
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "ClearPoint",
+            "point": {
+                "x": 23,
+                "y": 26
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "ClearPoint",
+            "point": {
+                "x": 24,
+                "y": 26
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "ClearPoint",
+            "point": {
+                "x": 24,
+                "y": 27
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "ClearPoint",
+            "point": {
+                "x": 25,
+                "y": 27
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "ClearPoint",
+            "point": {
+                "x": 26,
+                "y": 27
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "id": "ClearPoint",
+            "point": {
+                "x": 28,
+                "y": 22
+            },
+            "visible": true
+        },
+        {
+            "color": "#000000",
+            "doCopy": false,
+            "doOverride": false,
+            "id": "AreaMirror",
+            "mirrorLine0": {
+                "x": 18,
+                "y": 16
+            },
+            "mirrorLine1": {
+                "x": 18,
+                "y": 11
+            },
+            "select0": {
+                "x": 13,
+                "y": 10
+            },
+            "select1": {
+                "x": 23,
+                "y": 16
+            },
+            "visible": true
+        }
+    ],
+    "height": 32,
+    "width": 32
+}

@@ -41,6 +41,11 @@ class CsVisualScoreEdit : public CsVisualScore
     void cmEditAppendNoteLine() { editAppendLine( false ); }
     void cmEditDeleteLine();
 
+    void cmNoteShiftUp();
+    void cmNoteShiftDn();
+    void cmNoteDurationLess();
+    void cmNoteDurationGrow();
+
     // CsVisualAbstractList interface
   public:
     virtual void contentPaint(QPainter &painter) override;
@@ -50,6 +55,8 @@ class CsVisualScoreEdit : public CsVisualScore
   protected:
     virtual void keyPressEvent(QKeyEvent *event) override;
     virtual void keyReleaseEvent(QKeyEvent *event) override;
+    virtual void mousePressEvent(QMouseEvent *event) override;
+    virtual void wheelEvent(QWheelEvent *event) override;
 
   private:
     void editInsertLine( bool remark );
@@ -93,6 +100,11 @@ class CsVisualScoreEdit : public CsVisualScore
     //! \brief unselectAll Remove all selections
     //!
     void unselectAll();
+
+    //!
+    //! \brief insertActiveNote Inserts active note
+    //!
+    void insertActiveNote();
   };
 
 #endif // CSVISUALSCOREEDIT_H

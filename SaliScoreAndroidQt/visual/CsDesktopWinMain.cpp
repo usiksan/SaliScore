@@ -194,6 +194,8 @@ CsDesktopWinMain::CsDesktopWinMain(QWidget *parent) :
   menuEdit->addAction( QIcon(QStringLiteral(":/pic/editCopy.png")), tr("Delete current line"), mWCentralScoreEdit, &CsVisualScoreEdit::cmEditDeleteLine );
   menuEdit->addSeparator();
   actionEditSettings = menuEdit->addAction( QIcon(QStringLiteral(":/pic/editSettings.png")), tr("Edit score settings"), this, &CsDesktopWinMain::cmEditSettings );
+  menuEdit->addSeparator();
+  menuEdit->addAction( QIcon(QStringLiteral(":/pic/Music-doublewholenote.png")), tr("Delete current line"), mWCentralScoreEdit, &CsVisualScoreEdit::cmEditDeleteLine );
 
   menuView = new QMenu( tr("View") );
   actionViewEditor  = menuView->addAction( QIcon(QStringLiteral(":/pic/viewEditor.png")), tr("Editor mode"), this, &CsDesktopWinMain::cmViewEditor );
@@ -292,6 +294,11 @@ CsDesktopWinMain::CsDesktopWinMain(QWidget *parent) :
   barEditor->addAction( actionPlayTrain );
   barEditor->addAction( actionPlayPause );
   barEditor->addAction( actionPlayStop );
+  barEditor->addSeparator();
+  barEditor->addAction(  QIcon(QString(":/pic/noteToneUp.png")), tr("Tone up"), mWCentralScoreEdit, &CsVisualScoreEdit::cmNoteShiftUp );
+  barEditor->addAction( QIcon(QString(":/pic/noteToneDn.png")), tr("Tone dn"), mWCentralScoreEdit, &CsVisualScoreEdit::cmNoteShiftDn );
+  barEditor->addAction( QIcon(QString(":/pic/noteDurationLess.png")), tr("Duration less"), mWCentralScoreEdit, &CsVisualScoreEdit::cmNoteDurationLess );
+  barEditor->addAction( QIcon(QString(":/pic/noteDurationGrow.png")), tr("Duration grow"), mWCentralScoreEdit, &CsVisualScoreEdit::cmNoteDurationGrow );
   addToolBar( barEditor );
 
   barTrain    = new QToolBar( tr("Train") );

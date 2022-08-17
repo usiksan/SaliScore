@@ -128,13 +128,39 @@ class CsPainter
 
     virtual bool isNotEditChord( const QString &part, int position, int x, int y );
 
+    //!
+    //! \brief isNotEditNote Test if this position not edited
+    //! \param part          Part of score line
+    //! \param position      Time position inside line
+    //! \param x             x position of note in pixels
+    //! \param scoreY        y position of score line
+    //! \param noteStart     base note of score line (clef)
+    //! \return              true if this position not edited
+    //!
     virtual bool isNotEditNote(const QString &part, int position, int x, int scoreY, int noteStart);
 
     virtual bool isNotEditLyric( QVector<CsLyricDisposition> &disposition );
 
     virtual bool isNotEditTranslation( const QString &part, int x, int y );
 
-    QRect  drawNoteSingle( int x, int scoreY, int noteStart, int noteWhite, int noteDuration, bool noteDies );
+    //!
+    //! \brief disableDrawActiveNote Disables drawing active note
+    //! \return                      true drawing active note disabled
+    //!
+    virtual bool disableDrawActiveNote() const { return true; }
+
+    //!
+    //! \brief drawNoteSingle Draws single note
+    //! \param x              x position of note in pixel
+    //! \param scoreY         y position of note score line
+    //! \param noteStart      note of bottom score line
+    //! \param noteWhite      note white key index (black notes display with sharp)
+    //! \param noteDuration   note duration
+    //! \param noteDies       note dies
+    //! \param opacity        opacity of display
+    //! \return               rectangle of note
+    //!
+    QRect  drawNoteSingle(int x, int scoreY, int noteStart, int noteWhite, int noteDuration, bool noteDies , bool opacity = false);
 
     void   buildDisposition( QVector<CsLyricDisposition> &disposition, const CsLyricLine &lyricLine );
 

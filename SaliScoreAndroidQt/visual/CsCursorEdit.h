@@ -19,6 +19,8 @@ class CsCursorEdit : public CsCursor
     CsCursorEdit( CsComposition &comp );
     virtual ~CsCursorEdit() {}
 
+    virtual void         setPitchDuration( int pitch, int duration );
+
     virtual void         keyPress( int key, QChar ch, CsCursorEditPtr &ptr );
 
     virtual void         keyRelease( int key, QChar ch );
@@ -26,6 +28,8 @@ class CsCursorEdit : public CsCursor
     virtual QString      getStr() const { return QString{}; }
 
     virtual CsLyricLine  getLyric() const { return CsLyricLine{}; }
+
+    virtual int          pitch() const { return 0; }
 
     virtual int          duration() const { return 0; }
 

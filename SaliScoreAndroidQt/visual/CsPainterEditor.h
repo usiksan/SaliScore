@@ -18,9 +18,25 @@ class CsPainterEditor : public CsPainter
     virtual bool isNotEditProperty( const QString &propertyId, int x, int y) override;
     virtual bool isNotEditRemark(const QString &part, int x, int y) override;
     virtual bool isNotEditChord(const QString &part, int position, int x, int y) override;
+
+    //!
+    //! \brief isNotEditNote Test if this position not edited
+    //! \param part          Part of score line
+    //! \param position      Time position inside line
+    //! \param x             x position of note in pixels
+    //! \param scoreY        y position of score line
+    //! \param noteStart     base note of score line (clef)
+    //! \return              true if this position not edited
+    //!
     virtual bool isNotEditNote(const QString &part, int position, int x, int scoreY, int noteStart) override;
     virtual bool isNotEditLyric(QVector<CsLyricDisposition> &disposition) override;
     virtual bool isNotEditTranslation(const QString &part, int x, int y) override;
+
+    //!
+    //! \brief disableDrawActiveNote Disables drawing active note
+    //! \return                      true drawing active note disabled
+    //!
+    virtual bool disableDrawActiveNote() const override { return mCursorEdit != nullptr && mCursorEdit->isMatch( cccNote ); }
 
   private:
     void paintEditText( int x, int y );
