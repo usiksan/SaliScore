@@ -180,7 +180,6 @@ ANDROID_TARGET_SDK_VERSION = 25
 ANDROID_FEATURES += android.software.midi
 
 
-
 RESOURCES += \
   SaliScore.qrc
 

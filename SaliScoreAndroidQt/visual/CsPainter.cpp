@@ -527,11 +527,12 @@ void CsPainter::buildDisposition(QVector<CsLyricDisposition> &disposition, const
   int pos = 0;
   for( int i = 0; i < lyricLine.count(); i++ ) {
     if( lyricLine.at(i).isAlign() ) {
-      if( pos >= mLineStartOffset )
-        pos = mLineStartOffset + lyricLine.at(i).align();
-//        pos = mLineStartOffset + ((pos - mLineStartOffset) & ~0xff) + lyricLine.at(i).align();
-      else
-        pos = lyricLine.at(i).align();
+      pos = lyricLine.at(i).align();
+//      if( pos >= mLineStartOffset )
+//        pos = mLineStartOffset + lyricLine.at(i).align();
+////        pos = mLineStartOffset + ((pos - mLineStartOffset) & ~0xff) + lyricLine.at(i).align();
+//      else
+//        pos = lyricLine.at(i).align();
       curX = visualX( mLeftGap, pos );
       disposition[i].mWidth = 2;
       //Align all previous non-delimiter symbols to right
