@@ -1,3 +1,4 @@
+#include "CsConfig.h"
 #include "CsSynthSfVoice.h"
 #include "soundFont2/CsSoundFont.h"
 #include "audioOut/CsSoundBufferIODevice.h"
@@ -8,7 +9,7 @@
 inline int delay( quint16 time ) {
   double tm = static_cast<qint16>(time);
   double sec = pow( 2.0, tm / 1200.0 );
-  return static_cast<int>( sec * 48000.0 );
+  return static_cast<int>( sec * CS_SAMPLES_PER_SECOND );
   }
 
 

@@ -1,3 +1,4 @@
+#include "CsConfig.h"
 #include "CsSynthSfNote.h"
 #include "soundFont2/CsSoundFont.h"
 
@@ -133,7 +134,7 @@ bool CsSynthSfNote::addTrack(quint16 *generator, const SfSample &sam, qint16 *sa
   //Friquency of original note
   double originalFriq  = noteFriq[originalNote % 12] * oktavaMult[originalNote / 12];
   //Step for original note
-  double originalStep = static_cast<double>(sam.dwSampleRate) / 48000.0;
+  double originalStep = static_cast<double>(sam.dwSampleRate) / CS_SAMPLES_PER_SECOND;
   //Step for current note
   //orig = 1000Hz, friq = 500Hz
   //if step for orig = 1, then for friq it must be = 0.5

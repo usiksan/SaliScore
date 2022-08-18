@@ -251,7 +251,7 @@ void CsVisualWinMain::extractNote(const CsLine &line, const CsDefinition &def, i
         CsPlayerEvent noteEvent( def.channel(), note.pitch(), note.duration() );
         if( !def.mTrain || !mIsTraining ) {
           //Append note to event list
-          mEventList.append( noteEvent );
+          appendNoteEvent( noteEvent );
           emit playNote( noteEvent.channel(), noteEvent.pitch(), 127 );
           emit playHighlight( noteEvent.channel(), noteEvent.pitch(), 127 );
           }
@@ -269,6 +269,20 @@ void CsVisualWinMain::extractNote(const CsLine &line, const CsDefinition &def, i
         }
       }
     }
+  }
+
+
+
+
+void CsVisualWinMain::appendNoteEvent(CsPlayerEvent noteEvent)
+  {
+  //Check if this event already present in list then we replace older event with new
+  for( int i = 0; i < mEventList.count(); i++ )
+    if( mEventList.at(i).isMatch( noteEvent ) ) {
+      mEventList[i] = noteEvent;
+      return;
+      }
+  mEventList.append( noteEvent );
   }
 
 

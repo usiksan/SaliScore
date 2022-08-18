@@ -66,6 +66,8 @@ class CsPlayerEvent
       }
 
     CsKeyEvent keyEvent() const { return csKeyEvent( mChannel, mPitch ); }
+
+    bool       isMatch( CsPlayerEvent &ev ) const { return mChannel == ev.mChannel && mPitch == ev.mPitch; }
   };
 
 
@@ -140,6 +142,7 @@ class CsVisualWinMain : public QMainWindow
     void extractLine( int lastPosition );
     void extractChords( const CsLine &line, const CsDefinition &def, int lastPosition );
     void extractNote( const CsLine &line, const CsDefinition &def, int lastPosition );
+    void appendNoteEvent(CsPlayerEvent noteEvent );
   };
 
 #endif // CSVISUALWINMAIN_H

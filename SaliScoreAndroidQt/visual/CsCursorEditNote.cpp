@@ -192,6 +192,15 @@ void CsCursorEditNote::keyPress(int key, QChar ch, CsCursorEditPtr &ptr)
           CsCursorEdit::keyPress( key, ch, ptr );
         break;
 
+      case Qt::Key_Delete :
+      case Qt::Key_Backspace :
+        //Remove current note
+        mNoteList.removeAt(mNoteIndex);
+        mComposition.noteListSet( mLineIndex, mPartName, mNoteList );
+        delete ptr;
+        ptr = nullptr;
+        break;
+
       default:
         CsCursorEdit::keyPress( key, ch, ptr );
       }
