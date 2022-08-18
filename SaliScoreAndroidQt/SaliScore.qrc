@@ -83,5 +83,7 @@
         <file>pic/noteDurationLess.png</file>
         <file>pic/noteToneDn.png</file>
         <file>pic/noteToneUp.png</file>
+        <file>pic/viewZoomIn.png</file>
+        <file>pic/viewZoomOut.png</file>
     </qresource>
 </RCC>

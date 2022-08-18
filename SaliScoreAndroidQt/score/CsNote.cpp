@@ -60,6 +60,25 @@ void CsNote::durationShift(bool less)
 
 
 
+void CsNote::durationPart(bool less)
+  {
+  int dur = duration();
+  int pos = 0;
+  while( ((dur >> pos) & 1) == 0 )
+    pos++;
+  if( less ) {
+    if( pos > 0 )
+      dur |= 1 << (pos - 1);
+    }
+  else {
+    if( (dur >> (pos + 1)) & 1 )
+      dur &= ~(1 << pos);
+    }
+  durationSet( dur );
+  }
+
+
+
 //!
 //! \brief octaveShift Shift pitch of note on one octave up or down
 //! \param up          When true octave shifted up

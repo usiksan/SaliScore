@@ -49,6 +49,8 @@ class CsCellCursor : public CsCursor
 
     void   noteDurationShift( bool left ) { mActiveNote.durationShift(left); }
 
+    void   noteDurationPart( bool left ) { mActiveNote.durationPart(left); }
+
     void   setPitchDuration( int pitch, int duration );
 
   private:

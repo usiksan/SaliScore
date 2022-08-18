@@ -152,12 +152,26 @@ void CsCursorEditLyric::delSelected()
 
 void CsCursorEditLyric::insertAlign(int align)
   {
-  if( mCharPos && mLyricLine.at(mCharPos-1).isAlign() )
+  if( mCharPos && mLyricLine.at(mCharPos-1).isAlign() ) {
     mLyricLine[mCharPos-1].alignSet( mLyricLine[mCharPos-1].align() + align );
-  else if( mCharPos < mLyricLine.count() && mLyricLine.at(mCharPos).isAlign() )
+    qDebug() << "align" << mLyricLine[mCharPos-1].align();
+    }
+  else if( mCharPos < mLyricLine.count() && mLyricLine.at(mCharPos).isAlign() ) {
     mLyricLine[mCharPos].alignSet( mLyricLine[mCharPos].align() + align );
+    qDebug() << "align" << mLyricLine[mCharPos].align();
+    }
   else if( align > 0 ) {
+    //Find previous align
+    int prevAlign = 0;
+    for( int i = mCharPos - 1; i >= 0; i-- )
+      if( mLyricLine.at(i).isAlign() ) {
+        prevAlign = mLyricLine.at(i).align();
+        break;
+        }
+    //Correct position of align to insert
+    align = (prevAlign + align) / align * align;
     mLyricLine.insert( mCharPos, CsLyricSymbol(align) );
+    qDebug() << "align" << mLyricLine[mCharPos].align();
     mCharPos++;
     }
   }
@@ -182,15 +196,15 @@ void CsCursorEditLyric::keyPress(int key, QChar ch, CsCursorEditPtr &ptr)
       case Qt::Key_4 : //1/4
         insertAlign( 64 );
         return;
+      case Qt::Key_Right :
       case Qt::Key_8 : //1/8
         insertAlign( 32 );
         return;
-      case Qt::Key_Right :
       case Qt::Key_6 : //1/16
         insertAlign( 16 );
         return;
       case Qt::Key_Left :
-        insertAlign( -16 );
+        insertAlign( -32 );
         return;
       }
     }

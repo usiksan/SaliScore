@@ -146,12 +146,23 @@ void CsCursorEditNote::keyPress(int key, QChar ch, CsCursorEditPtr &ptr)
         break;
 
       case Qt::Key_Plus :
-        mNote.durationSet( qBound( duraOneHundredTwentyEighth, mNote.duration() * 2, duraBreve ) );
+      case Qt::Key_Greater :
+        mNote.durationShift( true );
         break;
 
       case Qt::Key_Minus :
-        mNote.durationSet( qBound( duraOneHundredTwentyEighth, mNote.duration() / 2, duraBreve ) );
+      case Qt::Key_Less :
+        mNote.durationShift( false );
         break;
+
+      case Qt::Key_Asterisk :
+        mNote.durationPart(true);
+        break;
+
+      case Qt::Key_Slash :
+        mNote.durationPart(false);
+        break;
+
 
       case Qt::Key_Up :
         if( mControl )

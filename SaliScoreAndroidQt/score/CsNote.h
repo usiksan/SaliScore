@@ -67,6 +67,8 @@ class CsNote : public CsPosition
     //!
     void durationShift( bool less );
 
+    void durationPart( bool less );
+
     //!
     //! \brief octaveIndex Return note octave
     //! \return            Note octave index

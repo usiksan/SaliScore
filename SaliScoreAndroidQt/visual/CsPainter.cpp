@@ -488,7 +488,7 @@ QRect CsPainter::drawNoteSingle(int x, int scoreY, int noteStart, int noteWhite,
       note->render( mPainter, over );
 
     if( !fraction.isEmpty() )
-      mPainter->drawText( QPoint( x + ew, yPos ), fraction );
+      mPainter->drawText( QPoint( x + ew/2, yPos ), fraction );
 
 //    mPainter->drawRoundedRect( QRectF( QPoint(x,yPos + 1 - mSettings.mScoreLineDistance), QSize( ew, eh ) ), 1, 1 );
     }
@@ -498,7 +498,7 @@ QRect CsPainter::drawNoteSingle(int x, int scoreY, int noteStart, int noteWhite,
       note->render( mPainter, over );
 
     if( !fraction.isEmpty() )
-      mPainter->drawText( QPoint( x + ew, yPos ), fraction );
+      mPainter->drawText( QPoint( x + ew/2, yPos ), fraction );
 
 //    mPainter->drawRoundedRect( QRectF( QPoint(x,yPos-eh), QSize( ew, eh ) ), 1, 1 );
     }
@@ -528,7 +528,8 @@ void CsPainter::buildDisposition(QVector<CsLyricDisposition> &disposition, const
   for( int i = 0; i < lyricLine.count(); i++ ) {
     if( lyricLine.at(i).isAlign() ) {
       if( pos >= mLineStartOffset )
-        pos = mLineStartOffset + ((pos - mLineStartOffset) & ~0xff) + lyricLine.at(i).align();
+        pos = mLineStartOffset + lyricLine.at(i).align();
+//        pos = mLineStartOffset + ((pos - mLineStartOffset) & ~0xff) + lyricLine.at(i).align();
       else
         pos = lyricLine.at(i).align();
       curX = visualX( mLeftGap, pos );

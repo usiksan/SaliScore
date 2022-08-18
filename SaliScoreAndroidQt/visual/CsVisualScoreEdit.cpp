@@ -312,6 +312,26 @@ void CsVisualScoreEdit::keyPressEvent(QKeyEvent *event)
           mCellCursor.move( ccoDown );
         break;
 
+      case Qt::Key_Less :
+        if( mCellCursor.isMatch(cccNote) )
+          mCellCursor.noteDurationShift(false);
+        break;
+
+      case Qt::Key_Greater :
+        if( mCellCursor.isMatch(cccNote) )
+          mCellCursor.noteDurationShift(true);
+        break;
+
+      case Qt::Key_Asterisk :
+        if( mCellCursor.isMatch(cccNote) )
+          mCellCursor.noteDurationPart(true);
+        break;
+
+      case Qt::Key_Slash :
+        if( mCellCursor.isMatch(cccNote) )
+          mCellCursor.noteDurationPart(false);
+        break;
+
       case Qt::Key_Left :
         keyLeft();
         break;
