@@ -49,6 +49,7 @@ SOURCES += \
     synth/CsSynthSfVoice.cpp \
     synth/CsSynthSfVoiceInfo.cpp \
     visual/CsCellCursor.cpp \
+    visual/CsDesktopWinMain.cpp \
     visual/CsPainter.cpp \
     visual/CsPainterSettings.cpp
 
@@ -100,6 +101,7 @@ HEADERS += \
     synth/CsSynthSfVoiceInfo.h \
     synth/CsSynthVoiceId.h \
     visual/CsCellCursor.h \
+    visual/CsDesktopWinMain.h \
     visual/CsPainter.h \
     visual/CsPainterSettings.h
 

@@ -26,6 +26,8 @@ struct CsDefinition
 
     int  classGet() const { return mClass; }
 
+    bool isRemark() const { return mClass == cccRemark; }
+
     bool visibleToggle() { mVisible = !mVisible; return mVisible; }
 
     int  channel() const { return 0; }

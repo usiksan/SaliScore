@@ -27,13 +27,13 @@ QStringList CsComposition::defVisibleList() const
 
 
 
-QString CsComposition::defPrevVisible(const QString &key) const
+QString CsComposition::defPrevVisible( const QString &key, bool rem ) const
   {
   int i = key.isEmpty() ? mDefList.count() - 1 : defIndex( key ) - 1;
   if( i < 0 )
     return QString{};
   while( i >= 0 )
-    if( mDefList.at(i).mVisible )
+    if( mDefList.at(i).mVisible && mDefList.at(i).isRemark() == rem )
       return mDefList.at(i).mName;
     else i--;
   return QString{};
@@ -42,13 +42,13 @@ QString CsComposition::defPrevVisible(const QString &key) const
 
 
 
-QString CsComposition::defNextVisible(const QString &key) const
+QString CsComposition::defNextVisible( const QString &key, bool rem ) const
   {
   int i = key.isEmpty() ? 0 : defIndex( key ) + 1;
   if( i < 0 )
     return QString{};
   while( i < mDefList.count() )
-    if( mDefList.at(i).mVisible )
+    if( mDefList.at(i).mVisible && mDefList.at(i).isRemark() == rem )
       return mDefList.at(i).mName;
     else i++;
   return QString{};

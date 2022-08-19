@@ -66,9 +66,9 @@ class CsComposition
 
     QStringList defVisibleList() const;
 
-    QString     defPrevVisible( const QString &key ) const;
+    QString     defPrevVisible(const QString &key , bool rem) const;
 
-    QString     defNextVisible( const QString &key ) const;
+    QString     defNextVisible(const QString &key , bool rem) const;
 
     int         defIndex( const QString &key ) const;
 

@@ -101,14 +101,14 @@ void CsCellCursor::updatePosition()
         if( !mComposition.line(mLineIndex).isRemark() ) {
           mClass = cccChord;
           mPartName.clear();
-          mPartName = mComposition.chordNextVisible( mPartName );
+          mPartName = mComposition.defNextVisible( mPartName, false );
           }
         }
       else {
         if( mComposition.line(mLineIndex).isRemark() ) {
           mClass = cccRemark;
           mPartName.clear();
-          mPartName = mComposition.remarkNextVisible( mPartName );
+          mPartName = mComposition.defNextVisible( mPartName, true );
           }
         }
       }
@@ -144,13 +144,13 @@ void CsCellCursor::move(CsCellCursorOperation oper, bool doSelect, int n)
           case cccTranslation :
             break;
           case cccChord :
-            setPosition( mLinePosition - mComposition.stepChord(), mComposition.stepChord() );
+            setPosition( mLinePosition - CS_STEP_CHORD, CS_STEP_CHORD );
             break;
           case cccNote :
-            setPosition( mLinePosition - mComposition.stepNote(), mComposition.stepNote() );
+            setPosition( mLinePosition - CS_STEP_NOTE, CS_STEP_NOTE );
             break;
           case cccLyric :
-            setPosition( mLinePosition - mComposition.stepLyric(), mComposition.stepLyric() );
+            setPosition( mLinePosition - CS_STEP_LYRIC, CS_STEP_LYRIC );
             break;
           case cccAttribute :
             mPartName = mMoveAttrLeft.value( mPartName, CS_ATTR_NAME );
@@ -165,13 +165,13 @@ void CsCellCursor::move(CsCellCursorOperation oper, bool doSelect, int n)
           case cccTranslation :
             break;
           case cccChord :
-            setPosition( mLinePosition + mComposition.stepChord(), mComposition.stepChord() );
+            setPosition( mLinePosition + CS_STEP_CHORD, CS_STEP_CHORD );
             break;
           case cccNote :
-            setPosition( mLinePosition + mComposition.stepNote(), mComposition.stepNote() );
+            setPosition( mLinePosition + CS_STEP_NOTE, CS_STEP_NOTE );
             break;
           case cccLyric :
-            setPosition( mLinePosition + mComposition.stepLyric(), mComposition.stepLyric() );
+            setPosition( mLinePosition + CS_STEP_LYRIC, CS_STEP_LYRIC );
             break;
           case cccAttribute :
             mPartName = mMoveAttrRight.value( mPartName, CS_ATTR_NAME );
@@ -223,44 +223,11 @@ void CsCellCursor::setPosition(int pos, int step)
 
 void CsCellCursor::movePrevPart()
   {
-  switch( mClass ) {
-    case cccRemark :
-      mPartName = mComposition.remarkPrevVisible( mPartName );
-      if( mPartName.isEmpty() ) {
-        mLineIndex = qBound( -1, mLineIndex - 1, mComposition.lineCount() - 1 );
-        if( mLineIndex >= 0 )
-          mClass = mComposition.line(mLineIndex).isRemark() ? cccRemark : cccTranslation;
-        }
-      break;
-
-    case cccChord :
-      mPartName = mComposition.chordPrevVisible( mPartName );
-      if( mPartName.isEmpty() ) {
-        mLineIndex = qBound( -1, mLineIndex - 1, mComposition.lineCount() - 1 );
-        if( mLineIndex >= 0 )
-          mClass = mComposition.line(mLineIndex).isRemark() ? cccRemark : cccTranslation;
-        }
-      else normPosition( mComposition.stepChord() );
-      break;
-
-    case cccNote :
-      mPartName = mComposition.notePrevVisible( mPartName );
-      if( mPartName.isEmpty() )
-        mClass = cccChord;
-      else normPosition( mComposition.stepNote() );
-      break;
-
-    case cccLyric :
-      mClass = cccNote;
-      break;
-
-    case cccTranslation :
-      mPartName = mComposition.translationPrevVisible( mPartName );
-      if( mPartName.isEmpty() ) {
-        mClass = cccLyric;
-        normPosition( mComposition.stepLyric() );
-        }
-      break;
+  mPartName = mComposition.defPrevVisible( mPartName, mClass == cccRemark );
+  if( mPartName.isEmpty() ) {
+    mLineIndex = qBound( -1, mLineIndex - 1, mComposition.lineCount() - 1 );
+    if( mLineIndex >= 0 )
+      mClass = mComposition.line(mLineIndex).isRemark() ? cccRemark : cccTranslation;
     }
   }
 
@@ -269,44 +236,11 @@ void CsCellCursor::movePrevPart()
 
 void CsCellCursor::moveNextPart()
   {
-  switch( mClass ) {
-    case cccRemark :
-      mPartName = mComposition.remarkNextVisible( mPartName );
-      if( mPartName.isEmpty() ) {
-        mLineIndex++;
-        if( mLineIndex < mComposition.lineCount() )
-          mClass = mComposition.line(mLineIndex).isRemark() ? cccRemark : cccChord;
-        }
-      break;
-
-    case cccChord :
-      mPartName = mComposition.chordNextVisible( mPartName );
-      if( mPartName.isEmpty() )
-        mClass = cccNote;
-      else normPosition( mComposition.stepChord() );
-      break;
-
-    case cccNote :
-      mPartName = mComposition.noteNextVisible( mPartName );
-      if( mPartName.isEmpty() ) {
-        mClass = cccLyric;
-        normPosition( mComposition.stepLyric() );
-        }
-      else normPosition( mComposition.stepNote() );
-      break;
-
-    case cccLyric :
-      mClass = cccTranslation;
-      break;
-
-    case cccTranslation :
-      mPartName = mComposition.translationNextVisible( mPartName );
-      if( mPartName.isEmpty() ) {
-        mLineIndex++;
-        if( mLineIndex < mComposition.lineCount() )
-          mClass = mComposition.line(mLineIndex).isRemark() ? cccRemark : cccChord;
-        }
-      break;
+  mPartName = mComposition.defNextVisible( mPartName, mClass == cccRemark );
+  if( mPartName.isEmpty() ) {
+    mLineIndex++;
+    if( mLineIndex < mComposition.lineCount() )
+      mClass = mComposition.line(mLineIndex).isRemark() ? cccRemark : cccChord;
     }
   }
 
