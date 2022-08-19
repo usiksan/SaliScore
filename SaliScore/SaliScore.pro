@@ -2,7 +2,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++11
+CONFIG += c++17
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -39,9 +39,6 @@ SOURCES += \
     score/CsReference.cpp \
     score/CsSongLocalRepo.cpp \
     score/CsSynthSettings.cpp \
-    score/CsTrack.cpp \
-    score/CsTrackList.cpp \
-    score/CsTrackString.cpp \
     score/CsTrainInterval.cpp \
     soundFont2/CsSoundFont.cpp \
     soundFont2/CsSoundFontMap.cpp \
@@ -50,7 +47,10 @@ SOURCES += \
     synth/CsSynthSfNote.cpp \
     synth/CsSynthSfTrack.cpp \
     synth/CsSynthSfVoice.cpp \
-    synth/CsSynthSfVoiceInfo.cpp
+    synth/CsSynthSfVoiceInfo.cpp \
+    visual/CsCellCursor.cpp \
+    visual/CsPainter.cpp \
+    visual/CsPainterSettings.cpp
 
 HEADERS += \
     CsConfig.h \
@@ -89,10 +89,6 @@ HEADERS += \
     score/CsReference.h \
     score/CsSongLocalRepo.h \
     score/CsSynthSettings.h \
-    score/CsTrack.h \
-    score/CsTrackList.h \
-    score/CsTrackListChord.h \
-    score/CsTrackString.h \
     score/CsTrainInterval.h \
     soundFont2/CsSoundFont.h \
     soundFont2/CsSoundFontMap.h \
@@ -102,7 +98,10 @@ HEADERS += \
     synth/CsSynthSfTrack.h \
     synth/CsSynthSfVoice.h \
     synth/CsSynthSfVoiceInfo.h \
-    synth/CsSynthVoiceId.h
+    synth/CsSynthVoiceId.h \
+    visual/CsCellCursor.h \
+    visual/CsPainter.h \
+    visual/CsPainterSettings.h
 
 TRANSLATIONS += \
     SaliScore_ru_RU.ts

@@ -89,8 +89,8 @@ void CsLine::lyricLineSet(const CsLyricLine &line)
 
 void CsLine::partRename( const QString &prevPart, const QString &newPart )
   {
-  auto track = mTrackMap.value(prevPart);
-  if( track != nullptr ) {
+  if( mTrackMap.contains( prevPart ) ) {
+    auto track = mTrackMap.value( prevPart );
     mTrackMap.remove( prevPart );
     mTrackMap.insert( newPart, track );
     }

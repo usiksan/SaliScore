@@ -2,7 +2,6 @@
 #define CSLINE_H
 
 #include "CsConfig.h"
-#include "CsTrack.h"
 #include "CsChord.h"
 #include "CsNote.h"
 #include "CsLyricSymbol.h"
@@ -27,6 +26,8 @@ class CsLine
     //========================================================
     //    Information
     bool        contains( const QString &part ) const { return mTrackMap.contains(part); }
+
+    bool        isRemark() const { return mTrackMap.contains(KEY_LYRIC); }
 
 
     QString     textGet( const QString &part ) const { return mTrackMap.value(part); }

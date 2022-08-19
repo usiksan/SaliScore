@@ -15,7 +15,7 @@ Description
 #define CSCURSORPOSITION_H
 
 #include "CsConfig.h"
-#include "CsJsonIO.h"
+#include "SvLib/SvJsonIO.h"
 
 class CsCursorPosition
   {
@@ -59,13 +59,13 @@ class CsCursorPosition
     //! \brief jsonWrite Writes content into json writer object
     //! \param js        JSON writer object
     //!
-    void     jsonWrite( CsJsonWriter &js ) const;
+    void     json( SvJsonWriter &js ) const;
 
     //!
     //! \brief jsonRead Reads content from json reader object
     //! \param js       JSON reader object
     //!
-    void     jsonRead( CsJsonReader &js );
+    void     json( SvJsonReader &js );
   };
 
 #endif // CSCURSORPOSITION_H

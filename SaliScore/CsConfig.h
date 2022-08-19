@@ -91,6 +91,10 @@
 //Clipboard objects format
 #define CS_CLIP_FORMAT_SELECTOR      "bin/saliscore-CsSelector"
 
+#define CS_STEP_CHORD                64
+#define CS_STEP_NOTE                 16
+#define CS_STEP_LYRIC                32
+
 
 //Settings key names
 #define KEY_LANGUAGE                 "Language"

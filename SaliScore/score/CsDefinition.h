@@ -11,16 +11,20 @@
 
 struct CsDefinition
   {
+  private:
+    int     mClass;
+  public:
     QString mName;
     QString mInstrument;
     QString mDescription;
-    int     mClass;
     int     mClef;
     bool    mVisible;
     bool    mSynthes;      //!< Do synthes of this instrument
     bool    mTrain;        //!< Perform teaching of this instrument part
 
-    CsDefinition( const QString nm = QString{}, const QString descr = QString{}, const QString inst = QString{}, int mClef = noteC );
+    CsDefinition( int csClass = cccRemark, const QString nm = QString{}, const QString descr = QString{}, const QString inst = QString{}, int mClef = noteC );
+
+    int  classGet() const { return mClass; }
 
     bool visibleToggle() { mVisible = !mVisible; return mVisible; }
 
