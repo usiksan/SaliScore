@@ -21,10 +21,28 @@ SOURCES += \
     import/saliScore/CsImportSaliScore.cpp \
     import/text/CsImportText.cpp \
     main.cpp \
-    MainWindow.cpp \
     midiKeyboard/CsMidiKeyboard.cpp \
     midiKeyboard/CsMidiKeyboardLinux.cpp \
     repo/CsRepoClient.cpp \
+    score/CsChord.cpp \
+    score/CsChordToNote.cpp \
+    score/CsComposition.cpp \
+    score/CsCursor.cpp \
+    score/CsCursorPosition.cpp \
+    score/CsDefinition.cpp \
+    score/CsLine.cpp \
+    score/CsLyricSymbol.cpp \
+    score/CsNote.cpp \
+    score/CsPlayList.cpp \
+    score/CsPlayPart.cpp \
+    score/CsPosition.cpp \
+    score/CsReference.cpp \
+    score/CsSongLocalRepo.cpp \
+    score/CsSynthSettings.cpp \
+    score/CsTrack.cpp \
+    score/CsTrackList.cpp \
+    score/CsTrackString.cpp \
+    score/CsTrainInterval.cpp \
     soundFont2/CsSoundFont.cpp \
     soundFont2/CsSoundFontMap.cpp \
     synth/CsSynthMeandr.cpp \
@@ -36,7 +54,6 @@ SOURCES += \
 
 HEADERS += \
     CsConfig.h \
-    MainWindow.h \
     SvLib/SvDir.h \
     SvLib/SvJsonIO.h \
     SvLib/SvSingleton.h \
@@ -55,6 +72,28 @@ HEADERS += \
     midiKeyboard/CsMidiKeyboard.h \
     midiKeyboard/CsMidiKeyboardLinux.h \
     repo/CsRepoClient.h \
+    score/CsChord.h \
+    score/CsChordToNote.h \
+    score/CsClass.h \
+    score/CsComposition.h \
+    score/CsCursor.h \
+    score/CsCursorPosition.h \
+    score/CsDefinition.h \
+    score/CsLine.h \
+    score/CsLyricSymbol.h \
+    score/CsNote.h \
+    score/CsNoteChord.h \
+    score/CsPlayList.h \
+    score/CsPlayPart.h \
+    score/CsPosition.h \
+    score/CsReference.h \
+    score/CsSongLocalRepo.h \
+    score/CsSynthSettings.h \
+    score/CsTrack.h \
+    score/CsTrackList.h \
+    score/CsTrackListChord.h \
+    score/CsTrackString.h \
+    score/CsTrainInterval.h \
     soundFont2/CsSoundFont.h \
     soundFont2/CsSoundFontMap.h \
     synth/CsSynthMeandr.h \

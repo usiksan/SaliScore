@@ -30,6 +30,9 @@
     17.08.2022 v0.10  Append into editor ActiveNote which displayed with cursor when no edit active
                       ActiveNote may be changed with keyborad or mouse or menu command
                       ActiveNote may be inserted quickly with space key or middle button of mouse
+
+    ---------------------------------------------------------------------------------------------
+    19.08.2022 v0.11  Begin global refactoring
 */
 #ifndef CSCONFIG_H
 #define CSCONFIG_H
@@ -41,7 +44,7 @@
 
 //Version definition
 #define CS_VERSION_MAJOR             0
-#define CS_VERSION_MINOR            10
+#define CS_VERSION_MINOR            11
 
 //Some defaults
 #define CS_DEFAULT_WEB               "www.SaliLAB.com"
@@ -103,5 +106,6 @@
 #define KEY_WEB_REPO                 "WebRepo"
 #define KEY_REMOTE_SYNC              "RemoteSync"
 #define KEY_LOCAL_SYNC               "LocalSync"
+#define KEY_LYRIC                    "Lyric"
 
 #endif // CSCONFIG_H
