@@ -69,6 +69,8 @@ SOURCES += \
     visual/CsPainterEditor.cpp \
     visual/CsPainterSettings.cpp \
     visual/CsPainterTrain.cpp \
+    visual/CsSvg.cpp \
+    visual/CsSvgBook.cpp \
     visual/CsVisualPartList.cpp \
     visual/CsVisualPiano.cpp \
     visual/CsVisualPlayList.cpp \
@@ -79,7 +81,8 @@ SOURCES += \
     visual/CsVisualWinMain.cpp \
     SvLib/SvVisualAbstractList.cpp \
     SvLib/SvVisualAbstractListView.cpp \
-    SvLib/SvVisualRegularList.cpp
+    SvLib/SvVisualRegularList.cpp \
+    visual/svg.cpp
 
 HEADERS += \
     CsConfig.h \
@@ -143,6 +146,8 @@ HEADERS += \
     visual/CsPainterEditor.h \
     visual/CsPainterSettings.h \
     visual/CsPainterTrain.h \
+    visual/CsSvg.h \
+    visual/CsSvgBook.h \
     visual/CsVisualPartList.h \
     visual/CsVisualPiano.h \
     visual/CsVisualPlayList.h \
@@ -178,6 +183,7 @@ ANDROID_MIN_SDK_VERSION = 24
 ANDROID_TARGET_SDK_VERSION = 25
 
 ANDROID_FEATURES += android.software.midi
+
 
 
 RESOURCES += \

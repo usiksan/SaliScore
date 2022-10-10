@@ -1,4 +1,5 @@
 #include "CsPainter.h"
+#include "CsSvgBook.h"
 
 #include <QTransform>
 #include <QSettings>
@@ -63,10 +64,12 @@ void CsPainter::fillBackground()
   }
 
 
+void svgPaint( QPainter *painter, int w );
 
 
 int CsPainter::drawTitleAndProperties(int y, const CsComposition &comp)
   {
+  svgPaint( mPainter, 5 * mSettings.mScoreLineDistance / 2 );
   QMap<QString,QString> attrTitles;
   //Build default titles
   attrTitles.insert( CS_ATTR_SINGER, QObject::tr("Singer:") );
@@ -297,7 +300,7 @@ static QString noteFraction( int duration, int noteDuration )
   }
 
 
-static QSvgRenderer *noteSvg( bool up, int duration, QString &fraction )
+static CsSvg *noteSvg( bool up, int duration, QString &fraction )
   {
   //At now we use svg pictures for display notes because on android font display incorrect
   //Note pictures
@@ -348,32 +351,35 @@ static QSvgRenderer *noteSvg( bool up, int duration, QString &fraction )
     noteDX2.setAspectRatioMode( Qt::KeepAspectRatio );
     }
 
-  if( up ) {
-    switch( duration ) {
-      case duraBreve : return &noteX2;
-      case duraHole : return &note1;
-      case duraHalf : return &note2;
-      case duraQuarter : return &note4;
-      case duraEighth : return &note8;
-      case duraSixteenth : return &note16;
-      case duraThirtySecond : return &note32;
-      case duraSixtyFourth : return &note64;
-      case duraOneHundredTwentyEighth : return &note128;
-      }
-    }
-  else {
-    switch( duration ) {
-      case duraBreve : return &noteDX2;
-      case duraHole : return &noteD1;
-      case duraHalf : return &noteD2;
-      case duraQuarter : return &noteD4;
-      case duraEighth : return &noteD8;
-      case duraSixteenth : return &noteD16;
-      case duraThirtySecond : return &noteD32;
-      case duraSixtyFourth : return &noteD64;
-      case duraOneHundredTwentyEighth : return &noteD128;
-      }
-    }
+  CsSvg *svg = CsSvgBook::instance()->svgNote( duration, up );
+//  if( up ) {
+//    switch( duration ) {
+//      case duraBreve : return &noteX2;
+//      case duraHole : return &note1;
+//      case duraHalf : return &note2;
+//      case duraQuarter : return &note4;
+//      case duraEighth : return &note8;
+//      case duraSixteenth : return &note16;
+//      case duraThirtySecond : return &note32;
+//      case duraSixtyFourth : return &note64;
+//      case duraOneHundredTwentyEighth : return &note128;
+//      }
+//    }
+//  else {
+//    switch( duration ) {
+//      case duraBreve : return &noteDX2;
+//      case duraHole : return &noteD1;
+//      case duraHalf : return &noteD2;
+//      case duraQuarter : return &noteD4;
+//      case duraEighth : return &noteD8;
+//      case duraSixteenth : return &noteD16;
+//      case duraThirtySecond : return &noteD32;
+//      case duraSixtyFourth : return &noteD64;
+//      case duraOneHundredTwentyEighth : return &noteD128;
+//      }
+//    }
+  if( svg != nullptr )
+    return svg;
 
   if( duration > duraBreve ) {
     fraction = noteFraction( duration, duraBreve );
@@ -481,11 +487,11 @@ QRect CsPainter::drawNoteSingle(int x, int scoreY, int noteStart, int noteWhite,
   //Simple text
   QString fraction;
   QRect over;
-  QSvgRenderer *note = noteSvg( yOffset >= 5, noteDuration, fraction );
+  CsSvg *note = noteSvg( yOffset >= 5, noteDuration, fraction );
   if( yOffset < 5 ) {
     over = QRect( QPoint(x,yPos - mSettings.mScoreLineDistance), QSize( ew, eh ) );
     if( note != nullptr )
-      note->render( mPainter, over );
+      note->render( mPainter, QColor(Qt::black), x, yPos - mSettings.mScoreLineDistance );
 
     if( !fraction.isEmpty() )
       mPainter->drawText( QPoint( x + ew/2, yPos ), fraction );
@@ -495,7 +501,7 @@ QRect CsPainter::drawNoteSingle(int x, int scoreY, int noteStart, int noteWhite,
   else {
     over = QRect( QPoint(x,yPos-eh), QSize( ew, eh ) );
     if( note != nullptr )
-      note->render( mPainter, over );
+      note->render( mPainter, QColor(Qt::black), x,yPos-eh );
 
     if( !fraction.isEmpty() )
       mPainter->drawText( QPoint( x + ew/2, yPos ), fraction );

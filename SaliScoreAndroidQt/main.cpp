@@ -18,6 +18,8 @@
 #include "visual/CsDesktopWinMain.h"
 #endif
 
+void svgParse();
+
 int main(int argc, char *argv[])
   {
   //Setups for settings
@@ -25,6 +27,7 @@ int main(int argc, char *argv[])
   QCoreApplication::setOrganizationDomain(CS_ORGANIZATION_DOMAIN);
   QCoreApplication::setApplicationName(CS_APPLICATION_NAME);
 
+  svgParse();
 
   QApplication a(argc, argv);
 
