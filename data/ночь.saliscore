@@ -1,0 +1,2104 @@
+{
+    "BaseType": "SaliLAB SaliScore file",
+    "BaseVersion": 1,
+    "ChordDefList": [
+        {
+            "Description": "Detected chords",
+            "Name": "chords",
+            "Visible": true
+        }
+    ],
+    "ClefMap": {
+    },
+    "CompLyricist": "lyri",
+    "CompSinger": "singer",
+    "CompTitle": "Primer",
+    "Composer": "composer",
+    "LineList": [
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "Вступление (можно перебором, если знаете или не знвете)"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "C Em G"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "C Em G"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                    "chords": {
+                        "ChordList": [
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 0,
+                                "Position": 0
+                            },
+                            {
+                                "Chord": 8,
+                                "Duration": 256,
+                                "Note": 4,
+                                "Position": 256
+                            },
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 7,
+                                "Position": 512
+                            }
+                        ]
+                    }
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "можно"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                    "chords": {
+                        "ChordList": [
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 0,
+                                "Position": 0
+                            },
+                            {
+                                "Chord": 8,
+                                "Duration": 256,
+                                "Note": 4,
+                                "Position": 256
+                            },
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 7,
+                                "Position": 512
+                            }
+                        ]
+                    }
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "Куплет 1"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "          C                Em        G"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "За окнами солнце, за окнами свет - это день."
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                    "chords": {
+                        "ChordList": [
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 0,
+                                "Position": 256
+                            },
+                            {
+                                "Chord": 8,
+                                "Duration": 256,
+                                "Note": 4,
+                                "Position": 512
+                            },
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 7,
+                                "Position": 768
+                            }
+                        ]
+                    }
+                }
+            },
+            "LyricList": [
+                {
+                    "Duration": 256,
+                    "Position": 0,
+                    "text": "За окнами "
+                },
+                {
+                    "Duration": 256,
+                    "Position": 256,
+                    "text": "солнце, за окнами"
+                },
+                {
+                    "Duration": 256,
+                    "Position": 512,
+                    "text": " свет - это день."
+                }
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "     C Em          G"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "Ну а я всегда любил ночь."
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                    "chords": {
+                        "ChordList": [
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 0,
+                                "Position": 256
+                            },
+                            {
+                                "Chord": 8,
+                                "Duration": 256,
+                                "Note": 4,
+                                "Position": 512
+                            },
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 7,
+                                "Position": 768
+                            }
+                        ]
+                    }
+                }
+            },
+            "LyricList": [
+                {
+                    "Duration": 256,
+                    "Position": 0,
+                    "text": "Ну а "
+                },
+                {
+                    "Duration": 256,
+                    "Position": 256,
+                    "text": "я "
+                },
+                {
+                    "Duration": 256,
+                    "Position": 512,
+                    "text": "всегда любил"
+                },
+                {
+                    "Duration": 256,
+                    "Position": 768,
+                    "text": " ночь."
+                }
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "      C       Em      G"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "И это моё дело любить ночь."
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                    "chords": {
+                        "ChordList": [
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 0,
+                                "Position": 256
+                            },
+                            {
+                                "Chord": 8,
+                                "Duration": 256,
+                                "Note": 4,
+                                "Position": 512
+                            },
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 7,
+                                "Position": 768
+                            }
+                        ]
+                    }
+                }
+            },
+            "LyricList": [
+                {
+                    "Duration": 256,
+                    "Position": 0,
+                    "text": "И это "
+                },
+                {
+                    "Duration": 256,
+                    "Position": 256,
+                    "text": "моё дело"
+                },
+                {
+                    "Duration": 256,
+                    "Position": 512,
+                    "text": " любить "
+                },
+                {
+                    "Duration": 256,
+                    "Position": 768,
+                    "text": "ночь."
+                }
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "      C       Em      G"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "И это моё право уйти в тень."
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                    "chords": {
+                        "ChordList": [
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 0,
+                                "Position": 256
+                            },
+                            {
+                                "Chord": 8,
+                                "Duration": 256,
+                                "Note": 4,
+                                "Position": 512
+                            },
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 7,
+                                "Position": 768
+                            }
+                        ]
+                    }
+                }
+            },
+            "LyricList": [
+                {
+                    "Duration": 256,
+                    "Position": 0,
+                    "text": "И это "
+                },
+                {
+                    "Duration": 256,
+                    "Position": 256,
+                    "text": "моё прав"
+                },
+                {
+                    "Duration": 256,
+                    "Position": 512,
+                    "text": "о уйти в"
+                },
+                {
+                    "Duration": 256,
+                    "Position": 768,
+                    "text": " тень."
+                }
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": ""
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "Куплет 2"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "         C      Em                  G"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "Я люблю ночь за то, что в ней меньше машин."
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                    "chords": {
+                        "ChordList": [
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 0,
+                                "Position": 256
+                            },
+                            {
+                                "Chord": 8,
+                                "Duration": 256,
+                                "Note": 4,
+                                "Position": 512
+                            },
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 7,
+                                "Position": 768
+                            }
+                        ]
+                    }
+                }
+            },
+            "LyricList": [
+                {
+                    "Duration": 256,
+                    "Position": 0,
+                    "text": "Я люблю н"
+                },
+                {
+                    "Duration": 256,
+                    "Position": 256,
+                    "text": "очь за "
+                },
+                {
+                    "Duration": 256,
+                    "Position": 512,
+                    "text": "то, что в ней меньше"
+                },
+                {
+                    "Duration": 256,
+                    "Position": 768,
+                    "text": " машин."
+                }
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "         C     Em         G"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "Я люблю дым и пепел своих папирос."
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                    "chords": {
+                        "ChordList": [
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 0,
+                                "Position": 256
+                            },
+                            {
+                                "Chord": 8,
+                                "Duration": 256,
+                                "Note": 4,
+                                "Position": 512
+                            },
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 7,
+                                "Position": 768
+                            }
+                        ]
+                    }
+                }
+            },
+            "LyricList": [
+                {
+                    "Duration": 256,
+                    "Position": 0,
+                    "text": "Я люблю д"
+                },
+                {
+                    "Duration": 256,
+                    "Position": 256,
+                    "text": "ым и п"
+                },
+                {
+                    "Duration": 256,
+                    "Position": 512,
+                    "text": "епел своих "
+                },
+                {
+                    "Duration": 256,
+                    "Position": 768,
+                    "text": "папирос."
+                }
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "         C       Em               G"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "Я люблю кухни за то, что они хранят тайны."
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                    "chords": {
+                        "ChordList": [
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 0,
+                                "Position": 256
+                            },
+                            {
+                                "Chord": 8,
+                                "Duration": 256,
+                                "Note": 4,
+                                "Position": 512
+                            },
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 7,
+                                "Position": 768
+                            }
+                        ]
+                    }
+                }
+            },
+            "LyricList": [
+                {
+                    "Duration": 256,
+                    "Position": 0,
+                    "text": "Я люблю к"
+                },
+                {
+                    "Duration": 256,
+                    "Position": 256,
+                    "text": "ухни за "
+                },
+                {
+                    "Duration": 256,
+                    "Position": 512,
+                    "text": "то, что они храня"
+                },
+                {
+                    "Duration": 256,
+                    "Position": 768,
+                    "text": "т тайны."
+                }
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "         C        Em             G"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "Я люблю свой дом, но вряд ли это всерьёз."
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                    "chords": {
+                        "ChordList": [
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 0,
+                                "Position": 256
+                            },
+                            {
+                                "Chord": 8,
+                                "Duration": 256,
+                                "Note": 4,
+                                "Position": 512
+                            },
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 7,
+                                "Position": 768
+                            }
+                        ]
+                    }
+                }
+            },
+            "LyricList": [
+                {
+                    "Duration": 256,
+                    "Position": 0,
+                    "text": "Я люблю с"
+                },
+                {
+                    "Duration": 256,
+                    "Position": 256,
+                    "text": "вой дом, "
+                },
+                {
+                    "Duration": 256,
+                    "Position": 512,
+                    "text": "но вряд ли это "
+                },
+                {
+                    "Duration": 256,
+                    "Position": 768,
+                    "text": "всерьёз."
+                }
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": ""
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "Припев"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "      C            Em            G"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "И это ночь и её электрический свет бьёт мне в глаза."
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                    "chords": {
+                        "ChordList": [
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 0,
+                                "Position": 256
+                            },
+                            {
+                                "Chord": 8,
+                                "Duration": 256,
+                                "Note": 4,
+                                "Position": 512
+                            },
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 7,
+                                "Position": 768
+                            }
+                        ]
+                    }
+                }
+            },
+            "LyricList": [
+                {
+                    "Duration": 256,
+                    "Position": 0,
+                    "text": "И это "
+                },
+                {
+                    "Duration": 256,
+                    "Position": 256,
+                    "text": "ночь и её эле"
+                },
+                {
+                    "Duration": 256,
+                    "Position": 512,
+                    "text": "ктрический све"
+                },
+                {
+                    "Duration": 256,
+                    "Position": 768,
+                    "text": "т бьёт мне в глаза."
+                }
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "      C            Em             G"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "И это ночь и её электрический дождь бьёт мне в окно."
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                    "chords": {
+                        "ChordList": [
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 0,
+                                "Position": 256
+                            },
+                            {
+                                "Chord": 8,
+                                "Duration": 256,
+                                "Note": 4,
+                                "Position": 512
+                            },
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 7,
+                                "Position": 768
+                            }
+                        ]
+                    }
+                }
+            },
+            "LyricList": [
+                {
+                    "Duration": 256,
+                    "Position": 0,
+                    "text": "И это "
+                },
+                {
+                    "Duration": 256,
+                    "Position": 256,
+                    "text": "ночь и её эле"
+                },
+                {
+                    "Duration": 256,
+                    "Position": 512,
+                    "text": "ктрический дожд"
+                },
+                {
+                    "Duration": 256,
+                    "Position": 768,
+                    "text": "ь бьёт мне в окно."
+                }
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "      C            Em             G"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "И это ночь и её электрический голос манит меня к себе."
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                    "chords": {
+                        "ChordList": [
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 0,
+                                "Position": 256
+                            },
+                            {
+                                "Chord": 8,
+                                "Duration": 256,
+                                "Note": 4,
+                                "Position": 512
+                            },
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 7,
+                                "Position": 768
+                            }
+                        ]
+                    }
+                }
+            },
+            "LyricList": [
+                {
+                    "Duration": 256,
+                    "Position": 0,
+                    "text": "И это "
+                },
+                {
+                    "Duration": 256,
+                    "Position": 256,
+                    "text": "ночь и её эле"
+                },
+                {
+                    "Duration": 256,
+                    "Position": 512,
+                    "text": "ктрический голо"
+                },
+                {
+                    "Duration": 256,
+                    "Position": 768,
+                    "text": "с манит меня к себе."
+                }
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "       C            Em                G"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "И я не знаю как мне прожить следующий день."
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                    "chords": {
+                        "ChordList": [
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 0,
+                                "Position": 256
+                            },
+                            {
+                                "Chord": 8,
+                                "Duration": 256,
+                                "Note": 4,
+                                "Position": 512
+                            },
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 7,
+                                "Position": 768
+                            }
+                        ]
+                    }
+                }
+            },
+            "LyricList": [
+                {
+                    "Duration": 256,
+                    "Position": 0,
+                    "text": "И я не "
+                },
+                {
+                    "Duration": 256,
+                    "Position": 256,
+                    "text": "знаю как мне "
+                },
+                {
+                    "Duration": 256,
+                    "Position": 512,
+                    "text": "прожить следующий "
+                },
+                {
+                    "Duration": 256,
+                    "Position": 768,
+                    "text": "день."
+                }
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": ""
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "Проигрыш"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "C Em G"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": ""
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                    "chords": {
+                        "ChordList": [
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 0,
+                                "Position": 0
+                            },
+                            {
+                                "Chord": 8,
+                                "Duration": 256,
+                                "Note": 4,
+                                "Position": 256
+                            },
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 7,
+                                "Position": 512
+                            }
+                        ]
+                    }
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "Куплет 3"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "  C              Em           G"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "Я один, но это не значит, что я одинок."
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                    "chords": {
+                        "ChordList": [
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 0,
+                                "Position": 256
+                            },
+                            {
+                                "Chord": 8,
+                                "Duration": 256,
+                                "Note": 4,
+                                "Position": 512
+                            },
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 7,
+                                "Position": 768
+                            }
+                        ]
+                    }
+                }
+            },
+            "LyricList": [
+                {
+                    "Duration": 256,
+                    "Position": 0,
+                    "text": "Я "
+                },
+                {
+                    "Duration": 256,
+                    "Position": 256,
+                    "text": "один, но это не"
+                },
+                {
+                    "Duration": 256,
+                    "Position": 512,
+                    "text": " значит, что "
+                },
+                {
+                    "Duration": 256,
+                    "Position": 768,
+                    "text": "я одинок."
+                }
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "          C    Em              G"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "Мой магнитофон хрипит о радостях дня."
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                    "chords": {
+                        "ChordList": [
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 0,
+                                "Position": 256
+                            },
+                            {
+                                "Chord": 8,
+                                "Duration": 256,
+                                "Note": 4,
+                                "Position": 512
+                            },
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 7,
+                                "Position": 768
+                            }
+                        ]
+                    }
+                }
+            },
+            "LyricList": [
+                {
+                    "Duration": 256,
+                    "Position": 0,
+                    "text": "Мой магнит"
+                },
+                {
+                    "Duration": 256,
+                    "Position": 256,
+                    "text": "офон "
+                },
+                {
+                    "Duration": 256,
+                    "Position": 512,
+                    "text": "хрипит о радостя"
+                },
+                {
+                    "Duration": 256,
+                    "Position": 768,
+                    "text": "х дня."
+                }
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "             C     Em                  G"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "Я помню, что завтра меня ждёт несколько встреч"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                    "chords": {
+                        "ChordList": [
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 0,
+                                "Position": 256
+                            },
+                            {
+                                "Chord": 8,
+                                "Duration": 256,
+                                "Note": 4,
+                                "Position": 512
+                            },
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 7,
+                                "Position": 768
+                            }
+                        ]
+                    }
+                }
+            },
+            "LyricList": [
+                {
+                    "Duration": 256,
+                    "Position": 0,
+                    "text": "Я помню, что "
+                },
+                {
+                    "Duration": 256,
+                    "Position": 256,
+                    "text": "завтра"
+                },
+                {
+                    "Duration": 256,
+                    "Position": 512,
+                    "text": " меня ждёт несколько"
+                },
+                {
+                    "Duration": 256,
+                    "Position": 768,
+                    "text": " встреч"
+                }
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "            C      Em         G"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "И кофе в известном кафе согреет меня."
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                    "chords": {
+                        "ChordList": [
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 0,
+                                "Position": 256
+                            },
+                            {
+                                "Chord": 8,
+                                "Duration": 256,
+                                "Note": 4,
+                                "Position": 512
+                            },
+                            {
+                                "Chord": 0,
+                                "Duration": 256,
+                                "Note": 7,
+                                "Position": 768
+                            }
+                        ]
+                    }
+                }
+            },
+            "LyricList": [
+                {
+                    "Duration": 256,
+                    "Position": 0,
+                    "text": "И кофе в изв"
+                },
+                {
+                    "Duration": 256,
+                    "Position": 256,
+                    "text": "естном "
+                },
+                {
+                    "Duration": 256,
+                    "Position": 512,
+                    "text": "кафе согрее"
+                },
+                {
+                    "Duration": 256,
+                    "Position": 768,
+                    "text": "т меня."
+                }
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": ""
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": "Припев"
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        },
+        {
+            "ChordKit": {
+                "ChordMap": {
+                }
+            },
+            "LyricList": [
+            ],
+            "NoteKit": {
+                "NoteMap": {
+                }
+            },
+            "Remark": {
+                "StringMap": {
+                    "input": ""
+                }
+            },
+            "Translation": {
+            },
+            "taktCount": 8
+        }
+    ],
+    "NoteDefList": [
+    ],
+    "RemarkDefList": [
+        {
+            "Description": "Source file",
+            "Name": "input",
+            "Visible": true
+        }
+    ],
+    "TranslateList": [
+    ]
+}
