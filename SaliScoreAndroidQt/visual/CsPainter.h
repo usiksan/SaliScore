@@ -54,7 +54,6 @@ class CsPainter
     QStringList       mVisibleChord;     //!< Visible parts of chord for each line of score
     QStringList       mVisibleNote;      //!< Visible parts of notes for each line of score
     QStringList       mVisibleTranslate; //!< Visible parts of lyric translations for each line of score
-    QMap<QString,int> mClefMap;
     QString           mNumerator;
     QString           mDenominator;
 
